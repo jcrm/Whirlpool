@@ -2,6 +2,8 @@ package example.whirlpool;
 
 import example.whirlpool.GraphicObject;
 import example.whirlpool.GraphicObject.objtype;
+import android.util.FloatMath;
+//used to create effect of whirlpool
 
 
 /*
@@ -13,6 +15,7 @@ public class Whirlpool {
 	private boolean clockwise = true;
 	private float power = 0.05f;
 	private float radius = 40;
+	private float angle = 0.0f;
 	private GraphicObject object = new GraphicObject(objtype.tWhirl);
 	
 	Whirlpool(){
@@ -21,6 +24,30 @@ public class Whirlpool {
 	public boolean getClockwise(){
 		return clockwise;
 	}
+	
+	public int Collision(GraphicObject graphic){
+		
+		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
+		
+		float distX, distY, dist;
+		distX = this.getCentreX() - graphic.getX();
+		distY = this.getCentreY() - graphic.getY();
+		
+		dist = (distX*distX)+(distY*distY);
+		
+		//if (graphic.GetPullState()==false){ //if you can pull the object
+			
+		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
+			return 2;
+		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
+			return 1;
+	
+		//}
+		
+		return 0;
+		
+	}
+	
 	public void gravity(GraphicObject graphic, float factor){
 		float tempx = graphic.getX();
 		float tempy = graphic.getY();
@@ -58,7 +85,7 @@ public class Whirlpool {
 			gravity(graphic, frogFactor);
 			break;
 		case tDuck:
-			gravity(graphic, 1.0f);
+			gravity(graphic, 4.0f);
 			break;
 		case tBoat:
 			
@@ -125,6 +152,12 @@ public class Whirlpool {
 	}
 	public void setRadius(float radius) {
 		this.radius = radius;
+	}
+	public void setWAngle(float angle) {
+		this.angle = angle;
+	}
+	public float getWAngle() {
+		return this.angle;
 	}
 	public GraphicObject getGraphic() {
 		return object;

@@ -1,5 +1,6 @@
 package example.whirlpool;
 
+//import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,11 +23,17 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private float[] Wcenter = new float[2];
 	
 	private int Wsize; //whirlpool direction, center point, and size.
-
-    TrackingTouchListener() {NewGesture = false;}
+	private float Wangle;
+	
+	private final WPools mWPools;
+	
+	private final TutorialThread _thread;
+	
+    TrackingTouchListener(WPools wpools, TutorialThread Athread) {mWPools = wpools; NewGesture = false; _thread = Athread;}
 
     public boolean onTouch(View v, MotionEvent evt) {
         
+    synchronized (_thread.getSurfaceHolder()){
     	switch(evt.getAction()){
     	
     	case MotionEvent.ACTION_DOWN:
@@ -108,6 +115,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
     			Wdirection[0] = curr[0] - refX[LastRef];
     			Wdirection[1] = curr[1] - refY[LastRef];
     			
+    			Wangle = Func.calcAngle(refX[LastRef], refY[LastRef] , curr[0], curr[1]);
     			//Get center point between 4 ref points
     			
     			Wcenter[0] = (refX[0]+refX[1]+refX[2]+refX[3])/4;
@@ -116,6 +124,13 @@ final class TrackingTouchListener implements View.OnTouchListener{
     				
     			//calc size of whirlpool, simply NoRefs, 4 reference points being the smallest size = (1).
     			Wsize = NoRef-3;
+    			
+    			addWPools(
+    	    			mWPools,
+    	    			Wcenter[0],
+    	    			Wcenter[1],
+    	    			Wsize,
+    	    			Wangle);
     		
     		}
     		break;
@@ -124,8 +139,17 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	default: return false;
     	}
     	
-    	
+    }
     	
     	return true;
+    }
+    
+    private void addWPools(WPools wpools, float x, float y, int s, float angle) {
+    	wpools.addWPool(
+            x,
+            y,
+            s,
+            angle);
+    	
     }
 }
