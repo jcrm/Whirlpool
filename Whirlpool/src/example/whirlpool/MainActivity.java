@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Panel(this));
     }
+    //stuff
     static //creates class extended from surfaceview to draw to
     class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	//private Whirlpool Whirl;
