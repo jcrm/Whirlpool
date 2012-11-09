@@ -4,7 +4,7 @@ import example.whirlpool.GraphicObject;
 import android.view.MotionEvent;
 import java.lang.Math;
 import android.util.FloatMath;
-
+//test
 //collision class
 public class Func{
 	//box collision - graphic is the sprite being tested, event is the touch
