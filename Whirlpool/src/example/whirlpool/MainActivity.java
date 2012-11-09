@@ -7,6 +7,8 @@ import example.whirlpool.GraphicObject.objtype;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Panel(this));
+        
     }
     static //creates class extended from surfaceview to draw to
     class Panel extends SurfaceView implements SurfaceHolder.Callback {
@@ -36,7 +39,9 @@ public class MainActivity extends Activity {
         private TutorialThread _thread;
         //an array list to store objects on screen
         private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
-        private ArrayList<Whirlpool> _whirlpools = new ArrayList<Whirlpool>();
+        //private ArrayList<Whirlpool> _whirlpools = new ArrayList<Whirlpool>();
+        /** The application model */
+        final WPools wpoolModel = new WPools();
         static public Screen screen = new Screen();
         static public Resources res;
         private Paint _paint = new Paint();
@@ -52,39 +57,40 @@ public class MainActivity extends Activity {
             getHolder().addCallback(this);
             _thread = new TutorialThread(getHolder(), this);
             setFocusable(true);
-            //setOnTouchListener(new TrackingTouchListener());
+            setOnTouchListener(new TrackingTouchListener(wpoolModel,_thread));
+            
+            //wpoolModel.setWpoolsChangeListener(new WPools.WPoolsChangeListener() {
+               //public void onDotsChange(Dots dots) {
+                    //Dot d = dots.getLastDot();
+                    //dotView.invalidate();
+               //} });
         }
         //currently uses on down for splash needs to be changed to double tap
-        @Override
-        public boolean onTouchEvent(MotionEvent event){
-            synchronized (_thread.getSurfaceHolder()){
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                	Whirlpool whirl = new Whirlpool();
-                	whirl.setCentreX(event.getX());
-                	whirl.setCentreY(event.getY());
-                	_whirlpools.add(whirl);
-                }
-            	x1 = event.getX();
-            	y1 = event.getY();
-                return true;
-            }
-        }
+        //@Override
+//        public boolean onTouchEvent(MotionEvent event){
+//            synchronized (_thread.getSurfaceHolder()){
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                	wpoolModel.addWPool(event.getX(), event.getY());
+//                }
+//            	x1 = event.getX();
+//            	y1 = event.getY();
+//                return true;
+//            }
+//        }
         /*
          *haven't been able to get it working yet
          *so here is the code anyway
          *the whirlpool code can be left out until i've fixed it
          **/
-        public void checkWhirl(MotionEvent event){
+        //public void checkWhirl(MotionEvent event){
         	
-        }
+        //}
         //changes direction of objects on screen if falls with in a circular distance from touch event
         public void changeDir(Whirlpool whirl){
         	//iterates through graphic list
         	for (GraphicObject graphic : _graphics){
         		//if shark randomise a new direction and speed
         		if(Func.circleCollision(graphic.getX(), graphic.getY(), graphic.getRadius(), whirl.getCentreX(), whirl.getCentreY(), whirl.getRadius())){
-        			
-        			
         			
         			
         			/*if(graphic.id==objtype.tShark){
@@ -112,20 +118,22 @@ public class MainActivity extends Activity {
         	screen.set(getWidth(), getHeight());
         	res = getResources();
         	//init duck to centre of screen
-            _graphics.add(new GraphicObject(objtype.tDuck));
+        	GraphicObject TheDuck =  new GraphicObject(objtype.tDuck);
+        	
+            _graphics.add(TheDuck);
             //for loop for init frog objects
-            for(int i = 0; i<(new Random().nextInt(2)+3); i++){
+            //for(int i = 0; i<(new Random().nextInt(2)+3); i++){
 	            _graphics.add(new GraphicObject(objtype.tFrog));
-            }
+            //}
             //for loop for init shark objects
-            for(int i = 0; i<(new Random().nextInt(10)+5); i++){
+            //for(int i = 0; i<(new Random().nextInt(10)+5); i++){
             	_graphics.add(new GraphicObject(objtype.tShark));
-            }
+            //}
             //for loop for init boat objects
-            for(int i = 0; i < (new Random().nextInt(5)+5); i++){
+           // for(int i = 0; i < (new Random().nextInt(5)+5); i++){
 	            _graphics.add(new GraphicObject(objtype.tBoat));
 	            
-        	}
+        	//}
         }
         //move objects around screen
         public void updatePhysics() {
@@ -136,16 +144,32 @@ public class MainActivity extends Activity {
                 	graphic.shiftY(graphic.getSpeed().getSpeed()*FloatMath.sin(graphic.getSpeed().getAngleRad()));
                 	Func.borders(graphic, screen.getWidth(), screen.getHeight());
                 }
-                for(Whirlpool whirl : _whirlpools){
-                	whirl.pull(graphic);
+                
+                boolean AnyCollFound = false; //see if object is in a wpool
+                
+                for(Whirlpool whirl : wpoolModel.getWpools()){
+                	
+                	if (whirl.Collision(graphic) == 1){
+                		AnyCollFound = true;
+                		if (graphic.GetPullState() == false) whirl.pull(graphic);
+                	}
+                	else if (whirl.Collision(graphic) == 2){
+                		AnyCollFound = true;
+                		if (graphic.GetPullState() == false) {
+                			graphic.setAngle(whirl.getWAngle());
+                			graphic.CantPull();
+                		}
+                	}
                 }
+                if (AnyCollFound == false)
+                	graphic.CanPull();
             }
             angle1 = Func.calcAngle(_graphics.get(0).getX(), _graphics.get(0).getY(), x1, y1);
         }
         @Override
         public void onDraw(Canvas canvas) {
             canvas.drawColor(Color.BLUE);
-            for (Whirlpool whirlpool : _whirlpools) {
+            for (Whirlpool whirlpool : wpoolModel.getWpools()) {
             	whirlpool.getGraphic().draw(canvas);
             }
             for (GraphicObject graphic : _graphics) {

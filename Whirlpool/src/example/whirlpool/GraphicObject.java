@@ -38,6 +38,8 @@ class GraphicObject {
 	public int width, height, radius = 0;
 	private float xscale, yscale;
 	
+	private boolean Nopull;
+	
 	private float _x = 0;
     private float _y = 0;
     
@@ -51,8 +53,10 @@ class GraphicObject {
 			break;
 		case tDuck:
 			_bitmap = BitmapFactory.decodeResource(Panel.res, R.drawable.duck);
-			setX((int) Panel.screen.getCentreX() - getGraphic().getWidth() / 2);
+			setX(0.0f);
         	setY((int) Panel.screen.getCentreY() - getGraphic().getHeight() / 2);
+        	_speed.setSpeed(4);
+        	_speed.setAngle(0);
 			break;
 		case tFrog:
 			_bitmap = BitmapFactory.decodeResource(Panel.res, R.drawable.frog);
@@ -187,7 +191,10 @@ class GraphicObject {
 			speed += a;
 		}
     }
-
+    
+    public void setAngle(float a){
+		_speed.setAngle(a);
+	}
     public float getX() {
         return _x + _bitmap.getWidth() / 2;
     }
@@ -249,5 +256,14 @@ class GraphicObject {
 	}
 	public void setYScale(float yscale) {
 		this.yscale = yscale;
+	}
+	public void CantPull() {
+		this.Nopull = true;
+	}
+	public void CanPull() {
+		this.Nopull = false;
+	}
+	public boolean GetPullState() {
+		return this.Nopull;
 	}
 }
