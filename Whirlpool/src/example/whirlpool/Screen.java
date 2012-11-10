@@ -1,5 +1,5 @@
 package example.whirlpool;
-//
+
 public class Screen {
 	
 	public class Point{
