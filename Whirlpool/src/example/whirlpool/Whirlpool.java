@@ -2,13 +2,7 @@ package example.whirlpool;
 
 import example.whirlpool.GraphicObject;
 import example.whirlpool.GraphicObject.objtype;
-import android.util.FloatMath;
-//used to create effect of whirlpool
 
-
-/*
- * Can be deleted until i've fixed crashing problem
- */
 public class Whirlpool {
 	private final float frogFactor = 0.8f;
 	private final float sharkFactor = 0.5f;

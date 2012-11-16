@@ -2,6 +2,7 @@ package example.whirlpool;
 
 //import android.graphics.Color;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 
 
@@ -27,13 +28,13 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	
 	private final WPools mWPools;
 	
-	private final TutorialThread _thread;
+	private final SurfaceHolder _surfaceHolder;
 	
-    TrackingTouchListener(WPools wpools, TutorialThread Athread) {mWPools = wpools; NewGesture = false; _thread = Athread;}
+    TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {mWPools = wpools; NewGesture = false; _surfaceHolder = surfaceHolder;}
 
     public boolean onTouch(View v, MotionEvent evt) {
         
-    synchronized (_thread.getSurfaceHolder()){
+    synchronized (_surfaceHolder){
     	switch(evt.getAction()){
     	
     	case MotionEvent.ACTION_DOWN:

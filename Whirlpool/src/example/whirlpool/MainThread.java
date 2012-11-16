@@ -1,23 +1,28 @@
 package example.whirlpool;
 
-import example.whirlpool.MainActivity.Panel;
+import java.util.ArrayList;
+
+import example.whirlpool.Panel;
+import example.whirlpool.GraphicObject.objtype;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.util.FloatMath;
 import android.view.SurfaceHolder;
 
-class TutorialThread extends Thread {
+class MainThread extends Thread {
     private SurfaceHolder _surfaceHolder;
     private Panel _panel;
     private boolean _run = false;
-
-    public TutorialThread(SurfaceHolder surfaceHolder, Panel panel) {
-        _surfaceHolder = surfaceHolder;
+    
+   
+    
+    public MainThread(Panel panel) {
+        _surfaceHolder = panel.getHolder();
         _panel = panel;
     }
-
     public void setRunning(boolean run) {
         _run = run;
     }
-
     public SurfaceHolder getSurfaceHolder() {
         return _surfaceHolder;
     }
@@ -32,7 +37,7 @@ class TutorialThread extends Thread {
             try {
                 c = _surfaceHolder.lockCanvas(null);
                 synchronized (_surfaceHolder) {
-                    _panel.updatePhysics();
+                	_panel.updatePhysics();
                     _panel.onDraw(c);
                 }
             } finally {
@@ -45,4 +50,5 @@ class TutorialThread extends Thread {
             }
         }
     }
+  
 }
