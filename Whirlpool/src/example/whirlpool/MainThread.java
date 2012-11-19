@@ -1,12 +1,7 @@
 package example.whirlpool;
 
-import java.util.ArrayList;
-
 import example.whirlpool.Panel;
-import example.whirlpool.GraphicObject.objtype;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.util.FloatMath;
 import android.view.SurfaceHolder;
 
 class MainThread extends Thread {

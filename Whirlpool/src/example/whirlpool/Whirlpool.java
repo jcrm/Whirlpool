@@ -71,7 +71,7 @@ public class Whirlpool {
 	//where as boats get pulled faster because they start slower
 	//frogs are not effected 
 	void pull(GraphicObject graphic){
-		switch(graphic.id){
+		switch(graphic.getId()){
 		case tShark:
 			gravity(graphic, sharkFactor);
 			break;
@@ -82,41 +82,11 @@ public class Whirlpool {
 			gravity(graphic, 4.0f);
 			break;
 		case tBoat:
-			
 			break;
 		default:
 			
 		}
-	}/*
-	//changes direction by a factor depending on type of object
-	//depending on quadrant depends which directions need changing
-	void ChangeDir(GraphicObject graphic, float Factor){
-		float tempx = graphic.GetX();
-		float tempy = graphic.GetY();
-		GraphicObject.Speed speed = graphic.GetSpeed();
-		//checks if the speed is the same as the quadrant before
-		if(tempx>=centreX && tempy>=centreY){
-			if(speed.GetX()>0 && speed.GetY()>0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy>=centreY){
-			if(speed.GetX()<0 && speed.GetY()>0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy<centreY){
-			if(speed.GetX()<0 && speed.GetY()<0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx>=centreX && tempy<centreY){
-			if(speed.GetX()>0 && speed.GetY()<0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-		
-	}*/
+	}
 	public float getX() {
 		return object.getActualX();
 	}
