@@ -1,7 +1,6 @@
 package example.whirlpool;
 
 import java.util.ArrayList;
-
 import example.whirlpool.GraphicObject.objtype;
 import android.content.Context;
 import android.content.res.Resources;

@@ -1,16 +1,12 @@
 package example.whirlpool;
 
 import java.util.Random;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-
 import java.lang.Math;
-
 import example.whirlpool.Panel;
 import android.util.FloatMath;
-
 
 class GraphicObject {
 	//enum used to decide what type of sprite
@@ -18,7 +14,7 @@ class GraphicObject {
 		tDefault(0, 0, 0), 
 		tWhirl(100, 100, 0),
 		tDuck(30, 30, 0),
-		tFrog(30, 30, 0), 
+		tFrog(30, 30, 5), 
 		tShark(10, 40, 0), 
 		tBoat(50, 15, 0);
 		int width;
@@ -127,7 +123,7 @@ class GraphicObject {
 	private objtype _id = objtype.tDefault;
 	private int _width, _height, _radius = 0;
 	private float _xScale, _yScale;
-	private float _frogCentreX, _frogCentreY, _frogAngle;
+	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
 	private boolean _noPull;
 	private float _x = 0;
     private float _y = 0;
@@ -147,6 +143,11 @@ class GraphicObject {
         c.restore();
     }
 	public void init(){
+		boolean _speedCheck = false;
+		if(_id.speed!=0){
+			_speedCheck = true;
+			_speed.setSpeed(_id.speed);
+		}
 		switch(_id){
 		case tWhirl:
 			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.whirlpool);
@@ -155,24 +156,26 @@ class GraphicObject {
 			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.duck);
 			setX(0.0f);
         	setY((int) Panel._screen.getCentreY() - getGraphic().getHeight() / 2);
-        	_speed.setSpeed(4);
+        	if(!_speedCheck){
+        		_speed.setSpeed(4);
+        	}
         	_speed.setAngle(0);
 			break;
 		case tFrog:
 			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.frog);
 			boolean dir = new Random().nextBoolean();
-			/*setX((float) (new Random().nextInt(Panel.screen.getWidth())));
-            setY((float) (new Random().nextInt(Panel.screen.getHeight())));*/
 			setX(Panel._screen.getWidth()/2);
 			setY(Panel._screen.getHeight()/2);
 			setFrogCentreX(getX());
 			setFrogCentreY(getY());
 			setFrogAngle(0);
+			setFrogRadius(100);
+			if(!_speedCheck){
+        		_speed.setSpeed(3);
+        	}
             if(dir){
-            	_speed.setSpeed(3);
             	_speed.setAngle(90);
             }else{
-            	_speed.setSpeed(3);
             	_speed.setAngle(0);
             }
             _speed.setMove(true);
@@ -181,7 +184,9 @@ class GraphicObject {
 			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.shark);
 			setX((float) (new Random().nextInt(Panel._screen.getWidth())));
         	setY((float) (new Random().nextInt(Panel._screen.getHeight())));
-        	_speed.setSpeed(new Random().nextInt(5)+1);
+        	if(!_speedCheck){
+        		_speed.setSpeed(new Random().nextInt(5)+1);
+        	}
         	_speed.setAngle(new Random().nextInt(360)+1);
         	_speed.setMove(true);
 			break;
@@ -189,11 +194,10 @@ class GraphicObject {
 			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.boat);
 			setX((float) (new Random().nextInt(Panel._screen.getWidth())));
             setY((float) (new Random().nextInt(Panel._screen.getHeight())));
-            _speed.setSpeed(new Random().nextInt(3));
+            if(!_speedCheck){
+        		_speed.setSpeed(new Random().nextInt(3)+1);
+        	}
             _speed.setAngle(new Random().nextInt(360));
-            if(_speed.getSpeed() == 0){
-            	_speed.setSpeed(1);
-            }
             _speed.setMove(true);
 			break;
 		default:
@@ -284,11 +288,17 @@ class GraphicObject {
 	public float getFrogAngle() {
 		return _frogAngle;
 	}
+	public float getFrogRadius() {
+		return _frogRadius;
+	}
 	public void setRadius(int radius){
 		_radius = radius;
 	}
 	public void setFrogAngle(float frogAngle) {
 		this._frogAngle = frogAngle;
+	}
+	public void setFrogRadius(float _frogRadius) {
+		this._frogRadius = _frogRadius;
 	}
 	public void setAngle(float a){
 		_speed.setAngle(a);
@@ -329,6 +339,8 @@ class GraphicObject {
 		return false;
 	}
 	private void moveFrog(){
-		
+		setX((float)(_frogCentreX + Math.sin(_frogAngle)*_frogRadius));
+		setY((float)(_frogCentreY + Math.cos(_frogAngle)*_frogRadius));
+		_frogAngle+=_speed.getSpeed()/100;
 	}
 }

@@ -8,18 +8,10 @@ class MainThread extends Thread {
     private SurfaceHolder _surfaceHolder;
     private Panel _panel;
     private boolean _run = false;
-    
-   
-    
+
     public MainThread(Panel panel) {
         _surfaceHolder = panel.getHolder();
         _panel = panel;
-    }
-    public void setRunning(boolean run) {
-        _run = run;
-    }
-    public SurfaceHolder getSurfaceHolder() {
-        return _surfaceHolder;
     }
     //run game loop not sure where to put this other than this thread
     //sometimes thread can cause program to end suddenly
@@ -45,5 +37,10 @@ class MainThread extends Thread {
             }
         }
     }
-  
+    public void setRunning(boolean run) {
+        _run = run;
+    }
+    public SurfaceHolder getSurfaceHolder() {
+        return _surfaceHolder;
+    }
 }

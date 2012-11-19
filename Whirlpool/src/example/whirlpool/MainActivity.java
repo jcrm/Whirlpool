@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.view.Window;
 
 public class MainActivity extends Activity {
-	private Panel mainView;
+	private Panel _mainView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mainView = new Panel(this);
+        _mainView = new Panel(this);
        // mainView.init();
-        setContentView(mainView);
+        setContentView(_mainView);
     }   
 }

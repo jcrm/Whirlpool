@@ -1,53 +1,44 @@
 package example.whirlpool;
 
 public class Screen {
-	
 	public class Point{
-		public int x;
-		public int y;
+		public int _x;
+		public int _y;
 		public void set(int x1, int y1){
-			x = x1;
-			y = y1;
+			_x = x1;
+			_y = y1;
 		}
 		public int getX(){
-			return x;
+			return _x;
 		}
 		public int getY(){
-			return y;
+			return _y;
 		}
 	}
-	
-	private int width;
-	private int height;
-	private Point centre = new Point();
+	//variables
+	private int _width;
+	private int _height;
+	private Point _centre = new Point();
 	
 	Screen(){
-		//width = 500;
-		//height = 500;
-		//centre.x = 250;
-		//centre.y = 250;
 	}
-	
+	//getters and setter for width and height
 	public int getWidth(){
-		return width;
+		return _width;
 	}
-	
 	public int getHeight(){
-		return height;
+		return _height;
 	}
-	
 	public void set(int wid, int hgt){
-		width = wid;
-		height = hgt;
-		centre.set(wid/2, hgt/2);
+		_width = wid;
+		_height = hgt;
+		_centre.set(wid/2, hgt/2);
 	}
-	
+	//getters for x and y components
 	public int getCentreX(){
-		return centre.getX();
+		return _centre.getX();
 	}
-	
 	public int getCentreY(){
-		return centre.getY();
+		return _centre.getY();
 	}
-	
 }
