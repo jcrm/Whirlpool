@@ -37,7 +37,7 @@ public class Whirlpool {
 		
 		//if (graphic.GetPullState()==false){ //if you can pull the object
 			
-		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
+		if (dist <= ( ((this.getRadius()/4) + (graphic.getRadius()/4)) * ((this.getRadius()/4) + (graphic.getRadius()/4)) ))
 			return 2;
 		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
 			return 1;
@@ -49,28 +49,26 @@ public class Whirlpool {
 	}
 	
 	public void gravity(GraphicObject graphic, float factor){
-		float tempx = graphic.getX();
-		float tempy = graphic.getY();
-		float speedx = graphic.getSpeed().getXSpeed();
-		float speedy = graphic.getSpeed().getYSpeed();
-		float cangle = Func.calcAngle(tempx, tempy, this.getCentreX(), this.getCentreY());
-		float temppower = getPower() * factor;
+		float objX = graphic.getX();
+		float objY = graphic.getY();
+		float objSpeedX = graphic.getSpeed().getXSpeed();
+		float objSpeedY = graphic.getSpeed().getYSpeed();
+		float wPoolCentreX = this.getCentreX();
+		float wPoolCentreY = this.getCentreY();
+		//this is the current distance from centre to graphic
+		float wPoolRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
+		//angle of radius
+		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
+		cAngle+=2;//rotate obj around wpool
 		
-		float cx = (float) (temppower*Math.cos(cangle*Math.PI/180));
-		float cy = (float) (temppower*Math.sin(cangle*Math.PI/180));
+		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
+		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
 		
-		/*float dist = 0;
-		for(int x1 = 0; x1 < 3; x1++){
-			if(_tempCollision.circleCollision(graphic.getX(), graphic.getY(), graphic.getRadius()+dist, this.getCentreX(), this.getCentreY(), this.getRadius()))
-				break;
-			else{cx = (float)cx/2; cy = (float)cy/2; dist += 150;}
-		}*/
-		speedx += cx;
-		speedy += cy;
+		cAngle = Func.calcAngle(objX, objY,destX, destY);
 		
 		//reset angle and speed
-		graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(Func.calcAngle(tempx, tempy, tempx + speedx, tempy + speedy));
+		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
+		graphic.getSpeed().setAngle(cAngle+5.0f);
 	}
 	//pulls different objects to the centre depending on original speed
 	//sharks are pulled slower because they start faster

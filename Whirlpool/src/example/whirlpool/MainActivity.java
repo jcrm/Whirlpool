@@ -118,15 +118,15 @@ public class MainActivity extends Activity {
             _graphics.add(TheDuck);
             //for loop for init frog objects
             //for(int i = 0; i<(new Random().nextInt(2)+3); i++){
-	            _graphics.add(new GraphicObject(objtype.tFrog));
+	          //  _graphics.add(new GraphicObject(objtype.tFrog));
             //}
             //for loop for init shark objects
             //for(int i = 0; i<(new Random().nextInt(10)+5); i++){
-            	_graphics.add(new GraphicObject(objtype.tShark));
+            	//_graphics.add(new GraphicObject(objtype.tShark));
             //}
             //for loop for init boat objects
            // for(int i = 0; i < (new Random().nextInt(5)+5); i++){
-	            _graphics.add(new GraphicObject(objtype.tBoat));
+	          //  _graphics.add(new GraphicObject(objtype.tBoat));
 	            
         	//}
         }
