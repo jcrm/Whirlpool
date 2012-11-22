@@ -11,7 +11,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         _mainView = new Panel(this);
-       // mainView.init();
         setContentView(_mainView);
     }   
 }
