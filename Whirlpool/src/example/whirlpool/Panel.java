@@ -10,12 +10,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 class Panel extends SurfaceView implements SurfaceHolder.Callback {
-	//private Whirlpool Whirl;
+	private boolean _GameIsRunning;
     private MainThread _thread;
     final WPools _wpoolModel = new WPools();
-    static public Screen _screen = new Screen();
-    static public Resources _res;
     private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
+    static public Screen sScreen = new Screen();
+    static public Resources sRes;
     
     public Panel(Context context) {
         super(context);
@@ -34,12 +34,12 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
         	graphic.draw(canvas);
         }
    }
-  //initalise objects to screen
+  //Initialise objects to screen
     public void init(){
-    	_screen.set(getWidth(), getHeight());
-    	_res = getResources();
-    	GraphicObject TheDuck =  new GraphicObject(objtype.tDuck);
-        _graphics.add(TheDuck);
+    	sScreen.set(getWidth(), getHeight());
+    	sRes = getResources();
+    	GraphicObject lTheDuck =  new GraphicObject(objtype.tDuck);
+        _graphics.add(lTheDuck);
         _graphics.add(new GraphicObject(objtype.tFrog));
     	_graphics.add(new GraphicObject(objtype.tShark));
         _graphics.add(new GraphicObject(objtype.tBoat));
@@ -49,45 +49,43 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
         for (GraphicObject graphic : _graphics) {
             // Move Objects
             if(graphic.move()){
-            	Func.borders(graphic, _screen.getWidth(), _screen.getHeight());
+            	Func.borders(graphic, sScreen.getWidth(), sScreen.getHeight());
             }
-            boolean AnyCollFound = false; //see if object is in a wpool
+            boolean lAnyCollFound = false; //see if object is in a wpool
             for(Whirlpool whirl : _wpoolModel.getWpools()){
-            	if (whirl.Collision(graphic) == 1){
-            		AnyCollFound = true;
+            	if (whirl.collision(graphic) == 1){
+            		lAnyCollFound = true;
             		if (graphic.getPullState() == false) whirl.pull(graphic);
             	}
-            	else if (whirl.Collision(graphic) == 2){
-            		AnyCollFound = true;
+            	else if (whirl.collision(graphic) == 2){
+            		lAnyCollFound = true;
             		if (graphic.getPullState() == false) {
             			graphic.setAngle(whirl.getWAngle());
             			graphic.cantPull();
             		}
             	}
             }
-            if (AnyCollFound == false){
+            if (lAnyCollFound == false){
             	graphic.canPull();
             }
         }
-        //angle1 = Func.calcAngle(_graphics.get(0).getX(), _graphics.get(0).getY(), x1, y1);
+    } 
+    public void start() {
+        if (!_GameIsRunning) {
+        	_thread.start();
+            _GameIsRunning = true;
+        } else {
+            _thread.onResume();
+        }
     }
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // TODO Auto-generated method stub
     }
     public void surfaceCreated(SurfaceHolder holder) {
-        _thread.setRunning(true);
-        _thread.start();
+    	_thread.setRunning(true);
+    	start();
     }
     public void surfaceDestroyed(SurfaceHolder holder) {
-        boolean retry = true;
-        _thread.setRunning(false);
-        while (retry) {
-            try {
-                _thread.join();
-                retry = false;
-            } catch (InterruptedException e) {
-                // we will try it again and again...
-            }
-        }
+    	_thread.onPause();
     }
 }

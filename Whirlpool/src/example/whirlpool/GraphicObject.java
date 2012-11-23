@@ -4,9 +4,8 @@ import java.util.Random;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import java.lang.Math;
-import example.whirlpool.Panel;
 import android.util.FloatMath;
+import example.whirlpool.Panel;
 
 class GraphicObject {
 	//enum used to decide what type of sprite
@@ -133,7 +132,7 @@ class GraphicObject {
     public GraphicObject(objtype type){
     	_id = type;
         init();
-        _radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
+        _radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
     }
     public void draw(Canvas c){
     	c.save();
@@ -150,22 +149,22 @@ class GraphicObject {
 		}
 		switch(_id){
 		case tWhirl:
-			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.whirlpool);
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.whirlpool);
 			break;
 		case tDuck:
-			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.duck);
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.duck);
 			setX(0.0f);
-        	setY((int) Panel._screen.getCentreY() - getGraphic().getHeight() / 2);
+        	setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
         	if(!_speedCheck){
         		_speed.setSpeed(4);
         	}
         	_speed.setAngle(0);
 			break;
 		case tFrog:
-			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.frog);
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frog);
 			boolean dir = new Random().nextBoolean();
-			setX(Panel._screen.getWidth()/2);
-			setY(Panel._screen.getHeight()/2);
+			setX(Panel.sScreen.getWidth()/2);
+			setY(Panel.sScreen.getHeight()/2);
 			setFrogCentreX(getX());
 			setFrogCentreY(getY());
 			setFrogAngle(0);
@@ -181,9 +180,9 @@ class GraphicObject {
             _speed.setMove(true);
 			break;
 		case tShark:
-			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.shark);
-			setX((float) (new Random().nextInt(Panel._screen.getWidth())));
-        	setY((float) (new Random().nextInt(Panel._screen.getHeight())));
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.shark);
+			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+        	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         	if(!_speedCheck){
         		_speed.setSpeed(new Random().nextInt(5)+1);
         	}
@@ -191,9 +190,9 @@ class GraphicObject {
         	_speed.setMove(true);
 			break;
 		case tBoat:
-			_bitmap = BitmapFactory.decodeResource(Panel._res, R.drawable.boat);
-			setX((float) (new Random().nextInt(Panel._screen.getWidth())));
-            setY((float) (new Random().nextInt(Panel._screen.getHeight())));
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.boat);
+			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+            setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
             if(!_speedCheck){
         		_speed.setSpeed(new Random().nextInt(3)+1);
         	}
@@ -339,8 +338,8 @@ class GraphicObject {
 		return false;
 	}
 	private void moveFrog(){
-		setX((float)(_frogCentreX + Math.sin(_frogAngle)*_frogRadius));
-		setY((float)(_frogCentreY + Math.cos(_frogAngle)*_frogRadius));
+		setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
+		setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
 		_frogAngle+=_speed.getSpeed()/100;
 	}
 }

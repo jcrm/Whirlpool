@@ -1,5 +1,6 @@
 package example.whirlpool;
 
+import android.util.FloatMath;
 import example.whirlpool.GraphicObject;
 import example.whirlpool.GraphicObject.objtype;
 
@@ -15,7 +16,7 @@ public class Whirlpool {
 	
 	Whirlpool(){
 	}
-	public int Collision(GraphicObject graphic){
+	public int collision(GraphicObject graphic){
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
 		float distX, distY, dist;
 		distX = this.getCentreX() - graphic.getX();
@@ -37,16 +38,11 @@ public class Whirlpool {
 		float temppower = getPower() * factor;
 		float cx = (float) (temppower*Math.cos(cangle*Math.PI/180));
 		float cy = (float) (temppower*Math.sin(cangle*Math.PI/180));
-		/*float dist = 0;
-		for(int x1 = 0; x1 < 3; x1++){
-			if(_tempCollision.circleCollision(graphic.getX(), graphic.getY(), graphic.getRadius()+dist, this.getCentreX(), this.getCentreY(), this.getRadius()))
-				break;
-			else{cx = (float)cx/2; cy = (float)cy/2; dist += 150;}
-		}*/
+
 		speedx += cx;
 		speedy += cy;
 		//reset angle and speed
-		graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
+		graphic.getSpeed().setSpeed(FloatMath.sqrt((float) (Math.pow(speedx, 2) + Math.pow(speedy, 2))));
 		graphic.getSpeed().setAngle(Func.calcAngle(tempx, tempy, tempx + speedx, tempy + speedy));
 	}
 	//pulls different objects to the centre depending on type of object

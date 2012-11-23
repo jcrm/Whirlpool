@@ -26,7 +26,7 @@ public class WPools {
         //notifyListener();
     }
     /** Remove all whirlpools. */
-    public void clearDots() {
+    public void clearWPools() {
     	wpools.clear();
     }
 }

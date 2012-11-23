@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 class MainThread extends Thread {
+	private Object _pauseLock = new Object();  
+	private boolean _paused;
     private SurfaceHolder _surfaceHolder;
     private Panel _panel;
     private boolean _run = false;
@@ -17,22 +19,33 @@ class MainThread extends Thread {
     //sometimes thread can cause program to end suddenly
     @Override
     public void run() {
-        Canvas c;
+        Canvas canvas;
         _panel.init();
         while (_run) {
-            c = null;
+            canvas = null;
             try {
-                c = _surfaceHolder.lockCanvas(null);
+                canvas = _surfaceHolder.lockCanvas(null);
                 synchronized (_surfaceHolder) {
-                	_panel.updatePhysics();
-                    _panel.onDraw(c);
+                	if(!_paused){
+                		_panel.updatePhysics();
+                		_panel.onDraw(canvas);
+                	}
                 }
             } finally {
                 // do this in a finally so that if an exception is thrown
                 // during the above, we don't leave the Surface in an
                 // inconsistent state
-                if (c != null) {
-                    _surfaceHolder.unlockCanvasAndPost(c);
+                if (canvas != null) {
+                    _surfaceHolder.unlockCanvasAndPost(canvas);
+                }
+            }
+            // This should be after your drawing/update code inside your thread's run() code.
+            while (_paused) {
+                try {
+                synchronized (_pauseLock) {
+                    _pauseLock.wait();
+                }
+                } catch (InterruptedException e) {
                 }
             }
         }
@@ -43,4 +56,21 @@ class MainThread extends Thread {
     public SurfaceHolder getSurfaceHolder() {
         return _surfaceHolder;
     }
+    // Two methods for your Runnable/Thread class to manage the thread properly.
+    public void onPause() {
+	synchronized (_pauseLock) {
+		_paused = true;
+    }
+    }
+
+    public void onResume() {
+	synchronized (_pauseLock) {
+	    _paused = false;
+	    _pauseLock.notifyAll();
+	}
+    }
 }
+     
+
+
+

@@ -1,3 +1,11 @@
+/**																*
+*																*
+*	changed all non-local variables to the following format 	*
+*	_[lower case][upper case words] for example _mainView		*
+*	all functions excepts constructors have also been changed	*
+*	so that they are camel case for example getSpeed()			*
+*																*
+*															  **/
 package example.whirlpool;
 
 import android.app.Activity;
