@@ -151,8 +151,12 @@ public class MainActivity extends Activity {
                 	else if (whirl.Collision(graphic) == 2){
                 		AnyCollFound = true;
                 		if (graphic.GetPullState() == false) {
-                			graphic.setAngle(whirl.getWAngle());
-                			graphic.CantPull();
+                			whirl.pull(graphic);
+                			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
+                			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
+                				graphic.setAngle(whirl.getWAngle());
+                				graphic.CantPull();
+                			}
                 		}
                 	}
                 }

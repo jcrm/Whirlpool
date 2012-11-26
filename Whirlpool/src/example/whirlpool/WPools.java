@@ -38,11 +38,12 @@ public class WPools {
      * @param color dot color.
      * @param diameter dot size.
       */
-    public void addWPool(float x, float y, float size, float angle) {
+    public void addWPool(float x, float y, float size, float angle, boolean clockwise) {
     	Whirlpool whirl = new Whirlpool();
     	whirl.setCentreX(x);
     	whirl.setCentreY(y);
     	whirl.setWAngle(angle);
+    	whirl.setClockwise(clockwise);
         wpools.add(whirl);
         //notifyListener();
     }

@@ -21,8 +21,15 @@ public class Whirlpool {
 	Whirlpool(){
 		
 	}
-	public boolean getClockwise(){
-		return clockwise;
+	public int getClockwise(){
+		if (clockwise)
+			return 1;
+		else 
+			return -1;
+	}
+	public void setClockwise(boolean Clock){
+		clockwise = Clock;
+		object.setClockwise(clockwise);
 	}
 	
 	public int Collision(GraphicObject graphic){
@@ -37,7 +44,7 @@ public class Whirlpool {
 		
 		//if (graphic.GetPullState()==false){ //if you can pull the object
 			
-		if (dist <= ( ((this.getRadius()/4) + (graphic.getRadius()/4)) * ((this.getRadius()/4) + (graphic.getRadius()/4)) ))
+		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
 			return 2;
 		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
 			return 1;
@@ -59,7 +66,7 @@ public class Whirlpool {
 		float wPoolRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
 		//angle of radius
 		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
-		cAngle+=2;//rotate obj around wpool
+		cAngle+= (2 * getClockwise());//rotate obj around wpool
 		
 		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
 		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
@@ -68,7 +75,7 @@ public class Whirlpool {
 		
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(cAngle+5.0f);
+		graphic.getSpeed().setAngle(cAngle+ (5.0f * getClockwise()));
 	}
 	//pulls different objects to the centre depending on original speed
 	//sharks are pulled slower because they start faster

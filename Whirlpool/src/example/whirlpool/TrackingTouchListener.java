@@ -125,12 +125,40 @@ final class TrackingTouchListener implements View.OnTouchListener{
     			//calc size of whirlpool, simply NoRefs, 4 reference points being the smallest size = (1).
     			Wsize = NoRef-3;
     			
+    			//calc direction of wpool
+    			float[] temp = new float[4];;//holds angle of ref points
+    			boolean clockwise;
+    			int lowest=0, next=1; 
+    			
+    			for (int i = 0;i<4;i++){
+    				temp[i] = Func.calcAngle(Wcenter[0], Wcenter[1], refX[i], refY[i]);
+    				if (temp[i] <= temp[lowest]){ 
+    					lowest = i;
+    					next = i+1;
+    					if (next == 4) next = 0;
+    				}
+    			}
+    			int secondlowest;
+    			secondlowest = next;
+    			
+    			for (int i = 0;i<4;i++){
+    				if (i != lowest)
+    					if (temp[i] <= temp[secondlowest]) 
+    						secondlowest = i;
+    			}
+    			
+    			//head is hurting, come back to this, just need a simple method to get lowest and second lowest angles -F
+    			
+    			if ((temp[next] == temp[secondlowest])) clockwise = true;
+    			else clockwise = false;
+    			
     			addWPools(
     	    			mWPools,
     	    			Wcenter[0],
     	    			Wcenter[1],
     	    			Wsize,
-    	    			Wangle);
+    	    			Wangle,
+    	    			clockwise);
     		
     		}
     		break;
@@ -144,12 +172,13 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	return true;
     }
     
-    private void addWPools(WPools wpools, float x, float y, int s, float angle) {
+    private void addWPools(WPools wpools, float x, float y, int s, float angle, boolean clockwise) {
     	wpools.addWPool(
             x,
             y,
             s,
-            angle);
+            angle,
+            clockwise);
     	
     }
 }

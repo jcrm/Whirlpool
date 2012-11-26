@@ -5,6 +5,7 @@ import java.util.Random;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 import java.lang.Math;
 
@@ -42,6 +43,8 @@ class GraphicObject {
 	
 	private float _x = 0;
     private float _y = 0;
+    private float _rot = 0;
+    private int rotAngle =1;;
     
     private Bitmap _bitmap;
     private Speed _speed = new Speed();
@@ -233,11 +236,42 @@ class GraphicObject {
         radius =  (int) Math.sqrt(((float)width*width) + ((float)height*height));
     }
     public void draw(Canvas c){
+    	Matrix matrix = new Matrix();
+    	
+    	if (id == objtype.tWhirl)
+    	{
+    	matrix.setScale( (1*getClockwise() ), 1);
+        matrix.postTranslate(getActualX()+ (_bitmap.getWidth() * (((getClockwise()*-1)+1)/2)), getActualY());
+        
+        //matrix.postTranslate(width, 0);
+    	matrix.postRotate(getRotation(), getX(), getY());
+    	//matrix.postTranslate(getRadius(), 0);
+    	}
+    	else{
+    		 matrix.setTranslate(getActualX(), getActualY());
+    	}
     	c.save();
     	c.scale(getXScale(), getYScale());
     	c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
-        c.drawBitmap(getGraphic(), getActualX(), getActualY(), null);
+        c.drawBitmap(getGraphic(), matrix, null);
         c.restore();
+    }
+    public void setClockwise(boolean clockwise){
+    	if (clockwise) rotAngle = 1;
+    	else rotAngle = -1;
+    }
+    public int getClockwise(){
+    	return rotAngle;
+    }
+    public float getRotation(){
+    	if (id == objtype.tWhirl){
+    		_rot+= (2*getClockwise());
+    		if (_rot >= 360)_rot=0;
+    		if (_rot < 0)_rot=360;
+    		return _rot;
+    	}
+    	else
+    		return 0.0f;
     }
     public Bitmap getGraphic() {
         return _bitmap;
