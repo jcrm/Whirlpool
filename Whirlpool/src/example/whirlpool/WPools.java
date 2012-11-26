@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 /** A list of whirlpools. */
 public class WPools {
-    private final ArrayList<Whirlpool> wpools = new ArrayList<Whirlpool>();
+private final ArrayList<Whirlpool> wpools = new ArrayList<Whirlpool>();
     /** @return the most recently added whirlpools. */
-    public Whirlpool getLastWpool() {
+	public Whirlpool getLastWpool() {
         return (wpools.size() <= 0) ? null : wpools.get(wpools.size());
     }
     /** @return immutable list of whirlpools. */

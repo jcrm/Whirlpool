@@ -38,11 +38,12 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public void init(){
     	sScreen.set(getWidth(), getHeight());
     	sRes = getResources();
-    	GraphicObject lTheDuck =  new GraphicObject(objtype.tDuck);
-        _graphics.add(lTheDuck);
+    	GraphicObject theDuck =  new GraphicObject(objtype.tDuck);
+        _graphics.add(theDuck);
         _graphics.add(new GraphicObject(objtype.tFrog));
     	_graphics.add(new GraphicObject(objtype.tShark));
         _graphics.add(new GraphicObject(objtype.tBoat));
+        
     }
     //move objects around screen
     public void updatePhysics() {
