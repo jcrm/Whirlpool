@@ -1,6 +1,6 @@
 package example.whirlpool;
 
-import example.whirlpool.MainActivity.Panel;
+import example.whirlpool.Panel;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 

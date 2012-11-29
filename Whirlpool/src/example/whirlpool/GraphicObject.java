@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 
 import java.lang.Math;
 
-import example.whirlpool.MainActivity.Panel;
+import example.whirlpool.Panel;
 import android.util.FloatMath;
 
 
