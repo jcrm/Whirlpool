@@ -49,7 +49,7 @@ public class Func{
         	graphic.setY(graphic.getY() + HEIGHT - (graphic.getY() + graphic.getGraphic().getHeight()));
         }
 	}
-	static float fmod(float num, int divide){
+	static float fMod(float num, int divide){
 		float fresult = num - FloatMath.floor(num);
 		return ((float)((int)num%divide) + fresult);
 	}
@@ -61,11 +61,11 @@ public class Func{
 			angle1 += 180.0f;
 		}
 		else if(x2 < x1 && !(y2 < y1)){
-			angle1 = 180.0f - fmod(Math.abs(angle1), 90);
+			angle1 = 180.0f - fMod(Math.abs(angle1), 90);
 		}
 		else if(!(x2 < x1) && y2 < y1){
-			angle1 = 360.0f - fmod(Math.abs(angle1), 90);
+			angle1 = 360.0f - fMod(Math.abs(angle1), 90);
 		}
-		return fmod((fmod((angle1), 360)+360), 360);
+		return fMod((fMod((angle1), 360)+360), 360);
 	}
 }

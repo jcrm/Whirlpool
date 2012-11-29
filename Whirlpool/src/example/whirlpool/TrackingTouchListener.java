@@ -1,131 +1,127 @@
 package example.whirlpool;
 
+//import android.graphics.Color;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 
-
 final class TrackingTouchListener implements View.OnTouchListener{
-	
 	//really bad way of doing this, change asap. no structs in java.
-	private float[] start = new float[2];
-	private float[] last = new float[2];
-	private float[] curr = new float[2];
-	private float[] refX = new float[4];
-	private float[] refY = new float[4];
-	private int NoRef, LastRef;
-	private float xdir, ydir;
-	private boolean NewGesture;
-	
-	private boolean xToChange, yToChange; //nasty
+	private float[] _start = new float[2];
+	private float[] _last = new float[2];
+	private float[] _curr = new float[2];
+	private float[] _refX = new float[4];
+	private float[] _refY = new float[4];
+	private int _noRef, _lastRef;
+	private float _xDir, _yDir;
+	private boolean _newGesture;
+	private boolean _xToChange, _yToChange; //nasty
 	//end result
-	private float[] Wdirection = new float[2];
-	private float[] Wcenter = new float[2];
+	private float[] _wDirection = new float[2];
+	private float[] _wCenter = new float[2];
+	private int _wSize; //whirlpool direction, center point, and size.
+	private float _wAngle;
+	private final WPools _mWPools;
+	private final SurfaceHolder _surfaceHolder;
 	
-	private int Wsize; //whirlpool direction, center point, and size.
-
-    TrackingTouchListener() {NewGesture = false;}
+    TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
+    	_mWPools = wpools;
+    	_newGesture = false;
+    	_surfaceHolder = surfaceHolder;
+    }
 
     public boolean onTouch(View v, MotionEvent evt) {
-        
+    synchronized (_surfaceHolder){
     	switch(evt.getAction()){
-    	
     	case MotionEvent.ACTION_DOWN:
-    		start[0] = evt.getX();
-    		start[1] = evt.getY();
-    		last[0] = evt.getX();
-    		last[1] = evt.getY();
-    		NoRef = 0;
-    		NewGesture = true;
+    		_start[0] = evt.getX();
+    		_start[1] = evt.getY();
+    		_last[0] = evt.getX();
+    		_last[1] = evt.getY();
+    		_noRef = 0;
+    		_newGesture = true;
     		break;
-    	
     	case MotionEvent.ACTION_MOVE:
-    		
-    		curr[0] = evt.getX();
-    		curr[1] = evt.getY();
-    		
-    		
-    		
-    		if (NewGesture == true){
+    		_curr[0] = evt.getX();
+    		_curr[1] = evt.getY();
+    		if (_newGesture == true){
     			//gesture has been started. determine direction.
-    			xdir = (curr[0] - start[0]);
-    			if (xdir > 0) xdir = 1; else xdir = -1;
-    			ydir = (curr[1] - start[1]);
-    			if (ydir > 0) ydir = 1; else ydir = -1;
-    			NewGesture=false;
-    			xToChange = true;
-    			yToChange = true;
+    			_xDir = (_curr[0] - _start[0]);
+    			if (_xDir > 0) _xDir = 1; else _xDir = -1;
+    			_yDir = (_curr[1] - _start[1]);
+    			if (_yDir > 0) _yDir = 1; else _yDir = -1;
+    			_newGesture=false;
+    			_xToChange = true;
+    			_yToChange = true;
     		}else{
-    			
     			int refindex;
-    			if ((curr[0] - last[0])*xdir < 0){//change in x direction
-    				if (xToChange == false){
-    					start[0] = evt.getX();
-    	    			start[1] = evt.getY();
-    	    			NoRef = 0;
-    	    			NewGesture = true;
+    			if ((_curr[0] - _last[0])*_xDir < 0){//change in x direction
+    				if (_xToChange == false){
+    					_start[0] = evt.getX();
+    	    			_start[1] = evt.getY();
+    	    			_noRef = 0;
+    	    			_newGesture = true;
     	    			break;
     				}
-    				refindex = NoRef;
+    				refindex = _noRef;
     				refindex = refindex % 4;
-    				refX[refindex]=last[0];
-    				refY[refindex]=last[1];
-    				LastRef=refindex;
-    				NoRef++;
-    				xdir*=-1;
-    				yToChange = true;
-    				xToChange = false;
+    				_refX[refindex]=_last[0];
+    				_refY[refindex]=_last[1];
+    				_lastRef=refindex;
+    				_noRef++;
+    				_xDir*=-1;
+    				_yToChange = true;
+    				_xToChange = false;
     			}
-    			if ((curr[1] - last[1])*ydir < 0){//change in y direction
-    				if (yToChange == false){
-    					start[0] = evt.getX();
-    	    			start[1] = evt.getY();
-    	    			NoRef = 0;
-    	    			NewGesture = true;
+    			if ((_curr[1] - _last[1])*_yDir < 0){//change in y direction
+    				if (_yToChange == false){
+    					_start[0] = evt.getX();
+    	    			_start[1] = evt.getY();
+    	    			_noRef = 0;
+    	    			_newGesture = true;
     	    			break;
     				}
-    				refindex = NoRef;
+    				refindex = _noRef;
     				refindex = refindex % 4;
-    				refX[refindex]=last[0];
-    				refY[refindex]=last[1];
-    				LastRef=refindex;
-    				NoRef++;
-    				ydir*=-1;
-    				yToChange = false;
-    				xToChange = true;
+    				_refX[refindex]=_last[0];
+    				_refY[refindex]=_last[1];
+    				_lastRef=refindex;
+    				_noRef++;
+    				_yDir*=-1;
+    				_yToChange = false;
+    				_xToChange = true;
     			}	
     		}
-    		
-    		last[0] = evt.getX();
-    		last[1] = evt.getY();
-    		
+    		_last[0] = evt.getX();
+    		_last[1] = evt.getY();
     		break;
-    	
     	case MotionEvent.ACTION_UP:
-    		
-    		if (NoRef > 4){//whirlpool made
-    			
+    		if (_noRef > 4){//whirlpool made
     			//direction (last ref point to final lift point)
-    			Wdirection[0] = curr[0] - refX[LastRef];
-    			Wdirection[1] = curr[1] - refY[LastRef];
-    			
+    			_wDirection[0] = _curr[0] - _refX[_lastRef];
+    			_wDirection[1] = _curr[1] - _refY[_lastRef];
+    			_wAngle = Func.calcAngle(_refX[_lastRef], _refY[_lastRef] , _curr[0], _curr[1]);
     			//Get center point between 4 ref points
-    			
-    			Wcenter[0] = (refX[0]+refX[1]+refX[2]+refX[3])/4;
-    			Wcenter[1] = (refY[0]+refY[1]+refY[2]+refY[3])/4;
-    				
-    				
+    			_wCenter[0] = (_refX[0]+_refX[1]+_refX[2]+_refX[3])/4;
+    			_wCenter[1] = (_refY[0]+_refY[1]+_refY[2]+_refY[3])/4;
     			//calc size of whirlpool, simply NoRefs, 4 reference points being the smallest size = (1).
-    			Wsize = NoRef-3;
+    			_wSize = _noRef-3;
+    			addWPools(
+    	    			_mWPools,
+    	    			_wCenter[0],
+    	    			_wCenter[1],
+    	    			_wSize,
+    	    			_wAngle);
     		
     		}
     		break;
-    		
-    		
     	default: return false;
     	}
-    	
-    	
-    	
+    }
     	return true;
+    }
+    
+    private void addWPools(WPools wpools, float x, float y, int s, float angle) {
+    	wpools.addWPool(x,y,s,angle);
     }
 }

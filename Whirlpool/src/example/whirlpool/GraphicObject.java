@@ -1,15 +1,12 @@
 package example.whirlpool;
 
 import java.util.Random;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.FloatMath;
 import example.whirlpool.Panel;
-import android.util.FloatMath;
-
 
 class GraphicObject {
 	//enum used to decide what type of sprite
