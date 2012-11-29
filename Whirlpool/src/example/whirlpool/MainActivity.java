@@ -1,20 +1,8 @@
 package example.whirlpool;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import example.whirlpool.GraphicObject.objtype;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.FloatMath;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.Window;
 /*
  * Here is code  so far if need any explaining just let me know.
@@ -31,6 +19,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new Panel(this));
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         _panel = (Panel) findViewById(R.id.mainview);
     }
 

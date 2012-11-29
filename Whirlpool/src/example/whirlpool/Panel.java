@@ -1,177 +1,92 @@
 package example.whirlpool;
 
 import java.util.ArrayList;
-import java.util.Random;
-
+import example.whirlpool.GraphicObject.objtype;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.FloatMath;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import example.whirlpool.GraphicObject.objtype;
 
-    class Panel extends SurfaceView implements SurfaceHolder.Callback {
-    	//private Whirlpool Whirl;
-        private TutorialThread _thread;
-        //an array list to store objects on screen
-        private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
-        private ArrayList<Whirlpool> _whirlpools = new ArrayList<Whirlpool>();
-        static public Screen screen = new Screen();
-        static public Resources res;
-        private Paint _paint = new Paint();
+class Panel extends SurfaceView implements SurfaceHolder.Callback {
+	private boolean _GameIsRunning;
+    private MainThread _thread;
+    final WPools _wpoolModel = new WPools();
+    private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
+    static public Screen sScreen = new Screen();
+    static public Resources sRes;
+    
+    public Panel(Context context) {
+        super(context);
+        getHolder().addCallback(this);
+        _thread = new MainThread(this);
+        setFocusable(true);
+        setOnTouchListener(new TrackingTouchListener(_wpoolModel,getHolder()));
+    }
+    @Override
+    public void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.BLUE);
+        for (Whirlpool whirlpool : _wpoolModel.getWpools()) {
+        	whirlpool.getGraphic().draw(canvas);
+        }
+        for (GraphicObject graphic : _graphics) {
+        	graphic.draw(canvas);
+        }
+   }
+  //Initialise objects to screen
+    public void init(){
+    	sScreen.set(getWidth(), getHeight());
+    	sRes = getResources();
+        _graphics.add(new GraphicObject(objtype.tDuck));
+        _graphics.add(new GraphicObject(objtype.tFrog));
+        _graphics.add(new GraphicObject(objtype.tDiver));
+    	_graphics.add(new GraphicObject(objtype.tShark));
+        _graphics.add(new GraphicObject(objtype.tBoat));
         
-        //temp stuff
-        float angle1 = 0.0f;
-        float x1 = 0.0f;
-        float y1 = 0.0f;
-        //////
-        
-        public Panel(Context context) {
-            super(context);
-            constructor();
-        }
-        public Panel(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            constructor();
-        }
-        private void constructor(){
-        	getHolder().addCallback(this);
-            _thread = new TutorialThread(getHolder(), this);
-            setFocusable(true);
-            //setOnTouchListener(new TrackingTouchListener());
-        }
-        
-        @Override
-        public boolean onTouchEvent(MotionEvent event){
-            synchronized (_thread.getSurfaceHolder()){
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                	Whirlpool whirl = new Whirlpool();
-                	whirl.setCentreX(event.getX());
-                	whirl.setCentreY(event.getY());
-                	_whirlpools.add(whirl);
-                }
-            	x1 = event.getX();
-            	y1 = event.getY();
-                return true;
+    }
+    //move objects around screen
+    public void updatePhysics() {
+        for (GraphicObject graphic : _graphics) {
+            // Move Objects
+            if(graphic.move()){
+            	Func.borders(graphic, sScreen.getWidth(), sScreen.getHeight());
+            }
+            boolean lAnyCollFound = false; //see if object is in a wpool
+            for(Whirlpool whirl : _wpoolModel.getWpools()){
+            	if (whirl.collision(graphic) == 1){
+            		lAnyCollFound = true;
+            		if (graphic.getPullState() == false) whirl.pull(graphic);
+            	}
+            	else if (whirl.collision(graphic) == 2){
+            		lAnyCollFound = true;
+            		if (graphic.getPullState() == false) {
+            			graphic.setAngle(whirl.getWAngle());
+            			graphic.cantPull();
+            		}
+            	}
+            }
+            if (lAnyCollFound == false){
+            	graphic.canPull();
             }
         }
-        /*
-         *haven't been able to get it working yet
-         *so here is the code anyway
-         *the whirlpool code can be left out until i've fixed it
-         **/
-        public void checkWhirl(MotionEvent event){
-        	
-        }
-        //changes direction of objects on screen if falls with in a circular distance from touch event
-        public void changeDir(Whirlpool whirl){
-        	//iterates through graphic list
-        	for (GraphicObject graphic : _graphics){
-        		//if shark randomise a new direction and speed
-        		if(Func.circleCollision(graphic.getX(), graphic.getY(), graphic.getRadius(), whirl.getCentreX(), whirl.getCentreY(), whirl.getRadius())){
-        			
-        			
-        			
-        			
-        			/*if(graphic.id==objtype.tShark){
-            			graphic.getSpeed().setX(new Random().nextInt(5) + 1);
-            			graphic.getSpeed().setY(new Random().nextInt(5) + 1);
-            			graphic.getSpeed().setXDirection(new Random().nextInt(3)-1);
-            			graphic.getSpeed().setYDirection(new Random().nextInt(3)-1);
-        			}else if(graphic.id==objtype.tBoat){
-        				//if boat reduce the speed
-    					float tempX = graphic.getSpeed().getX();
-        				float tempY = graphic.getSpeed().getY();
-        				if(tempY > 0){
-        					graphic.getSpeed().setY((float)(tempY-0.3));
-        				}
-        				if(tempX > 0){
-        					graphic.getSpeed().setX((float)(tempX-0.3));
-        				}
-        			}*/
-        		}
-        	}
-        }
-        
-        //initalise objects to screen
-        public void init(){
-        	screen.set(getWidth(), getHeight());
-        	res = getResources();
-        	//init duck to centre of screen
-            _graphics.add(new GraphicObject(objtype.tDuck));
-            //for loop for init frog objects
-            for(int i = 0; i<(new Random().nextInt(2)+3); i++){
-	            _graphics.add(new GraphicObject(objtype.tFrog));
-            }
-            //for loop for init shark objects
-            for(int i = 0; i<(new Random().nextInt(10)+5); i++){
-            	_graphics.add(new GraphicObject(objtype.tShark));
-            }
-            //for loop for init boat objects
-            for(int i = 0; i < (new Random().nextInt(5)+5); i++){
-	            _graphics.add(new GraphicObject(objtype.tBoat));
-	            
-        	}
-        }
-        //move objects around screen
-        public void updatePhysics() {
-            for (GraphicObject graphic : _graphics) {
-                // Move Objects
-                if(graphic.getSpeed().getMove()){
-                	graphic.shiftX(graphic.getSpeed().getSpeed()*FloatMath.cos(graphic.getSpeed().getAngleRad()));
-                	graphic.shiftY(graphic.getSpeed().getSpeed()*FloatMath.sin(graphic.getSpeed().getAngleRad()));
-                	Func.borders(graphic, screen.getWidth(), screen.getHeight());
-                }
-                for(Whirlpool whirl : _whirlpools){
-                	whirl.pull(graphic);
-                }
-            }
-            angle1 = Func.calcAngle(_graphics.get(0).getX(), _graphics.get(0).getY(), x1, y1);
-        }
-        @Override
-        public void onDraw(Canvas canvas) {
-            canvas.drawColor(Color.BLUE);
-            
-            
-            
-            for (Whirlpool whirlpool : _whirlpools) {
-            	whirlpool.getGraphic().draw(canvas);
-            }
-            for (GraphicObject graphic : _graphics) {
-            	graphic.draw(canvas);
-            }
-            
-            
-            _paint.setTextSize(20);
-            _paint.setColor(Color.GREEN);
-            /*if(_graphics.size() > 0)
-            	canvas.drawText(String.format("%f", _graphics.get(0).getX()) + " " + String.format("%f", _graphics.get(0).getY()) + " " + String.format("%f", _graphics.get(0).getSpeed().getAngle()), 10, 50, _paint);
-            if(_whirlpools.size() > 0)
-            	canvas.drawText(String.format("%f", _whirlpools.get(0).getCentreX()) + " " + String.format("%f", _whirlpools.get(0).getCentreY()) + " " + String.format("%f", angle1), 10, 70, _paint);
-       		*/
-       }
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            // TODO Auto-generated method stub
-        }
-        public void surfaceCreated(SurfaceHolder holder) {
-            _thread.setRunning(true);
-            _thread.start();
-        }
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            boolean retry = true;
-            _thread.setRunning(false);
-            while (retry) {
-                try {
-                    _thread.join();
-                    retry = false;
-                } catch (InterruptedException e) {
-                    // we will try it again and again...
-                }
-            }
+    } 
+    public void start() {
+        if (!_GameIsRunning) {
+        	_thread.start();
+            _GameIsRunning = true;
+        } else {
+            _thread.onResume();
         }
     }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // TODO Auto-generated method stub
+    }
+    public void surfaceCreated(SurfaceHolder holder) {
+    	_thread.setRunning(true);
+    	start();
+    }
+    public void surfaceDestroyed(SurfaceHolder holder) {
+    	_thread.onPause();
+    }
+}
