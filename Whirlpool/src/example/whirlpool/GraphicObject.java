@@ -4,25 +4,30 @@ import java.util.Random;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.util.FloatMath;
 import example.whirlpool.Panel;
 
 class GraphicObject {
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 0), 
-		tWhirl(100, 100, 0),
-		tDuck(30, 30, 0),
-		tFrog(30, 30, 5), 
-		tShark(10, 40, 0), 
-		tBoat(50, 15, 0);
+		tDefault(0, 0, 0, 0), 
+		tWhirl(100, 100, 0, 0),
+		tDuck(30, 30, 4, 0),
+		tFrog(30, 30, 5, 0), 
+		tShark(10, 40, 5, new Random().nextInt(360)+1), 
+		tBoat(50, 15, 0, 0),
+		tDiver(64, 32, 4, 45);
+		
 		int width;
 		int height;
 		float speed;
-		objtype(int a, int b, float c){
+		float angle;
+		objtype(int a, int b, float c, float d){
 			width = a;
 			height = b;
 			speed = c;
+			angle = d;
 		}
 	}
 	//speed class
@@ -68,6 +73,10 @@ class GraphicObject {
     			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
     					break;
     		}
+    		setFlipH(true);
+    		if(_flipped){
+    			flip();
+    		}
     	}
     	void VerBounce(){
     		float angletemp = _angle.getAngle();
@@ -78,6 +87,10 @@ class GraphicObject {
     			case 1:
     			case 3:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
     					break;
+    		}
+    		setFlipV(true);
+    		if(_flipped){
+    			flip();
     		}
     	}
     	//getters and setters for speed
@@ -124,6 +137,7 @@ class GraphicObject {
 	private float _xScale, _yScale;
 	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
 	private boolean _noPull;
+	private boolean _flipped, _flipV, _flipH;
 	private float _x = 0;
     private float _y = 0;
     private Bitmap _bitmap;
@@ -138,72 +152,55 @@ class GraphicObject {
     	c.save();
     	c.scale(getXScale(), getYScale());
     	c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
-        c.drawBitmap(getGraphic(), getActualX(), getActualY(), null);
+    	c.drawBitmap(getGraphic(), getActualX(), getActualY(), null);
         c.restore();
     }
 	public void init(){
-		boolean _speedCheck = false;
-		if(_id.speed!=0){
-			_speedCheck = true;
-			_speed.setSpeed(_id.speed);
-		}
 		switch(_id){
 		case tWhirl:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.whirlpool);
+			_speed.setMove(false);
 			break;
 		case tDuck:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.duck);
 			setX(0.0f);
         	setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
-        	if(!_speedCheck){
-        		_speed.setSpeed(4);
-        	}
-        	_speed.setAngle(0);
+        	_speed.setMove(true);
 			break;
 		case tFrog:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frog);
-			boolean dir = new Random().nextBoolean();
 			setX(Panel.sScreen.getWidth()/2);
-			setY(Panel.sScreen.getHeight()/2);
+			setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
 			setFrogCentreX(getX());
 			setFrogCentreY(getY());
-			setFrogAngle(0);
 			setFrogRadius(100);
-			if(!_speedCheck){
-        		_speed.setSpeed(3);
-        	}
-            if(dir){
-            	_speed.setAngle(90);
-            }else{
-            	_speed.setAngle(0);
-            }
             _speed.setMove(true);
 			break;
 		case tShark:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.shark);
 			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
         	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-        	if(!_speedCheck){
-        		_speed.setSpeed(new Random().nextInt(5)+1);
-        	}
-        	_speed.setAngle(new Random().nextInt(360)+1);
         	_speed.setMove(true);
 			break;
 		case tBoat:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.boat);
 			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
             setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-            if(!_speedCheck){
-        		_speed.setSpeed(new Random().nextInt(3)+1);
-        	}
-            _speed.setAngle(new Random().nextInt(360));
             _speed.setMove(true);
 			break;
+		case tDiver:
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.diver);
+			setX(Panel.sScreen.getWidth()/2);
+			setY(Panel.sScreen.getHeight()/2);
+            _speed.setMove(true);
+            _flipped = true;
 		default:
 			break;
 		}
 		_width = _id.width;
 		_height = _id.height;
+		_speed.setAngle(_id.angle);
+		_speed.setSpeed(_id.speed);
 		setScale();
 	}
 	//getter and setter for object type
@@ -328,6 +325,8 @@ class GraphicObject {
 				break;
 			case tWhirl:
 				break;
+			case tBoat:
+				break;
 			default:
 				shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
 		    	shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
@@ -338,8 +337,49 @@ class GraphicObject {
 		return false;
 	}
 	private void moveFrog(){
+		shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
+		shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
+		_speed.shiftAngle(2.5f);
+    	/*
 		setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 		setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-		_frogAngle+=_speed.getSpeed()/100;
+		_frogAngle+=_speed.getSpeed()/100;*/
+	}
+	public boolean getFlipped() {
+		return _flipped;
+	}
+	public void setFlipped(boolean _flipped) {
+		this._flipped = _flipped;
+	}
+	public boolean getFlipV() {
+		return _flipV;
+	}
+	public void setFlipV(boolean _flipV) {
+		this._flipV = _flipV;
+	}
+	public boolean getFlipH() {
+		return _flipH;
+	}
+	public void setFlipH(boolean _flipH) {
+		this._flipH = _flipH;
+	}
+	public void flip(){
+		boolean tempflip = false;
+		Matrix flipMatrix = new Matrix();
+		
+		if(_flipH){
+			flipMatrix.setScale(-1, 1);
+			tempflip = true;
+			_flipH = false;
+		}else if(_flipV){
+			flipMatrix.setScale(1, -1);
+			tempflip = true;
+			_flipV = false;
+		}
+		if(tempflip){
+			Bitmap temp;
+			temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
+			_bitmap = temp;
+		}
 	}
 }
