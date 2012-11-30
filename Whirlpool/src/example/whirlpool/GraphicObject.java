@@ -140,6 +140,8 @@ class GraphicObject {
 	private boolean _flipped, _flipV, _flipH;
 	private float _x = 0;
     private float _y = 0;
+    private float _rot = 0;
+    private int rotAngle =1;
     private Bitmap _bitmap;
     private Speed _speed = new Speed();
 	
@@ -299,6 +301,13 @@ class GraphicObject {
 	public void setAngle(float a){
 		_speed.setAngle(a);
 	}
+	public void setClockwise(boolean clockwise){
+    	if (clockwise) rotAngle = 1;
+    	else rotAngle = -1;
+    }
+    public int getClockwise(){
+    	return rotAngle;
+    }
 	//getters for graphics and speed
     public Bitmap getGraphic() {
         return _bitmap;

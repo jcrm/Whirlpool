@@ -14,6 +14,7 @@ class MainThread extends Thread {
     public MainThread(Panel panel) {
         _surfaceHolder = panel.getHolder();
         _panel = panel;
+        //_panel.init();
     }
     //run game loop not sure where to put this other than this thread
     //sometimes thread can cause program to end suddenly
@@ -21,13 +22,14 @@ class MainThread extends Thread {
     public void run() {
         Canvas canvas;
         _panel.init();
+        MainActivity.getCurrentLevel().init();
         while (_run) {
             canvas = null;
             try {
                 canvas = _surfaceHolder.lockCanvas(null);
                 synchronized (_surfaceHolder) {
                 	if(!_paused){
-                		_panel.updatePhysics();
+                		_panel.update();
                 		_panel.onDraw(canvas);
                 	}
                 }
