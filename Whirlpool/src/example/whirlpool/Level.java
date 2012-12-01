@@ -67,7 +67,7 @@ public class Level {
             }
             if (lAnyCollFound == false){
             	graphic.canPull();
-            }
+            }//
         }
 		scroll();
 	}
