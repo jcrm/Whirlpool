@@ -12,16 +12,18 @@ public final class R {
     }
     public static final class drawable {
         public static final int boat=0x7f020000;
-        public static final int duck=0x7f020001;
-        public static final int frog=0x7f020002;
-        public static final int ic_action_search=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int shark=0x7f020005;
-        public static final int whirlpool=0x7f020006;
+        public static final int diver=0x7f020001;
+        public static final int duck=0x7f020002;
+        public static final int frog=0x7f020003;
+        public static final int ic_action_search=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int shark=0x7f020006;
+        public static final int whirlpool=0x7f020007;
     }
     public static final class id {
-        public static final int mainview=0x7f070000;
-        public static final int menu_settings=0x7f070001;
+        public static final int mainview=0x7f070001;
+        public static final int menu_settings=0x7f070002;
+        public static final int root=0x7f070000;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.util.FloatMath;
 import example.whirlpool.Panel;
 
@@ -53,7 +54,7 @@ class GraphicObject {
     			checkAngle();
     		}
     		private void checkAngle(){		//Makes sure it's always withing 0-360
-    			if(_angle > 360.0f || _angle < 0.0f){
+    			if(_angle >= 360.0f || _angle < 0.0f){
     				_angle = ((_angle%360)+360)%360;
     			}
     		}
@@ -151,10 +152,31 @@ class GraphicObject {
         _radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
     }
     public void draw(Canvas c){
+    	Rect rect;
+    	
     	c.save();
-    	c.scale(getXScale(), getYScale());
-    	c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
-    	c.drawBitmap(getGraphic(), getActualX(), getActualY(), null);
+    	
+    	if (_id == objtype.tWhirl)
+    	{
+    		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+    		
+    		c.translate(getX(), getY());
+    		c.rotate(getRotation());
+    		
+    		c.drawBitmap(getGraphic(), null, rect,  null);
+	    	
+    	}
+    	else{
+    		rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
+    		c.drawBitmap(getGraphic(), null, rect,  null);
+    	}
+    	
+    	
+    	//c.translate(-getActualX(), -getActualY());
+    	
+    	//c.scale(getXScale(), getYScale());
+    	//c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
+        //c.drawBitmap(getGraphic(), matrix, null);
         c.restore();
     }
 	public void init(){
@@ -214,7 +236,7 @@ class GraphicObject {
 	}
 	//getters and setters for X components
     public float getX() {
-        return _x + _bitmap.getWidth() / 2;
+        return _x + getWidth() / 2;
     }
     public float getActualX() {
         return _x;
@@ -223,7 +245,10 @@ class GraphicObject {
 		return _frogCentreX;
 	}
     public void setX(float value) {
-        _x = value - _bitmap.getWidth() / 2;
+        _x = value - getWidth() / 2;
+    }
+    public void setActualX(float value) {
+        _x = value;
     }
     public void setFrogCentreX(float frogCentreX) {
 		this._frogCentreX = frogCentreX;
@@ -233,7 +258,7 @@ class GraphicObject {
     }
     //getters and setters for Y components
     public float getY() {
-        return _y + _bitmap.getHeight() / 2;
+        return _y + getHeight() / 2;
     }
     public float getActualY() {
         return _y;
@@ -242,7 +267,10 @@ class GraphicObject {
 		return _frogCentreY;
 	}
     public void setY(float value) {
-        _y = value - _bitmap.getHeight() / 2;
+        _y = value - getHeight() / 2;
+    }
+    public void setActualY(float value) {
+        _y = value;
     }
 	public void setFrogCentreY(float frogCentreY) {
 		this._frogCentreY = frogCentreY;
@@ -308,7 +336,16 @@ class GraphicObject {
     public int getClockwise(){
     	return rotAngle;
     }
-	//getters for graphics and speed
+    public float getRotation(){
+    	if (_id == objtype.tWhirl){
+    		_rot+= (2*getClockwise());
+    		if (_rot >= 360)_rot=0;
+    		if (_rot < 0)_rot=360;
+    		return _rot;
+    	}
+    	else
+    		return 0.0f;
+    }
     public Bitmap getGraphic() {
         return _bitmap;
     }

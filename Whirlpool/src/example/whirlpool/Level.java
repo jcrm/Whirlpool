@@ -27,6 +27,7 @@ public class Level {
     private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
     private int levelWidth = 0;
     private float scrollBy = 0;
+    private float scrollSpeed = 0;
     Paint paint = new Paint();
     Rect rect = new Rect();
     
@@ -44,7 +45,7 @@ public class Level {
 		for (GraphicObject graphic : _graphics) {
             // Move Objects
             if(graphic.move()){
-            	Func.borders(graphic, levelWidth-290, Panel.sScreen.getHeight());
+            	Func.borders(graphic, levelWidth, Panel.sScreen.getHeight());
             }
             boolean lAnyCollFound = false; //see if object is in a wpool
             for(Whirlpool whirl : _wPoolModel.getWpools()){
@@ -55,8 +56,12 @@ public class Level {
             	else if (whirl.collision(graphic) == 2){
             		lAnyCollFound = true;
             		if (graphic.getPullState() == false) {
-            			graphic.setAngle(whirl.getWAngle());
-            			graphic.cantPull();
+            			whirl.pull(graphic);
+            			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
+            			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
+            				graphic.setAngle(whirl.getWAngle());
+            				graphic.cantPull();
+            			}
             		}
             	}
             }
@@ -64,6 +69,7 @@ public class Level {
             	graphic.canPull();
             }
         }
+		scroll();
 	}
 	
 	void onDraw(Canvas canvas){
@@ -83,7 +89,8 @@ public class Level {
     	
     	canvas.drawRect(rect, paint);
     	
-    	rect.set(levelWidth-300, 0, levelWidth, canvas.getHeight());
+    	canvas.translate(levelWidth-10, 0);
+    	rect.set(0, 0, 10, canvas.getHeight());
     	
     	canvas.drawRect(rect, paint);
 	}
@@ -104,12 +111,19 @@ public class Level {
 		this.scrollBy = scrollBy;
 	}
 	public void shiftScrollBy(float a) {
-		scrollBy += a;
+		scrollSpeed += a/2.0f;
+	}
+	private void scroll(){
+		scrollBy += scrollSpeed;
+		if(scrollSpeed > 1.0f)
+			scrollSpeed /= 1.5f;
+		else
+			scrollSpeed = 0.0f;
 		if(scrollBy < 0){
 			scrollBy = 0;
 		}
-		if(scrollBy > (levelWidth - (scrollBy + (Panel.sScreen.getWidth()*(float)(3/2))))){
-			scrollBy = (levelWidth - (scrollBy + (Panel.sScreen.getWidth()*(float)(3/2))));
+		if(scrollBy + Panel.sScreen.getWidth() > levelWidth){
+			scrollBy = levelWidth - Panel.sScreen.getWidth();
 		}
 	}
 	

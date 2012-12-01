@@ -33,20 +33,20 @@ public class Func{
 	//WIDTH, HEIGHT are screen width and height
 	static public void borders(GraphicObject graphic, int WIDTH,int HEIGHT){
 		// borders for x...
-        if (graphic.getX() < 0) {
+        if (graphic.getActualX() < 0) {
         	graphic.getSpeed().HorBounce();
-        	graphic.setX(-graphic.getX());
-        } else if (graphic.getX() + graphic.getGraphic().getWidth() > WIDTH) {
+        	graphic.setActualX(-graphic.getActualX());
+        } else if (graphic.getActualX() + graphic.getWidth() > WIDTH) {
         	graphic.getSpeed().HorBounce();
-        	graphic.setX(graphic.getX() + WIDTH - (graphic.getX() + graphic.getGraphic().getWidth()));
+        	graphic.setActualX(WIDTH - graphic.getWidth());
         }
         // borders for y...
-        if (graphic.getY() < 0) {
+        if (graphic.getActualY() < 0) {
             graphic.getSpeed().VerBounce();
-            graphic.setY(-graphic.getY());
-        } else if (graphic.getY() + graphic.getGraphic().getHeight() > HEIGHT) {
+            graphic.setActualY(-graphic.getActualY());
+        } else if (graphic.getActualY() + graphic.getHeight() > HEIGHT) {
         	graphic.getSpeed().VerBounce();
-        	graphic.setY(graphic.getY() + HEIGHT - (graphic.getY() + graphic.getGraphic().getHeight()));
+        	graphic.setActualY(HEIGHT - graphic.getHeight());
         }
 	}
 	static float fMod(float num, int divide){
