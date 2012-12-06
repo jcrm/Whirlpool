@@ -1,14 +1,11 @@
 package example.whirlpool;
-
+//updated 29/11
 import example.whirlpool.GraphicObject;
 import example.whirlpool.GraphicObject.objtype;
 import android.util.FloatMath;
 //used to create effect of whirlpool
 
 
-/*
- * Can be deleted until i've fixed crashing problem
- */
 public class Whirlpool {
 	private final float frogFactor = 0.8f;
 	private final float sharkFactor = 0.5f;
@@ -58,8 +55,8 @@ public class Whirlpool {
 	public void gravity(GraphicObject graphic, float factor){
 		float objX = graphic.getX();
 		float objY = graphic.getY();
-		float objSpeedX = graphic.getSpeed().getXSpeed();
-		float objSpeedY = graphic.getSpeed().getYSpeed();
+		//float objSpeedX = graphic.getSpeed().getXSpeed();
+		//float objSpeedY = graphic.getSpeed().getYSpeed();
 		float wPoolCentreX = this.getCentreX();
 		float wPoolCentreY = this.getCentreY();
 		//this is the current distance from centre to graphic
@@ -75,7 +72,29 @@ public class Whirlpool {
 		
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(cAngle+ (5.0f * getClockwise()));
+		cAngle = cAngle+ (5.0f * getClockwise()); //ideal angle
+		
+		float mAngle = graphic.getSpeed().getAngle();
+		float clockwiseDiff;
+		float anticlockwiseDiff;
+		if (mAngle > cAngle){
+			 anticlockwiseDiff = (cAngle + 360) - mAngle;
+			 clockwiseDiff = (mAngle - cAngle);
+		}
+		else{
+			clockwiseDiff = (mAngle + 360) - cAngle;
+			anticlockwiseDiff = (cAngle - mAngle);
+		}
+			if (anticlockwiseDiff < clockwiseDiff)
+				if (anticlockwiseDiff >= 10)
+					mAngle+=10;
+				else mAngle = cAngle;
+			else
+				if (clockwiseDiff >= 10)
+					mAngle-=10;
+				else mAngle = cAngle;
+		
+		graphic.setAngle(mAngle);
 	}
 	//pulls different objects to the centre depending on original speed
 	//sharks are pulled slower because they start faster
@@ -86,12 +105,11 @@ public class Whirlpool {
 		case tShark:
 			gravity(graphic, sharkFactor);
 			break;
-		case tFrog:
-			gravity(graphic, frogFactor);
-			break;
 		case tDuck:
 			gravity(graphic, 4.0f);
 			break;
+		case tFrog:
+			
 		case tBoat:
 			
 			break;
