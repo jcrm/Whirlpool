@@ -16,6 +16,19 @@ public class Func{
     	}
     	return false;
     }
+	//box collision - graphic is duck, graphic 2 is other sprite
+	static public boolean boxCollision(GraphicObject graphic, GraphicObject graphic2){
+		if((graphic.getX()+(graphic.getWidth()/2))>(graphic2.getX()-(graphic2.getWidth()/2))){
+			if((graphic.getX()-(graphic.getWidth()/2))<(graphic2.getX()+(graphic2.getWidth()/2))){
+				if((graphic.getY()+(graphic.getHeight()/2))>(graphic2.getY()-(graphic2.getHeight()/2))){
+					if((graphic.getY()-(graphic.getHeight()/2))<(graphic2.getY()+(graphic2.getHeight()/2))){
+						return true;
+					}
+				}
+			}
+		}
+    	return false;
+    }
 	//circle collision - graphic is the sprite being tested, event is the touch
 	static public boolean circleCollision(float x1, float y1, float r1, float x2, float y2, float r2){
 		float width, height, radius;
@@ -36,20 +49,20 @@ public class Func{
         if (graphic.getX() < 0) {
         	graphic.getSpeed().HorBounce();
         	graphic.setX(-graphic.getX());
-        } else if (graphic.getX() + graphic.getGraphic().getWidth() > WIDTH) {
+        } else if (graphic.getX() + (graphic.getGraphic().getWidth()/2) > WIDTH) {
         	graphic.getSpeed().HorBounce();
-        	graphic.setX(graphic.getX() + WIDTH - (graphic.getX() + graphic.getGraphic().getWidth()));
+        	graphic.setX(graphic.getX() + WIDTH - (graphic.getX() + (graphic.getGraphic().getWidth()/2)));
         }
         // borders for y...
         if (graphic.getY() < 0) {
             graphic.getSpeed().VerBounce();
             graphic.setY(-graphic.getY());
-        } else if (graphic.getY() + graphic.getGraphic().getHeight() > HEIGHT) {
+        } else if (graphic.getY() + (graphic.getGraphic().getHeight()/2) > HEIGHT) {
         	graphic.getSpeed().VerBounce();
-        	graphic.setY(graphic.getY() + HEIGHT - (graphic.getY() + graphic.getGraphic().getHeight()));
+        	graphic.setY(graphic.getY() + HEIGHT - (graphic.getY() + (graphic.getGraphic().getHeight()/2)));
         }
 	}
-	static float fMod(float num, int divide){
+	static float fmod(float num, int divide){
 		float fresult = num - FloatMath.floor(num);
 		return ((float)((int)num%divide) + fresult);
 	}
@@ -61,11 +74,11 @@ public class Func{
 			angle1 += 180.0f;
 		}
 		else if(x2 < x1 && !(y2 < y1)){
-			angle1 = 180.0f - fMod(Math.abs(angle1), 90);
+			angle1 = 180.0f - fmod(Math.abs(angle1), 90);
 		}
 		else if(!(x2 < x1) && y2 < y1){
-			angle1 = 360.0f - fMod(Math.abs(angle1), 90);
+			angle1 = 360.0f - fmod(Math.abs(angle1), 90);
 		}
-		return fMod((fMod((angle1), 360)+360), 360);
+		return fmod((fmod((angle1), 360)+360), 360);
 	}
 }

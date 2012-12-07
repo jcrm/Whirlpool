@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.util.FloatMath;
 import example.whirlpool.Panel;
 
@@ -14,11 +15,11 @@ class GraphicObject {
 		tDefault(0, 0, 0, 0), 
 		tWhirl(100, 100, 0, 0),
 		tDuck(30, 30, 4, 0),
-		tFrog(30, 30, 5, 0), 
+		tFrog(63, 45, 5, 0), 
 		tShark(10, 40, 5, new Random().nextInt(360)+1), 
 		tBoat(50, 15, 0, 0),
-		tDiver(64, 32, 4, 45);
-		
+		tDiver(64, 64, 4, 135);
+
 		int width;
 		int height;
 		float speed;
@@ -52,8 +53,8 @@ class GraphicObject {
     			_angle += a;
     			checkAngle();
     		}
-    		private void checkAngle(){		//Makes sure it's always withing 0-360
-    			if(_angle > 360.0f || _angle < 0.0f){
+    		private void checkAngle(){		//Makes sure it's always within 0-360
+    			if(_angle >= 360.0f || _angle < 0.0f){
     				_angle = ((_angle%360)+360)%360;
     			}
     		}
@@ -64,14 +65,18 @@ class GraphicObject {
     	private Angle _angle = new Angle(0);
     	//bounce functions
     	public void HorBounce(){
-    		float angletemp = _angle.getAngle();
-    		switch((int)(angletemp/90)){
-    			case 0:
-    			case 2:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
-    					break;
-    			case 1:
-    			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
-    					break;
+    		if(_id!=objtype.tDiver){
+	    		float angletemp = _angle.getAngle();
+	    		switch((int)(angletemp/90)){
+	    			case 0:
+	    			case 2:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
+	    					break;
+	    			case 1:
+	    			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
+	    					break;
+	    		}
+    		}else if(_id==objtype.tDiver){
+    			_angle.shiftAngle(180);
     		}
     		setFlipH(true);
     		if(_flipped){
@@ -79,16 +84,20 @@ class GraphicObject {
     		}
     	}
     	void VerBounce(){
-    		float angletemp = _angle.getAngle();
-    		switch((int)(angletemp/90)){
-    			case 0:
-    			case 2:	_angle.shiftAngle(-2*((int)(angletemp%90)));
-    					break;
-    			case 1:
-    			case 3:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
-    					break;
+    		if(_id!=objtype.tDiver){
+	    		float angletemp = _angle.getAngle();
+	    		switch((int)(angletemp/90)){
+	    			case 0:
+	    			case 2:	_angle.shiftAngle(-2*((int)(angletemp%90)));
+	    					break;
+	    			case 1:
+	    			case 3:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
+	    					break;
+	    		}
+    		}else if(_id==objtype.tDiver){
+    			_angle.shiftAngle(180);
     		}
-    		setFlipV(true);
+    		setFlipH(true);
     		if(_flipped){
     			flip();
     		}
@@ -140,19 +149,42 @@ class GraphicObject {
 	private boolean _flipped, _flipV, _flipH;
 	private float _x = 0;
     private float _y = 0;
+    private float _rot = 0;
+    private int rotAngle =1;
     private Bitmap _bitmap;
     private Speed _speed = new Speed();
-	
+
     public GraphicObject(objtype type){
     	_id = type;
         init();
         _radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
     }
     public void draw(Canvas c){
+    	Rect rect;
+    	
     	c.save();
-    	c.scale(getXScale(), getYScale());
-    	c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
-    	c.drawBitmap(getGraphic(), getActualX(), getActualY(), null);
+    	
+    	if (_id == objtype.tWhirl)
+    	{
+    		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+    		
+    		c.translate(getX(), getY());
+    		c.rotate(getRotation());
+    		
+    		c.drawBitmap(getGraphic(), null, rect,  null);
+
+    	}
+    	else{
+    		rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
+    		c.drawBitmap(getGraphic(), null, rect,  null);
+    	}
+    	
+    	
+    	//c.translate(-getActualX(), -getActualY());
+    	
+    	//c.scale(getXScale(), getYScale());
+    	//c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
+        //c.drawBitmap(getGraphic(), matrix, null);
         c.restore();
     }
 	public void init(){
@@ -168,12 +200,13 @@ class GraphicObject {
         	_speed.setMove(true);
 			break;
 		case tFrog:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frog);
+			//create temp image to display frog until animation code has been added
+			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frogtemp);
 			setX(Panel.sScreen.getWidth()/2);
-			setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
+			setY(Panel.sScreen.getHeight()/2);
 			setFrogCentreX(getX());
 			setFrogCentreY(getY());
-			setFrogRadius(100);
+			setFrogRadius(50);
             _speed.setMove(true);
 			break;
 		case tShark:
@@ -190,8 +223,8 @@ class GraphicObject {
 			break;
 		case tDiver:
 			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.diver);
-			setX(Panel.sScreen.getWidth()/2);
-			setY(Panel.sScreen.getHeight()/2);
+			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+            setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
             _speed.setMove(true);
             _flipped = true;
 		default:
@@ -212,7 +245,7 @@ class GraphicObject {
 	}
 	//getters and setters for X components
     public float getX() {
-        return _x + _bitmap.getWidth() / 2;
+        return _x + getWidth() / 2;
     }
     public float getActualX() {
         return _x;
@@ -221,7 +254,10 @@ class GraphicObject {
 		return _frogCentreX;
 	}
     public void setX(float value) {
-        _x = value - _bitmap.getWidth() / 2;
+        _x = value - getWidth() / 2;
+    }
+    public void setActualX(float value) {
+        _x = value;
     }
     public void setFrogCentreX(float frogCentreX) {
 		this._frogCentreX = frogCentreX;
@@ -231,7 +267,7 @@ class GraphicObject {
     }
     //getters and setters for Y components
     public float getY() {
-        return _y + _bitmap.getHeight() / 2;
+        return _y + getHeight() / 2;
     }
     public float getActualY() {
         return _y;
@@ -240,7 +276,10 @@ class GraphicObject {
 		return _frogCentreY;
 	}
     public void setY(float value) {
-        _y = value - _bitmap.getHeight() / 2;
+        _y = value - getHeight() / 2;
+    }
+    public void setActualY(float value) {
+        _y = value;
     }
 	public void setFrogCentreY(float frogCentreY) {
 		this._frogCentreY = frogCentreY;
@@ -299,7 +338,23 @@ class GraphicObject {
 	public void setAngle(float a){
 		_speed.setAngle(a);
 	}
-	//getters for graphics and speed
+	public void setClockwise(boolean clockwise){
+    	if (clockwise) rotAngle = 1;
+    	else rotAngle = -1;
+    }
+    public int getClockwise(){
+    	return rotAngle;
+    }
+    public float getRotation(){
+    	if (_id == objtype.tWhirl){
+    		_rot+= (2*getClockwise());
+    		if (_rot >= 360)_rot=0;
+    		if (_rot < 0)_rot=360;
+    		return _rot;
+    	}else{
+    		return 0.0f;
+    	}
+    }
     public Bitmap getGraphic() {
         return _bitmap;
     }
@@ -337,13 +392,9 @@ class GraphicObject {
 		return false;
 	}
 	private void moveFrog(){
-		shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-		shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-		_speed.shiftAngle(2.5f);
-    	/*
 		setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 		setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-		_frogAngle+=_speed.getSpeed()/100;*/
+		_frogAngle+=_speed.getSpeed()/100;
 	}
 	public boolean getFlipped() {
 		return _flipped;
@@ -366,7 +417,7 @@ class GraphicObject {
 	public void flip(){
 		boolean tempflip = false;
 		Matrix flipMatrix = new Matrix();
-		
+
 		if(_flipH){
 			flipMatrix.setScale(-1, 1);
 			tempflip = true;
