@@ -23,7 +23,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private float _wAngle;
 	private final WPools _mWPools;
 	private final SurfaceHolder _surfaceHolder;
-	
+
     TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
     	_mWPools = wpools;
     	_newGesture = false;
@@ -44,7 +44,13 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	case MotionEvent.ACTION_MOVE:
     		_curr[0] = evt.getX();
     		_curr[1] = evt.getY();
-    		if (_newGesture == true){
+    		int numPointers = evt.getPointerCount();
+            if (numPointers > 1) {
+                float currX = evt.getRawX();
+                float deltaX = -(currX - _last[0]);
+                MainActivity.getCurrentLevel().shiftScrollBy(deltaX);
+            }
+            else if (_newGesture == true){
     			//gesture has been started. determine direction.
     			_xDir = (_curr[0] - _start[0]);
     			if (_xDir > 0) _xDir = 1; else _xDir = -1;
@@ -106,12 +112,40 @@ final class TrackingTouchListener implements View.OnTouchListener{
     			_wCenter[1] = (_refY[0]+_refY[1]+_refY[2]+_refY[3])/4;
     			//calc size of whirlpool, simply NoRefs, 4 reference points being the smallest size = (1).
     			_wSize = _noRef-3;
+    			
+    			//calc direction of wpool
+    			float[] temp = new float[4];;//holds angle of ref points
+    			boolean clockwise;
+    			int lowest=0, next=1; 
+    			
+    			for (int i = 0;i<4;i++){
+    				temp[i] = Func.calcAngle(_wCenter[0], _wCenter[1], _refX[i], _refY[i]);
+    				if (temp[i] <= temp[lowest]){ 
+    					lowest = i;
+    					next = i+1;
+    					if (next == 4) next = 0;
+    				}
+    			}
+    			int secondlowest;
+    			secondlowest = next;
+    			
+    			for (int i = 0;i<4;i++){
+    				if (i != lowest)
+    					if (temp[i] <= temp[secondlowest]) 
+    						secondlowest = i;
+    			}
+    			
+    			//head is hurting, come back to this, just need a simple method to get lowest and second lowest angles -F
+    			
+    			if ((temp[next] == temp[secondlowest])) clockwise = true;
+    			else clockwise = false;
     			addWPools(
     	    			_mWPools,
-    	    			_wCenter[0],
+    	    			_wCenter[0] + MainActivity.getCurrentLevel().getScrollBy(),
     	    			_wCenter[1],
     	    			_wSize,
-    	    			_wAngle);
+    	    			_wAngle,
+    	    			clockwise);
     		
     		}
     		break;
@@ -121,7 +155,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	return true;
     }
     
-    private void addWPools(WPools wpools, float x, float y, int s, float angle) {
-    	wpools.addWPool(x,y,s,angle);
+    private void addWPools(WPools wpools, float x, float y, int s, float angle, boolean clockwise) {
+    	wpools.addWPool(x, y, s, angle, clockwise);
     }
 }

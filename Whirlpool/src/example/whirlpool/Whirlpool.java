@@ -1,58 +1,90 @@
 package example.whirlpool;
-
-import android.util.FloatMath;
+//updated 29/11
 import example.whirlpool.GraphicObject;
 import example.whirlpool.GraphicObject.objtype;
 
+
+/*
+ * Can be deleted until i've fixed crashing problem
+ */
 public class Whirlpool {
-	//variables
-	private final float _frogFactor = 0.8f;
-	private final float _sharkFactor = 0.5f;
-	private boolean _clockwise = true;
-	private float _power = 0.05f;
-	private float _radius = 40;
-	private float _angle = 0.0f;
-	private GraphicObject _object = new GraphicObject(objtype.tWhirl);
-	
+	private final float frogFactor = 0.8f;
+	private final float sharkFactor = 0.5f;
+	private boolean clockwise = true;
+	private float power = 0.05f;
+	private float radius = 40;
+	private float angle = 0.0f;
+	private GraphicObject object = new GraphicObject(objtype.tWhirl);
+
 	Whirlpool(){
+
 	}
+	public int getClockwise(){
+		if (clockwise)
+			return 1;
+		else 
+			return -1;
+	}
+	public void setClockwise(boolean Clock){
+		clockwise = Clock;
+		object.setClockwise(clockwise);
+	}
+
 	public int collision(GraphicObject graphic){
+
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
+
 		float distX, distY, dist;
 		distX = this.getCentreX() - graphic.getX();
 		distY = this.getCentreY() - graphic.getY();
+
 		dist = (distX*distX)+(distY*distY);
+
 		//if (graphic.GetPullState()==false){ //if you can pull the object
+
 		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
 			return 2;
 		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
 			return 1;
-		return 0;
-	}
-	public void gravity(GraphicObject graphic, float factor){
-		float tempx = graphic.getX();
-		float tempy = graphic.getY();
-		float speedx = graphic.getSpeed().getXSpeed();
-		float speedy = graphic.getSpeed().getYSpeed();
-		float cangle = Func.calcAngle(tempx, tempy, this.getCentreX(), this.getCentreY());
-		float temppower = getPower() * factor;
-		float cx = (float) (temppower*Math.cos(cangle*Math.PI/180));
-		float cy = (float) (temppower*Math.sin(cangle*Math.PI/180));
 
-		speedx += cx;
-		speedy += cy;
-		//reset angle and speed
-		graphic.getSpeed().setSpeed(FloatMath.sqrt((float) (Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(Func.calcAngle(tempx, tempy, tempx + speedx, tempy + speedy));
+		//}
+
+		return 0;
+
 	}
-	//pulls different objects to the centre depending on type of object
+
+	public void gravity(GraphicObject graphic, float factor){
+		float objX = graphic.getX();
+		float objY = graphic.getY();
+		float objSpeedX = graphic.getSpeed().getXSpeed();
+		float objSpeedY = graphic.getSpeed().getYSpeed();
+		float wPoolCentreX = this.getCentreX();
+		float wPoolCentreY = this.getCentreY();
+		//this is the current distance from centre to graphic
+		float wPoolRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
+		//angle of radius
+		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
+		cAngle+= (2 * getClockwise());//rotate obj around wpool
+
+		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
+		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
+
+		cAngle = Func.calcAngle(objX, objY,destX, destY);
+
+		//reset angle and speed
+		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
+		graphic.getSpeed().setAngle(cAngle+ (5.0f * getClockwise()));
+	}
+	//pulls different objects to the centre depending on original speed
+	//sharks are pulled slower because they start faster
+	//where as boats get pulled faster because they start slower
+	//frogs are not effected 
 	void pull(GraphicObject graphic){
 		switch(graphic.getId()){
 		case tShark:
-			gravity(graphic, _sharkFactor);
+			gravity(graphic, sharkFactor);
 			break;
 		case tFrog:
-			gravity(graphic, _frogFactor);
 			break;
 		case tDuck:
 			gravity(graphic, 4.0f);
@@ -60,59 +92,78 @@ public class Whirlpool {
 		case tBoat:
 			break;
 		default:
-			
+
 		}
-	}
-	//getter for clockwise variable
-	public boolean getClockwise(){
-		return _clockwise;
-	}
-	//getters and setter for X variables
+	}/*
+	//changes direction by a factor depending on type of object
+	//depending on quadrant depends which directions need changing
+	void ChangeDir(GraphicObject graphic, float Factor){
+		float tempx = graphic.GetX();
+		float tempy = graphic.GetY();
+		GraphicObject.Speed speed = graphic.GetSpeed();
+		//checks if the speed is the same as the quadrant before
+		if(tempx>=centreX && tempy>=centreY){
+			if(speed.GetX()>0 && speed.GetY()>0){
+				speed.SetX((float)(speed.GetX()*Factor*-1));
+			}
+		}
+		else if(tempx<centreX && tempy>=centreY){
+			if(speed.GetX()<0 && speed.GetY()>0){
+				speed.SetY((float)(speed.GetY()*Factor*-1));
+			}
+		}
+		else if(tempx<centreX && tempy<centreY){
+			if(speed.GetX()<0 && speed.GetY()<0){
+				speed.SetX((float)(speed.GetX()*Factor*-1));
+			}
+		}
+		else if(tempx>=centreX && tempy<centreY){
+			if(speed.GetX()>0 && speed.GetY()<0){
+				speed.SetY((float)(speed.GetY()*Factor*-1));
+			}
+		}
+		
+	}*/
 	public float getX() {
-		return _object.getActualX();
+		return object.getActualX();
 	}
 	public float getCentreX() {
-		return _object.getX();
+		return object.getX();
 	}
 	public void setCentreX(float centreX) {
-		_object.setX(centreX);
+		object.setX(centreX);
 	}
-	//getters and setter for Y variables
 	public float getY() {
-		return _object.getActualY();
+		return object.getActualY();
 	}
 	public float getCentreY() {
-		return _object.getY();
+		return object.getY();
 	}
 	public void setCentreY(float centreY) {
-		_object.setY(centreY);
+		object.setY(centreY);
 	}
-	//getter and setter for power
 	public float getPower() {
-		return _power;
+		return power;
 	}
 	public void setPower(float power) {
-		this._power = power;
+		this.power = power;
 	}
-	//getter and setter for radius
 	public float getRadius() {
-		return _radius;
+		return radius;
 	}
 	public void setRadius(float radius) {
-		this._radius = radius;
+		this.radius = radius;
 	}
-	//getter and setter for angel
 	public void setWAngle(float angle) {
-		this._angle = angle;
+		this.angle = angle;
 	}
 	public float getWAngle() {
-		return this._angle;
+		return this.angle;
 	}
-	//getter and setter for object
 	public GraphicObject getGraphic() {
-		return _object;
+		return object;
 	}
 	public void setGraphic(GraphicObject object) {
-		this._object = object;
+		this.object = object;
 	}
 }

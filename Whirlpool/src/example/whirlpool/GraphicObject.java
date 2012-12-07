@@ -173,8 +173,12 @@ class GraphicObject {
     		
     		c.drawBitmap(getGraphic(), null, rect,  null);
 
-    	}
-    	else{
+    	}else if(_id == objtype.tFrog){
+    		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+    		c.translate(getX(), getY());
+    		c.rotate((_frogAngle*180/PI));
+    		c.drawBitmap(getGraphic(), null, rect,  null);
+    	}else{
     		rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
     		c.drawBitmap(getGraphic(), null, rect,  null);
     	}
