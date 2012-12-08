@@ -1,8 +1,13 @@
-package example.whirlpool;
+package logic;
 
 import java.util.ArrayList;
 
-import example.whirlpool.GraphicObject.objtype;
+
+import objects.GraphicObject;
+import objects.Whirlpool;
+import objects.GraphicObject.objtype;
+
+
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,7 +15,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class Level {
-    Level(){
+    public Level(){
     	constructor();
     }
     

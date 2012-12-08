@@ -1,9 +1,11 @@
-package example.whirlpool;
+package logic;
 
 import java.util.ArrayList;
 //import java.util.Collections;
 //import java.util.LinkedList;
 //import java.util.List;
+
+import objects.Whirlpool;
 
 
 /** A list of dots. */

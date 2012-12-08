@@ -1,6 +1,7 @@
-package example.whirlpool;
+package logic;
 
 //import android.graphics.Color;
+import states.MainActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;

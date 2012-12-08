@@ -1,8 +1,9 @@
-package example.whirlpool;
+package logic;
 
-import example.whirlpool.GraphicObject;
 import android.view.MotionEvent;
 import java.lang.Math;
+
+import objects.GraphicObject;
 import android.util.FloatMath;
 
 //collision class
@@ -36,24 +37,28 @@ public class Func{
         if (graphic.getActualX() < 0) {
         	graphic.getSpeed().HorBounce();
         	graphic.setActualX(-graphic.getActualX());
+        	graphic.setFlipH(true);
         } else if (graphic.getActualX() + graphic.getWidth() > WIDTH) {
         	graphic.getSpeed().HorBounce();
         	graphic.setActualX(WIDTH - graphic.getWidth());
+        	graphic.setFlipH(true);
         }
         // borders for y...
         if (graphic.getActualY() < 0) {
             graphic.getSpeed().VerBounce();
             graphic.setActualY(-graphic.getActualY());
+            graphic.setFlipV(true);
         } else if (graphic.getActualY() + graphic.getHeight() > HEIGHT) {
         	graphic.getSpeed().VerBounce();
         	graphic.setActualY(HEIGHT - graphic.getHeight());
+        	graphic.setFlipV(true);
         }
 	}
 	static float fMod(float num, int divide){
 		float fresult = num - FloatMath.floor(num);
 		return ((float)((int)num%divide) + fresult);
 	}
-	static float calcAngle(float x1, float y1, float x2, float y2){
+	public static float calcAngle(float x1, float y1, float x2, float y2){
 		float angle1;
 		if(x2-x1 == 0) angle1 = 90.0f;
 		else angle1 = (float) ((float)(180.0f/Math.PI)*Math.atan((y2 - y1)/(x2 - x1)));

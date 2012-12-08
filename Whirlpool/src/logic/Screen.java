@@ -1,4 +1,4 @@
-package example.whirlpool;
+package logic;
 
 public class Screen {
 	public class Point{

@@ -1,15 +1,18 @@
-package example.whirlpool;
+package objects;
 
 import java.util.Random;
+
+import logic.Panel;
+import movement.Speed;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.FloatMath;
-import example.whirlpool.Panel;
+import example.whirlpool.R;
 
-class GraphicObject {
+public class GraphicObject {
 	//enum used to decide what type of sprite
 	public enum objtype {
 		tDefault(0, 0, 0, 0), 
@@ -32,105 +35,7 @@ class GraphicObject {
 		}
 	}
 	//speed class
-	public class Speed {
-		//angle class
-    	private class Angle{
-    		private float _angle = 0;
-    		Angle(float a){
-    			_angle = a;
-    		}
-    		public float getAngle(){
-    			return _angle;
-    		}
-    		public float getAngleRad(){
-    			return (_angle*PI/180);
-    		}
-    		public void setAngle(float a){
-    			_angle = a;
-    			checkAngle();
-    		}
-    		public void shiftAngle(float a){
-    			_angle += a;
-    			checkAngle();
-    		}
-    		private void checkAngle(){		//Makes sure it's always withing 0-360
-    			if(_angle >= 360.0f || _angle < 0.0f){
-    				_angle = ((_angle%360)+360)%360;
-    			}
-    		}
-    	}
-    	//variables
-    	private boolean _move = true;
-    	private float _speed = 0;
-    	private Angle _angle = new Angle(0);
-    	//bounce functions
-    	public void HorBounce(){
-    		float angletemp = _angle.getAngle();
-    		switch((int)(angletemp/90)){
-    			case 0:
-    			case 2:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
-    					break;
-    			case 1:
-    			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
-    					break;
-    		}
-    		setFlipH(true);
-    		if(_flipped){
-    			flip();
-    		}
-    	}
-    	void VerBounce(){
-    		float angletemp = _angle.getAngle();
-    		switch((int)(angletemp/90)){
-    			case 0:
-    			case 2:	_angle.shiftAngle(-2*((int)(angletemp%90)));
-    					break;
-    			case 1:
-    			case 3:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
-    					break;
-    		}
-    		setFlipV(true);
-    		if(_flipped){
-    			flip();
-    		}
-    	}
-    	//getters and setters for speed
-		public float getSpeed(){
-			return _speed;
-		}
-    	public float getXSpeed(){
-    		return _speed*FloatMath.cos(_angle.getAngleRad());
-    	}
-    	public float getYSpeed(){
-    		return _speed*FloatMath.sin(_angle.getAngleRad());
-    	}
-		public void setSpeed(float a){
-			_speed = a;
-		}
-		public void shiftSpeed(float a){
-			_speed += a;
-		}
-		//getters and setters for move
-    	public boolean getMove(){
-    		return _move;
-    	}
-    	public void setMove(boolean a){
-    		_move = a;
-    	}
-    	//getters and setters for angle
-    	public float getAngle(){
-			return _angle.getAngle();
-		}
-    	public float getAngleRad(){
-			return _angle.getAngleRad();
-		}
-		public void setAngle(float a){
-			_angle.setAngle(a);
-		}
-		public void shiftAngle(float a){
-			_angle.shiftAngle(a);
-		}
-    }
+	
 	//private variables
 	private float PI = 3.141592653589793238f;
 	private objtype _id = objtype.tDefault;
@@ -142,7 +47,7 @@ class GraphicObject {
 	private float _x = 0;
     private float _y = 0;
     private float _rot = 0;
-    private int rotAngle =1;
+    private int rotAngle = 1;
     private Bitmap _bitmap;
     private Speed _speed = new Speed();
 	
@@ -396,18 +301,27 @@ class GraphicObject {
 	}
 	public void setFlipped(boolean _flipped) {
 		this._flipped = _flipped;
+		if(_flipped == true){
+			flip();
+		}
 	}
 	public boolean getFlipV() {
 		return _flipV;
 	}
 	public void setFlipV(boolean _flipV) {
 		this._flipV = _flipV;
+		if(_flipped == true){
+			flip();
+		}
 	}
 	public boolean getFlipH() {
 		return _flipH;
 	}
 	public void setFlipH(boolean _flipH) {
 		this._flipH = _flipH;
+		if(_flipped == true){
+			flip();
+		}
 	}
 	public void flip(){
 		boolean tempflip = false;
@@ -425,6 +339,7 @@ class GraphicObject {
 		if(tempflip){
 			Bitmap temp;
 			temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
+			
 			_bitmap = temp;
 		}
 	}

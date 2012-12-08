@@ -1,7 +1,7 @@
-package example.whirlpool;
+package objects;
 //updated 29/11
-import example.whirlpool.GraphicObject;
-import example.whirlpool.GraphicObject.objtype;
+import objects.GraphicObject.objtype;
+import logic.Func;
 import android.util.FloatMath;
 //used to create effect of whirlpool
 
@@ -18,7 +18,7 @@ public class Whirlpool {
 	private float angle = 0.0f;
 	private GraphicObject object = new GraphicObject(objtype.tWhirl);
 	
-	Whirlpool(){
+	public Whirlpool(){
 		
 	}
 	public int getClockwise(){
@@ -81,7 +81,7 @@ public class Whirlpool {
 	//sharks are pulled slower because they start faster
 	//where as boats get pulled faster because they start slower
 	//frogs are not effected 
-	void pull(GraphicObject graphic){
+	public void pull(GraphicObject graphic){
 		switch(graphic.getId()){
 		case tShark:
 			gravity(graphic, sharkFactor);
