@@ -80,5 +80,4 @@ public class Shark extends GraphicObject{
         	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
         }
 	}
-
 }

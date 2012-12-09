@@ -9,7 +9,7 @@ public class Animate{
 		int frameX = 0;
 		int frameY = 0;
 		int noOfFrames = 1;
-		int delay = 10;
+		int delay = 3;
 		int counter = 0;
 		private Rect portion;
 		

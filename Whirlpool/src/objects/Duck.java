@@ -13,9 +13,11 @@ import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Duck extends GraphicObject{
-	public enum coltype{
+	//enum for collision checking
+	private enum coltype{
 		cDefault, cShark, cDiver, cFrog;
 	}
+	//collision variables 
 	public coltype cID = coltype.cDefault;
 	private int colCount = -1;
 	Animate animate;
@@ -90,6 +92,7 @@ public class Duck extends GraphicObject{
         }
         animate.animateFrame();
 	}
+	//collision checking
 	public void checkObjCollision(GraphicObject otherGraphic){
 		if(cID == coltype.cDefault){
 			switch(otherGraphic.getId()){
@@ -101,13 +104,13 @@ public class Duck extends GraphicObject{
 				break;
 			case tDiver:
 				if(Func.boxCollision(this, otherGraphic)){
-					colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
+					colDiverFrog();
 					cID = coltype.cDiver;
 				}
 				break;
 			case tFrog: 
 				if(Func.boxCollision(this, otherGraphic)){
-					colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
+					colDiverFrog();
 					cID = coltype.cFrog;
 				}
 				break;
@@ -115,6 +118,7 @@ public class Duck extends GraphicObject{
 			}
 		}
 	}
+	//collision movement
 	private void colMovement(){
 		if(cID != coltype.cDefault && colCount >= 0){
 			if(colCount == 10){
@@ -129,7 +133,7 @@ public class Duck extends GraphicObject{
 			colCount++;
 		}
 	}
-	private void colDiverFrog(float x, float w){
+	private void colDiverFrog(){
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(new Random().nextInt(180)+90);
 		colCount = 0;
@@ -137,6 +141,7 @@ public class Duck extends GraphicObject{
 	private void colShark(float s, float a){
 		getSpeed().setSpeed(s);
     	setAngle(a);
+    	colCount = 0;    	
 	}
 	
 }

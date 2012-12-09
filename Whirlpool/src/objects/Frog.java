@@ -1,6 +1,7 @@
 package objects;
 
 import states.MainActivity;
+import logic.Animate;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -14,16 +15,17 @@ public class Frog extends GraphicObject{
 	public Frog(){
 		_id = objtype.tFrog;
         init();
+        animate = new Animate(_id.frames, _id.aWidth, _id.aHeight);
 	}
-	
+	Animate animate;
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
+		//doesn't seen to rotate
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
 		c.rotate((-_frogAngle*90/PI));
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -43,6 +45,7 @@ public class Frog extends GraphicObject{
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		
 	}
 
 	@Override
@@ -83,6 +86,7 @@ public class Frog extends GraphicObject{
         if(move()){
         	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
         }
+        animate.animateFrame();
 	}
 	
 	public float getFrogAngle() {
