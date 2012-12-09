@@ -2,6 +2,8 @@ package objects;
 
 import java.util.Random;
 
+import states.MainActivity;
+
 import logic.Panel;
 import logic.Screen.ScreenSide;
 
@@ -31,7 +33,7 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.boat);
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
         setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
@@ -73,6 +75,13 @@ public class Boat extends GraphicObject{
         	setActualX(width - getWidth());
 			break;
 		}
+	}
+	
+	public void frame(){
+		// Move Objects
+        if(move()){
+        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        }
 	}
 
 }

@@ -1,5 +1,6 @@
 package objects;
 
+import states.MainActivity;
 import example.whirlpool.R;
 import logic.Panel;
 import logic.Screen.ScreenSide;
@@ -28,7 +29,7 @@ public class Frog extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frog);
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX(Panel.sScreen.getWidth()/2);
 		setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
 		setFrogCentreX(getX());
@@ -78,6 +79,13 @@ public class Frog extends GraphicObject{
         	setActualX(width - getWidth());
 			break;
 		}
+	}
+	
+	public void frame(){
+		// Move Objects
+        if(move()){
+        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        }
 	}
 	
 	public float getFrogAngle() {

@@ -2,6 +2,7 @@ package objects;
 //updated 29/11
 import example.whirlpool.R;
 import objects.GraphicObject.objtype;
+import states.MainActivity;
 import logic.Func;
 import logic.Panel;
 import logic.Screen.ScreenSide;
@@ -46,7 +47,7 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.whirlpool);
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		_speed.setMove(false);
 		
 		_width = _id.width;
@@ -83,6 +84,10 @@ public class Whirlpool extends GraphicObject{
         	setActualX(width - getWidth());
 			break;
 		}
+	}
+	
+	public void frame(){
+		
 	}
 	
 	public void setClockwise(boolean clockwise){

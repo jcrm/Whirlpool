@@ -1,5 +1,6 @@
 package objects;
 
+import states.MainActivity;
 import example.whirlpool.R;
 import logic.Panel;
 import logic.Screen.ScreenSide;
@@ -30,7 +31,7 @@ public class Diver extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.diver);
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX(Panel.sScreen.getWidth()/2);
 		setY(Panel.sScreen.getHeight()/2);
         _speed.setMove(true);
@@ -79,6 +80,13 @@ public class Diver extends GraphicObject{
 		}
 	}
 	
+	public void frame(){
+		// Move Objects
+        if(move()){
+        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        }
+	}
+	
 	public boolean getFlipped() {
 		return _flipped;
 	}
@@ -120,9 +128,7 @@ public class Diver extends GraphicObject{
 			_flipV = false;
 		}
 		if(tempflip){
-			Bitmap temp;
-			temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
-			
+			Bitmap temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
 			_bitmap = temp;
 		}
 	}

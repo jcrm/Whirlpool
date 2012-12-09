@@ -21,23 +21,32 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 0, 0), 
-		tWhirl(100, 100, 0, 0),
-		tDuck(30, 30, 4, 0),
-		tFrog(30, 30, 5, 0), 
-		tShark(10, 40, 5, new Random().nextInt(360)+1), 
-		tBoat(50, 15, 0, 0),
-		tDiver(64, 32, 4, 45);
+		tDefault(0, 0, 0, 0, R.drawable.ic_launcher, 						1, 0, 0), 
+		tWhirl(	100, 100, 0, 0, R.drawable.whirlpool, 						1, 0, 0),
+		tDuck(	50, 50, 4, 0, R.drawable.duckleftandright2, 				19, 190, 190),
+		tFrog(	30, 30, 5, 0, R.drawable.frog, 								1, 0, 0), 
+		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1, 0, 0), 
+		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1, 0, 0),
+		tDiver(	64, 32, 4, 45, R.drawable.diver, 							1, 0, 0);
 		
 		int width;
 		int height;
 		float speed;
 		float angle;
-		objtype(int a, int b, float c, float d){
+		int bitmap;
+		int frames;
+		int aWidth;
+		int aHeight;
+		
+		objtype(int a, int b, float c, float d, int e, int f, int g, int h){
 			width = a;
 			height = b;
 			speed = c;
 			angle = d;
+			bitmap = e;
+			frames = f;
+			aWidth = g;
+			aHeight = h;
 		}
 	}
 	
@@ -50,6 +59,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected Bitmap _bitmap;
 	protected Speed _speed = new Speed();
 	private boolean _pull;
+	Rect _portion;
 	
 	
     public GraphicObject(){}
@@ -61,6 +71,8 @@ public abstract class GraphicObject {//implements ObjectFunctions{
     abstract public boolean move();
     
     abstract public void borderCollision(Screen.ScreenSide side, float width, float height);
+    
+    abstract public void frame();
     
     
 	public objtype getId(){

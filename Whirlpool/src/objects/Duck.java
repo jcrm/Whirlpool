@@ -1,7 +1,9 @@
 package objects;
 
+import states.MainActivity;
 import logic.Panel;
 import logic.Screen.ScreenSide;
+import logic.Animate;
 import example.whirlpool.R;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,9 +12,12 @@ import android.util.FloatMath;
 
 public class Duck extends GraphicObject{
 	
+	Animate animate;
+	
 	public Duck(){
 		_id = objtype.tDuck;
 		init();
+		animate = new Animate(_id.frames, _id.aWidth, _id.aHeight);
 	}
 
 	@Override
@@ -20,14 +25,14 @@ public class Duck extends GraphicObject{
 		c.save();
 		
 		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.duck);
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX(0.0f);
     	setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
     	_speed.setMove(true);
@@ -69,6 +74,14 @@ public class Duck extends GraphicObject{
         	setActualX(width - getWidth());
 			break;
 		}
+	}
+	
+	public void frame(){
+		// Move Objects
+        if(move()){
+        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        }
+        animate.animateFrame();
 	}
 
 }

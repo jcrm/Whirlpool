@@ -52,11 +52,9 @@ public class Level {
     }
     
 	void update(){
-		for (GraphicObject graphic : _graphics) {
-            // Move Objects
-            if(graphic.move()){
-            	graphic.border(levelWidth, Panel.sScreen.getHeight());
-            }
+		for (GraphicObject graphic : _graphics) { 
+            graphic.frame();				//Do everything this object does every frame, like move
+            
             boolean lAnyCollFound = false; //see if object is in a wpool
             for(Whirlpool whirl : _wPoolModel.getWpools()){
             	if (whirl.collision(graphic) == 1){
