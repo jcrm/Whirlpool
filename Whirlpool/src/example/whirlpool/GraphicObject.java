@@ -167,16 +167,13 @@ class GraphicObject {
     	if (_id == objtype.tWhirl)
     	{
     		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-    		
     		c.translate(getX(), getY());
     		c.rotate(getRotation());
-    		
     		c.drawBitmap(getGraphic(), null, rect,  null);
-
     	}else if(_id == objtype.tFrog){
     		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
     		c.translate(getX(), getY());
-    		c.rotate((_frogAngle*180/PI));
+    		c.rotate((-_frogAngle*90/PI));
     		c.drawBitmap(getGraphic(), null, rect,  null);
     	}else{
     		rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
@@ -398,7 +395,7 @@ class GraphicObject {
 	private void moveFrog(){
 		setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 		setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-		_frogAngle+=_speed.getSpeed()/100;
+		_frogAngle-=_speed.getSpeed()/10;
 	}
 	public boolean getFlipped() {
 		return _flipped;
