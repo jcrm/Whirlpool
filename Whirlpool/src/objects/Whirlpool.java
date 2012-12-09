@@ -1,7 +1,13 @@
 package objects;
 //updated 29/11
+import example.whirlpool.R;
 import objects.GraphicObject.objtype;
 import logic.Func;
+import logic.Panel;
+import logic.Screen.ScreenSide;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.FloatMath;
 //used to create effect of whirlpool
 
@@ -9,36 +15,97 @@ import android.util.FloatMath;
 /*
  * Can be deleted until i've fixed crashing problem
  */
-public class Whirlpool {
+public class Whirlpool extends GraphicObject{
 	private final float frogFactor = 0.8f;
 	private final float sharkFactor = 0.5f;
-	private boolean clockwise = true;
 	private float power = 0.05f;
-	private float radius = 40;
+	private float radius = 40.0f;
 	private float angle = 0.0f;
-	private GraphicObject object = new GraphicObject(objtype.tWhirl);
+	private float _rot = 0.0f;
+	private int rotAngle = 1;
 	
 	public Whirlpool(){
+		_id = objtype.tWhirl;
+        init();
+	}
+	
+	@Override
+	public void draw(Canvas c) {
+		c.save();
+		
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		
+		c.translate(getX(), getY());
+		c.rotate(getRotation());
+		
+		c.drawBitmap(getGraphic(), null, rect,  null);
+		
+		c.restore();
 		
 	}
-	public int getClockwise(){
-		if (clockwise)
-			return 1;
-		else 
-			return -1;
+	
+	@Override
+	public void init() {
+		_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.whirlpool);
+		_speed.setMove(false);
+		
+		_width = _id.width;
+		_height = _id.height;
+		_speed.setAngle(_id.angle);
+		_speed.setSpeed(_id.speed);
+		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		
 	}
-	public void setClockwise(boolean Clock){
-		clockwise = Clock;
-		object.setClockwise(clockwise);
+	
+	@Override
+	public boolean move() {
+		// TODO Auto-generated method stub
+		return false;
 	}
+	
+	@Override
+	public void borderCollision(ScreenSide side, float width, float height) {
+		switch(side){
+		case Top:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+			break;
+		case Bottom:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+			break;
+		case Left:
+			_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case Right:
+			_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		}
+	}
+	
+	public void setClockwise(boolean clockwise){
+    	if (clockwise) rotAngle = 1;
+    	else rotAngle = -1;
+    }
+    public int getClockwise(){
+    	return rotAngle;
+    }
+    public float getRotation(){
+		_rot+= (2*getClockwise());
+		if (_rot >= 360)_rot=0;
+		if (_rot < 0)_rot=360;
+		return _rot;
+    }
 	
 	public int collision(GraphicObject graphic){
 		
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
 		
 		float distX, distY, dist;
-		distX = this.getCentreX() - graphic.getX();
-		distY = this.getCentreY() - graphic.getY();
+		distX = this.getX() - graphic.getX();
+		distY = this.getY() - graphic.getY();
 		
 		dist = (distX*distX)+(distY*distY);
 		
@@ -60,8 +127,8 @@ public class Whirlpool {
 		float objY = graphic.getY();
 		float objSpeedX = graphic.getSpeed().getXSpeed();
 		float objSpeedY = graphic.getSpeed().getYSpeed();
-		float wPoolCentreX = this.getCentreX();
-		float wPoolCentreY = this.getCentreY();
+		float wPoolCentreX = getX();
+		float wPoolCentreY = getY();
 		//this is the current distance from centre to graphic
 		float wPoolRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
 		//angle of radius
@@ -128,24 +195,6 @@ public class Whirlpool {
 		}
 		
 	}*/
-	public float getX() {
-		return object.getActualX();
-	}
-	public float getCentreX() {
-		return object.getX();
-	}
-	public void setCentreX(float centreX) {
-		object.setX(centreX);
-	}
-	public float getY() {
-		return object.getActualY();
-	}
-	public float getCentreY() {
-		return object.getY();
-	}
-	public void setCentreY(float centreY) {
-		object.setY(centreY);
-	}
 	public float getPower() {
 		return power;
 	}
@@ -164,10 +213,6 @@ public class Whirlpool {
 	public float getWAngle() {
 		return this.angle;
 	}
-	public GraphicObject getGraphic() {
-		return object;
-	}
-	public void setGraphic(GraphicObject object) {
-		this.object = object;
-	}
+	
+	
 }

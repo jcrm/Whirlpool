@@ -28,7 +28,7 @@ public class WPools {
 
     /** @return the most recently added dot. */
     public Whirlpool getLastWpool() {
-        return (wpools.size() <= 0) ? null : wpools.get(wpools.size());
+        return (wpools.size() <= 0) ? null : wpools.get(wpools.size()); //TODO Is it not size - 1?
     }
     
     /** @return immutable list of dots. */
@@ -42,8 +42,8 @@ public class WPools {
       */
     public void addWPool(float x, float y, float size, float angle, boolean clockwise) {
     	Whirlpool whirl = new Whirlpool();
-    	whirl.setCentreX(x);
-    	whirl.setCentreY(y);
+    	whirl.setX(x);
+    	whirl.setY(y);
     	whirl.setWAngle(angle);
     	whirl.setClockwise(clockwise);
         wpools.add(whirl);

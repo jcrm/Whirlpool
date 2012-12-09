@@ -3,6 +3,7 @@ package objects;
 import java.util.Random;
 
 import logic.Panel;
+import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +13,12 @@ import android.graphics.Rect;
 import android.util.FloatMath;
 import example.whirlpool.R;
 
-public class GraphicObject {
+interface ObjectFunctions{
+	public void draw(Canvas c);
+	public void init();
+	public boolean move();
+}
+public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
 		tDefault(0, 0, 0, 0), 
@@ -34,111 +40,52 @@ public class GraphicObject {
 			angle = d;
 		}
 	}
-	//speed class
 	
 	//private variables
-	private float PI = 3.141592653589793238f;
-	private objtype _id = objtype.tDefault;
-	private int _width, _height, _radius = 0;
-	private float _xScale, _yScale;
-	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
-	private boolean _noPull;
-	private boolean _flipped, _flipV, _flipH;
-	private float _x = 0;
-    private float _y = 0;
-    private float _rot = 0;
-    private int rotAngle = 1;
-    private Bitmap _bitmap;
-    private Speed _speed = new Speed();
+	protected float PI = 3.141592653589793238f;
+	protected objtype _id = objtype.tDefault;
+	protected int _width, _height, _radius = 0; //TODO Don't think we use Radius, might delete.
+	protected float _x = 0;
+	protected float _y = 0;
+	protected Bitmap _bitmap;
+	protected Speed _speed = new Speed();
+	private boolean _pull;
 	
-    public GraphicObject(objtype type){
-    	_id = type;
-        init();
-        _radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
-    }
-    public void draw(Canvas c){
-    	Rect rect;
-    	
-    	c.save();
-    	
-    	if (_id == objtype.tWhirl)
-    	{
-    		rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-    		
-    		c.translate(getX(), getY());
-    		c.rotate(getRotation());
-    		
-    		c.drawBitmap(getGraphic(), null, rect,  null);
-	    	
-    	}
-    	else{
-    		rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-    		c.drawBitmap(getGraphic(), null, rect,  null);
-    	}
-    	
-    	
-    	//c.translate(-getActualX(), -getActualY());
-    	
-    	//c.scale(getXScale(), getYScale());
-    	//c.translate(((1/getXScale())-1)*(getX()), ((1/getYScale())-1)*(getY()));
-        //c.drawBitmap(getGraphic(), matrix, null);
-        c.restore();
-    }
-	public void init(){
-		switch(_id){
-		case tWhirl:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.whirlpool);
-			_speed.setMove(false);
-			break;
-		case tDuck:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.duck);
-			setX(0.0f);
-        	setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
-        	_speed.setMove(true);
-			break;
-		case tFrog:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.frog);
-			setX(Panel.sScreen.getWidth()/2);
-			setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
-			setFrogCentreX(getX());
-			setFrogCentreY(getY());
-			setFrogRadius(100);
-            _speed.setMove(true);
-			break;
-		case tShark:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.shark);
-			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
-        	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-        	_speed.setMove(true);
-			break;
-		case tBoat:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.boat);
-			setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
-            setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-            _speed.setMove(true);
-			break;
-		case tDiver:
-			_bitmap = BitmapFactory.decodeResource(Panel.sRes, R.drawable.diver);
-			setX(Panel.sScreen.getWidth()/2);
-			setY(Panel.sScreen.getHeight()/2);
-            _speed.setMove(true);
-            _flipped = true;
-		default:
-			break;
-		}
-		_width = _id.width;
-		_height = _id.height;
-		_speed.setAngle(_id.angle);
-		_speed.setSpeed(_id.speed);
-		setScale();
-	}
-	//getter and setter for object type
+	
+    public GraphicObject(){}
+    
+    abstract public void draw(Canvas c);
+    
+    abstract public void init();
+    
+    abstract public boolean move();
+    
+    abstract public void borderCollision(Screen.ScreenSide side, float width, float height);
+    
+    
 	public objtype getId(){
 		return _id;
 	}
 	public void setId(objtype id){
 		_id = id;
 	}
+	
+	
+	public void border(int WIDTH,int HEIGHT){
+        if (getActualX() < 0) {
+        	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+        } else if (getActualX() + getWidth() > WIDTH) {
+        	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        }
+
+        if (getActualY() < 0) {
+        	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
+        } else if (getActualY() + getHeight() > HEIGHT) {
+        	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
+        }
+	}
+	
+	
 	//getters and setters for X components
     public float getX() {
         return _x + getWidth() / 2;
@@ -146,21 +93,16 @@ public class GraphicObject {
     public float getActualX() {
         return _x;
     }
-    public float getFrogCentreX() {
-		return _frogCentreX;
-	}
     public void setX(float value) {
         _x = value - getWidth() / 2;
     }
     public void setActualX(float value) {
         _x = value;
     }
-    public void setFrogCentreX(float frogCentreX) {
-		this._frogCentreX = frogCentreX;
-	}
     public void shiftX(float shift){
     	_x += shift;
     }
+    
     //getters and setters for Y components
     public float getY() {
         return _y + getHeight() / 2;
@@ -168,179 +110,58 @@ public class GraphicObject {
     public float getActualY() {
         return _y;
     }
-    public float getFrogCentreY() {
-		return _frogCentreY;
-	}
     public void setY(float value) {
         _y = value - getHeight() / 2;
     }
     public void setActualY(float value) {
         _y = value;
     }
-	public void setFrogCentreY(float frogCentreY) {
-		this._frogCentreY = frogCentreY;
-	}
     public void shiftY(float shift){
     	_y += shift;
     }
-    //getters and setters for scale, width and height
-    public float getXScale() {
-		return _xScale;
-	}
-    public float getYScale() {
-		return _yScale;
-	}
+    
+    
     public int getWidth(){
 		return _width;
     }
     public int getHeight(){
 		return _height;
     }
-	public void setScale(){
-		setXScale((float)_width/_bitmap.getWidth());
-		setYScale((float)_height/_bitmap.getHeight());
-	}
-	public void setXScale(float xscale) {
-		this._xScale = xscale;
-	}
-	public void setYScale(float yscale) {
-		this._yScale = yscale;
-	}
 	public void setWidth(int width){
 		_width = width;
 	}
 	public void setHeight(int height){
 		_height = height;
 	}
-	//getters and setters for angels and radius
+	
+	
+	//getters and setters for angles and radius
     public float getRadius(){
     	return _radius;
     }
-	public float getFrogAngle() {
-		return _frogAngle;
-	}
-	public float getFrogRadius() {
-		return _frogRadius;
-	}
 	public void setRadius(int radius){
 		_radius = radius;
 	}
-	public void setFrogAngle(float frogAngle) {
-		this._frogAngle = frogAngle;
-	}
-	public void setFrogRadius(float _frogRadius) {
-		this._frogRadius = _frogRadius;
-	}
+	
+	
 	public void setAngle(float a){
 		_speed.setAngle(a);
 	}
-	public void setClockwise(boolean clockwise){
-    	if (clockwise) rotAngle = 1;
-    	else rotAngle = -1;
-    }
-    public int getClockwise(){
-    	return rotAngle;
-    }
-    public float getRotation(){
-    	if (_id == objtype.tWhirl){
-    		_rot+= (2*getClockwise());
-    		if (_rot >= 360)_rot=0;
-    		if (_rot < 0)_rot=360;
-    		return _rot;
-    	}
-    	else
-    		return 0.0f;
-    }
     public Bitmap getGraphic() {
         return _bitmap;
     }
     public Speed getSpeed() {
         return _speed;
     }
-    //pull variable functions 
-	public void cantPull() {
-		this._noPull = true;
+    
+    public void cantPull() {
+		this._pull = true;
 	}
 	public void canPull() {
-		this._noPull = false;
+		this._pull = false;
 	}
 	public boolean getPullState() {
-		return this._noPull;
+		return this._pull;
 	}
-	//move functions
-	public boolean move(){
-		if(_speed.getMove()){
-			switch(_id){
-			case tFrog:
-				moveFrog();
-				break;
-			case tWhirl:
-				break;
-			case tBoat:
-				break;
-			default:
-				shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-		    	shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-				break;
-			}
-			return true;
-		}
-		return false;
-	}
-	private void moveFrog(){
-		shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-		shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-		_speed.shiftAngle(2.5f);
-    	/*
-		setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
-		setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-		_frogAngle+=_speed.getSpeed()/100;*/
-	}
-	public boolean getFlipped() {
-		return _flipped;
-	}
-	public void setFlipped(boolean _flipped) {
-		this._flipped = _flipped;
-		if(_flipped == true){
-			flip();
-		}
-	}
-	public boolean getFlipV() {
-		return _flipV;
-	}
-	public void setFlipV(boolean _flipV) {
-		this._flipV = _flipV;
-		if(_flipped == true){
-			flip();
-		}
-	}
-	public boolean getFlipH() {
-		return _flipH;
-	}
-	public void setFlipH(boolean _flipH) {
-		this._flipH = _flipH;
-		if(_flipped == true){
-			flip();
-		}
-	}
-	public void flip(){
-		boolean tempflip = false;
-		Matrix flipMatrix = new Matrix();
-		
-		if(_flipH){
-			flipMatrix.setScale(-1, 1);
-			tempflip = true;
-			_flipH = false;
-		}else if(_flipV){
-			flipMatrix.setScale(1, -1);
-			tempflip = true;
-			_flipV = false;
-		}
-		if(tempflip){
-			Bitmap temp;
-			temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
-			
-			_bitmap = temp;
-		}
-	}
+    
 }

@@ -29,31 +29,6 @@ public class Func{
 		}
 		return false;
 	}
-	//checks borders of the screen
-	//coord and speed are sub classes of graphic and can be changed when our sprite class has been created
-	//WIDTH, HEIGHT are screen width and height
-	static public void borders(GraphicObject graphic, int WIDTH,int HEIGHT){
-		// borders for x...
-        if (graphic.getActualX() < 0) {
-        	graphic.getSpeed().HorBounce();
-        	graphic.setActualX(-graphic.getActualX());
-        	graphic.setFlipH(true);
-        } else if (graphic.getActualX() + graphic.getWidth() > WIDTH) {
-        	graphic.getSpeed().HorBounce();
-        	graphic.setActualX(WIDTH - graphic.getWidth());
-        	graphic.setFlipH(true);
-        }
-        // borders for y...
-        if (graphic.getActualY() < 0) {
-            graphic.getSpeed().VerBounce();
-            graphic.setActualY(-graphic.getActualY());
-            graphic.setFlipV(true);
-        } else if (graphic.getActualY() + graphic.getHeight() > HEIGHT) {
-        	graphic.getSpeed().VerBounce();
-        	graphic.setActualY(HEIGHT - graphic.getHeight());
-        	graphic.setFlipV(true);
-        }
-	}
 	static float fMod(float num, int divide){
 		float fresult = num - FloatMath.floor(num);
 		return ((float)((int)num%divide) + fresult);

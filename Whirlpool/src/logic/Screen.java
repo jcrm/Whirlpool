@@ -15,6 +15,14 @@ public class Screen {
 			return _y;
 		}
 	}
+	public enum ScreenSide{
+		Top,
+		Bottom,
+		Left,
+		Right
+		;
+	}
+	
 	//variables
 	private int _width;
 	private int _height;
