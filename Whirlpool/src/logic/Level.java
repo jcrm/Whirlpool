@@ -1,15 +1,22 @@
-package example.whirlpool;
+package logic;
 
 import java.util.ArrayList;
-import example.whirlpool.GraphicObject.objtype;
 
+import objects.Boat;
+import objects.Diver;
+import objects.Duck;
+import objects.Frog;
+import objects.GraphicObject;
+import objects.GraphicObject.objtype;
+import objects.Shark;
+import objects.Whirlpool;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class Level {
-    Level(){
+    public Level(){
     	constructor();
     }
     
@@ -33,38 +40,43 @@ public class Level {
     
     void init(){
     	setLevelWidth(Panel.sScreen.getWidth() + 500);
-    	_graphics.add(new GraphicObject(objtype.tDuck));
-        _graphics.add(new GraphicObject(objtype.tFrog));
-        _graphics.add(new GraphicObject(objtype.tDiver));
-    	_graphics.add(new GraphicObject(objtype.tShark));
-        _graphics.add(new GraphicObject(objtype.tBoat));
+    	_graphics.add(new Duck());
+        _graphics.add(new Frog());
+        _graphics.add(new Diver());
+    	_graphics.add(new Shark());
+        _graphics.add(new Boat());
     }
     
 	void update(){
-		for (GraphicObject graphic : _graphics) {
-            // Move Objects
-            if(graphic.move()){
-            	Func.borders(graphic, levelWidth, Panel.sScreen.getHeight());
-            }
+		for (GraphicObject graphic : _graphics) { 
+            graphic.frame();				//Do everything this object does every frame, like move
+            
             boolean lAnyCollFound = false; //see if object is in a wpool
-            for(Whirlpool whirl : _wPoolModel.getWpools()){
-            	if (whirl.collision(graphic) == 1){
-            		lAnyCollFound = true;
-            		if (graphic.getPullState() == false) whirl.pull(graphic);
-            	}
-            	else if (whirl.collision(graphic) == 2){
-            		lAnyCollFound = true;
-            		if (graphic.getPullState() == false) {
-            			whirl.pull(graphic);
-            			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
-            			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
-            				graphic.setAngle(whirl.getWAngle());
-            				graphic.cantPull();
-            			}
-            		}
-            	}
+            /**
+            * added this line so frog and diver not affected by whirlpool can be moved elsewhere
+            * just not sure where yet by looking at the code - jake
+            **/
+            if(graphic.getId() != objtype.tFrog || graphic.getId() != objtype.tDiver){
+	            for(Whirlpool whirl : _wPoolModel.getWpools()){
+	            	if (whirl.collision(graphic) == 1){
+	            		lAnyCollFound = true;
+	            		if (graphic.getPullState() == false) whirl.pull(graphic);
+	            	}
+	            	else if (whirl.collision(graphic) == 2){
+	            		lAnyCollFound = true;
+	            		if (graphic.getPullState() == false) {
+	            			whirl.pull(graphic);
+	            			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
+	            			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
+	            				graphic.setAngle(whirl.getWAngle());
+	            				graphic.cantPull();
+	            			}
+	            		}
+	            	}
+	            }
             }
-            //checks collision of duck with other sprites
+            /**
+              //checks collision of duck with other sprites
             if(graphic.getId()==objtype.tDuck){
 	            for(GraphicObject graphic2 : _graphics){
 	            	if(graphic2.getId()==objtype.tDiver || graphic2.getId()==objtype.tFrog || graphic2.getId() == objtype.tShark){
@@ -83,9 +95,10 @@ public class Level {
 	            	}
 	            }
             }
+             */
             if (lAnyCollFound == false){
             	graphic.canPull();
-            }//
+            }
         }
 		scroll();
 	}
@@ -94,7 +107,7 @@ public class Level {
 		canvas.drawColor(Color.BLUE);
 		canvas.translate(-scrollBy, 0.0f);
         for (Whirlpool whirlpool : _wPoolModel.getWpools()) {
-        	whirlpool.getGraphic().draw(canvas);
+        	whirlpool.draw(canvas);
         }
         for (GraphicObject graphic : _graphics) {
         	graphic.draw(canvas);

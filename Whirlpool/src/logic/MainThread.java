@@ -1,6 +1,6 @@
-package example.whirlpool;
+package logic;
 
-import example.whirlpool.Panel;
+import states.MainActivity;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 

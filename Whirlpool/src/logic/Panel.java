@@ -1,5 +1,6 @@
-package example.whirlpool;
+package logic;
 
+import states.MainActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -7,11 +8,12 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-class Panel extends SurfaceView implements SurfaceHolder.Callback {
+public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean _GameIsRunning;
     private MainThread _thread;
     static public Screen sScreen = new Screen();
     static public Resources sRes;
+    
     public Panel(Context context) {
         super(context);
         constructor();
@@ -24,10 +26,6 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	getHolder().addCallback(this);
         _thread = new MainThread(this);
         setFocusable(true);
-        //init();
-    }
-    public void subConstructor(){//have to call this after the panel and level are created
-        setOnTouchListener(new TrackingTouchListener(MainActivity.getCurrentLevel().getWPoolModel() , getHolder()));
     }
     public void update(){
     	MainActivity.getCurrentLevel().update();
@@ -37,8 +35,11 @@ class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	MainActivity.getCurrentLevel().onDraw(canvas);
     }
     public void init(){
+    	//int x = findViewById(R.id.mainview).getWidth();
+    	//int y = findViewById(R.id.mainview).getHeight();
     	sScreen.set(getWidth(), getHeight());
     	sRes = getResources();
+        setOnTouchListener(new TrackingTouchListener(MainActivity.getCurrentLevel().getWPoolModel() , getHolder()));
     }
     public void start() {
         if (!_GameIsRunning) {

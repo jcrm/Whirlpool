@@ -1,6 +1,7 @@
-package example.whirlpool;
+package logic;
 
 //import android.graphics.Color;
+import states.MainActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -23,7 +24,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private float _wAngle;
 	private final WPools _mWPools;
 	private final SurfaceHolder _surfaceHolder;
-
+	
     TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
     	_mWPools = wpools;
     	_newGesture = false;

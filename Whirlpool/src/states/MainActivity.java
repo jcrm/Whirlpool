@@ -1,5 +1,8 @@
-package example.whirlpool;
+package states;
 
+import logic.Level;
+import logic.Panel;
+import example.whirlpool.R;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -10,8 +13,8 @@ public class MainActivity extends Activity {
 	static private Level _currentLevel;
 	private Level level1;
 	private Level menuScreen;
-
-
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +27,6 @@ public class MainActivity extends Activity {
         level1 = new Level();
     	menuScreen = new Level();
     	_currentLevel = level1;
-    	_panel.subConstructor();
     }
 
 	public static Level getCurrentLevel() {

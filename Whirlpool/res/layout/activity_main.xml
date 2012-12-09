@@ -5,11 +5,11 @@
     android:orientation="horizontal"
     android:id="@+id/root" >
 
-    <example.whirlpool.Panel
-	    android:id="@+id/mainview"
-	    android:layout_width="fill_parent"
+    <logic.Panel
+		android:id="@+id/mainview"
+		android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         >
-	</example.whirlpool.Panel>
+	</logic.Panel>
 
 </RelativeLayout>
