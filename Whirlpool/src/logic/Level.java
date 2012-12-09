@@ -49,6 +49,7 @@ public class Level {
     
 	void update(){
 		for (GraphicObject graphic : _graphics) { 
+			//duck every frame is different so added id check so that it can check collision against other objects
 			if(graphic.getId()==objtype.tDuck){
 				graphic.frame();	//Do everything this object does every frame, like move
 				for(GraphicObject graphic2 : _graphics){

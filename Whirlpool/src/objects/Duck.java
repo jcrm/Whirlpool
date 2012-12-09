@@ -84,24 +84,29 @@ public class Duck extends GraphicObject{
         animate.animateFrame();
 	}
 	public void checkObjCollision(GraphicObject otherGraphic){
-		
-		if(otherGraphic.getId()==objtype.tDiver){
+		switch(otherGraphic.getId()){
+		case tShark: 
 			if(Func.boxCollision(this, otherGraphic)){
-				float temp = otherGraphic.getX()-(otherGraphic.getWidth()/2)-(getWidth()/2);
-				setX(temp);
-				getSpeed().setSpeed(0);
+				colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
 			}
-		}else if(otherGraphic.getId()==objtype.tFrog){
+			break;
+		case tDiver:
+		case tFrog: 
 			if(Func.boxCollision(this, otherGraphic)){
-				float temp = otherGraphic.getX()-(otherGraphic.getWidth()/2)-(getWidth()/2);
-				setX(temp);
-				getSpeed().setSpeed(0);
+				colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
 			}
-		}else if(otherGraphic.getId() == objtype.tShark){
-			if(Func.boxCollision(this, otherGraphic)){
-				getSpeed().setSpeed(otherGraphic.getSpeed().getSpeed());
-    			setAngle(otherGraphic.getSpeed().getAngle());
-			}
+			break;
+		default: break;
 		}
 	}
+	private void colDiverFrog(float x, float w){
+		float temp = x-(w/2)-(getWidth()/2);
+		setX(temp);
+		getSpeed().setSpeed(0);
+	}
+	private void colShark(float s, float a){
+		getSpeed().setSpeed(s);
+    	setAngle(a);
+	}
+	
 }
