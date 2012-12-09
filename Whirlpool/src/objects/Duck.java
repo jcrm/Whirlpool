@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.Random;
+
 import states.MainActivity;
 import logic.Func;
 import logic.Panel;
@@ -11,7 +13,11 @@ import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Duck extends GraphicObject{
-	
+	public enum coltype{
+		cDefault, cShark, cDiver, cFrog;
+	}
+	public coltype cID = coltype.cDefault;
+	private int colCount = -1;
 	Animate animate;
 	
 	public Duck(){
@@ -78,31 +84,55 @@ public class Duck extends GraphicObject{
 	
 	public void frame(){
 		// Move Objects
+		colMovement();
         if(move()){
         	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
         }
         animate.animateFrame();
 	}
 	public void checkObjCollision(GraphicObject otherGraphic){
-		switch(otherGraphic.getId()){
-		case tShark: 
-			if(Func.boxCollision(this, otherGraphic)){
-				colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
+		if(cID == coltype.cDefault){
+			switch(otherGraphic.getId()){
+			case tShark: 
+				if(Func.boxCollision(this, otherGraphic)){
+					colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
+	 				cID = coltype.cShark;
+				}
+				break;
+			case tDiver:
+				if(Func.boxCollision(this, otherGraphic)){
+					colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
+					cID = coltype.cDiver;
+				}
+				break;
+			case tFrog: 
+				if(Func.boxCollision(this, otherGraphic)){
+					colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
+					cID = coltype.cFrog;
+				}
+				break;
+			default: break;
 			}
-			break;
-		case tDiver:
-		case tFrog: 
-			if(Func.boxCollision(this, otherGraphic)){
-				colDiverFrog(otherGraphic.getX(),otherGraphic.getWidth());
+		}
+	}
+	private void colMovement(){
+		if(cID != coltype.cDefault && colCount >= 0){
+			if(colCount == 10){
+				getSpeed().setSpeed(0);
+				getSpeed().setAngle(0);
+			}else if(colCount == 20){
+				getSpeed().setSpeed(4);				
+				getSpeed().setAngle(0);
+				cID = coltype.cDefault;
+				colCount = -1;
 			}
-			break;
-		default: break;
+			colCount++;
 		}
 	}
 	private void colDiverFrog(float x, float w){
-		float temp = x-(w/2)-(getWidth()/2);
-		setX(temp);
-		getSpeed().setSpeed(0);
+		getSpeed().setSpeed(5);
+		getSpeed().setAngle(new Random().nextInt(180)+90);
+		colCount = 0;
 	}
 	private void colShark(float s, float a){
 		getSpeed().setSpeed(s);
