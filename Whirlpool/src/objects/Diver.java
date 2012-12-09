@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.Random;
+
 import states.MainActivity;
 import logic.Panel;
 import logic.Screen.ScreenSide;
@@ -31,8 +33,8 @@ public class Diver extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
-		setX(Panel.sScreen.getWidth()/2);
-		setY(Panel.sScreen.getHeight()/2);
+		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+    	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
         _flipped = true;
 		
@@ -57,23 +59,23 @@ public class Diver extends GraphicObject{
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			_speed.VerBounce();
             setActualY(-getActualY());
-            setFlipV(true);
+    		_speed.shiftAngle(180);
+            setFlipH(true);
 			break;
 		case Bottom:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
-        	setFlipV(true);
+        	setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
+        	setFlipH(true);
 			break;
 		case Left:
-			_speed.HorBounce();
         	setActualX(-getActualX());
+        	_speed.shiftAngle(180);
         	setFlipH(true);
 			break;
 		case Right:
-			_speed.HorBounce();
         	setActualX(width - getWidth());
+        	_speed.shiftAngle(180);
         	setFlipH(true);
 			break;
 		}

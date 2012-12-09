@@ -49,8 +49,14 @@ public class Level {
     
 	void update(){
 		for (GraphicObject graphic : _graphics) { 
-            graphic.frame();				//Do everything this object does every frame, like move
-            
+			if(graphic.getId()==objtype.tDuck){
+				graphic.frame();	//Do everything this object does every frame, like move
+				for(GraphicObject graphic2 : _graphics){
+					((Duck) graphic).checkObjCollision(graphic2);
+				}
+			}else{
+				graphic.frame();	//Do everything this object does every frame, like move
+			}
             boolean lAnyCollFound = false; //see if object is in a wpool
             /**
             * added this line so frog and diver not affected by whirlpool can be moved elsewhere
@@ -75,27 +81,6 @@ public class Level {
 	            	}
 	            }
             }
-            /**
-              //checks collision of duck with other sprites
-            if(graphic.getId()==objtype.tDuck){
-	            for(GraphicObject graphic2 : _graphics){
-	            	if(graphic2.getId()==objtype.tDiver || graphic2.getId()==objtype.tFrog || graphic2.getId() == objtype.tShark){
-	            		//only using basic box collision for now working on creating AABB collision
-	            		if(Func.boxCollision(graphic, graphic2)){
-	            			//just added temp movement for duck working on more accurate version
-	            			if(graphic2.getId()==objtype.tShark){
-	            				graphic.getSpeed().setSpeed(graphic2.getSpeed().getSpeed());
-	            				graphic.setAngle(graphic2.getSpeed().getAngle());
-	            			}else{
-	            				float temp = graphic2.getX()-(graphic2.getWidth()/2)-(graphic.getWidth()/2);
-	            				graphic.setX(temp);
-	            				graphic.getSpeed().setSpeed(0);
-	            			}
-	            		}
-	            	}
-	            }
-            }
-             */
             if (lAnyCollFound == false){
             	graphic.canPull();
             }

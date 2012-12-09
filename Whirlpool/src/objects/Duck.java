@@ -1,6 +1,7 @@
 package objects;
 
 import states.MainActivity;
+import logic.Func;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import logic.Animate;
@@ -82,5 +83,25 @@ public class Duck extends GraphicObject{
         }
         animate.animateFrame();
 	}
-
+	public void checkObjCollision(GraphicObject otherGraphic){
+		
+		if(otherGraphic.getId()==objtype.tDiver){
+			if(Func.boxCollision(this, otherGraphic)){
+				float temp = otherGraphic.getX()-(otherGraphic.getWidth()/2)-(getWidth()/2);
+				setX(temp);
+				getSpeed().setSpeed(0);
+			}
+		}else if(otherGraphic.getId()==objtype.tFrog){
+			if(Func.boxCollision(this, otherGraphic)){
+				float temp = otherGraphic.getX()-(otherGraphic.getWidth()/2)-(getWidth()/2);
+				setX(temp);
+				getSpeed().setSpeed(0);
+			}
+		}else if(otherGraphic.getId() == objtype.tShark){
+			if(Func.boxCollision(this, otherGraphic)){
+				getSpeed().setSpeed(otherGraphic.getSpeed().getSpeed());
+    			setAngle(otherGraphic.getSpeed().getAngle());
+			}
+		}
+	}
 }

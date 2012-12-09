@@ -48,14 +48,9 @@ public class Frog extends GraphicObject{
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
-			/*
-			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-			shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-			_speed.shiftAngle(2.5f);*/
-	    	
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle+=_speed.getSpeed()/100;
+			_frogAngle-=_speed.getSpeed()/100;
 			return true;
 		}
 		return false;
