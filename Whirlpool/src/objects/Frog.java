@@ -30,7 +30,7 @@ public class Frog extends GraphicObject{
 	public void init() {
 		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX(Panel.sScreen.getWidth()/2);
-		setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
+		setY(Panel.sScreen.getHeight()/2);
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
 		setFrogRadius(100);
@@ -46,13 +46,14 @@ public class Frog extends GraphicObject{
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
+			/*
 			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
 			shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-			_speed.shiftAngle(2.5f);
-	    	/*
+			_speed.shiftAngle(2.5f);*/
+	    	
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle+=_speed.getSpeed()/100;*/
+			_frogAngle+=_speed.getSpeed()/100;
 			return true;
 		}
 		return false;

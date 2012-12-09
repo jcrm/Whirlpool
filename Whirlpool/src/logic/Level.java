@@ -8,6 +8,7 @@ import objects.Diver;
 import objects.Duck;
 import objects.Frog;
 import objects.GraphicObject;
+import objects.GraphicObject.objtype;
 import objects.Shark;
 import objects.Whirlpool;
 import android.graphics.Canvas;
@@ -52,22 +53,28 @@ public class Level {
             graphic.frame();				//Do everything this object does every frame, like move
             
             boolean lAnyCollFound = false; //see if object is in a wpool
-            for(Whirlpool whirl : _wPoolModel.getWpools()){
-            	if (whirl.collision(graphic) == 1){
-            		lAnyCollFound = true;
-            		if (graphic.getPullState() == false) whirl.pull(graphic);
-            	}
-            	else if (whirl.collision(graphic) == 2){
-            		lAnyCollFound = true;
-            		if (graphic.getPullState() == false) {
-            			whirl.pull(graphic);
-            			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
-            			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
-            				graphic.setAngle(whirl.getWAngle());
-            				graphic.cantPull();
-            			}
-            		}
-            	}
+            /**
+            * added this line so frog and diver not affected by whirlpool can be moved elsewhere
+            * just not sure where yet by looking at the code - jake
+            **/
+            if(graphic.getId() != objtype.tFrog || graphic.getId() != objtype.tDiver){
+	            for(Whirlpool whirl : _wPoolModel.getWpools()){
+	            	if (whirl.collision(graphic) == 1){
+	            		lAnyCollFound = true;
+	            		if (graphic.getPullState() == false) whirl.pull(graphic);
+	            	}
+	            	else if (whirl.collision(graphic) == 2){
+	            		lAnyCollFound = true;
+	            		if (graphic.getPullState() == false) {
+	            			whirl.pull(graphic);
+	            			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
+	            			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
+	            				graphic.setAngle(whirl.getWAngle());
+	            				graphic.cantPull();
+	            			}
+	            		}
+	            	}
+	            }
             }
             if (lAnyCollFound == false){
             	graphic.canPull();

@@ -20,7 +20,8 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tDefault(0, 0, 0, 0, R.drawable.ic_launcher, 						1, 0, 0), 
 		tWhirl(	100, 100, 0, 0, R.drawable.whirlpool, 						1, 0, 0),
 		tDuck(	50, 50, 4, 0, R.drawable.duckleftandright2, 				19, 190, 190),
-		tFrog(	30, 30, 5, 0, R.drawable.frog, 								1, 0, 0), 
+		//using temp frog image until animation has been added to frog to make it look better
+		tFrog(	30, 30, 5, 0, R.drawable.frogtemp, 							1, 0, 0), 
 		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1, 0, 0), 
 		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1, 0, 0),
 		tDiver(	64, 32, 4, 45, R.drawable.diver, 							1, 0, 0);
