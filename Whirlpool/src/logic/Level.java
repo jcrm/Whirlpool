@@ -41,10 +41,10 @@ public class Level {
     void init(){
     	setLevelWidth(Panel.sScreen.getWidth() + 500);
     	_graphics.add(new Duck());
-        _graphics.add(new Frog());/*
+        _graphics.add(new Frog());
         _graphics.add(new Diver());
     	_graphics.add(new Shark());
-        _graphics.add(new Boat());*/
+        _graphics.add(new Boat());
     }
     
 	void update(){

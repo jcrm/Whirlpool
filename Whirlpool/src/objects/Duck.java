@@ -137,7 +137,7 @@ public class Duck extends GraphicObject{
 	}
 	private void colDiverFrog(){
 		getSpeed().setSpeed(5);
-		getSpeed().setAngle(new Random().nextInt(180)+90);
+		getSpeed().setAngle(new Random().nextInt(90)+135);
 		colCount = 0;
 	}
 	private void colShark(float s, float a){
