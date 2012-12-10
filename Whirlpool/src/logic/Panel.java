@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 
+import objects.GraphicObject;
 import objects.GraphicObject.objtype;
 
 import states.MainActivity;
@@ -18,8 +19,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-	private boolean _GameIsRunning;
-    private MainThread _thread;
+	private static boolean _GameIsRunning;
+    static private MainThread _thread = new MainThread();
     static public Screen sScreen = new Screen();
     static public Resources sRes;
     
@@ -33,22 +34,27 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     }
     private void constructor(){
     	getHolder().addCallback(this);
-        _thread = new MainThread(this);
+        _thread.setPanel(this);
         setFocusable(true);
+        Constants.setScreen(sScreen);
+        Constants.setThread(_thread);
     }
     public void update(){
-    	MainActivity.getCurrentLevel().update();
+    	Constants.getState().update();
     }
     @Override
     public void onDraw(Canvas canvas) {
-    	MainActivity.getCurrentLevel().onDraw(canvas);
+    	Constants.getState().onDraw(canvas);
     }
     public void init(){
     	//int x = findViewById(R.id.mainview).getWidth();
     	//int y = findViewById(R.id.mainview).getHeight();
     	sScreen.set(getWidth(), getHeight());
     	sRes = getResources();
-        setOnTouchListener(new TrackingTouchListener(MainActivity.getCurrentLevel().getWPoolModel() , getHolder()));
+    	Constants.setRes(sRes);
+    	if(Constants.getState().needListener()){
+    		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel() , getHolder()));    		
+    	}
     }
     public void start() {
         if (!_GameIsRunning) {
@@ -66,6 +72,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	start();
     }
     public void surfaceDestroyed(SurfaceHolder holder) {
-    	_thread.onPause();
+    	//_thread.onPause();
     }
+
 }

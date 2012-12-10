@@ -4,17 +4,25 @@ import states.MainActivity;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-class MainThread extends Thread {
+public class MainThread extends Thread {
 	private Object _pauseLock = new Object();  
 	private boolean _paused;
     private SurfaceHolder _surfaceHolder;
     private Panel _panel;
     private boolean _run = false;
 
+    public MainThread(){
+    	
+    }
+    
     public MainThread(Panel panel) {
-        _surfaceHolder = panel.getHolder();
+    	_surfaceHolder = panel.getHolder();
         _panel = panel;
-        //_panel.init();
+    }
+    
+    public void setPanel(Panel panel){
+    	_surfaceHolder = panel.getHolder();
+        _panel = panel;
     }
     //run game loop not sure where to put this other than this thread
     //sometimes thread can cause program to end suddenly
@@ -22,7 +30,9 @@ class MainThread extends Thread {
     public void run() {
         Canvas canvas;
         _panel.init();
-        MainActivity.getCurrentLevel().init();
+        if(Constants.getLevel() != null){
+	    	Constants.getLevel().init();		    	
+	    }
         while (_run) {
             canvas = null;
             try {
@@ -44,9 +54,9 @@ class MainThread extends Thread {
             // This should be after your drawing/update code inside your thread's run() code.
             while (_paused) {
                 try {
-                synchronized (_pauseLock) {
-                    _pauseLock.wait();
-                }
+	                synchronized (_pauseLock) {
+	                    _pauseLock.wait();
+	                }
                 } catch (InterruptedException e) {
                 }
             }
@@ -60,16 +70,20 @@ class MainThread extends Thread {
     }
     // Two methods for your Runnable/Thread class to manage the thread properly.
     public void onPause() {
-	synchronized (_pauseLock) {
-		_paused = true;
-    }
+		synchronized (_pauseLock) {
+			_paused = true;
+	    }
     }
 
     public void onResume() {
-	synchronized (_pauseLock) {
-	    _paused = false;
-	    _pauseLock.notifyAll();
-	}
+		synchronized (_pauseLock) {
+			_paused = false;
+		    interrupt();
+		    _panel.init();
+		    if(Constants.getLevel() != null){
+		    	Constants.getLevel().init();		    	
+		    }
+		}
     }
 }
      

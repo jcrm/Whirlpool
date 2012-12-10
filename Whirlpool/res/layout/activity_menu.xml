@@ -6,10 +6,19 @@
     android:id="@+id/root" >
 
     <logic.Panel
-	    android:id="@+id/mainview"
+	    android:id="@+id/menuview"
 	    android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         >
 	</logic.Panel>
+	
+    <Button
+        android:id="@+id/test2"
+        android:text="Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        
+    </Button>
 
 </RelativeLayout>

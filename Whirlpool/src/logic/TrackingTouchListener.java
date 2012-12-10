@@ -49,7 +49,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
             if (numPointers > 1) {
                 float currX = evt.getRawX();
                 float deltaX = -(currX - _last[0]);
-                MainActivity.getCurrentLevel().shiftScrollBy(deltaX);
+                Constants.getLevel().shiftScrollBy(deltaX);
             }
             else if (_newGesture == true){
     			//gesture has been started. determine direction.
@@ -142,7 +142,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
     			else clockwise = false;
     			addWPools(
     	    			_mWPools,
-    	    			_wCenter[0] + MainActivity.getCurrentLevel().getScrollBy(),
+    	    			_wCenter[0] + Constants.getLevel().getScrollBy(),
     	    			_wCenter[1],
     	    			_wSize,
     	    			_wAngle,

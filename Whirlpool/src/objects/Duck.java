@@ -79,7 +79,7 @@ public class Duck extends GraphicObject{
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
         animate.animateFrame();
 	}

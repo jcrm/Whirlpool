@@ -1,0 +1,24 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:id="@+id/root" >
+
+    <logic.Panel
+	    android:id="@+id/gameview"
+	    android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+	</logic.Panel>
+	
+    <Button
+        android:id="@+id/test1"
+        android:text="Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        
+    </Button>
+
+</RelativeLayout>

@@ -2,6 +2,9 @@ package objects;
 
 import java.util.Random;
 
+import states.MainActivity;
+
+import logic.Constants;
 import logic.Panel;
 import logic.Screen;
 import movement.Speed;
@@ -83,7 +86,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	
-	public void border(int WIDTH,int HEIGHT){
+	public void border(){
+		int HEIGHT = Panel.sScreen.getHeight();
+		int WIDTH = Constants.getLevel().getLevelWidth();
         if (getActualX() < 0) {
         	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
         } else if (getActualX() + getWidth() > WIDTH) {

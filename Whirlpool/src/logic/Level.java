@@ -24,11 +24,6 @@ public class Level {
     	constructor();
     }
     
-    //Level(other stuff){
-    //	set other stuff
-    //	constructor();
-    //}
-	
     private void constructor(){
     	//init();
     }
@@ -51,7 +46,7 @@ public class Level {
         _graphics.add(new Boat());
     }
     
-	void update(){
+	public void update(){
 		for (GraphicObject graphic : _graphics) { 
             graphic.frame();				//Do everything this object does every frame, like move
             
@@ -80,7 +75,7 @@ public class Level {
 		scroll();
 	}
 	
-	void onDraw(Canvas canvas){
+	public void onDraw(Canvas canvas){
 		canvas.drawColor(Color.BLUE);
 		canvas.translate(-scrollBy, 0.0f);
         for (Whirlpool whirlpool : _wPoolModel.getWpools()) {
