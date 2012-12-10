@@ -15,7 +15,7 @@ public class Frog extends GraphicObject{
 	public Frog(){
 		_id = objtype.tFrog;
         init();
-        animate = new Animate(_id.frames, _id.aWidth, _id.aHeight);
+        animate = new Animate(_id.frames,(_bitmap.getWidth()/_id.frames), _bitmap.getHeight());
 	}
 	Animate animate;
 	@Override
@@ -29,7 +29,6 @@ public class Frog extends GraphicObject{
 		
 		c.restore();
 	}
-
 	@Override
 	public void init() {
 		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
@@ -47,7 +46,6 @@ public class Frog extends GraphicObject{
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
 		
 	}
-
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
@@ -58,7 +56,6 @@ public class Frog extends GraphicObject{
 		}
 		return false;
 	}
-	
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
@@ -80,7 +77,6 @@ public class Frog extends GraphicObject{
 			break;
 		}
 	}
-	
 	public void frame(){
 		// Move Objects
         if(move()){
@@ -88,7 +84,6 @@ public class Frog extends GraphicObject{
         }
         animate.animateFrame();
 	}
-	
 	public float getFrogAngle() {
 		return _frogAngle;
 	}
