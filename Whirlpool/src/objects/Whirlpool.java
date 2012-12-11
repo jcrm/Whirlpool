@@ -23,7 +23,13 @@ public class Whirlpool extends GraphicObject{
 	private float radius = 40.0f;
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
-	private int rotAngle = 1;
+	private int dirFactor = 1;
+	private int collideTimer = 100;
+	private int expireTimer = 250;
+	private int collideCounter = 0;
+	private int expireCounter = 0;
+	private boolean strawberriesOnIce = false; //TODO set to disappate
+	private boolean collisionDone = false;
 	
 	public Whirlpool(){
 		_id = objtype.tWhirl;
@@ -38,6 +44,7 @@ public class Whirlpool extends GraphicObject{
 		
 		c.translate(getX(), getY());
 		c.rotate(getRotation());
+		c.scale(dirFactor, 1);
 		
 		c.drawBitmap(getGraphic(), null, rect,  null);
 		
@@ -87,15 +94,40 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	public void frame(){
-		
+		if(collisionDone){
+			collideCounter++;
+			if(collideCounter >= collideTimer){
+				strawberriesOnIce = true;
+			}
+		}
+		expireCounter++;
+		if(expireCounter >= expireTimer){
+			collisionDone = true;
+		}
+	}
+	
+	public boolean isDone(){
+		return strawberriesOnIce;
+	}
+	
+	public void setCollisionDone(boolean a){
+		collisionDone = a;
+	}
+	
+	public boolean getCollisionDone(){
+		return collisionDone;
+	}
+	
+	public void setExpireCounter(int a){
+		expireCounter = a;
 	}
 	
 	public void setClockwise(boolean clockwise){
-    	if (clockwise) rotAngle = 1;
-    	else rotAngle = -1;
+    	if (clockwise) dirFactor = 1;
+    	else dirFactor = -1;
     }
     public int getClockwise(){
-    	return rotAngle;
+    	return dirFactor;
     }
     public float getRotation(){
 		_rot+= (2*getClockwise());
@@ -130,8 +162,8 @@ public class Whirlpool extends GraphicObject{
 	public void gravity(GraphicObject graphic, float factor){
 		float objX = graphic.getX();
 		float objY = graphic.getY();
-		float objSpeedX = graphic.getSpeed().getXSpeed();
-		float objSpeedY = graphic.getSpeed().getYSpeed();
+		//float objSpeedX = graphic.getSpeed().getXSpeed();
+		//float objSpeedY = graphic.getSpeed().getYSpeed();
 		float wPoolCentreX = getX();
 		float wPoolCentreY = getY();
 		//this is the current distance from centre to graphic
@@ -139,15 +171,37 @@ public class Whirlpool extends GraphicObject{
 		//angle of radius
 		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
 		cAngle+= (2 * getClockwise());//rotate obj around wpool
-		
+
 		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
 		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
-		
+
 		cAngle = Func.calcAngle(objX, objY,destX, destY);
-		
+
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(cAngle+ (5.0f * getClockwise()));
+		cAngle = cAngle+ (5.0f * getClockwise()); //ideal angle
+
+		float mAngle = graphic.getSpeed().getAngle();
+		float clockwiseDiff;
+		float anticlockwiseDiff;
+		if (mAngle > cAngle){
+			 anticlockwiseDiff = (cAngle + 360) - mAngle;
+			 clockwiseDiff = (mAngle - cAngle);
+		}
+		else{
+			clockwiseDiff = (mAngle + 360) - cAngle;
+			anticlockwiseDiff = (cAngle - mAngle);
+		}
+			if (anticlockwiseDiff < clockwiseDiff)
+				if (anticlockwiseDiff >= 10)
+					mAngle+=10;
+				else mAngle = cAngle;
+			else
+				if (clockwiseDiff >= 10)
+					mAngle-=10;
+				else mAngle = cAngle;
+
+		graphic.setAngle(mAngle);
 	}
 	//pulls different objects to the centre depending on original speed
 	//sharks are pulled slower because they start faster

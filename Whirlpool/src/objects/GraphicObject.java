@@ -24,13 +24,14 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 0, 0, R.drawable.ic_launcher, 						1, 0, 0), 
-		tWhirl(	100, 100, 0, 0, R.drawable.whirlpool, 						1, 0, 0),
-		tDuck(	50, 50, 4, 0, R.drawable.duckleftandright2, 				19, 190, 190),
-		tFrog(	30, 30, 5, 0, R.drawable.frog, 								1, 0, 0), 
-		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1, 0, 0), 
-		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1, 0, 0),
-		tDiver(	64, 32, 4, 45, R.drawable.diver, 							1, 0, 0);
+		tDefault(1, 1, 0, 0, R.drawable.ic_launcher, 						1), 
+		tWhirl(	6, 3, 0, 0, R.drawable.whirlpool, 						1),
+		tDuck(	13, 7, 4, 0, R.drawable.duckleftandright2, 				16),
+		//not sure what numbers need for frame width and hieght
+		tFrog(	7, 4, 2, 0, R.drawable.frog2, 							16), 
+		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1), 
+		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
+		tDiver(	64, 64, 4, 45, R.drawable.diver, 							1);
 		
 		int width;
 		int height;
@@ -38,18 +39,15 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		float angle;
 		int bitmap;
 		int frames;
-		int aWidth;
-		int aHeight;
 		
-		objtype(int a, int b, float c, float d, int e, int f, int g, int h){
-			width = a;
-			height = b;
+		objtype(int a, int b, float c, float d, int e, int f){
+			width = Constants.getScreen().getWidth()/a;
+			height = Constants.getScreen().getHeight()/b;
+			//TODO set min width/height
 			speed = c;
 			angle = d;
 			bitmap = e;
 			frames = f;
-			aWidth = g;
-			aHeight = h;
 		}
 	}
 	
@@ -61,7 +59,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected float _y = 0;
 	protected Bitmap _bitmap;
 	protected Speed _speed = new Speed();
-	private boolean _pull;
+	private boolean _pull;// = false;
 	Rect _portion;
 	
 	
@@ -171,12 +169,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return _speed;
     }
     
-    public void cantPull() {
-		this._pull = true;
-	}
-	public void canPull() {
-		this._pull = false;
-	}
+    public void setPull(boolean a){
+    	_pull = a;
+    }
 	public boolean getPullState() {
 		return this._pull;
 	}

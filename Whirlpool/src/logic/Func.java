@@ -17,6 +17,19 @@ public class Func{
     	}
     	return false;
     }
+	//box collision - graphic is duck, graphic 2 is other sprite
+		static public boolean boxCollision(GraphicObject graphic, GraphicObject graphic2){
+			if((graphic.getX()+(graphic.getWidth()/2))>(graphic2.getX()-(graphic2.getWidth()/2))){
+				if((graphic.getX()-(graphic.getWidth()/2))<(graphic2.getX()+(graphic2.getWidth()/2))){
+					if((graphic.getY()+(graphic.getHeight()/2))>(graphic2.getY()-(graphic2.getHeight()/2))){
+						if((graphic.getY()-(graphic.getHeight()/2))<(graphic2.getY()+(graphic2.getHeight()/2))){
+							return true;
+						}
+					}
+				}
+			}
+	    	return false;
+	    }
 	//circle collision - graphic is the sprite being tested, event is the touch
 	static public boolean circleCollision(float x1, float y1, float r1, float x2, float y2, float r2){
 		float width, height, radius;

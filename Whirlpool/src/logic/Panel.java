@@ -46,10 +46,16 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
     	Constants.getState().onDraw(canvas);
     }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    	int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+    	int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+    	this.setMeasuredDimension(parentWidth, parentHeight);
+    	sScreen.set(parentWidth, parentHeight);
+    }
     public void init(){
     	//int x = findViewById(R.id.mainview).getWidth();
     	//int y = findViewById(R.id.mainview).getHeight();
-    	sScreen.set(getWidth(), getHeight());
     	sRes = getResources();
     	Constants.setRes(sRes);
     	if(Constants.getState().needListener()){

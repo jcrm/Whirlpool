@@ -40,39 +40,56 @@ public class Level {
     void init(){
     	setLevelWidth(Panel.sScreen.getWidth() + 500);
     	_graphics.add(new Duck());
+    	Constants.setPlayer((Duck)_graphics.get(0));
         _graphics.add(new Frog());
-        _graphics.add(new Diver());
-    	_graphics.add(new Shark());
-        _graphics.add(new Boat());
+        //_graphics.add(new Diver());
+    	//_graphics.add(new Shark());
+        //_graphics.add(new Boat());
     }
     
 	public void update(){
 		for (GraphicObject graphic : _graphics) { 
-            graphic.frame();				//Do everything this object does every frame, like move
-            
             boolean lAnyCollFound = false; //see if object is in a wpool
             for(Whirlpool whirl : _wPoolModel.getWpools()){
+            	whirl.frame();
             	if (whirl.collision(graphic) == 1){
             		lAnyCollFound = true;
             		if (graphic.getPullState() == false) whirl.pull(graphic);
+            		whirl.setExpireCounter(0);
             	}
             	else if (whirl.collision(graphic) == 2){
             		lAnyCollFound = true;
+            		whirl.setCollisionDone(true);
             		if (graphic.getPullState() == false) {
             			whirl.pull(graphic);
             			if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
             			graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
             				graphic.setAngle(whirl.getWAngle());
-            				graphic.cantPull();
             			}
             		}
             	}
             }
-            if (lAnyCollFound == false){
-            	graphic.canPull();
+            for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
+            	if(_wPoolModel.getWpools().get(a).isDone()){
+            		_wPoolModel.getWpools().remove(a);
+            	}
             }
+            graphic.setPull(!lAnyCollFound);
+            
+            //duck every frame is different so added id check so that it can check collision against other objects
+            if(graphic.getId()==objtype.tDuck){
+            	graphic.frame();	//Do everything this object does every frame, like move
+            	((Duck) graphic).changeCollisionType(lAnyCollFound);
+            	for(GraphicObject graphic2 : _graphics){
+            		((Duck) graphic).checkObjCollision(graphic2);
+            	}
+            }else{
+            	graphic.frame();	//Do everything this object does every frame, like move
+            }
+
         }
-		scroll();
+		duckOnScreen();
+		//scroll();
 	}
 	
 	public void onDraw(Canvas canvas){
@@ -122,6 +139,21 @@ public class Level {
 			scrollSpeed /= 1.5f;
 		else
 			scrollSpeed = 0.0f;
+		if(scrollBy < 0){
+			scrollBy = 0;
+		}
+		if(scrollBy + Panel.sScreen.getWidth() > levelWidth){
+			scrollBy = levelWidth - Panel.sScreen.getWidth();
+		}
+		
+	}
+	public void duckOnScreen(){
+		while(Constants.getPlayer().getX() >= (Panel.sScreen.getWidth()/2)+scrollBy){
+			scrollBy++;
+		}
+		while(Constants.getPlayer().getX() < (Panel.sScreen.getWidth()/2)+scrollBy){
+			scrollBy--;
+		}
 		if(scrollBy < 0){
 			scrollBy = 0;
 		}

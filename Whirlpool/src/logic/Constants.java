@@ -1,5 +1,6 @@
 package logic;
 
+import objects.Duck;
 import android.content.res.Resources;
 import states.MainActivity;
 
@@ -9,6 +10,7 @@ public class Constants {
 	private static Screen screen;
 	private static MainThread thread;
 	private static Level level;
+	private static Duck player;
 	
 	synchronized public static MainActivity getState() {
 		return state;
@@ -42,6 +44,12 @@ public class Constants {
 	}
 	synchronized public static void clearLevel() {
 		Constants.level = null;
+	}
+	synchronized public static Duck getPlayer() {
+		return player;
+	}
+	synchronized public static void setPlayer(Duck player) {
+		Constants.player = player;
 	}
 	
 }

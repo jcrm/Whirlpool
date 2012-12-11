@@ -1,7 +1,8 @@
 package objects;
 
+import java.util.Random;
+
 import states.MainActivity;
-import example.whirlpool.R;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.Bitmap;
@@ -13,30 +14,30 @@ import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
 	protected boolean _flipped, _flipV, _flipH; //TODO What does _flipped even do?
-	
+
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
 	}
-	
+
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
+
 		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
 		c.drawBitmap(getGraphic(), null, rect,  null);
-		
+
 		c.restore();
 	}
 
 	@Override
 	public void init() {
 		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
-		setX(Panel.sScreen.getWidth()/2);
-		setY(Panel.sScreen.getHeight()/2);
+		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+    	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
         _flipped = true;
-		
+
 		_width = _id.width;
 		_height = _id.height;
 		_speed.setAngle(_id.angle);
@@ -53,40 +54,40 @@ public class Diver extends GraphicObject{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			_speed.VerBounce();
             setActualY(-getActualY());
-            setFlipV(true);
+    		_speed.shiftAngle(180);
+            setFlipH(true);
 			break;
 		case Bottom:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
-        	setFlipV(true);
+        	setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
+        	setFlipH(true);
 			break;
 		case Left:
-			_speed.HorBounce();
         	setActualX(-getActualX());
+        	_speed.shiftAngle(180);
         	setFlipH(true);
 			break;
 		case Right:
-			_speed.HorBounce();
         	setActualX(width - getWidth());
+        	_speed.shiftAngle(180);
         	setFlipH(true);
 			break;
 		}
 	}
-	
+
 	public void frame(){
 		// Move Objects
         if(move()){
         	border();
         }
 	}
-	
+
 	public boolean getFlipped() {
 		return _flipped;
 	}
@@ -117,7 +118,7 @@ public class Diver extends GraphicObject{
 	public void flip(){
 		boolean tempflip = false;
 		Matrix flipMatrix = new Matrix();
-		
+
 		if(_flipH){
 			flipMatrix.setScale(-1, 1);
 			tempflip = true;
@@ -132,6 +133,6 @@ public class Diver extends GraphicObject{
 			_bitmap = temp;
 		}
 	}
-	
+
 
 }

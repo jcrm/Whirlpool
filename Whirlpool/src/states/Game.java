@@ -41,6 +41,13 @@ public class Game extends MainActivity {
 		        }
     		}
     	);
+    	((Button) findViewById(R.id.test2)).setOnClickListener(
+        		new Button.OnClickListener(){
+    		        public void onClick(View v) {
+    		        	//getCurrentLevel().getWPoolModel().clearDots();
+    		        }
+        		}
+        	);
     }
     
 	@Override

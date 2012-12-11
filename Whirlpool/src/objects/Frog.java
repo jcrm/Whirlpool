@@ -1,7 +1,8 @@
 package objects;
 
 import states.MainActivity;
-import example.whirlpool.R;
+import logic.Animate;
+import logic.Constants;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -15,14 +16,17 @@ public class Frog extends GraphicObject{
 	public Frog(){
 		_id = objtype.tFrog;
         init();
+        animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 	}
-	
+	Animate animate;
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		//doesn't seen to rotate
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		c.translate(getX(), getY());
+		c.rotate((-_frogAngle*180/PI));
+		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -31,10 +35,10 @@ public class Frog extends GraphicObject{
 	public void init() {
 		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
 		setX(Panel.sScreen.getWidth()/2);
-		setY((Panel.sScreen.getHeight()/2)-(Panel.sScreen.getHeight()/4));
+		setY(Panel.sScreen.getHeight()/2);
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
-		setFrogRadius(100);
+		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
         _speed.setMove(true);
         
 		_width = _id.width;
@@ -47,13 +51,9 @@ public class Frog extends GraphicObject{
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
-			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-			shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-			_speed.shiftAngle(2.5f);
-	    	/*
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle+=_speed.getSpeed()/100;*/
+			_frogAngle-=_speed.getSpeed()/100;
 			return true;
 		}
 		return false;
@@ -86,6 +86,7 @@ public class Frog extends GraphicObject{
         if(move()){
         	border();
         }
+        animate.animateFrame();
 	}
 	
 	public float getFrogAngle() {
