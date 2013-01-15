@@ -4,6 +4,7 @@ import java.util.Random;
 
 import states.MainActivity;
 import logic.Func;
+import logic.ImageImports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import logic.Animate;
@@ -26,7 +27,7 @@ public class Duck extends GraphicObject{
 	public Duck(){
 		_id = objtype.tDuck;
 		init();
-		animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
+		
 	}
 
 	@Override
@@ -46,7 +47,8 @@ public class Duck extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = ImageImports.getDuck();
+		animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 		setX(0.0f);
 		setY(0.0f);
     	//setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);

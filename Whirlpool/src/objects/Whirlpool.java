@@ -4,6 +4,7 @@ import example.whirlpool.R;
 import objects.GraphicObject.objtype;
 import states.MainActivity;
 import logic.Func;
+import logic.ImageImports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -54,7 +55,7 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = ImageImports.getWhirlpool();
 		_speed.setMove(false);
 		
 		_width = _id.width;

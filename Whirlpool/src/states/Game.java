@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -18,39 +19,57 @@ import android.widget.Button;
 public class Game extends MainActivity {
 	Panel _panel;
 	private Level level1;
+	MediaPlayer backgroundMusic;
 	
 	
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_game);
-        _panel = (Panel) findViewById(R.id.gameview);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        level1 = new Level();
-        setCurrentLevel(level1);
-    	Constants.setState(this);
-    	Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
-    	
-    	((Button) findViewById(R.id.test1)).setOnClickListener(
-    		new Button.OnClickListener(){
-		        public void onClick(View v) {
-		        	MainThread tempthread = Constants.getThread();
-	        		tempthread.onPause();
-	        		startActivity(new Intent(Game.this, Menu.class));
-		        	
-		        }
-    		}
-    	);
-    	((Button) findViewById(R.id.test2)).setOnClickListener(
-        		new Button.OnClickListener(){
-    		        public void onClick(View v) {
-    		        	//getCurrentLevel().getWPoolModel().clearDots();
-    		        }
-        		}
-        	);
-    }
-    
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_game);
+		_panel = (Panel) findViewById(R.id.gameview);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		Constants.setState(this);
+		Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
+		
+		level1 = new Level();
+		setCurrentLevel(level1);
+		
+		backgroundMusic = MediaPlayer.create(Constants.getContext(), R.raw.sample1);
+		backgroundMusic.start();
+		backgroundMusic.setLooping(true);
+		
+		((Button) findViewById(R.id.test1)).setOnClickListener(
+			new Button.OnClickListener(){
+				public void onClick(View v) {
+					MainThread tempthread = Constants.getThread();
+					tempthread.onPause();
+					startActivity(new Intent(Game.this, Menu.class));
+					
+				}
+			}
+		);
+		((Button) findViewById(R.id.test2)).setOnClickListener(
+				new Button.OnClickListener(){
+					public void onClick(View v) {
+						//getCurrentLevel().getWPoolModel().clearDots();
+					}
+				}
+			);
+	}
+	
+	@Override
+	public void onPause(){
+		backgroundMusic.stop();
+		super.onPause();
+	}
+	
+	@Override
+	public void onDestroy(){
+		backgroundMusic.stop();
+		super.onDestroy();
+	}
+	
 	@Override
 	public void update() {
 		getCurrentLevel().update();
@@ -67,5 +86,5 @@ public class Game extends MainActivity {
 	public boolean needListener() {
 		return true;
 	}
-    
+	
 }

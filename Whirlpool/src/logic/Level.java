@@ -41,22 +41,19 @@ public class Level {
 	private float scrollSpeed = 0;
 	Paint paint = new Paint();
 	Rect rect = new Rect();
-	MediaPlayer backgroundMusic;
 	Bitmap backgroundImage;
 	
 	
 	void init(){
-		setLevelWidth(Panel.sScreen.getWidth() + 5000);
-		backgroundImage = BitmapFactory.decodeResource(Panel.sRes, R.drawable.wateroffset);
-		backgroundMusic = MediaPlayer.create(Constants.getContext(), R.raw.sample1);
+		ImageImports.setImages();
+		setLevelWidth(Panel.sScreen.getWidth() + 1000);
+		backgroundImage = ImageImports.getBackground();
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));
 		_graphics.add(new Frog());
 		//_graphics.add(new Diver());
 		//_graphics.add(new Shark());
 		//_graphics.add(new Boat());
-		backgroundMusic.start();
-		backgroundMusic.setLooping(true);
 		
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL);
