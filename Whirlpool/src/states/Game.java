@@ -30,6 +30,7 @@ public class Game extends MainActivity {
         level1 = new Level();
         setCurrentLevel(level1);
     	Constants.setState(this);
+    	Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
     	
     	((Button) findViewById(R.id.test1)).setOnClickListener(
     		new Button.OnClickListener(){

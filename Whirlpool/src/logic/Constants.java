@@ -1,6 +1,7 @@
 package logic;
 
 import objects.Duck;
+import android.content.Context;
 import android.content.res.Resources;
 import states.MainActivity;
 
@@ -11,6 +12,7 @@ public class Constants {
 	private static MainThread thread;
 	private static Level level;
 	private static Duck player;
+	private static Context context;
 	
 	synchronized public static MainActivity getState() {
 		return state;
@@ -50,6 +52,12 @@ public class Constants {
 	}
 	synchronized public static void setPlayer(Duck player) {
 		Constants.player = player;
+	}
+	public static Context getContext() {
+		return context;
+	}
+	public static void setContext(Context context) {
+		Constants.context = context;
 	}
 	
 }

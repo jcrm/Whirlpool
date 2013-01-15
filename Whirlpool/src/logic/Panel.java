@@ -62,7 +62,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel() , getHolder()));    		
     	}
     }
-    public void start() {
+    public void start(){
         if (!_GameIsRunning) {
         	_thread.start();
             _GameIsRunning = true;

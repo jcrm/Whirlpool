@@ -28,7 +28,7 @@ public class Whirlpool extends GraphicObject{
 	private int expireTimer = 250;
 	private int collideCounter = 0;
 	private int expireCounter = 0;
-	private boolean strawberriesOnIce = false; //TODO set to disappate
+	private boolean disappate = false;
 	private boolean collisionDone = false;
 	
 	public Whirlpool(){
@@ -97,7 +97,7 @@ public class Whirlpool extends GraphicObject{
 		if(collisionDone){
 			collideCounter++;
 			if(collideCounter >= collideTimer){
-				strawberriesOnIce = true;
+				disappate = true;
 			}
 		}
 		expireCounter++;
@@ -107,7 +107,7 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	public boolean isDone(){
-		return strawberriesOnIce;
+		return disappate;
 	}
 	
 	public void setCollisionDone(boolean a){
