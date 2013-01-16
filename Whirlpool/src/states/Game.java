@@ -1,6 +1,7 @@
 package states;
 
 import logic.Constants;
+import logic.Imports;
 import logic.Level;
 import logic.MainThread;
 import logic.Panel;
@@ -19,8 +20,6 @@ import android.widget.Button;
 public class Game extends MainActivity {
 	Panel _panel;
 	private Level level1;
-	MediaPlayer backgroundMusic;
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -34,10 +33,6 @@ public class Game extends MainActivity {
 		
 		level1 = new Level();
 		setCurrentLevel(level1);
-		
-		backgroundMusic = MediaPlayer.create(Constants.getContext(), R.raw.sample1);
-		backgroundMusic.start();
-		backgroundMusic.setLooping(true);
 		
 		((Button) findViewById(R.id.test1)).setOnClickListener(
 			new Button.OnClickListener(){
@@ -60,13 +55,13 @@ public class Game extends MainActivity {
 	
 	@Override
 	public void onPause(){
-		backgroundMusic.stop();
+		Panel.stopMusic();
 		super.onPause();
 	}
 	
 	@Override
 	public void onDestroy(){
-		backgroundMusic.stop();
+		Panel.stopMusic();
 		super.onDestroy();
 	}
 	

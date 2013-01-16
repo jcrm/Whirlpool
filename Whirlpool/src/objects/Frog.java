@@ -3,7 +3,7 @@ package objects;
 import states.MainActivity;
 import logic.Animate;
 import logic.Constants;
-import logic.ImageImports;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -34,7 +34,7 @@ public class Frog extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = ImageImports.getFrog();
+		_bitmap = Imports.getFrog();
 		setX(Panel.sScreen.getWidth()/2);
 		setY(Panel.sScreen.getHeight()/2);
 		setFrogCentreX(getX());
@@ -54,7 +54,7 @@ public class Frog extends GraphicObject{
 		if(_speed.getMove()){
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle-=_speed.getSpeed()/100;
+			_frogAngle-=_speed.getSpeed()/150;
 			return true;
 		}
 		return false;

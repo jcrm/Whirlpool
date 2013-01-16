@@ -4,7 +4,7 @@ import java.util.Random;
 
 import states.MainActivity;
 
-import logic.ImageImports;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 
@@ -34,7 +34,7 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = ImageImports.getBoat();
+		_bitmap = Imports.getBoat();
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
         setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);

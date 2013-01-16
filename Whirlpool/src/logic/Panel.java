@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -23,6 +24,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     static private MainThread _thread = new MainThread();
     static public Screen sScreen = new Screen();
     static public Resources sRes;
+    static MediaPlayer backgroundMusic;
     
     public Panel(Context context) {
         super(context);
@@ -61,6 +63,11 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	if(Constants.getState().needListener()){
     		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel() , getHolder()));    		
     	}
+    	Imports.setImages();
+    	backgroundMusic = Imports.getGameMusic();
+    	backgroundMusic.setVolume(0.7f, 0.7f);
+		backgroundMusic.start();
+		backgroundMusic.setLooping(true);
     }
     public void start(){
         if (!_GameIsRunning) {
@@ -80,5 +87,13 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
     	//_thread.onPause();
     }
+    
+    public static void stopMusic(){
+    	if(backgroundMusic != null){
+    		backgroundMusic.stop();
+    	}
+    }
+    
+    
 
 }

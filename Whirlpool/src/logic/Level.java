@@ -45,9 +45,8 @@ public class Level {
 	
 	
 	void init(){
-		ImageImports.setImages();
 		setLevelWidth(Panel.sScreen.getWidth() + 1000);
-		backgroundImage = ImageImports.getBackground();
+		backgroundImage = Imports.getBackground();
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));
 		_graphics.add(new Frog());
@@ -60,42 +59,15 @@ public class Level {
 	}
 	
 	public void update(){
-		for (GraphicObject graphic : _graphics) { 
-			boolean lAnyCollFound = false; //see if object is in a wpool
-			//TODO Fix this shit
-			//Set pull to false first, then only set pull to true when needed and there's no need for lAnyCollFound
+		for (GraphicObject graphic : _graphics){
+			graphic.setPull(false);
 			for(Whirlpool whirl : _wPoolModel.getWpools()){
-				whirl.frame();
-				if (whirl.collision(graphic) == 1){
-					lAnyCollFound = true;
-					if (graphic.getPullState() == false){
-						whirl.pull(graphic);
-					}
-					whirl.setExpireCounter(0);
-				}
-				else if (whirl.collision(graphic) == 2){
-					lAnyCollFound = true;
-					whirl.setCollisionDone(true);
-					if (graphic.getPullState() == false) {
-						whirl.pull(graphic);
-						if (graphic.getSpeed().getAngle() > whirl.getWAngle()-3.0f &&
-						graphic.getSpeed().getAngle() < whirl.getWAngle()+3.0f){
-							graphic.setAngle(whirl.getWAngle());
-						}
-					}
-				}
+				whirl.checkCollision(graphic);
 			}
-			for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
-				if(_wPoolModel.getWpools().get(a).isDone()){
-					_wPoolModel.getWpools().remove(a);
-				}
-			}
-			graphic.setPull(!lAnyCollFound);
 			
-			//duck every frame is different so added id check so that it can check collision against other objects
 			if(graphic.getId()==objtype.tDuck){
 				graphic.frame();	//Do everything this object does every frame, like move
-				((Duck) graphic).changeCollisionType(lAnyCollFound);
+				((Duck) graphic).changeCollisionType(graphic.getPullState());
 				for(GraphicObject graphic2 : _graphics){
 					((Duck) graphic).checkObjCollision(graphic2);
 				}
@@ -103,6 +75,13 @@ public class Level {
 				graphic.frame();	//Do everything this object does every frame, like move
 			}
 
+		}
+		for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
+			_wPoolModel.getWpools().get(a).frame();
+			if(_wPoolModel.getWpools().get(a).getFinished()){
+				_wPoolModel.getWpools().remove(a);
+				a--;
+			}
 		}
 		duckOnScreen();
 		//scroll();

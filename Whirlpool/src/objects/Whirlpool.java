@@ -4,7 +4,7 @@ import example.whirlpool.R;
 import objects.GraphicObject.objtype;
 import states.MainActivity;
 import logic.Func;
-import logic.ImageImports;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -25,11 +25,11 @@ public class Whirlpool extends GraphicObject{
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
-	private int collideTimer = 100;
-	private int expireTimer = 250;
-	private int collideCounter = 0;
-	private int expireCounter = 0;
-	private boolean disappate = false;
+	private final int expireTimer = 250;
+	private int expireCounter = 1;
+	private boolean finished = false;
+	private final int afterCollisionTimer = 50;
+	private int afterCollisionCounter = 0;
 	private boolean collisionDone = false;
 	
 	public Whirlpool(){
@@ -55,7 +55,7 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public void init() {
-		_bitmap = ImageImports.getWhirlpool();
+		_bitmap = Imports.getWhirlpool();
 		_speed.setMove(false);
 		
 		_width = _id.width;
@@ -68,7 +68,6 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public boolean move() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -95,28 +94,45 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	public void frame(){
-		if(collisionDone){
-			collideCounter++;
-			if(collideCounter >= collideTimer){
-				disappate = true;
+		if(expireCounter > 0){
+			expireCounter++;
+			if(expireCounter >= expireTimer){
+				finished = true;
 			}
 		}
-		expireCounter++;
-		if(expireCounter >= expireTimer){
-			collisionDone = true;
+		if(afterCollisionCounter > 0){
+			afterCollisionCounter++;
+			if(afterCollisionCounter >= afterCollisionTimer){
+				finished = true;
+			}
 		}
 	}
 	
-	public boolean isDone(){
-		return disappate;
+	public void checkCollision(GraphicObject a){
+		if (a.getPullState() == false && !collisionDone){
+			int collide = collision(a);
+			
+			if (collide == 1){
+				a.setPull(true);
+				pull(a);
+				setExpireCounter(0);
+			}
+			else if (collide == 2){
+				a.setPull(true);
+				pull(a);
+				setExpireCounter(0);
+				if (a.getSpeed().getAngle() > getWAngle()-3.0f &&
+				 a.getSpeed().getAngle() < getWAngle()+3.0f){
+					a.setAngle(getWAngle());
+					collisionDone = true;
+					setAfterCollisionCounter(1);
+				}
+			}
+		}
 	}
 	
-	public void setCollisionDone(boolean a){
-		collisionDone = a;
-	}
-	
-	public boolean getCollisionDone(){
-		return collisionDone;
+	public boolean getFinished(){
+		return finished;
 	}
 	
 	public void setExpireCounter(int a){
@@ -272,6 +288,14 @@ public class Whirlpool extends GraphicObject{
 	}
 	public float getWAngle() {
 		return this.angle;
+	}
+
+	public int getAfterCollisionCounter() {
+		return afterCollisionCounter;
+	}
+
+	public void setAfterCollisionCounter(int afterCollisionCounter) {
+		this.afterCollisionCounter = afterCollisionCounter;
 	}
 	
 	

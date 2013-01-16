@@ -3,7 +3,7 @@ package objects;
 import java.util.Random;
 
 import states.MainActivity;
-import logic.ImageImports;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.Bitmap;
@@ -33,7 +33,7 @@ public class Diver extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = ImageImports.getDiver();
+		_bitmap = Imports.getDiver();
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
     	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);

@@ -84,20 +84,26 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	
-	public void border(){
+	public boolean border(){
 		int HEIGHT = Panel.sScreen.getHeight();
 		int WIDTH = Constants.getLevel().getLevelWidth();
+		boolean hit = false;
         if (getActualX() < 0) {
         	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+        	hit = true;
         } else if (getActualX() + getWidth() > WIDTH) {
         	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        	hit = true;
         }
 
         if (getActualY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
+        	hit = true;
         } else if (getActualY() + getHeight() > HEIGHT) {
         	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
+        	hit = true;
         }
+        return hit;
 	}
 	
 	
