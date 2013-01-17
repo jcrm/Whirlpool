@@ -121,8 +121,8 @@ public class Whirlpool extends GraphicObject{
 				a.setPull(true);
 				pull(a);
 				setExpireCounter(0);
-				if (a.getSpeed().getAngle() > getWAngle()-3.0f &&
-				 a.getSpeed().getAngle() < getWAngle()+3.0f){
+				if (a.getSpeed().getAngle() > getWAngle()-5.0f &&
+				 a.getSpeed().getAngle() < getWAngle()+5.0f){
 					a.setAngle(getWAngle());
 					collisionDone = true;
 					setAfterCollisionCounter(1);

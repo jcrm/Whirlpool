@@ -66,7 +66,7 @@ public class Duck extends GraphicObject{
 		duckSound = Imports.getDuckSound();
 		duckSound.setVolume(0.1f, 0.1f);
 		duckHit1Sound = Imports.getDuckHit1Sound();
-		duckHit1Sound.setVolume(0.6f, 0.6f);
+		duckHit1Sound.setVolume(0.3f, 0.3f);
 	}
 
 	@Override

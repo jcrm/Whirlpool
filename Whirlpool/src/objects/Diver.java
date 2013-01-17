@@ -15,7 +15,8 @@ import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
 	protected boolean _flipped, _flipV, _flipH; //TODO What does _flipped even do?
-
+	Rect rect = new Rect(0, 0, 0, 0);
+	
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
@@ -24,10 +25,12 @@ public class Diver extends GraphicObject{
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
+		
+		rect.set(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		
+		c.translate(getX(), getY());
 		c.drawBitmap(getGraphic(), null, rect,  null);
-
+		
 		c.restore();
 	}
 

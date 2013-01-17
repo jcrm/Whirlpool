@@ -45,7 +45,7 @@ public class Level {
 	
 	
 	void init(){
-		setLevelWidth(Panel.sScreen.getWidth() + 1000);
+		setLevelWidth(Panel.sScreen.getWidth() + 500);
 		backgroundImage = Imports.getBackground();
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));

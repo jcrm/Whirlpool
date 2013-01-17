@@ -66,8 +66,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	Imports.setImages();
     	backgroundMusic = Imports.getGameMusic();
     	backgroundMusic.setVolume(0.7f, 0.7f);
-		backgroundMusic.start();
-		backgroundMusic.setLooping(true);
+		//backgroundMusic.start();
+		//backgroundMusic.setLooping(true);
     }
     public void start(){
         if (!_GameIsRunning) {
