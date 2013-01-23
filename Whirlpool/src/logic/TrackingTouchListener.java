@@ -1,6 +1,7 @@
 package logic;
 
 //import android.graphics.Color;
+import objects.Whirlpool;
 import states.MainActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -15,33 +16,46 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private float[] _refY = new float[4];
 	private int _noRef, _lastRef;
 	private float _xDir, _yDir;
-	private boolean _newGesture;
+	private int _newGesture;//type of gesture 1 =  whirl, 2 = direction
 	private boolean _xToChange, _yToChange; //nasty
 	//end result
 	private float[] _wDirection = new float[2];
 	private float[] _wCenter = new float[2];
 	private int _wSize; //whirlpool direction, center point, and size.
+	private int wPoolIndex;
 	private float _wAngle;
 	private final WPools _mWPools;
 	private final SurfaceHolder _surfaceHolder;
+	private Whirlpool mWhirl;
 	
     TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
     	_mWPools = wpools;
-    	_newGesture = false;
+    	_newGesture = 0;
     	_surfaceHolder = surfaceHolder;
     }
 
     public boolean onTouch(View v, MotionEvent evt) {
     synchronized (_surfaceHolder){
     	switch(evt.getAction()){
+    	
     	case MotionEvent.ACTION_DOWN:
-    		_start[0] = evt.getX();
-    		_start[1] = evt.getY();
-    		_last[0] = evt.getX();
-    		_last[1] = evt.getY();
-    		_noRef = 0;
-    		_newGesture = true;
-    		break;
+    		
+    		wPoolIndex =_mWPools.checkCollision(evt.getX(), evt.getY());
+    		
+    		if (wPoolIndex > -1){ //pointing a whirl
+    			_newGesture = 2;
+    			mWhirl = _mWPools.getWpools().get(wPoolIndex);
+    		}else if (wPoolIndex == -1){ //new whirl
+	    		_start[0] = evt.getX();
+	    		_start[1] = evt.getY();
+	    		_last[0] = evt.getX();
+	    		_last[1] = evt.getY();
+	    		_noRef = 1;
+	    		_newGesture = 1;
+	    		break;
+    		}
+    		
+    		
     	case MotionEvent.ACTION_MOVE:
     		_curr[0] = evt.getX();
     		_curr[1] = evt.getY();
@@ -51,23 +65,23 @@ final class TrackingTouchListener implements View.OnTouchListener{
                 float deltaX = -(currX - _last[0]);
                 Constants.getLevel().shiftScrollBy(deltaX);
             }
-            else if (_newGesture == true){
+            else if (_newGesture == 1){
     			//gesture has been started. determine direction.
     			_xDir = (_curr[0] - _start[0]);
     			if (_xDir > 0) _xDir = 1; else _xDir = -1;
     			_yDir = (_curr[1] - _start[1]);
     			if (_yDir > 0) _yDir = 1; else _yDir = -1;
-    			_newGesture=false;
+    			_newGesture=0;
     			_xToChange = true;
     			_yToChange = true;
-    		}else{
+    		}else if (_newGesture == 0){
     			int refindex;
     			if ((_curr[0] - _last[0])*_xDir < 0){//change in x direction
     				if (_xToChange == false){
     					_start[0] = evt.getX();
     	    			_start[1] = evt.getY();
     	    			_noRef = 0;
-    	    			_newGesture = true;
+    	    			_newGesture = 1;
     	    			break;
     				}
     				refindex = _noRef;
@@ -85,7 +99,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
     					_start[0] = evt.getX();
     	    			_start[1] = evt.getY();
     	    			_noRef = 0;
-    	    			_newGesture = true;
+    	    			_newGesture = 1;
     	    			break;
     				}
     				refindex = _noRef;
@@ -102,58 +116,74 @@ final class TrackingTouchListener implements View.OnTouchListener{
     		_last[0] = evt.getX();
     		_last[1] = evt.getY();
     		break;
+    		
+    		
     	case MotionEvent.ACTION_UP:
+    		
+    	if (_newGesture == 2){	
+    		_wAngle = Func.calcAngle(mWhirl.getX(), mWhirl.getY() , (evt.getX() + Constants.getLevel().getScrollBy()), evt.getY());
+    		mWhirl.setWAngle(_wAngle);
+    	}
+    	
+    	else if (_newGesture == 0){
     		if (_noRef > 4){//whirlpool made
     			//direction (last ref point to final lift point)
-    			_wDirection[0] = _curr[0] - _refX[_lastRef];
-    			_wDirection[1] = _curr[1] - _refY[_lastRef];
-    			_wAngle = Func.calcAngle(_refX[_lastRef], _refY[_lastRef] , _curr[0], _curr[1]);
+    			//_wDirection[0] = _curr[0] - _refX[_lastRef];
+    			//_wDirection[1] = _curr[1] - _refY[_lastRef];
+    			//_wAngle = Func.calcAngle(_refX[_lastRef], _refY[_lastRef] , _curr[0], _curr[1]);
+    			
     			//Get center point between 4 ref points
     			_wCenter[0] = (_refX[0]+_refX[1]+_refX[2]+_refX[3])/4;
     			_wCenter[1] = (_refY[0]+_refY[1]+_refY[2]+_refY[3])/4;
     			//calc size of whirlpool, simply NoRefs, 4 reference points being the smallest size = (1).
     			_wSize = _noRef-3;
     			
-    			//calc direction of wpool
-    			float[] temp = new float[4];;//holds angle of ref points
-    			boolean clockwise;
-    			int lowest=0, next=1; 
     			
-    			for (int i = 0;i<4;i++){
-    				temp[i] = Func.calcAngle(_wCenter[0], _wCenter[1], _refX[i], _refY[i]);
-    				if (temp[i] <= temp[lowest]){ 
-    					lowest = i;
-    					next = i+1;
-    					if (next == 4) next = 0;
-    				}
-    			}
-    			int secondlowest;
-    			secondlowest = next;
-    			
-    			for (int i = 0;i<4;i++){
-    				if (i != lowest)
-    					if (temp[i] <= temp[secondlowest]) 
-    						secondlowest = i;
-    			}
-    			
-    			//head is hurting, come back to this, just need a simple method to get lowest and second lowest angles -F
-    			
-    			if ((temp[next] == temp[secondlowest])) clockwise = true;
-    			else clockwise = false;
     			addWPools(
     	    			_mWPools,
     	    			_wCenter[0] + Constants.getLevel().getScrollBy(),
     	    			_wCenter[1],
     	    			_wSize,
-    	    			_wAngle,
-    	    			clockwise);
+    	    			-1,// pass in -1 for no angle, probs should clean this up
+    	    			isClockwise());
     		
     		}
     		break;
+    	}
     	default: return false;
     	}
     }
     	return true;
+    }
+    
+    private boolean isClockwise(){
+    	
+    	float[] temp = new float[4];;//holds angle of ref points
+		int lowest=0, next=1; 
+		
+		for (int i = 0;i<4;i++){
+			temp[i] = Func.calcAngle(_wCenter[0], _wCenter[1], _refX[i], _refY[i]);
+			if (temp[i] <= temp[lowest]){ 
+				lowest = i;
+				next = i+1;
+				if (next == 4) next = 0;
+			}
+		}
+		int secondlowest;
+		secondlowest = next;
+		
+		for (int i = 0;i<4;i++){
+			if (i != lowest)
+				if (temp[i] <= temp[secondlowest]) 
+					secondlowest = i;
+		}
+		
+		//head is hurting, come back to this, just need a simple method to get lowest and second lowest angles -F
+		
+		if ((temp[next] == temp[secondlowest])) 
+			return true;
+		else 
+			return false;
     }
     
     private void addWPools(WPools wpools, float x, float y, int s, float angle, boolean clockwise) {

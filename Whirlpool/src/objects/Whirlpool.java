@@ -121,8 +121,7 @@ public class Whirlpool extends GraphicObject{
 				a.setPull(true);
 				pull(a);
 				setExpireCounter(0);
-				if (a.getSpeed().getAngle() > getWAngle()-5.0f &&
-				 a.getSpeed().getAngle() < getWAngle()+5.0f){
+				if (testAngle(a)){
 					a.setAngle(getWAngle());
 					collisionDone = true;
 					setAfterCollisionCounter(1);
@@ -131,6 +130,31 @@ public class Whirlpool extends GraphicObject{
 		}
 	}
 	
+	public boolean testAngle(GraphicObject a){
+		if (angle == -1)//wpool not directed yet
+			return false;
+		float _lastAngle;
+		//check if duckie has reached his exit angle
+		_lastAngle = a.getSpeed().getLastAngle();
+		//for a clockwise wpool, the last angle is always gonna be smaller
+		if (dirFactor == 1){
+			
+			if (_lastAngle > a.getSpeed().getAngle())
+				//if lastangle is bigger, its passed 360
+				_lastAngle -= 360;
+			if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+				return true;
+		}else{
+			
+			if (_lastAngle < a.getSpeed().getAngle())
+				//if lastangle is less, its passed 0
+				_lastAngle += 360;
+			if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+				return true;
+		}
+				
+		return false;
+	}
 	public boolean getFinished(){
 		return finished;
 	}
@@ -153,6 +177,20 @@ public class Whirlpool extends GraphicObject{
 		return _rot;
     }
 	
+public boolean pointCollision(float x, float y){
+		
+		float distX, distY, dist;
+		distX = this.getX() - x;
+		distY = this.getY() - y;
+		dist = (distX*distX)+(distY*distY);
+		
+		if (dist <= ( (this.getRadius()) * (this.getRadius()) ))
+			return true;
+
+		return false;
+		
+	}
+
 	public int collision(GraphicObject graphic){
 		
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
@@ -287,7 +325,7 @@ public class Whirlpool extends GraphicObject{
 		this.angle = angle;
 	}
 	public float getWAngle() {
-		return this.angle;
+		return angle;
 	}
 
 	public int getAfterCollisionCounter() {

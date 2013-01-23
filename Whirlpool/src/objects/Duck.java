@@ -114,9 +114,11 @@ public class Duck extends GraphicObject{
 		// Move Objects
 		colMovement();
         if(move()){
-        	if(border()){
-        		duckSound.start();
-        	}
+        	//only detect border if not in wpool
+        	if (!getPullState())
+	        	if(border()){
+	        		duckSound.start();
+	        	}
         }
         animate.animateFrame();
 	}
