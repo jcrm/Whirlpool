@@ -2,12 +2,10 @@ package objects;
 
 import java.util.Random;
 
-import states.MainActivity;
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;

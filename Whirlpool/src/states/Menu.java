@@ -1,15 +1,10 @@
 package states;
 
 import logic.Constants;
-import logic.Level;
-import logic.MainThread;
-import logic.Panel;
 import example.whirlpool.R;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;

@@ -2,18 +2,13 @@ package objects;
 
 import java.util.Random;
 
-import states.MainActivity;
-
 import logic.Constants;
 import logic.Panel;
 import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.FloatMath;
 import example.whirlpool.R;
 
 interface ObjectFunctions{

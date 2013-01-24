@@ -1,13 +1,7 @@
 package objects;
-//updated 29/11
-import example.whirlpool.R;
-import objects.GraphicObject.objtype;
-import states.MainActivity;
 import logic.Func;
 import logic.Imports;
-import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;

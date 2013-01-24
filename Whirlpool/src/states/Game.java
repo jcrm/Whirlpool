@@ -1,7 +1,6 @@
 package states;
 
 import logic.Constants;
-import logic.Imports;
 import logic.Level;
 import logic.MainThread;
 import logic.Panel;
@@ -9,10 +8,7 @@ import example.whirlpool.R;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;

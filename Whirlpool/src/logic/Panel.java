@@ -1,21 +1,10 @@
 package logic;
 
-import java.util.ArrayList;
-
-
-
-import objects.GraphicObject;
-import objects.GraphicObject.objtype;
-
-import states.MainActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 

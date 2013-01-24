@@ -1,12 +1,10 @@
 package objects;
 
-import states.MainActivity;
 import logic.Animate;
 import logic.Constants;
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;

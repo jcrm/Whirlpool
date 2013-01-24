@@ -2,15 +2,10 @@ package objects;
 
 import java.util.Random;
 
-import states.MainActivity;
-
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 
-import example.whirlpool.R;
-
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;

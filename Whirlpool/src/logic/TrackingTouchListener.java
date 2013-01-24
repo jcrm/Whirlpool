@@ -2,7 +2,6 @@ package logic;
 
 //import android.graphics.Color;
 import objects.Whirlpool;
-import states.MainActivity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
