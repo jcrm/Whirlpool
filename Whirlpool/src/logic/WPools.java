@@ -34,12 +34,16 @@ public class WPools {
     /** @return immutable list of dots. */
     public ArrayList<Whirlpool> getWpools() { return wpools; }
 
-    /**
-     * @param x dot horizontal coordinate.
-     * @param y dot vertical coordinate.
-     * @param color dot color.
-     * @param diameter dot size.
-      */
+   
+    public int checkCollision(float x, float y){
+    	x += Constants.getLevel().getScrollBy();
+    	for (int i=0; i<wpools.size(); i++)
+    		if (wpools.get(i).pointCollision(x, y))
+    			return i;
+    	
+    	return -1;
+    }
+    
     public void addWPool(float x, float y, float size, float angle, boolean clockwise) {
     	Whirlpool whirl = new Whirlpool();
     	whirl.setX(x);

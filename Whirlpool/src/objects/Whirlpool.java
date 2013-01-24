@@ -1,5 +1,10 @@
 package objects;
+//updated 29/11
+import example.whirlpool.R;
+import objects.GraphicObject.objtype;
+import states.MainActivity;
 import logic.Func;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -19,7 +24,13 @@ public class Whirlpool extends GraphicObject{
 	private float radius = 40.0f;
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
-	private int rotAngle = 1;
+	private int dirFactor = 1;
+	private final int expireTimer = 250;
+	private int expireCounter = 1;
+	private boolean finished = false;
+	private final int afterCollisionTimer = 50;
+	private int afterCollisionCounter = 0;
+	private boolean collisionDone = false;
 	
 	public Whirlpool(){
 		_id = objtype.tWhirl;
@@ -34,6 +45,7 @@ public class Whirlpool extends GraphicObject{
 		
 		c.translate(getX(), getY());
 		c.rotate(getRotation());
+		c.scale(dirFactor, 1);
 		
 		c.drawBitmap(getGraphic(), null, rect,  null);
 		
@@ -43,7 +55,7 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getWhirlpool();
 		_speed.setMove(false);
 		
 		_width = _id.width;
@@ -56,7 +68,6 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public boolean move() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -83,15 +94,81 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	public void frame(){
-		
+		if(expireCounter > 0){
+			expireCounter++;
+			if(expireCounter >= expireTimer){
+				finished = true;
+			}
+		}
+		if(afterCollisionCounter > 0){
+			afterCollisionCounter++;
+			if(afterCollisionCounter >= afterCollisionTimer){
+				finished = true;
+			}
+		}
+	}
+	
+	public void checkCollision(GraphicObject a){
+		if (a.getPullState() == false && !collisionDone){
+			int collide = collision(a);
+			
+			if (collide == 1){
+				a.setPull(true);
+				pull(a);
+				setExpireCounter(0);
+			}
+			else if (collide == 2){
+				a.setPull(true);
+				pull(a);
+				setExpireCounter(0);
+				if (testAngle(a)){
+					a.setAngle(getWAngle());
+					collisionDone = true;
+					setAfterCollisionCounter(1);
+				}
+			}
+		}
+	}
+	
+	public boolean testAngle(GraphicObject a){
+		if (angle == -1)//wpool not directed yet
+			return false;
+		float _lastAngle;
+		//check if duckie has reached his exit angle
+		_lastAngle = a.getSpeed().getLastAngle();
+		//for a clockwise wpool, the last angle is always gonna be smaller
+		if (dirFactor == 1){
+			
+			if (_lastAngle > a.getSpeed().getAngle())
+				//if lastangle is bigger, its passed 360
+				_lastAngle -= 360;
+			if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+				return true;
+		}else{
+			
+			if (_lastAngle < a.getSpeed().getAngle())
+				//if lastangle is less, its passed 0
+				_lastAngle += 360;
+			if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+				return true;
+		}
+				
+		return false;
+	}
+	public boolean getFinished(){
+		return finished;
+	}
+	
+	public void setExpireCounter(int a){
+		expireCounter = a;
 	}
 	
 	public void setClockwise(boolean clockwise){
-    	if (clockwise) rotAngle = 1;
-    	else rotAngle = -1;
+    	if (clockwise) dirFactor = 1;
+    	else dirFactor = -1;
     }
     public int getClockwise(){
-    	return rotAngle;
+    	return dirFactor;
     }
     public float getRotation(){
 		_rot+= (2*getClockwise());
@@ -100,6 +177,20 @@ public class Whirlpool extends GraphicObject{
 		return _rot;
     }
 	
+public boolean pointCollision(float x, float y){
+		
+		float distX, distY, dist;
+		distX = this.getX() - x;
+		distY = this.getY() - y;
+		dist = (distX*distX)+(distY*distY);
+		
+		if (dist <= ( (this.getRadius()) * (this.getRadius()) ))
+			return true;
+
+		return false;
+		
+	}
+
 	public int collision(GraphicObject graphic){
 		
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
@@ -126,8 +217,8 @@ public class Whirlpool extends GraphicObject{
 	public void gravity(GraphicObject graphic, float factor){
 		float objX = graphic.getX();
 		float objY = graphic.getY();
-		float objSpeedX = graphic.getSpeed().getXSpeed();
-		float objSpeedY = graphic.getSpeed().getYSpeed();
+		//float objSpeedX = graphic.getSpeed().getXSpeed();
+		//float objSpeedY = graphic.getSpeed().getYSpeed();
 		float wPoolCentreX = getX();
 		float wPoolCentreY = getY();
 		//this is the current distance from centre to graphic
@@ -135,15 +226,37 @@ public class Whirlpool extends GraphicObject{
 		//angle of radius
 		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
 		cAngle+= (2 * getClockwise());//rotate obj around wpool
-		
+
 		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
 		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
-		
+
 		cAngle = Func.calcAngle(objX, objY,destX, destY);
-		
+
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		graphic.getSpeed().setAngle(cAngle+ (5.0f * getClockwise()));
+		cAngle = cAngle+ (5.0f * getClockwise()); //ideal angle
+
+		float mAngle = graphic.getSpeed().getAngle();
+		float clockwiseDiff;
+		float anticlockwiseDiff;
+		if (mAngle > cAngle){
+			 anticlockwiseDiff = (cAngle + 360) - mAngle;
+			 clockwiseDiff = (mAngle - cAngle);
+		}
+		else{
+			clockwiseDiff = (mAngle + 360) - cAngle;
+			anticlockwiseDiff = (cAngle - mAngle);
+		}
+			if (anticlockwiseDiff < clockwiseDiff)
+				if (anticlockwiseDiff >= 10)
+					mAngle+=10;
+				else mAngle = cAngle;
+			else
+				if (clockwiseDiff >= 10)
+					mAngle-=10;
+				else mAngle = cAngle;
+
+		graphic.setAngle(mAngle);
 	}
 	//pulls different objects to the centre depending on original speed
 	//sharks are pulled slower because they start faster
@@ -212,7 +325,15 @@ public class Whirlpool extends GraphicObject{
 		this.angle = angle;
 	}
 	public float getWAngle() {
-		return this.angle;
+		return angle;
+	}
+
+	public int getAfterCollisionCounter() {
+		return afterCollisionCounter;
+	}
+
+	public void setAfterCollisionCounter(int afterCollisionCounter) {
+		this.afterCollisionCounter = afterCollisionCounter;
 	}
 	
 	

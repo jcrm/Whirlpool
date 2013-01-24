@@ -2,11 +2,18 @@ package objects;
 
 import java.util.Random;
 
+import states.MainActivity;
+
+import logic.Constants;
+import logic.Panel;
 import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.util.FloatMath;
 import example.whirlpool.R;
 
 interface ObjectFunctions{
@@ -17,14 +24,14 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 0, 0, R.drawable.ic_launcher, 						1), 
-		tWhirl(	100, 100, 0, 0, R.drawable.whirlpool, 						1),
-		tDuck(	50, 50, 4, 0, R.drawable.duckleftandright2, 				16),
-		//not sure what numbers need for frame width and hieght
-		tFrog(	50, 50, 5, 0, R.drawable.frog2, 							16), 
+		tDefault(1, 1, 0, 0, R.drawable.ic_launcher, 						1), 
+		tWhirl(	6, 3, 0, 0, R.drawable.whirlpool, 						1),
+		tDuck(	13, 7, 8, 0, R.drawable.duckleftandright2, 				16),
+		//not sure what numbers need for frame width and height
+		tFrog(	7, 4, 4, 0, R.drawable.frog2, 							16), 
 		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1), 
 		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
-		tDiver(	64, 64, 4, 135, R.drawable.diver, 							1);
+		tDiver(	64, 64, 4, 45, R.drawable.diver, 							1);
 		
 		int width;
 		int height;
@@ -32,12 +39,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		float angle;
 		int bitmap;
 		int frames;
-		int aWidth;
-		int aHeight;
 		
 		objtype(int a, int b, float c, float d, int e, int f){
-			width = a;
-			height = b;
+			width = Constants.getScreen().getWidth()/a;
+			height = Constants.getScreen().getHeight()/b;
+			//TODO set min width/height
 			speed = c;
 			angle = d;
 			bitmap = e;
@@ -53,7 +59,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected float _y = 0;
 	protected Bitmap _bitmap;
 	protected Speed _speed = new Speed();
-	private boolean _pull;
+	private boolean _pull;// = false;
 	Rect _portion;
 	
 	
@@ -78,18 +84,26 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	
-	public void border(int WIDTH,int HEIGHT){
+	public boolean border(){
+		int HEIGHT = Panel.sScreen.getHeight();
+		int WIDTH = Constants.getLevel().getLevelWidth();
+		boolean hit = false;
         if (getActualX() < 0) {
         	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+        	hit = true;
         } else if (getActualX() + getWidth() > WIDTH) {
         	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        	hit = true;
         }
 
         if (getActualY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
+        	hit = true;
         } else if (getActualY() + getHeight() > HEIGHT) {
         	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
+        	hit = true;
         }
+        return hit;
 	}
 	
 	
@@ -161,12 +175,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return _speed;
     }
     
-    public void cantPull() {
-		this._pull = true;
-	}
-	public void canPull() {
-		this._pull = false;
-	}
+    public void setPull(boolean a){
+    	_pull = a;
+    }
 	public boolean getPullState() {
 		return this._pull;
 	}

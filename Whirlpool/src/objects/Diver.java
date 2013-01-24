@@ -3,6 +3,7 @@ package objects;
 import java.util.Random;
 
 import states.MainActivity;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.Bitmap;
@@ -14,17 +15,20 @@ import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
 	protected boolean _flipped, _flipV, _flipH; //TODO What does _flipped even do?
+	Rect rect = new Rect(0, 0, 0, 0);
 	
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
 	}
-	
+
 	@Override
 	public void draw(Canvas c) {
 		c.save();
 		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
+		rect.set(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		
+		c.translate(getX(), getY());
 		c.drawBitmap(getGraphic(), null, rect,  null);
 		
 		c.restore();
@@ -32,12 +36,12 @@ public class Diver extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getDiver();
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
     	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
         _flipped = true;
-		
+
 		_width = _id.width;
 		_height = _id.height;
 		_speed.setAngle(_id.angle);
@@ -54,7 +58,7 @@ public class Diver extends GraphicObject{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
@@ -80,14 +84,14 @@ public class Diver extends GraphicObject{
 			break;
 		}
 	}
-	
+
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
 	}
-	
+
 	public boolean getFlipped() {
 		return _flipped;
 	}
@@ -118,7 +122,7 @@ public class Diver extends GraphicObject{
 	public void flip(){
 		boolean tempflip = false;
 		Matrix flipMatrix = new Matrix();
-		
+
 		if(_flipH){
 			flipMatrix.setScale(-1, 1);
 			tempflip = true;
@@ -133,6 +137,6 @@ public class Diver extends GraphicObject{
 			_bitmap = temp;
 		}
 	}
-	
+
 
 }

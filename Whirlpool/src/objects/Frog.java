@@ -2,6 +2,8 @@ package objects;
 
 import states.MainActivity;
 import logic.Animate;
+import logic.Constants;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -15,7 +17,7 @@ public class Frog extends GraphicObject{
 	public Frog(){
 		_id = objtype.tFrog;
         init();
-        animate = new Animate(_id.frames,(_bitmap.getWidth()/_id.frames), _bitmap.getHeight());
+        animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 	}
 	Animate animate;
 	@Override
@@ -24,19 +26,20 @@ public class Frog extends GraphicObject{
 		//doesn't seen to rotate
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
-		c.rotate((-_frogAngle*90/PI));
+		c.rotate((-_frogAngle*180/PI));
 		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
+
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getFrog();
 		setX(Panel.sScreen.getWidth()/2);
 		setY(Panel.sScreen.getHeight()/2);
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
-		setFrogRadius(50);
+		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
         _speed.setMove(true);
         
 		_width = _id.width;
@@ -44,18 +47,19 @@ public class Frog extends GraphicObject{
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
-		
 	}
+
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle-=_speed.getSpeed()/100;
+			_frogAngle-=_speed.getSpeed()/150;
 			return true;
 		}
 		return false;
 	}
+	
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
@@ -77,13 +81,15 @@ public class Frog extends GraphicObject{
 			break;
 		}
 	}
+	
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
         animate.animateFrame();
 	}
+	
 	public float getFrogAngle() {
 		return _frogAngle;
 	}

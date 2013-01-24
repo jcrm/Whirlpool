@@ -4,8 +4,11 @@ import java.util.Random;
 
 import states.MainActivity;
 
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
+
+import example.whirlpool.R;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,7 +34,7 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getBoat();
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
         setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
@@ -78,7 +81,7 @@ public class Boat extends GraphicObject{
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
 	}
 

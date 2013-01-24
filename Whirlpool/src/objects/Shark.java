@@ -4,6 +4,8 @@ import java.util.Random;
 
 import states.MainActivity;
 
+import example.whirlpool.R;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.BitmapFactory;
@@ -30,7 +32,7 @@ public class Shark extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getShark();
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
     	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
     	_speed.setMove(true);
@@ -77,7 +79,8 @@ public class Shark extends GraphicObject{
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
 	}
+
 }

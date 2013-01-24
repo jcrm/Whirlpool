@@ -4,37 +4,45 @@ import java.util.Random;
 
 import states.MainActivity;
 import logic.Func;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import logic.Animate;
+import example.whirlpool.R;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.util.FloatMath;
 
 public class Duck extends GraphicObject{
 	//enum for collision checking
 	private enum coltype{
-		cDefault, cShark, cDiver, cFrog;
+		cDefault, cShark, cDiver, cFrog, cWhirl;
 	}
 	//collision variables 
 	public coltype cID = coltype.cDefault;
 	private int colCount = -1;
 	Animate animate;
+	MediaPlayer duckSound;
+	MediaPlayer duckHit1Sound;
+	Rect rect = new Rect(0, 0, 0, 0);
 	
 	public Duck(){
 		_id = objtype.tDuck;
 		init();
-		int test = _bitmap.getWidth();
-		
-		animate = new Animate(_id.frames, (_bitmap.getWidth()/_id.frames), _bitmap.getHeight());
 	}
 
 	@Override
 	public void draw(Canvas c) {
 		c.save();
 		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
+		rect.set(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		
+		c.translate(getX(), getY());
+		if(_speed.getAngle() > 90 && _speed.getAngle() < 270){
+			c.scale(-1, 1);
+		}
 		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
@@ -42,16 +50,23 @@ public class Duck extends GraphicObject{
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getDuck();
+		animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 		setX(0.0f);
-    	setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
+		setY(10.0f);
+    	//setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
     	_speed.setMove(true);
 		
 		_width = _id.width;
 		_height = _id.height;
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
-		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
+		
+		duckSound = Imports.getDuckSound();
+		duckSound.setVolume(0.1f, 0.1f);
+		duckHit1Sound = Imports.getDuckHit1Sound();
+		duckHit1Sound.setVolume(0.3f, 0.3f);
 	}
 
 	@Override
@@ -64,13 +79,22 @@ public class Duck extends GraphicObject{
 		return false;
 	}
 	
+	public void changeCollisionType(boolean a){
+		if(a){
+			cID = coltype.cWhirl;
+		}
+		else if (cID == coltype.cWhirl){
+			cID = coltype.cDefault;
+		}
+	}
+	
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
 			_speed.VerBounce();
             setActualY(-getActualY());
-			break;
+            break;
 		case Bottom:
 			_speed.VerBounce();
         	setActualY(height - getHeight());
@@ -90,7 +114,11 @@ public class Duck extends GraphicObject{
 		// Move Objects
 		colMovement();
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	//only detect border if not in wpool
+        	if (!getPullState())
+	        	if(border()){
+	        		duckSound.start();
+	        	}
         }
         animate.animateFrame();
 	}
@@ -102,19 +130,26 @@ public class Duck extends GraphicObject{
 				if(Func.boxCollision(this, otherGraphic)){
 					colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
 	 				cID = coltype.cShark;
+	 				duckHit1Sound.start();
 				}
 				break;
 			case tDiver:
 				if(Func.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cDiver;
+					duckHit1Sound.start();
 				}
 				break;
-			case tFrog: 
+			case tFrog:
+				//TODO bounding boxes for angled collisions
 				if(Func.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cFrog;
+					duckHit1Sound.start();
 				}
+				break;
+			case tWhirl:
+				cID = coltype.cWhirl;
 				break;
 			default: break;
 			}
@@ -122,11 +157,11 @@ public class Duck extends GraphicObject{
 	}
 	//collision movement
 	private void colMovement(){
-		if(cID != coltype.cDefault && colCount >= 0){
-			if(colCount == 10){
+		if((cID != coltype.cDefault && cID != coltype.cWhirl) && colCount >= 0){
+			if(colCount == 30){
 				getSpeed().setSpeed(0);
 				getSpeed().setAngle(0);
-			}else if(colCount == 20){
+			}else if(colCount == 60){
 				getSpeed().setSpeed(4);				
 				getSpeed().setAngle(0);
 				cID = coltype.cDefault;
