@@ -19,14 +19,14 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(1, 1, 0, 0, R.drawable.ic_launcher, 						1), 
-		tWhirl(	6, 3, 0, 0, R.drawable.whirlpool, 						1),
-		tDuck(	13, 7, 8, 0, R.drawable.duckleftandright2, 				16),
+		tDefault(1, 1, 0, 0, R.drawable.ic_launcher,						1), 
+		tWhirl(	6, 3, 0, 0, R.drawable.whirlpool, 							1),
+		tDuck(	13, 7, 8, 0, R.drawable.duckleftandright2, 					16),
 		//not sure what numbers need for frame width and height
-		tFrog(	7, 4, 4, 0, R.drawable.frog2, 							16), 
-		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1), 
+		tFrog(	7, 4, 4, 0, R.drawable.frog2, 								16), 
+		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark,	1), 
 		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
-		tDiver(	6, 4, 4, new Random().nextInt(360), R.drawable.diver, 							1);
+		tDiver(	6, 4, 4, new Random().nextInt(360), R.drawable.diver, 		1);
 		
 		int width;
 		int height;
