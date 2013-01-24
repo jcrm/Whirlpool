@@ -2,13 +2,12 @@ package logic;
 
 import java.util.ArrayList;
 
+import objects.Diver;
 import objects.Duck;
 import objects.Frog;
 import objects.GraphicObject;
 import objects.Whirlpool;
 import objects.GraphicObject.objtype;
-
-
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -41,7 +40,7 @@ public class Level {
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));
 		_graphics.add(new Frog());
-		//_graphics.add(new Diver());
+		_graphics.add(new Diver());
 		//_graphics.add(new Shark());
 		//_graphics.add(new Boat());
 		

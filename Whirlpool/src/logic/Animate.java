@@ -29,7 +29,7 @@ public class Animate{
 		}
 		
 		public void updatePortion(){
-			if(frameNum >= (noOfFrames - 3)){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
+			if(frameNum >= (noOfFrames)){
 				frameNum = 0;
 			}
 			getPortion().left =  frameNum * frameWidth;

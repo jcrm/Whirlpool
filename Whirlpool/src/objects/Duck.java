@@ -27,6 +27,7 @@ public class Duck extends GraphicObject{
 	public Duck(){
 		_id = objtype.tDuck;
 		init();
+		animate = new Animate(_id.frames, (_bitmap.getWidth()/_id.frames), _bitmap.getHeight());
 	}
 
 	@Override

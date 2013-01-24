@@ -26,7 +26,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tFrog(	7, 4, 4, 0, R.drawable.frog2, 							16), 
 		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1), 
 		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
-		tDiver(	64, 64, 4, 45, R.drawable.diver, 							1);
+		tDiver(	6, 4, 4, new Random().nextInt(360), R.drawable.diver, 							1);
 		
 		int width;
 		int height;
