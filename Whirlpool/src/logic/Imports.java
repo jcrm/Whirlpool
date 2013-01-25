@@ -23,7 +23,7 @@ public class Imports {
 		if(!once){
 			once = true;
 			duck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duckleftandright2);
-			diver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver);
+			diver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
 			boat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat);
 			frog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog2);
 			shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);

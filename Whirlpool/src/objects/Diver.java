@@ -30,7 +30,7 @@ public class Diver extends GraphicObject{
 		
 		c.translate(getX(), getY());
 		c.rotate(_speed.getAngle()+180);
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -46,10 +46,6 @@ public class Diver extends GraphicObject{
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
-		if(_speed.getAngle()>270){
-			_flipped = true;
-			flip();
-		}
 	}
 	@Override
 	public boolean move() {
@@ -106,6 +102,7 @@ public class Diver extends GraphicObject{
         if(move()){
         	border();
         }
+        animate.animateFrame();
 	}
 	public void flip(){
 		/*if(_flipped){
