@@ -26,7 +26,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tFrog(	7, 4, 4, 0, R.drawable.frog2, 								16), 
 		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark,	1), 
 		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
-		tDiver(	6, 4, 4, new Random().nextInt(360), R.drawable.diver, 		1);
+		tDiver(	6, 4, 4, 225, R.drawable.diver, 		1);
 		
 		int width;
 		int height;
@@ -84,13 +84,24 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
         if (getActualX() < 0) {
-        	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopLeft, WIDTH, HEIGHT);
+            }else if (getActualY() + getHeight() > HEIGHT){
+            	borderCollision(Screen.ScreenSide.BottomLeft, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+            }
         	hit = true;
-        } else if (getActualX() + getWidth() > WIDTH) {
-        	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        }else if(getActualX() + getWidth() > WIDTH){
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
+            }else if(getActualY() + getHeight() > HEIGHT) {
+            	borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+            }
         	hit = true;
         }
-
         if (getActualY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
         	hit = true;

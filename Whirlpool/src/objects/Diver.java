@@ -6,11 +6,14 @@ import logic.Animate;
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
+	boolean _flipped;
 	Rect rect = new Rect(0, 0, 0, 0);
 	
 	public Diver(){
@@ -43,6 +46,10 @@ public class Diver extends GraphicObject{
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		if(_speed.getAngle()>270){
+			_flipped = true;
+			flip();
+		}
 	}
 	@Override
 	public boolean move() {
@@ -72,6 +79,26 @@ public class Diver extends GraphicObject{
         	setActualX(width - getWidth());
         	_speed.shiftAngle(180);
 			break;
+		case TopLeft:
+			setActualX(-getActualX());
+			setActualY(-getActualY());
+    		_speed.shiftAngle(180);
+			break;
+		case TopRight:
+			setActualX(width - getWidth());
+			setActualY(-getActualY());
+    		_speed.shiftAngle(180);
+			break;
+		case BottomLeft:
+			setActualX(-getActualX());
+			setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
+			break;
+		case BottomRight:
+			setActualX(width - getWidth());
+			setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
+			break;
 		}
 	}
 	public void frame(){
@@ -79,6 +106,15 @@ public class Diver extends GraphicObject{
         if(move()){
         	border();
         }
+	}
+	public void flip(){
+		/*if(_flipped){
+			Matrix flipMatrix = new Matrix();
+			flipMatrix.setScale(1, -1);
+			Bitmap temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
+			_bitmap = temp;
+			_flipped = false;
+		}*/
 	}
 
 }
