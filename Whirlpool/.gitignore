@@ -20,7 +20,7 @@ local.properties
 *.pydevproject
 .project
 .metadata
-bin/classes/example/whirlpool
+bin\classes\example\whirlpool
 bin/**
 tmp/**
 tmp/**/*
