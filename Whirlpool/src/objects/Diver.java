@@ -1,7 +1,7 @@
 package objects;
 
 import java.util.Random;
-//test
+
 import logic.Animate;
 import logic.Imports;
 import logic.Panel;
