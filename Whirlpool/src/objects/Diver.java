@@ -11,7 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.FloatMath;
-
+//
 public class Diver extends GraphicObject{
 	boolean _flipped;
 	Rect rect = new Rect(0, 0, 0, 0);
