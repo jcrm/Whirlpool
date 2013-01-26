@@ -12,7 +12,6 @@ import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
 	protected boolean _flipped, _flipV, _flipH; //TODO What does _flipped even do?
-	//
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
