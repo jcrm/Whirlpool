@@ -34,6 +34,7 @@ public class Diver extends GraphicObject{
 		
 		c.restore();
 	}
+	//test
 	@Override
 	public void init() {
 		_bitmap = Imports.getDiver();
