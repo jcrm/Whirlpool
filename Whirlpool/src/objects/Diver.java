@@ -47,7 +47,6 @@ public class Diver extends GraphicObject{
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
 	}
-	//test
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
