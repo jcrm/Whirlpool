@@ -31,7 +31,7 @@ public class Diver extends GraphicObject{
 		c.translate(getX(), getY());
 		c.rotate(_speed.getAngle()+180);
 		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
-		
+		/////////
 		c.restore();
 	}
 	@Override
