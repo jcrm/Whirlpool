@@ -35,6 +35,7 @@ public class Imports {
 			duckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.duckhit1);
 		}
 	}
+	//
 	public static Bitmap getDuck() {
 		return duck;
 	}
