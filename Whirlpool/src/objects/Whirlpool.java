@@ -163,9 +163,8 @@ public class Whirlpool extends GraphicObject{
 		expireCounter = a;
 	}
 	
-	public void setClockwise(boolean clockwise){
-    	if (clockwise) dirFactor = 1;
-    	else dirFactor = -1;
+	public void setClockwise(int clockwise){
+    	dirFactor = clockwise;
     }
     public int getClockwise(){
     	return dirFactor;
