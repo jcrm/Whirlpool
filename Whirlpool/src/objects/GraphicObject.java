@@ -26,7 +26,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tShark(	10, 40, 5, new Random().nextInt(360)+1, 1), 
 		tBoat(	50, 15, 0, 0, 1),
 		//just guessing numbers for diver w/h need to work out correct ones
-		tDiver(	9, 7, 4, 135,	16);
+		tDiver(	6, 5, 4, 355, 16);
 		
 		int width;
 		int height;

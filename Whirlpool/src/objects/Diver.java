@@ -6,9 +6,7 @@ import logic.Animate;
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.FloatMath;
 
@@ -31,7 +29,6 @@ public class Diver extends GraphicObject{
 		c.translate(getX(), getY());
 		c.rotate(_speed.getAngle()+180);
 		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
-		/////////
 		c.restore();
 	}
 	@Override
@@ -101,17 +98,22 @@ public class Diver extends GraphicObject{
 		// Move Objects
         if(move()){
         	border();
+        	checkFlip();
         }
         animate.animateFrame();
 	}
-	public void flip(){
-		/*if(_flipped){
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
-			Bitmap temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
-			_bitmap = temp;
-			_flipped = false;
-		}*/
+	public void checkFlip(){
+		if(!_flipped){
+			if(_speed.getAngle()>270 || _speed.getAngle()<90){
+				_flipped = true;
+				_bitmap = Imports.getDiverFlipped();				
+			}
+		}else if(_flipped){
+			if(_speed.getAngle()<=270 && _speed.getAngle()>=90){
+				_flipped = false;
+				_bitmap = Imports.getDiver();
+			}
+		}
 	}
 
 }

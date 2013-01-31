@@ -3,12 +3,14 @@ package logic;
 import example.whirlpool.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.MediaPlayer;
 
 public class Imports {
 	private static boolean once = false;
 	private static Bitmap duck;
 	private static Bitmap diver;
+	private static Bitmap diverFlipped;
 	private static Bitmap boat;
 	private static Bitmap frog;
 	private static Bitmap shark;
@@ -22,8 +24,12 @@ public class Imports {
 	static public void setImages(){
 		if(!once){
 			once = true;
+			Matrix flipMatrix = new Matrix();
+			flipMatrix.setScale(1, -1);
+			
 			duck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duckleftandright2);
 			diver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
+			diverFlipped = Bitmap.createBitmap(diver, 0, 0, diver.getWidth(), diver.getHeight(), flipMatrix, false);
 			boat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat);
 			frog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog2);
 			shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);
@@ -46,6 +52,12 @@ public class Imports {
 	}
 	public static void setDiver(Bitmap diver) {
 		Imports.diver = diver;
+	}
+	public static Bitmap getDiverFlipped() {
+		return diverFlipped;
+	}
+	public static void setDiverFlipped(Bitmap diverflipped) {
+		Imports.diverFlipped = diverflipped;
 	}
 	public static Bitmap getBoat() {
 		return boat;
