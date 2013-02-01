@@ -69,6 +69,32 @@ public class Shark extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	

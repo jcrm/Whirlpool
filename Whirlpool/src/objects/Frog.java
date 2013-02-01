@@ -11,13 +11,12 @@ import android.util.FloatMath;
 
 public class Frog extends GraphicObject{
 	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
+	Animate _animate;
 	
 	public Frog(){
 		_id = objtype.tFrog;
         init();
-        animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 	}
-	Animate animate;
 	@Override
 	public void draw(Canvas c) {
 		c.save();
@@ -25,7 +24,7 @@ public class Frog extends GraphicObject{
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
 		c.rotate((-_frogAngle*180/PI));
-		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -39,7 +38,7 @@ public class Frog extends GraphicObject{
 		setFrogCentreY(getY());
 		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
         _speed.setMove(true);
-        
+        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_width = _id.width;
 		_height = _id.height;
 		_speed.setAngle(_id.angle);
@@ -77,6 +76,32 @@ public class Frog extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -85,7 +110,7 @@ public class Frog extends GraphicObject{
         if(move()){
         	border();
         }
-        animate.animateFrame();
+        _animate.animateFrame();
 	}
 	
 	public float getFrogAngle() {

@@ -11,24 +11,20 @@ import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
+	Animate _animate;
 	boolean _flipped;
-	Rect rect = new Rect(0, 0, 0, 0);
 	
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
-		animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 	}
-	Animate animate;
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
-		rect.set(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-		
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
 		c.rotate(_speed.getAngle()+180);
-		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		c.restore();
 	}
 	@Override
@@ -37,7 +33,7 @@ public class Diver extends GraphicObject{
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
     	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
-
+        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_width = _id.width;
 		_height = _id.height;
 		_speed.setAngle(_id.angle);
@@ -100,7 +96,7 @@ public class Diver extends GraphicObject{
         	border();
         	checkFlip();
         }
-        animate.animateFrame();
+        _animate.animateFrame();
 	}
 	public void checkFlip(){
 		if(!_flipped){

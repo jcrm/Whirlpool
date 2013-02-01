@@ -28,6 +28,7 @@ public final class R {
         public static final int shark=0x7f02000e;
         public static final int wateroffset=0x7f02000f;
         public static final int whirlpool=0x7f020010;
+        public static final int whirlpool_sprites=0x7f020011;
     }
     public static final class id {
         public static final int exit=0x7f080007;

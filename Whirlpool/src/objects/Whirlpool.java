@@ -1,4 +1,5 @@
 package objects;
+import logic.Animate;
 import logic.Func;
 import logic.Imports;
 import logic.Screen.ScreenSide;
@@ -25,6 +26,7 @@ public class Whirlpool extends GraphicObject{
 	private final int afterCollisionTimer = 50;
 	private int afterCollisionCounter = 0;
 	private boolean collisionDone = false;
+	Animate _animate;
 	
 	public Whirlpool(){
 		_id = objtype.tWhirl;
@@ -38,10 +40,11 @@ public class Whirlpool extends GraphicObject{
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		
 		c.translate(getX(), getY());
-		c.rotate(getRotation());
+		//removed rotation because not needed with new animation
+		//c.rotate(getRotation());
 		c.scale(dirFactor, 1);
 		
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 		
@@ -50,6 +53,7 @@ public class Whirlpool extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = Imports.getWhirlpool();
+		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_speed.setMove(false);
 		
 		_width = _id.width;
@@ -57,7 +61,6 @@ public class Whirlpool extends GraphicObject{
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
-		
 	}
 	
 	@Override
@@ -84,6 +87,32 @@ public class Whirlpool extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -100,6 +129,7 @@ public class Whirlpool extends GraphicObject{
 				finished = true;
 			}
 		}
+		_animate.animateFrame();
 	}
 	
 	public void checkCollision(GraphicObject a){

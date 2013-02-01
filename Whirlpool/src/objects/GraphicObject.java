@@ -19,14 +19,14 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
 		tDefault(1, 1, 0, 0, 1), 
-		tWhirl(	6, 3, 0, 0, 1),
-		tDuck(	13, 7, 8, 0, 16),
+		tWhirl(6, 3, 0, 0, 30),
+		tDuck(13, 7, 8, 0, 16),
 		//not sure what numbers need for frame width and height
-		tFrog(	7, 4, 4, 0, 16), 
-		tShark(	10, 40, 5, new Random().nextInt(360)+1, 1), 
-		tBoat(	50, 15, 0, 0, 1),
+		tFrog(7, 4, 4, 0, 16), 
+		tShark(10, 40, 5, new Random().nextInt(360)+1, 1), 
+		tBoat(50, 15, 0, 0, 1),
 		//just guessing numbers for diver w/h need to work out correct ones
-		tDiver(	6, 5, 4, 355, 16);
+		tDiver(6, 5, 4, new Random().nextInt(360), 16);
 		
 		int width;
 		int height;

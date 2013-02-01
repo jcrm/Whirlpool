@@ -35,7 +35,7 @@ public class Imports {
 			boat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat);
 			frog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog2);
 			shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);
-			whirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool);
+			whirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
 			background  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset);
 		}
 	}

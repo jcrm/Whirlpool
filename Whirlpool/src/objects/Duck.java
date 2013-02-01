@@ -19,28 +19,25 @@ public class Duck extends GraphicObject{
 	//collision variables 
 	public coltype cID = coltype.cDefault;
 	private int colCount = -1;
-	Animate animate;
-	MediaPlayer duckSound;
-	MediaPlayer duckHit1Sound;
-	Rect rect = new Rect(0, 0, 0, 0);
+	Animate _animate;
+	MediaPlayer _duckSound;
+	MediaPlayer _duckHit1Sound;
 	
 	public Duck(){
 		_id = objtype.tDuck;
 		init();
-		animate = new Animate(_id.frames, (_bitmap.getWidth()/_id.frames), _bitmap.getHeight());
 	}
 
 	@Override
 	public void draw(Canvas c) {
+		
 		c.save();
-		
-		rect.set(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-		
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
 		if(_speed.getAngle() > 90 && _speed.getAngle() < 270){
 			c.scale(-1, 1);
 		}
-		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -48,7 +45,7 @@ public class Duck extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = Imports.getDuck();
-		animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
+		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		setX(0.0f);
 		setY(10.0f);
     	//setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
@@ -60,10 +57,10 @@ public class Duck extends GraphicObject{
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
 		
-		duckSound = Imports.getDuckSound();
-		duckSound.setVolume(0.1f, 0.1f);
-		duckHit1Sound = Imports.getDuckHit1Sound();
-		duckHit1Sound.setVolume(0.3f, 0.3f);
+		_duckSound = Imports.getDuckSound();
+		_duckSound.setVolume(0.1f, 0.1f);
+		_duckHit1Sound = Imports.getDuckHit1Sound();
+		_duckHit1Sound.setVolume(0.3f, 0.3f);
 	}
 
 	@Override
@@ -91,7 +88,7 @@ public class Duck extends GraphicObject{
 		case Top:
 			_speed.VerBounce();
             setActualY(-getActualY());
-            break;
+			break;
 		case Bottom:
 			_speed.VerBounce();
         	setActualY(height - getHeight());
@@ -104,6 +101,32 @@ public class Duck extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -114,10 +137,10 @@ public class Duck extends GraphicObject{
         	//only detect border if not in wpool
         	if (!getPullState())
 	        	if(border()){
-	        		duckSound.start();
+	        		_duckSound.start();
 	        	}
         }
-        animate.animateFrame();
+        _animate.animateFrame();
 	}
 	//collision checking
 	public void checkObjCollision(GraphicObject otherGraphic){
@@ -127,14 +150,14 @@ public class Duck extends GraphicObject{
 				if(Func.boxCollision(this, otherGraphic)){
 					colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
 	 				cID = coltype.cShark;
-	 				duckHit1Sound.start();
+	 				_duckHit1Sound.start();
 				}
 				break;
 			case tDiver:
 				if(Func.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cDiver;
-					duckHit1Sound.start();
+					_duckHit1Sound.start();
 				}
 				break;
 			case tFrog:
@@ -142,7 +165,7 @@ public class Duck extends GraphicObject{
 				if(Func.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cFrog;
-					duckHit1Sound.start();
+					_duckHit1Sound.start();
 				}
 				break;
 			case tWhirl:
