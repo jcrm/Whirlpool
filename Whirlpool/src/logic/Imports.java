@@ -1,5 +1,7 @@
 package logic;
 
+import java.io.IOException;
+
 import example.whirlpool.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,7 +9,8 @@ import android.graphics.Matrix;
 import android.media.MediaPlayer;
 
 public class Imports {
-	private static boolean once = false;
+	private static boolean onceImages = false;
+	private static boolean onceAudio = false;
 	private static Bitmap duck;
 	private static Bitmap diver;
 	private static Bitmap diverFlipped;
@@ -17,13 +20,12 @@ public class Imports {
 	private static Bitmap whirlpool;
 	private static Bitmap background;
 	
-	private static MediaPlayer gameMusic;
 	private static MediaPlayer duckSound;
 	private static MediaPlayer duckHit1Sound;
 	
 	static public void setImages(){
-		if(!once){
-			once = true;
+		if(!onceImages){
+			onceImages = true;
 			Matrix flipMatrix = new Matrix();
 			flipMatrix.setScale(1, -1);
 			
@@ -35,10 +37,21 @@ public class Imports {
 			shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);
 			whirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool);
 			background  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset);
-			
-			gameMusic = MediaPlayer.create(Constants.getContext(), R.raw.sample1);
-			duckSound = MediaPlayer.create(Constants.getContext(), R.raw.duck);
-			duckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.duckhit1);
+		}
+	}
+	static public void setAudio(){
+		if(!onceAudio){
+			onceAudio = true;
+			duckSound = MediaPlayer.create(Constants.getContext(), R.raw.ducky);
+			duckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.ducky5);
+			try{
+				duckSound.prepare();
+				duckHit1Sound.prepare();
+			}catch(IllegalStateException e){
+				e.printStackTrace();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	public static Bitmap getDuck() {
@@ -89,15 +102,6 @@ public class Imports {
 	public static void setBackground(Bitmap background) {
 		Imports.background = background;
 	}
-
-	public static MediaPlayer getGameMusic() {
-		return gameMusic;
-	}
-
-	public static void setGameMusic(MediaPlayer gameMusic) {
-		Imports.gameMusic = gameMusic;
-	}
-
 	public static MediaPlayer getDuckSound() {
 		return duckSound;
 	}

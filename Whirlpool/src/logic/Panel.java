@@ -53,10 +53,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel() , getHolder()));    		
     	}
     	Imports.setImages();
-    	backgroundMusic = Imports.getGameMusic();
-    	backgroundMusic.setVolume(0.7f, 0.7f);
-		//backgroundMusic.start();
-		//backgroundMusic.setLooping(true);
+    	Imports.setAudio();
     }
     public void start(){
         if (!_GameIsRunning) {
