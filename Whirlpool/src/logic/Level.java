@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import example.whirlpool.R;
 
 
+import objects.Arrow;
 import objects.Boat;
 import objects.Diver;
 import objects.Duck;

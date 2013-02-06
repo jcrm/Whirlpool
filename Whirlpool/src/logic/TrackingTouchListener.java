@@ -1,7 +1,16 @@
+/*
+ * Author: Fraser Tomison
+ * Last Updated: 5/2/13
+ * Content:
+ * This is the touch listener hooked to the Panel
+ * It handles the gesture of spinning a finger, 
+ * and also of directing an already existing whirlpool
+ * TODO: implement coordinate class to tidy things up
+ */
+
 package logic;
 
-//TODO: header
-
+import objects.Arrow;
 import objects.Whirlpool;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -26,6 +35,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private final WPools _mWPools;
 	private final SurfaceHolder _surfaceHolder;
 	private Whirlpool mWhirl;
+	private Arrow mArrow;
 	
     TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
     	_mWPools = wpools;
@@ -44,6 +54,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
     		if (wPoolIndex > -1){ //pointing a whirl
     			_newGesture = 2;
     			mWhirl = _mWPools.getWpools().get(wPoolIndex);
+    			mArrow = (new Arrow(mWhirl.getX(), mWhirl.getY() , (evt.getX() + Constants.getLevel().getScrollBy()), evt.getY()));
+    			mWhirl.setArrow(mArrow);
     		}else if (wPoolIndex == -1){ //new whirl
 	    		_start[0] = evt.getX();
 	    		_start[1] = evt.getY();
@@ -67,12 +79,12 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	case MotionEvent.ACTION_MOVE:
     		_curr[0] = evt.getX();
     		_curr[1] = evt.getY();
-    		int numPointers = evt.getPointerCount();
-            if (numPointers > 1) {
-                float currX = evt.getRawX();
-                float deltaX = -(currX - _last[0]);
-                Constants.getLevel().shiftScrollBy(deltaX);
-            }
+
+    		if (_newGesture == 2){	//arrow being drawn
+    			mArrow.setVisible(mWhirl.calcTangentPoint((evt.getX() + Constants.getLevel().getScrollBy()), evt.getY()));
+    			if (mArrow.getVisible())
+    				mArrow.Reposition(mWhirl.getTangentX(), mWhirl.getTangentY() , (evt.getX() + Constants.getLevel().getScrollBy()), evt.getY());
+        	}
             else if (_newGesture == 1){
     			//gesture has been started. determine direction.
     			_xDir = (_curr[0] - _start[0]);
@@ -132,8 +144,11 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	case MotionEvent.ACTION_UP:
     		
     	if (_newGesture == 2){	
-    		_wAngle = Func.calcAngle(mWhirl.getX(), mWhirl.getY() , (evt.getX() + Constants.getLevel().getScrollBy()), evt.getY());
-    		mWhirl.setWAngle(_wAngle);
+    		mArrow.setVisible(mWhirl.calcTangentPoint((evt.getX() + Constants.getLevel().getScrollBy()), evt.getY()));
+			if (mArrow.getVisible()){
+				_wAngle = Func.calcAngle(mWhirl.getTangentX(), mWhirl.getTangentY() , (evt.getX() + Constants.getLevel().getScrollBy()), evt.getY());
+    			mWhirl.setWAngle(_wAngle);
+			}
     	}
     	
     	else if (_newGesture == 0){
