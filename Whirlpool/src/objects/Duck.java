@@ -1,7 +1,6 @@
 package objects;
 
 import java.util.Random;
-
 import logic.Func;
 import logic.Imports;
 import logic.Screen.ScreenSide;

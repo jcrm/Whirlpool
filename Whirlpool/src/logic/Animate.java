@@ -3,44 +3,40 @@ package logic;
 import android.graphics.Rect;
 
 public class Animate{
-		private int _frameNum = 0;
-		private int _frameWidth = 0;
-		private int _frameHeight = 0;
-		private int _noOfFrames = 1;
-		private int _delay = 3;
-		private int _counter = 0;
-		private Rect _portion;
+		int frameNum = 0;
+		int frameWidth = 0;
+		int frameHeight = 0;
+		int frameX = 0;
+		int frameY = 0;
+		int noOfFrames = 1;
+		int delay = 3;
+		int counter = 0;
+		private Rect portion;
 		
 		public Animate(int frames, int width, int height){
-			_noOfFrames = frames;
-			_frameWidth = width/_noOfFrames ;
-			_frameHeight = height;
-			_portion = new Rect(0, 0, _frameWidth, _frameHeight);
+			noOfFrames = frames;
+			frameWidth = width/noOfFrames ;
+			frameHeight = height;
+			portion = new Rect(0, 0, frameWidth, frameHeight);
 		}
 		
 		public void animateFrame(){
-			if(_counter++ >= _delay){
-				_counter = 0;
-				_frameNum++;
+			if(counter++ >= delay){
+				counter = 0;
+				frameNum++;
 				updatePortion();
 			}
 		}
 		
 		public void updatePortion(){
-			if(_frameNum >= (_noOfFrames)){
-				_frameNum = 0;
+			if(frameNum >= noOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
+				frameNum = 0;
 			}
-			getPortion().left =  _frameNum * _frameWidth;
-			getPortion().right = getPortion().left + _frameWidth;
+			getPortion().left =  frameNum * frameWidth;
+			getPortion().right = getPortion().left + frameWidth;
 		}
 
 		public Rect getPortion() {
-			return _portion;
-		}
-		public void setDelay(int d){
-			_delay = d;
-		}
-		public int getDelay(){
-			return _delay;
+			return portion;
 		}
 	}

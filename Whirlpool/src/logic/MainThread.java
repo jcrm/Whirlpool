@@ -1,5 +1,6 @@
 package logic;
 
+import states.MainActivity;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 

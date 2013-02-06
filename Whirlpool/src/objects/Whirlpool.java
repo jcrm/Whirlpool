@@ -6,6 +6,7 @@ import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;
+import java.lang.Math;
 //used to create effect of whirlpool
 
 
@@ -17,6 +18,7 @@ public class Whirlpool extends GraphicObject{
 	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
 	private float radius = 40.0f;
+	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
@@ -26,6 +28,8 @@ public class Whirlpool extends GraphicObject{
 	private final int afterCollisionTimer = 50;
 	private int afterCollisionCounter = 0;
 	private boolean collisionDone = false;
+	private Arrow mArrow = null;
+	private float tangentX, tangentY;
 	Animate _animate;
 	
 	public Whirlpool(){
@@ -48,6 +52,9 @@ public class Whirlpool extends GraphicObject{
 		
 		c.restore();
 		
+		if (mArrow != null){
+			mArrow.draw(c);//draw whirls directional arrow
+		}
 	}
 	
 	@Override
@@ -61,7 +68,8 @@ public class Whirlpool extends GraphicObject{
 		_height = _id.height;*/
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
-		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
+		
 	}
 	
 	@Override
@@ -117,6 +125,13 @@ public class Whirlpool extends GraphicObject{
 		}
 	}
 	
+	public Arrow getArrow(){
+		return mArrow;
+	}
+	public void setArrow(Arrow arrow){
+		mArrow = arrow;
+	}
+	
 	public void frame(){
 		if(expireCounter > 0){
 			expireCounter++;
@@ -137,12 +152,7 @@ public class Whirlpool extends GraphicObject{
 		if (a.getPullState() == false && !collisionDone){
 			int collide = collision(a);
 			
-			if (collide == 1){
-				a.setPull(true);
-				pull(a);
-				setExpireCounter(0);
-			}
-			else if (collide == 2){
+			if (collide == 1 || collide == 2){
 				a.setPull(true);
 				pull(a);
 				setExpireCounter(0);
@@ -188,9 +198,8 @@ public class Whirlpool extends GraphicObject{
 		expireCounter = a;
 	}
 	
-	public void setClockwise(boolean clockwise){
-    	if (clockwise) dirFactor = 1;
-    	else dirFactor = -1;
+	public void setClockwise(int clockwise){
+    	dirFactor = clockwise;
     }
     public int getClockwise(){
     	return dirFactor;
@@ -247,13 +256,13 @@ public boolean pointCollision(float x, float y){
 		float wPoolCentreX = getX();
 		float wPoolCentreY = getY();
 		//this is the current distance from centre to graphic
-		float wPoolRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
+		objectRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
 		//angle of radius
 		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
 		cAngle+= (2 * getClockwise());//rotate obj around wpool
 
-		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*wPoolRadius;
-		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*wPoolRadius;
+		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*objectRadius;
+		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*objectRadius;
 
 		cAngle = Func.calcAngle(objX, objY,destX, destY);
 
@@ -291,9 +300,6 @@ public boolean pointCollision(float x, float y){
 		switch(graphic.getId()){
 		case tShark:
 			gravity(graphic, sharkFactor);
-			break;
-		case tFrog:
-			gravity(graphic, frogFactor);
 			break;
 		case tDuck:
 			gravity(graphic, 4.0f);
@@ -334,6 +340,37 @@ public boolean pointCollision(float x, float y){
 		}
 		
 	}*/
+	
+	//this function is called so the math is only done once per fetch
+	//(rather than individually in each getter)
+	public boolean calcTangentPoint(float x, float y){
+		float adj1,opp1,hyp1,angle1,angle2;
+		
+		opp1 = objectRadius;
+		//distance from center to point
+		hyp1 = (float) Math.sqrt(((x-getX())*(x-getX())) + ((y-getY())*(y-getY())));
+		
+		if(hyp1 < opp1)
+			return false;//no arrow can be drawn, point inside whirl
+		//distance from point to tangentPoint
+		adj1 = (float) Math.sqrt((hyp1*hyp1) - (opp1*opp1));
+		//angle from point to tangentPoint
+		angle1 = (float) Math.asin(opp1/hyp1);
+		angle2 = (float) (((Func.calcAngle(x,y,getX(),getY())))*(Math.PI/180));
+		
+		angle1 *= getClockwise();
+		angle1 = angle2 + angle1;
+		//calc y component from circle center
+		tangentX = (float) (Math.cos(angle1) * adj1) + x;
+		tangentY = (float) (Math.sin(angle1) * adj1) + y;
+		return true;
+	}
+	public float getTangentX(){
+		return tangentX;
+	}
+	public float getTangentY(){
+		return tangentY;
+	}
 	public float getPower() {
 		return power;
 	}

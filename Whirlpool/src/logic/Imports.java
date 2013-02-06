@@ -44,14 +44,14 @@ public class Imports {
 			onceAudio = true;
 			duckSound = MediaPlayer.create(Constants.getContext(), R.raw.ducky);
 			duckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.ducky5);
-			/*try{
+			try{
 				duckSound.prepare();
 				duckHit1Sound.prepare();
 			}catch(IllegalStateException e){
 				e.printStackTrace();
 			}catch(IOException e) {
 				e.printStackTrace();
-			}*/
+			}
 		}
 	}
 	public static boolean scaledBitmap(int type, int nW, int nH){

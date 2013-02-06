@@ -1,7 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
-
+import objects.Arrow;
 import objects.Diver;
 import objects.Duck;
 import objects.Frog;

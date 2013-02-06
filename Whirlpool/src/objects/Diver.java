@@ -114,5 +114,4 @@ public class Diver extends GraphicObject{
 			}
 		}
 	}
-
 }

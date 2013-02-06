@@ -50,7 +50,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	sRes = getResources();
     	Constants.setRes(sRes);
     	if(Constants.getState().needListener()){
-    		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel() , getHolder()));    		
+    		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel(), getHolder()));    		
     	}
     	Imports.setImages();
     	Imports.setAudio();
