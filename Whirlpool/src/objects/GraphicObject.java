@@ -3,6 +3,7 @@ package objects;
 import java.util.Random;
 
 import logic.Constants;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen;
 import movement.Speed;
@@ -18,15 +19,14 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(1, 1, 0, 0, 1), 
-		tWhirl(6, 3, 0, 0, 30),
-		tDuck(13, 7, 8, 0, 16),
+		tDefault(0, 1, 1, 0, 0, 1), 
+		tWhirl(1, 128, 128, 0, 0, 30),
+		tDuck(2, 64, 64, 8, 0, 16),
 		//not sure what numbers need for frame width and height
-		tFrog(7, 4, 4, 0, 16), 
-		tShark(10, 40, 5, new Random().nextInt(360)+1, 1), 
-		tBoat(50, 15, 0, 0, 1),
-		//just guessing numbers for diver w/h need to work out correct ones
-		tDiver(6, 5, 4, new Random().nextInt(360), 16);
+		tFrog(3, 96, 96, 4, 0, 16), 
+		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 
+		tBoat(5,  64, 64, 0, 0, 1),
+		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16);
 		
 		int width;
 		int height;
@@ -34,12 +34,13 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		float angle;
 		int frames;
 		
-		objtype(int a, int b, float c, float d, int f){
-			width = Constants.getScreen().getWidth()/a;
-			height = Constants.getScreen().getHeight()/b;
+		objtype(int t, int w, int h, float s, float a, int f){
+			if(t != 0){
+				Imports.scaledBitmap(t, w*f, h);
+			}
 			//TODO set min width/height
-			speed = c;
-			angle = d;
+			speed = s;
+			angle = a;
 			frames = f;
 		}
 	}
@@ -75,7 +76,6 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	public void setId(objtype id){
 		_id = id;
 	}
-	
 	
 	public boolean border(){
 		int HEIGHT = Panel.sScreen.getHeight();
@@ -185,5 +185,4 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	public boolean getPullState() {
 		return this._pull;
 	}
-    
 }

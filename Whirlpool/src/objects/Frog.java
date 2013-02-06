@@ -37,10 +37,10 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
 		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
         _speed.setMove(true);
         _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
-		_width = _id.width;
-		_height = _id.height;
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));

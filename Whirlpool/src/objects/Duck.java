@@ -45,14 +45,13 @@ public class Duck extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = Imports.getDuck();
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
+		
 		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		setX(0.0f);
 		setY(10.0f);
-    	//setY((int) Panel.sScreen.getCentreY() - getGraphic().getHeight() / 2);
     	_speed.setMove(true);
-		
-		_width = _id.width;
-		_height = _id.height;
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));

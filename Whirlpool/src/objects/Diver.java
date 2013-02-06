@@ -30,12 +30,13 @@ public class Diver extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = Imports.getDiver();
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
+		
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
     	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
         _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
-		_width = _id.width;
-		_height = _id.height;
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
@@ -102,12 +103,14 @@ public class Diver extends GraphicObject{
 		if(!_flipped){
 			if(_speed.getAngle()>270 || _speed.getAngle()<90){
 				_flipped = true;
-				_bitmap = Imports.getDiverFlipped();				
+				_bitmap = Imports.getDiverFlipped();
+				System.gc();
 			}
 		}else if(_flipped){
 			if(_speed.getAngle()<=270 && _speed.getAngle()>=90){
 				_flipped = false;
 				_bitmap = Imports.getDiver();
+				System.gc();
 			}
 		}
 	}

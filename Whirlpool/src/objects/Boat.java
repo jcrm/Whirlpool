@@ -34,8 +34,8 @@ public class Boat extends GraphicObject{
         setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
         _speed.setMove(true);
 		
-		_width = _id.width;
-		_height = _id.height;
+        _width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));

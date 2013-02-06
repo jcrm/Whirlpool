@@ -44,14 +44,59 @@ public class Imports {
 			onceAudio = true;
 			duckSound = MediaPlayer.create(Constants.getContext(), R.raw.ducky);
 			duckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.ducky5);
-			try{
+			/*try{
 				duckSound.prepare();
 				duckHit1Sound.prepare();
 			}catch(IllegalStateException e){
 				e.printStackTrace();
 			}catch(IOException e) {
 				e.printStackTrace();
+			}*/
+		}
+	}
+	public static boolean scaledBitmap(int type, int nW, int nH){
+		switch(type){
+		case 0:
+			return false;
+		case 1:
+			if(whirlpool.getWidth()!= nW && whirlpool.getHeight()!=nH){
+				whirlpool = Bitmap.createScaledBitmap(whirlpool, nW, nH, false);
+				System.gc();
+				return true;
 			}
+		case 2:
+			if(duck.getWidth()!= nW && duck.getHeight()!=nH){
+				duck = Bitmap.createScaledBitmap(duck, nW, nH, false);
+				System.gc();
+				return true;
+			}
+		case 3:
+			if(frog.getWidth()!= nW && frog.getHeight()!=nH){
+				frog = Bitmap.createScaledBitmap(frog, nW, nH, false);
+				System.gc();
+				return true;
+			}
+		case 4:
+			if(shark.getWidth()!= nW && shark.getHeight()!=nH){
+				shark = Bitmap.createScaledBitmap(shark, nW, nH, false);
+				System.gc();
+				return true;
+			}
+		case 5:
+			if(boat.getWidth()!= nW && boat.getHeight()!=nH){
+				boat = Bitmap.createScaledBitmap(boat, nW, nH, false);
+				System.gc();
+				return true;
+			}
+		case 6:
+			if(diver.getWidth()!= nW && diver.getHeight()!=nH){
+				diver = Bitmap.createScaledBitmap(diver, nW, nH, false);
+				diverFlipped = Bitmap.createScaledBitmap(diverFlipped, nW, nH, false);
+				System.gc();
+				return true;
+			}
+		default:
+			return false;
 		}
 	}
 	public static Bitmap getDuck() {
