@@ -46,7 +46,6 @@ public class Duck extends GraphicObject{
 		_bitmap = Imports.getDuck();
 		_width = _bitmap.getWidth()/_id.frames;
 		_height = _bitmap.getHeight();
-		
 		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		setX(0.0f);
 		setY(10.0f);
