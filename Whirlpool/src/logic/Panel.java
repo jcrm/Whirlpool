@@ -1,21 +1,10 @@
 package logic;
 
-import java.util.ArrayList;
-
-
-
-import objects.GraphicObject;
-import objects.GraphicObject.objtype;
-
-import states.MainActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -64,10 +53,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel(), getHolder()));    		
     	}
     	Imports.setImages();
-    	backgroundMusic = Imports.getGameMusic();
-    	backgroundMusic.setVolume(0.7f, 0.7f);
-		//backgroundMusic.start();
-		//backgroundMusic.setLooping(true);
+    	Imports.setAudio();
     }
     public void start(){
         if (!_GameIsRunning) {

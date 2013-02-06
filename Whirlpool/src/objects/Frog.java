@@ -1,25 +1,22 @@
 package objects;
 
-import states.MainActivity;
 import logic.Animate;
 import logic.Constants;
 import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Frog extends GraphicObject{
 	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
+	Animate _animate;
 	
 	public Frog(){
 		_id = objtype.tFrog;
         init();
-        animate = new Animate(_id.frames, _bitmap.getWidth()/_id.frames, _bitmap.getHeight());
 	}
-	Animate animate;
 	@Override
 	public void draw(Canvas c) {
 		c.save();
@@ -27,7 +24,7 @@ public class Frog extends GraphicObject{
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		c.translate(getX(), getY());
 		c.rotate((-_frogAngle*180/PI));
-		c.drawBitmap(getGraphic(), animate.getPortion(), rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
@@ -40,10 +37,10 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
 		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
         _speed.setMove(true);
-        
-		_width = _id.width;
-		_height = _id.height;
+        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
@@ -79,6 +76,32 @@ public class Frog extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -87,7 +110,7 @@ public class Frog extends GraphicObject{
         if(move()){
         	border();
         }
-        animate.animateFrame();
+        _animate.animateFrame();
 	}
 	
 	public float getFrogAngle() {

@@ -21,11 +21,17 @@ public class WPools {
     
     //private WPoolsChangeListener wpoolsChangeListener;
     
+    /** @param l set the change listener. */
+    //public void setWPoolsChangeListener(WPoolsChangeListener l) {
+    //	wpoolsChangeListener = l;
+    //}
 
+    /** @return the most recently added dot. */
     public Whirlpool getLastWpool() {
         return (wpools.size() <= 0) ? null : wpools.get(wpools.size()-1); 
     }
     
+    /** @return immutable list of dots. */
     public ArrayList<Whirlpool> getWpools() { return wpools; }
 
    

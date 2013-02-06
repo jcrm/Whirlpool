@@ -1,30 +1,19 @@
 package logic;
 
 import java.util.ArrayList;
-
-import example.whirlpool.R;
-
-
 import objects.Arrow;
-import objects.Boat;
 import objects.Diver;
 import objects.Duck;
 import objects.Frog;
 import objects.GraphicObject;
-import objects.Shark;
 import objects.Whirlpool;
 import objects.GraphicObject.objtype;
 
-
-
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
-import android.util.Log;
 
 public class Level {
 	public Level(){
@@ -51,7 +40,7 @@ public class Level {
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));
 		_graphics.add(new Frog());
-		//_graphics.add(new Diver());
+		_graphics.add(new Diver());
 		//_graphics.add(new Shark());
 		//_graphics.add(new Boat());
 		

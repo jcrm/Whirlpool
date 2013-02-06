@@ -1,14 +1,8 @@
 package objects;
-//updated 29/11
-import example.whirlpool.R;
-import objects.GraphicObject.objtype;
-import states.MainActivity;
-import logic.Constants;
+import logic.Animate;
 import logic.Func;
 import logic.Imports;
-import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;
@@ -36,6 +30,8 @@ public class Whirlpool extends GraphicObject{
 	private boolean collisionDone = false;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
+	Animate _animate;
+	
 	public Whirlpool(){
 		_id = objtype.tWhirl;
         init();
@@ -48,10 +44,11 @@ public class Whirlpool extends GraphicObject{
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		
 		c.translate(getX(), getY());
-		c.rotate(getRotation());
+		//removed rotation because not needed with new animation
+		//c.rotate(getRotation());
 		c.scale(dirFactor, 1);
 		
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 		
@@ -63,10 +60,12 @@ public class Whirlpool extends GraphicObject{
 	@Override
 	public void init() {
 		_bitmap = Imports.getWhirlpool();
+		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_speed.setMove(false);
-		
-		_width = _id.width;
-		_height = _id.height;
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
+		/*_width = _id.width;
+		_height = _id.height;*/
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
@@ -97,6 +96,32 @@ public class Whirlpool extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
@@ -120,6 +145,7 @@ public class Whirlpool extends GraphicObject{
 				finished = true;
 			}
 		}
+		_animate.animateFrame();
 	}
 	
 	public void checkCollision(GraphicObject a){

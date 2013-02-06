@@ -2,13 +2,9 @@ package states;
 
 import logic.Constants;
 import logic.Level;
-import logic.Panel;
-import example.whirlpool.R;
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.Window;
 
 public abstract class MainActivity extends Activity {
 	static protected Level _currentLevel;

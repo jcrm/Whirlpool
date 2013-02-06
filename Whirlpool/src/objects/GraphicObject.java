@@ -2,19 +2,14 @@ package objects;
 
 import java.util.Random;
 
-import states.MainActivity;
-
 import logic.Constants;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.FloatMath;
-import example.whirlpool.R;
 
 interface ObjectFunctions{
 	public void draw(Canvas c);
@@ -24,29 +19,28 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(1, 1, 0, 0, R.drawable.ic_launcher, 						1), 
-		tWhirl(	6, 3, 0, 0, R.drawable.whirlpool, 						1),
-		tDuck(	13, 7, 8, 0, R.drawable.duckleftandright2, 				16),
+		tDefault(0, 1, 1, 0, 0, 1), 
+		tWhirl(1, 128, 128, 0, 0, 30),
+		tDuck(2, 64, 64, 8, 0, 16),
 		//not sure what numbers need for frame width and height
-		tFrog(	7, 4, 4, 0, R.drawable.frog2, 							16), 
-		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1), 
-		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1),
-		tDiver(	64, 64, 4, 45, R.drawable.diver, 							1);
+		tFrog(3, 96, 96, 4, 0, 16), 
+		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 
+		tBoat(5,  64, 64, 0, 0, 1),
+		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16);
 		
 		int width;
 		int height;
 		float speed;
 		float angle;
-		int bitmap;
 		int frames;
 		
-		objtype(int a, int b, float c, float d, int e, int f){
-			width = Constants.getScreen().getWidth()/a;
-			height = Constants.getScreen().getHeight()/b;
+		objtype(int t, int w, int h, float s, float a, int f){
+			if(t != 0){
+				Imports.scaledBitmap(t, w*f, h);
+			}
 			//TODO set min width/height
-			speed = c;
-			angle = d;
-			bitmap = e;
+			speed = s;
+			angle = a;
 			frames = f;
 		}
 	}
@@ -83,19 +77,29 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		_id = id;
 	}
 	
-	
 	public boolean border(){
 		int HEIGHT = Panel.sScreen.getHeight();
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
         if (getActualX() < 0) {
-        	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopLeft, WIDTH, HEIGHT);
+            }else if (getActualY() + getHeight() > HEIGHT){
+            	borderCollision(Screen.ScreenSide.BottomLeft, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+            }
         	hit = true;
-        } else if (getActualX() + getWidth() > WIDTH) {
-        	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        }else if(getActualX() + getWidth() > WIDTH){
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
+            }else if(getActualY() + getHeight() > HEIGHT) {
+            	borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+            }
         	hit = true;
         }
-
         if (getActualY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
         	hit = true;
@@ -181,5 +185,4 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	public boolean getPullState() {
 		return this._pull;
 	}
-    
 }
