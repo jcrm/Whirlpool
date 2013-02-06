@@ -1,47 +1,46 @@
 package objects;
-//
-import states.MainActivity;
+
+import java.util.Random;
+
+import logic.Animate;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
-	protected boolean _flipped, _flipV, _flipH; //TODO What does _flipped even do?
+	Animate _animate;
+	boolean _flipped;
+	
 	public Diver(){
 		_id = objtype.tDiver;
 		init();
 	}
-	
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-		c.drawBitmap(getGraphic(), null, rect,  null);
-		
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		c.translate(getX(), getY());
+		c.rotate(_speed.getAngle()+180);
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		c.restore();
 	}
-
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
-		setX(Panel.sScreen.getWidth()/2);
-		setY(Panel.sScreen.getHeight()/2);
-        _speed.setMove(true);
-        _flipped = true;
+		_bitmap = Imports.getDiver();
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
 		
-		_width = _id.width;
-		_height = _id.height;
+		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
+    	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
+        _speed.setMove(true);
+        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
 	}
-
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
@@ -51,85 +50,68 @@ public class Diver extends GraphicObject{
 		}
 		return false;
 	}
-	
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			_speed.VerBounce();
             setActualY(-getActualY());
-            setFlipV(true);
+    		_speed.shiftAngle(180);
 			break;
 		case Bottom:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
-        	setFlipV(true);
+        	setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
 			break;
 		case Left:
-			_speed.HorBounce();
         	setActualX(-getActualX());
-        	setFlipH(true);
+        	_speed.shiftAngle(180);
 			break;
 		case Right:
-			_speed.HorBounce();
         	setActualX(width - getWidth());
-        	setFlipH(true);
+        	_speed.shiftAngle(180);
+			break;
+		case TopLeft:
+			setActualX(-getActualX());
+			setActualY(-getActualY());
+    		_speed.shiftAngle(180);
+			break;
+		case TopRight:
+			setActualX(width - getWidth());
+			setActualY(-getActualY());
+    		_speed.shiftAngle(180);
+			break;
+		case BottomLeft:
+			setActualX(-getActualX());
+			setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
+			break;
+		case BottomRight:
+			setActualX(width - getWidth());
+			setActualY(height - getHeight());        	
+        	_speed.shiftAngle(180);
 			break;
 		}
 	}
-	
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
+        	checkFlip();
         }
+        _animate.animateFrame();
 	}
-	
-	public boolean getFlipped() {
-		return _flipped;
-	}
-	public void setFlipped(boolean _flipped) {
-		this._flipped = _flipped;
-		if(_flipped == true){
-			flip();
+	public void checkFlip(){
+		if(!_flipped){
+			if(_speed.getAngle()>270 || _speed.getAngle()<90){
+				_flipped = true;
+				_bitmap = Imports.getDiverFlipped();
+				System.gc();
+			}
+		}else if(_flipped){
+			if(_speed.getAngle()<=270 && _speed.getAngle()>=90){
+				_flipped = false;
+				_bitmap = Imports.getDiver();
+				System.gc();
+			}
 		}
 	}
-	public boolean getFlipV() {
-		return _flipV;
-	}
-	public void setFlipV(boolean _flipV) {
-		this._flipV = _flipV;
-		if(_flipV == true){
-			flip();
-		}
-	}
-	public boolean getFlipH() {
-		return _flipH;
-	}
-	public void setFlipH(boolean _flipH) {
-		this._flipH = _flipH;
-		if(_flipH == true){
-			flip();
-		}
-	}
-	public void flip(){
-		boolean tempflip = false;
-		Matrix flipMatrix = new Matrix();
-		
-		if(_flipH){
-			flipMatrix.setScale(-1, 1);
-			tempflip = true;
-			_flipH = false;
-		}else if(_flipV){
-			flipMatrix.setScale(1, -1);
-			tempflip = true;
-			_flipV = false;
-		}
-		if(tempflip){
-			Bitmap temp = Bitmap.createBitmap(_bitmap, 0, 0, _bitmap.getWidth(), _bitmap.getHeight(), flipMatrix, false);
-			_bitmap = temp;
-		}
-	}
-	
-
 }

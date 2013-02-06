@@ -2,12 +2,14 @@ package objects;
 
 import java.util.Random;
 
+import logic.Constants;
+import logic.Imports;
+import logic.Panel;
 import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import example.whirlpool.R;
 
 interface ObjectFunctions{
 	public void draw(Canvas c);
@@ -17,33 +19,29 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 0, 0, R.drawable.ic_launcher, 						1, 0, 0), 
-		tWhirl(	100, 100, 0, 0, R.drawable.whirlpool, 						1, 0, 0),
-		tDuck(	50, 50, 4, 0, R.drawable.duckleftandright2, 				19, 190, 190),
-		//using temp frog image until animation has been added to frog to make it look better
-		tFrog(	30, 30, 5, 0, R.drawable.frogtemp, 							1, 0, 0), 
-		tShark(	10, 40, 5, new Random().nextInt(360)+1, R.drawable.shark, 	1, 0, 0), 
-		tBoat(	50, 15, 0, 0, R.drawable.boat, 								1, 0, 0),
-		tDiver(	64, 32, 4, 45, R.drawable.diver, 							1, 0, 0);
+		tDefault(0, 1, 1, 0, 0, 1), 
+		tWhirl(1, 128, 128, 0, 0, 30),
+		tDuck(2, 64, 64, 8, 0, 16),
+		//not sure what numbers need for frame width and height
+		tFrog(3, 96, 96, 4, 0, 16), 
+		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 
+		tBoat(5,  64, 64, 0, 0, 1),
+		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16);
 		
 		int width;
 		int height;
 		float speed;
 		float angle;
-		int bitmap;
 		int frames;
-		int aWidth;
-		int aHeight;
 		
-		objtype(int a, int b, float c, float d, int e, int f, int g, int h){
-			width = a;
-			height = b;
-			speed = c;
-			angle = d;
-			bitmap = e;
+		objtype(int t, int w, int h, float s, float a, int f){
+			if(t != 0){
+				Imports.scaledBitmap(t, w*f, h);
+			}
+			//TODO set min width/height
+			speed = s;
+			angle = a;
 			frames = f;
-			aWidth = g;
-			aHeight = h;
 		}
 	}
 	
@@ -55,7 +53,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected float _y = 0;
 	protected Bitmap _bitmap;
 	protected Speed _speed = new Speed();
-	private boolean _pull;
+	private boolean _pull;// = false;
 	Rect _portion;
 	
 	
@@ -79,19 +77,37 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		_id = id;
 	}
 	
-	
-	public void border(int WIDTH,int HEIGHT){
+	public boolean border(){
+		int HEIGHT = Panel.sScreen.getHeight();
+		int WIDTH = Constants.getLevel().getLevelWidth();
+		boolean hit = false;
         if (getActualX() < 0) {
-        	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
-        } else if (getActualX() + getWidth() > WIDTH) {
-        	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopLeft, WIDTH, HEIGHT);
+            }else if (getActualY() + getHeight() > HEIGHT){
+            	borderCollision(Screen.ScreenSide.BottomLeft, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+            }
+        	hit = true;
+        }else if(getActualX() + getWidth() > WIDTH){
+        	if(getActualY() < 0){
+            	borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
+            }else if(getActualY() + getHeight() > HEIGHT) {
+            	borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
+            }else{
+            	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+            }
+        	hit = true;
         }
-
         if (getActualY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
+        	hit = true;
         } else if (getActualY() + getHeight() > HEIGHT) {
         	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
+        	hit = true;
         }
+        return hit;
 	}
 	
 	
@@ -163,14 +179,10 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return _speed;
     }
     
-    public void cantPull() {
-		this._pull = true;
-	}
-	public void canPull() {
-		this._pull = false;
-	}
+    public void setPull(boolean a){
+    	_pull = a;
+    }
 	public boolean getPullState() {
 		return this._pull;
 	}
-    
 }

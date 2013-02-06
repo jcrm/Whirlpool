@@ -1,40 +1,37 @@
 package states;
 
+import logic.Constants;
 import logic.Level;
-import logic.Panel;
-import example.whirlpool.R;
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.Window;
 
-public class MainActivity extends Activity {
-	Panel _panel;
-	static private Level _currentLevel;
-	private Level level1;
-	private Level menuScreen;
+public abstract class MainActivity extends Activity {
+	static protected Level _currentLevel;
 	
 	
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //_panel = new Panel(this);
-        //setContentView(_panel);
-        setContentView(R.layout.activity_main);
-        _panel = (Panel) findViewById(R.id.mainview);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        level1 = new Level();
-    	menuScreen = new Level();
-    	_currentLevel = level1;
+    }
+    
+    public MainActivity getState(){
+    	return this;
     }
 
-	public static Level getCurrentLevel() {
+    public abstract void update();
+    
+    public abstract void onDraw(Canvas canvas);
+    
+    public abstract boolean needListener();
+    
+	public Level getCurrentLevel() {
 		return _currentLevel;
 	}
 
-	public static void setCurrentLevel(Level level) {
+	public void setCurrentLevel(Level level) {
 		_currentLevel = level;
+		Constants.setLevel(level);
 	}
     
 }

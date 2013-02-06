@@ -1,43 +1,46 @@
 package objects;
 
-import states.MainActivity;
+import logic.Animate;
+import logic.Constants;
+import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.FloatMath;
 
 public class Frog extends GraphicObject{
 	private float _frogCentreX, _frogCentreY, _frogAngle, _frogRadius;
+	Animate _animate;
 	
 	public Frog(){
 		_id = objtype.tFrog;
         init();
 	}
-	
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-		c.drawBitmap(getGraphic(), null, rect,  null);
+		//doesn't seen to rotate
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		c.translate(getX(), getY());
+		c.rotate((-_frogAngle*180/PI));
+		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
 		
 		c.restore();
 	}
 
 	@Override
 	public void init() {
-		_bitmap = BitmapFactory.decodeResource(Panel.sRes, _id.bitmap);
+		_bitmap = Imports.getFrog();
 		setX(Panel.sScreen.getWidth()/2);
 		setY(Panel.sScreen.getHeight()/2);
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
-		setFrogRadius(100);
+		setFrogRadius((Constants.getScreen().getHeight()/2)-70);
+		_width = _bitmap.getWidth()/_id.frames;
+		_height = _bitmap.getHeight();
         _speed.setMove(true);
-        
-		_width = _id.width;
-		_height = _id.height;
+        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
 		_speed.setAngle(_id.angle);
 		_speed.setSpeed(_id.speed);
 		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
@@ -46,14 +49,9 @@ public class Frog extends GraphicObject{
 	@Override
 	public boolean move() {
 		if(_speed.getMove()){
-			/*
-			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-			shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
-			_speed.shiftAngle(2.5f);*/
-	    	
 			setX((float)(_frogCentreX + FloatMath.sin(_frogAngle)*_frogRadius));
 			setY((float)(_frogCentreY + FloatMath.cos(_frogAngle)*_frogRadius));
-			_frogAngle+=_speed.getSpeed()/100;
+			_frogAngle-=_speed.getSpeed()/150;
 			return true;
 		}
 		return false;
@@ -78,14 +76,41 @@ public class Frog extends GraphicObject{
 			_speed.HorBounce();
         	setActualX(width - getWidth());
 			break;
+		case BottomLeft:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case BottomRight:
+			_speed.VerBounce();
+        	setActualY(height - getHeight());
+        	_speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		case TopLeft:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(-getActualX());
+			break;
+		case TopRight:
+			_speed.VerBounce();
+            setActualY(-getActualY());
+            _speed.HorBounce();
+        	setActualX(width - getWidth());
+			break;
+		default:
+			break;
 		}
 	}
 	
 	public void frame(){
 		// Move Objects
         if(move()){
-        	border(MainActivity.getCurrentLevel().getLevelWidth(), Panel.sScreen.getHeight());
+        	border();
         }
+        _animate.animateFrame();
 	}
 	
 	public float getFrogAngle() {

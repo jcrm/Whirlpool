@@ -7,6 +7,7 @@ public class Speed {
 	private boolean _move = true;
 	private float _speed = 0;
 	private Angle _angle = new Angle(0);
+	private Angle _lastAngle = new Angle(0);
 	//bounce functions
 	public void HorBounce(){
 		float angletemp = _angle.getAngle();
@@ -18,6 +19,7 @@ public class Speed {
 			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
 					break;
 		}
+		_lastAngle.setAngle(_angle.getAngle());
 	}
 	public void VerBounce(){
 		float angletemp = _angle.getAngle();
@@ -57,10 +59,14 @@ public class Speed {
 	public float getAngle(){
 		return _angle.getAngle();
 	}
+	public float getLastAngle(){
+		return _lastAngle.getAngle();
+	}
 	public float getAngleRad(){
 		return _angle.getAngleRad();
 	}
 	public void setAngle(float a){
+		_lastAngle.setAngle(_angle.getAngle());
 		_angle.setAngle(a);
 	}
 	public void shiftAngle(float a){
