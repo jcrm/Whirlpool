@@ -8,7 +8,6 @@ import logic.Imports;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 import logic.Animate;
-import example.whirlpool.R;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
