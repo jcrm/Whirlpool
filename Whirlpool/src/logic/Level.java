@@ -21,7 +21,7 @@ public class Level {
 	}
 	
 	private void constructor(){
-		//init();
+		init();
 	}
 	
 	private final WPools _wPoolModel = new WPools();
@@ -32,20 +32,23 @@ public class Level {
 	Paint paint = new Paint();
 	Rect rect = new Rect();
 	Bitmap backgroundImage;
-	
+	private static Object screenLock;
 	
 	void init(){
-		setLevelWidth(Panel.sScreen.getWidth() + 500);
+		setLevelWidth(2000);
 		backgroundImage = Imports.getBackground();
 		_graphics.add(new Duck());
 		Constants.setPlayer((Duck)_graphics.get(0));
 		_graphics.add(new Frog());
-		_graphics.add(new Diver());
+		//_graphics.add(new Diver());
 		//_graphics.add(new Shark());
 		//_graphics.add(new Boat());
 		
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL);
+		
+		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(_wPoolModel));
+		screenLock=Constants.getLock();
 	}
 	
 	public void update(){
@@ -66,14 +69,19 @@ public class Level {
 			}
 
 		}
-		for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
-			_wPoolModel.getWpools().get(a).frame();
-			if(_wPoolModel.getWpools().get(a).getFinished()){
-				_wPoolModel.getWpools().remove(a);
-				a--;
+		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
+			//could maybe optimise later TODO
+			for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
+				_wPoolModel.getWpools().get(a).frame();
+				if(_wPoolModel.getWpools().get(a).getFinished()){
+					_wPoolModel.getWpools().remove(a);
+					a--;
+				}
 			}
-		}
-		duckOnScreen();
+		//}
+			synchronized(screenLock){
+				duckOnScreen();
+			}
 		//scroll();
 	}
 	

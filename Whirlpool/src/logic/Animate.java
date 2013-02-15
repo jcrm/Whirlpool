@@ -12,12 +12,14 @@ public class Animate{
 		int _delay = 3;
 		int _counter = 0;
 		private Rect portion;
+		private static Object screenLock;
 		
 		public Animate(int frames, int width, int height){
 			_noOfFrames = frames;
 			_frameWidth = width/_noOfFrames ;
 			_frameHeight = height;
 			portion = new Rect(0, 0, _frameWidth, _frameHeight);
+			screenLock = Constants.getLock();
 		}
 		
 		public void animateFrame(){
@@ -32,8 +34,10 @@ public class Animate{
 			if(_frameNum >= _noOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
 				_frameNum = 0;
 			}
-			getPortion().left =  _frameNum * _frameWidth;
-			getPortion().right = getPortion().left + _frameWidth;
+			//synchronized(screenLock){
+				getPortion().left =  _frameNum * _frameWidth;
+				getPortion().right = getPortion().left + _frameWidth;
+			//}
 		}
 
 		public Rect getPortion() {

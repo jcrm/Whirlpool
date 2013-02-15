@@ -174,6 +174,9 @@ public class Duck extends GraphicObject{
 	}
 	//collision movement
 	private void colMovement(){
+		//TODO: This is why duck stops moving if wpool over after collide. 
+		//It wont keep counting till wpool goes away
+		//Wpool wont go away coz duck is in it. Deadlock
 		if((cID != coltype.cDefault && cID != coltype.cWhirl) && colCount >= 0){
 			if(colCount == 30){
 				getSpeed().setSpeed(0);

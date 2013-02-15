@@ -55,9 +55,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected Speed _speed = new Speed();
 	private boolean _pull;// = false;
 	Rect _portion;
+	private static Object screenLock;
 	
-	
-    public GraphicObject(){}
+    public GraphicObject(){
+    	screenLock=Constants.getLock();
+    }
     
     abstract public void draw(Canvas c);
     
@@ -125,9 +127,10 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         _x = value;
     }
     public void shiftX(float shift){
-    	_x += shift;
+    	synchronized(screenLock){
+    		_x += shift;
+    	}
     }
-    
     //getters and setters for Y components
     public float getY() {
         return _y + getHeight() / 2;
@@ -142,7 +145,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         _y = value;
     }
     public void shiftY(float shift){
-    	_y += shift;
+    	//synchronized(screenLock){
+    		_y += shift;
+    	//}
     }
     
     

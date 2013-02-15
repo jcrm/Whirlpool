@@ -1,24 +1,30 @@
 package logic;
 
 import objects.Duck;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import states.Game;
 import states.MainActivity;
 
 public class Constants {
-	private static MainActivity state;
+	private static Activity state;
 	private static Resources res;
 	private static Screen screen;
-	private static MainThread thread;
 	private static Level level;
 	private static Duck player;
 	private static Context context;
+	private static Panel panel;
+	private static Object screenLock = 0;
 	
-	synchronized public static MainActivity getState() {
+	synchronized public static Object getLock() {
+		return screenLock;
+	}
+	synchronized public static Activity getState() {
 		return state;
 	}
-	synchronized public static void setState(MainActivity state) {
-		Constants.state = state;
+	synchronized public static void setState(Activity game) {
+		Constants.state = game;
 	}
 	synchronized public static Resources getRes() {
 		return res;
@@ -31,12 +37,6 @@ public class Constants {
 	}
 	synchronized public static void setScreen(Screen screen) {
 		Constants.screen = screen;
-	}
-	synchronized public static MainThread getThread(){
-		return thread;
-	}
-	synchronized public static void setThread(MainThread thread) {
-		Constants.thread = thread;
 	}
 	synchronized public static Level getLevel() {
 		return level;
@@ -59,5 +59,10 @@ public class Constants {
 	public static void setContext(Context context) {
 		Constants.context = context;
 	}
-	
+	public static Panel getPanel() {
+		return panel;
+	}
+	public static void setPanel(Panel panel) {
+		Constants.panel = panel;
+	}
 }

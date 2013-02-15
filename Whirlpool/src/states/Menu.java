@@ -3,7 +3,6 @@ package states;
 import example.whirlpool.R;
 import logic.Constants;
 import logic.Level;
-import logic.MainThread;
 import logic.Panel;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -48,15 +47,5 @@ public class Menu extends MainActivity {
 		//nothing needed in Menu State
 	}
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		//nothing needed in Menu State
-		
-	}
-
-	@Override
-	public boolean needListener() {
-		return false;
-	}
     
 }

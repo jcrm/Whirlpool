@@ -33,18 +33,16 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private int wPoolIndex;
 	private float _wAngle;
 	private final WPools _mWPools;
-	private final SurfaceHolder _surfaceHolder;
 	private Whirlpool mWhirl;
 	private Arrow mArrow;
 	
-    TrackingTouchListener(WPools wpools, SurfaceHolder surfaceHolder) {
+    TrackingTouchListener(WPools wpools) {
     	_mWPools = wpools;
     	_newGesture = 0;
-    	_surfaceHolder = surfaceHolder;
     }
 
     public boolean onTouch(View v, MotionEvent evt) {
-    synchronized (_surfaceHolder){
+
     	switch(evt.getAction()){
     	
     	case MotionEvent.ACTION_DOWN:
@@ -166,7 +164,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
     	break;
     	default: return false;
     	}
-    }
+    
     	return true;
     }
     

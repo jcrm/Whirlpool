@@ -21,17 +21,7 @@ public abstract class MainActivity extends Activity {
 
     public abstract void update();
     
-    public abstract void onDraw(Canvas canvas);
     
-    public abstract boolean needListener();
-    
-	public Level getCurrentLevel() {
-		return _currentLevel;
-	}
-
-	public void setCurrentLevel(Level level) {
-		_currentLevel = level;
-		Constants.setLevel(level);
-	}
+	
     
 }
