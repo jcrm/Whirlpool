@@ -21,6 +21,7 @@ public class Menu extends MainActivity {
         Constants.clearLevel();
         Constants.setState(this);
         ImageButton game = ((ImageButton) findViewById(R.id.game));
+        
         System.gc();
         game.setOnClickListener(
     		new Button.OnClickListener(){

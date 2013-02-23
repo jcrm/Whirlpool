@@ -49,7 +49,6 @@ public class Panel extends View{
     	sRes = getResources();
     	Constants.setRes(sRes);
     	Imports.setImages();
-    	Imports.setAudio();
     }
     
     public static void stopMusic(){

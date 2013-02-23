@@ -32,7 +32,8 @@ public class Game extends MainActivity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		Constants.setState(this);
 		Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
-
+		Constants.getSoundManager().initSound();
+        Constants.getSoundManager().playBackgroundMusic();
 		mLevelOne = new Level();
 		setCurrentLevel(mLevelOne);
 

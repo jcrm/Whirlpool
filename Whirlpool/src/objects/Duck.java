@@ -2,12 +2,12 @@ package objects;
 
 import java.util.Random;
 import logic.CollisionManager;
+import logic.Constants;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import logic.Animate;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 
 public class Duck extends GraphicObject{
 	//enum for collision checking
@@ -17,8 +17,6 @@ public class Duck extends GraphicObject{
 	//collision variables 
 	public coltype cID = coltype.cDefault;
 	private int mCollisonCount = -1;
-	MediaPlayer mDuckSound;
-	MediaPlayer mDuckHit1Sound;
 
 	public Duck(){
 		mId = objtype.tDuck;
@@ -52,11 +50,6 @@ public class Duck extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
-
-		mDuckSound = Imports.getDuckSound();
-		mDuckSound.setVolume(0.1f, 0.1f);
-		mDuckHit1Sound = Imports.getDuckHit1Sound();
-		mDuckHit1Sound.setVolume(0.3f, 0.3f);
 	}
 
 	@Override
@@ -132,7 +125,7 @@ public class Duck extends GraphicObject{
 			//only detect border if not in wpool
 			if (!getPullState())
 				if(border()){
-					mDuckSound.start();
+					Constants.getSoundManager().playDucky();
 				}
 		}
 		mAnimate.animateFrame();
@@ -145,14 +138,14 @@ public class Duck extends GraphicObject{
 				if(CollisionManager.boxCollision(this, otherGraphic)){
 					colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
 					cID = coltype.cShark;
-					mDuckHit1Sound.start();
+					Constants.getSoundManager().playDucky();
 				}
 				break;
 			case tDiver:
 				if(CollisionManager.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cDiver;
-					mDuckHit1Sound.start();
+					Constants.getSoundManager().playDucky();
 				}
 				break;
 			case tFrog:
@@ -160,7 +153,7 @@ public class Duck extends GraphicObject{
 				if(CollisionManager.boxCollision(this, otherGraphic)){
 					colDiverFrog();
 					cID = coltype.cFrog;
-					mDuckHit1Sound.start();
+					Constants.getSoundManager().playDucky();
 				}
 				break;
 			case tWhirl:
