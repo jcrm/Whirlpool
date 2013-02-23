@@ -14,13 +14,13 @@ public class Diver extends GraphicObject{
 		init();
 	}
 	@Override
-	public void draw(Canvas c) {
-		c.save();
+	public void draw(Canvas canvas) {
+		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			c.translate(getX(), getY());
-			c.rotate(mSpeed.getAngle()+180);
-			c.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
-		c.restore();
+			canvas.translate(getX(), getY());
+			canvas.rotate(mSpeed.getAngle()+180);
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.restore();
 	}
 	@Override
 	public void init() {

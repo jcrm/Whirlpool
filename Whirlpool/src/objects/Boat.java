@@ -56,43 +56,43 @@ public class Boat extends GraphicObject{
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
 			break;
 		case Bottom:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
 			break;
 		case Left:
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case Right:
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		case BottomLeft:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case BottomRight:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		case TopLeft:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case TopRight:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		default:

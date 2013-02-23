@@ -75,7 +75,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 			if (mNewGesture == 2){	//arrow being drawn
 				mArrow.setVisible(mWhirl.calcTangentPoint((event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
 				if (mArrow.getVisible())
-					mArrow.Reposition(mWhirl.getTangentX(), mWhirl.getTangentY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY());
+					mArrow.reposition(mWhirl.getTangentX(), mWhirl.getTangentY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY());
 			}else if (mNewGesture == 1){
 				//gesture has been started. determine direction.
 				mXDir = (mCurrent[0] - mStart[0]);
