@@ -2,6 +2,7 @@ package objects;
 
 import java.util.Random;
 
+import logic.Animate;
 import logic.Constants;
 import logic.Imports;
 import logic.Panel;
@@ -9,10 +10,9 @@ import logic.Screen;
 import movement.Speed;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 
 interface ObjectFunctions{
-	public void draw(Canvas c);
+	public void draw(Canvas canvas);
 	public void init();
 	public boolean move();
 }
@@ -28,36 +28,36 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tBoat(5,  64, 64, 0, 0, 1),
 		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16);
 		
-		int width;
-		int height;
-		float speed;
-		float angle;
-		int frames;
+		int tWidth;
+		int tHeight;
+		float tSpeed;
+		float tAngle;
+		int tFrames;
 		
-		objtype(int t, int w, int h, float s, float a, int f){
-			if(t != 0){
-				Imports.scaledBitmap(t, w*f, h);
+		objtype(int type, int width, int height, float speed, float angle, int frames){
+			if(type != 0){
+				Imports.scaledBitmap(type, width*frames, height);
 			}
 			//TODO set min width/height
-			speed = s;
-			angle = a;
-			frames = f;
+			tSpeed = speed;
+			tAngle = angle;
+			tFrames = frames;
 		}
 	}
-	
 	//private variables
-	protected float PI = 3.141592653589793238f;
-	protected objtype _id = objtype.tDefault;
-	protected int _width, _height, _radius = 0; //TODO Don't think we use Radius, might delete.
-	protected float _x = 0;
-	protected float _y = 0;
-	protected Bitmap _bitmap;
-	protected Speed _speed = new Speed();
-	private boolean _pull;// = false;
-	Rect _portion;
+	protected objtype mId = objtype.tDefault;
+	protected int mWidth, mHeight, mRadius = 0; //TODO Don't think we use Radius, might delete.
+	protected float mX = 0;
+	protected float mY = 0;
+	protected Bitmap mBitmap;
+	protected Speed mSpeed = new Speed();
+	private boolean mPull;// = false;
+	private static Object mScreenLock;
+	protected Animate mAnimate;
 	
-	
-    public GraphicObject(){}
+    public GraphicObject(){
+    	mScreenLock=Constants.getLock();
+    }
     
     abstract public void draw(Canvas c);
     
@@ -71,10 +71,10 @@ public abstract class GraphicObject {//implements ObjectFunctions{
     
     
 	public objtype getId(){
-		return _id;
+		return mId;
 	}
 	public void setId(objtype id){
-		_id = id;
+		mId = id;
 	}
 	
 	public boolean border(){
@@ -113,76 +113,79 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	
 	//getters and setters for X components
     public float getX() {
-        return _x + getWidth() / 2;
+        return mX + getWidth() / 2;
     }
     public float getActualX() {
-        return _x;
+        return mX;
     }
     public void setX(float value) {
-        _x = value - getWidth() / 2;
+        mX = value - getWidth() / 2;
     }
     public void setActualX(float value) {
-        _x = value;
+        mX = value;
     }
     public void shiftX(float shift){
-    	_x += shift;
+    	synchronized(mScreenLock){
+    		mX += shift;
+    	}
     }
-    
     //getters and setters for Y components
     public float getY() {
-        return _y + getHeight() / 2;
+        return mY + getHeight() / 2;
     }
     public float getActualY() {
-        return _y;
+        return mY;
     }
     public void setY(float value) {
-        _y = value - getHeight() / 2;
+        mY = value - getHeight() / 2;
     }
     public void setActualY(float value) {
-        _y = value;
+        mY = value;
     }
     public void shiftY(float shift){
-    	_y += shift;
+    	//synchronized(screenLock){
+    		mY += shift;
+    	//}
     }
     
     
     public int getWidth(){
-		return _width;
+		return mWidth;
     }
     public int getHeight(){
-		return _height;
+		return mHeight;
     }
 	public void setWidth(int width){
-		_width = width;
+		mWidth = width;
 	}
 	public void setHeight(int height){
-		_height = height;
+		mHeight = height;
 	}
 	
 	
 	//getters and setters for angles and radius
     public float getRadius(){
-    	return _radius;
+    	return mRadius;
     }
 	public void setRadius(int radius){
-		_radius = radius;
+		mRadius = radius;
 	}
 	
 	
 	public void setAngle(float a){
-		_speed.setAngle(a);
+		mSpeed.setAngle(a);
 	}
     public Bitmap getGraphic() {
-        return _bitmap;
+        return mBitmap;
     }
     public Speed getSpeed() {
-        return _speed;
+        return mSpeed;
     }
     
     public void setPull(boolean a){
-    	_pull = a;
+    	mPull = a;
     }
 	public boolean getPullState() {
-		return this._pull;
+		return this.mPull;
 	}
 }

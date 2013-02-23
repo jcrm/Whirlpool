@@ -2,108 +2,110 @@ package objects;
 
 import java.util.Random;
 
-import logic.Imports;
+import logic.Animate;
 import logic.Panel;
 import logic.Screen.ScreenSide;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.FloatMath;
 
 public class Boat extends GraphicObject{
-	
+
 	public Boat(){
-		_id = objtype.tBoat;
+		mId = objtype.tBoat;
 		init();
 	}
 
 	@Override
-	public void draw(Canvas c) {
-		c.save();
-		
-		Rect rect = new Rect((int)getActualX(), (int)getActualY(), (int)getActualX() + _width, (int)getActualY() + _height);
-		c.drawBitmap(getGraphic(), null, rect,  null);
-		
-		c.restore();
+	public void draw(Canvas canvas) {
+		canvas.save();
+			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+			canvas.translate(getX(), getY());
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.restore();
 	}
 
 	@Override
 	public void init() {
-		_bitmap = Imports.getBoat();
+		//_bitmap = Imports.getBoat();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+
+		mWidth = mBitmap.getWidth()/mId.tFrames;
+		mHeight = mBitmap.getHeight();
+
 		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
-        setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-        _speed.setMove(true);
-		
-        _width = _bitmap.getWidth()/_id.frames;
-		_height = _bitmap.getHeight();
-		_speed.setAngle(_id.angle);
-		_speed.setSpeed(_id.speed);
-		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
+
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 	}
 
 	@Override
 	public boolean move() {
-		if(_speed.getMove()){
-			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-	    	shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
+		if(mSpeed.getMove()){
+			shiftX((float) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			shiftY((float) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			_speed.VerBounce();
-            setActualY(-getActualY());
+			mSpeed.VerBounce();
+			setActualY(-getActualY());
 			break;
 		case Bottom:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
+			mSpeed.VerBounce();
+			setActualY(height - getHeight());
 			break;
 		case Left:
-			_speed.HorBounce();
-        	setActualX(-getActualX());
+			mSpeed.HorBounce();
+			setActualX(-getActualX());
 			break;
 		case Right:
-			_speed.HorBounce();
-        	setActualX(width - getWidth());
+			mSpeed.HorBounce();
+			setActualX(width - getWidth());
 			break;
 		case BottomLeft:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
-        	_speed.HorBounce();
-        	setActualX(-getActualX());
+			mSpeed.VerBounce();
+			setActualY(height - getHeight());
+			mSpeed.HorBounce();
+			setActualX(-getActualX());
 			break;
 		case BottomRight:
-			_speed.VerBounce();
-        	setActualY(height - getHeight());
-        	_speed.HorBounce();
-        	setActualX(width - getWidth());
+			mSpeed.VerBounce();
+			setActualY(height - getHeight());
+			mSpeed.HorBounce();
+			setActualX(width - getWidth());
 			break;
 		case TopLeft:
-			_speed.VerBounce();
-            setActualY(-getActualY());
-            _speed.HorBounce();
-        	setActualX(-getActualX());
+			mSpeed.VerBounce();
+			setActualY(-getActualY());
+			mSpeed.HorBounce();
+			setActualX(-getActualX());
 			break;
 		case TopRight:
-			_speed.VerBounce();
-            setActualY(-getActualY());
-            _speed.HorBounce();
-        	setActualX(width - getWidth());
+			mSpeed.VerBounce();
+			setActualY(-getActualY());
+			mSpeed.HorBounce();
+			setActualX(width - getWidth());
 			break;
 		default:
 			break;
 		}
 	}
-	
+
 	public void frame(){
 		// Move Objects
-        if(move()){
-        	border();
-        }
+		if(move()){
+			border();
+		}
+		mAnimate.animateFrame();
 	}
 
 }

@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         android:layout_marginTop="0dp"
         android:layout_centerHorizontal="true"
-    	android:contentDescription="Start Game"
+    	android:contentDescription="@string/start_game"
     />
 
     <ImageButton
@@ -23,7 +23,7 @@
         android:background="@drawable/optionsbtn"
         android:scaleType="fitCenter"
         android:layout_below="@id/game"
-        android:contentDescription="Options Screen"
+        android:contentDescription="@string/options_screen"
     />
     
         
@@ -34,7 +34,7 @@
         android:background="@drawable/exitbtn"
         android:scaleType="fitCenter"
         android:layout_below="@id/options"
-        android:contentDescription="Exit"
+        android:contentDescription="@string/exit"
     />
 
 

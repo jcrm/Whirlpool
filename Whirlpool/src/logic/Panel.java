@@ -5,39 +5,38 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
 
-public class Panel extends SurfaceView implements SurfaceHolder.Callback {
-	private static boolean _GameIsRunning;
-    static private MainThread _thread = new MainThread();
+public class Panel extends View{
+	private static boolean sGameIsRunning;
     static public Screen sScreen = new Screen();
     static public Resources sRes;
-    static MediaPlayer backgroundMusic;
+    static MediaPlayer sBackgroundMusic;
+    private static Object sScreenLock;
     
     public Panel(Context context) {
         super(context);
         constructor();
     }
-    public Panel(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public Panel(Context context, AttributeSet attributes) {
+        super(context, attributes);
         constructor();
     }
     private void constructor(){
-    	getHolder().addCallback(this);
-        _thread.setPanel(this);
         setFocusable(true);
         Constants.setScreen(sScreen);
-        Constants.setThread(_thread);
+        sScreenLock = Constants.getLock();
     }
-    public void update(){
-    	Constants.getState().update();
-    }
+
     @Override
     public void onDraw(Canvas canvas) {
-    	Constants.getState().onDraw(canvas);
+    	synchronized(sScreenLock){
+    		if(Constants.getLock()!=null)
+    		Constants.getLevel().onDraw(canvas);
+    	}
     }
-    @Override
+
+	@Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
     	int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
     	int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
@@ -49,34 +48,13 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
     	//int y = findViewById(R.id.mainview).getHeight();
     	sRes = getResources();
     	Constants.setRes(sRes);
-    	if(Constants.getState().needListener()){
-    		setOnTouchListener(new TrackingTouchListener(Constants.getState().getCurrentLevel().getWPoolModel(), getHolder()));    		
-    	}
     	Imports.setImages();
     	Imports.setAudio();
     }
-    public void start(){
-        if (!_GameIsRunning) {
-        	_thread.start();
-            _GameIsRunning = true;
-        } else {
-            _thread.onResume();
-        }
-    }
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        // TODO Auto-generated method stub
-    }
-    public void surfaceCreated(SurfaceHolder holder) {
-    	_thread.setRunning(true);
-    	start();
-    }
-    public void surfaceDestroyed(SurfaceHolder holder) {
-    	//_thread.onPause();
-    }
     
     public static void stopMusic(){
-    	if(backgroundMusic != null){
-    		backgroundMusic.stop();
+    	if(sBackgroundMusic != null){
+    		sBackgroundMusic.stop();
     	}
     }
     

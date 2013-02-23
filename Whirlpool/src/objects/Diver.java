@@ -1,51 +1,48 @@
 package objects;
 
-import java.util.Random;
-
 import logic.Animate;
 import logic.Imports;
-import logic.Panel;
 import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.FloatMath;
 
 public class Diver extends GraphicObject{
-	Animate _animate;
-	boolean _flipped;
-	
+	private boolean mFlipped;
+
 	public Diver(){
-		_id = objtype.tDiver;
+		mId = objtype.tDiver;
 		init();
 	}
 	@Override
 	public void draw(Canvas c) {
 		c.save();
-		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-		c.translate(getX(), getY());
-		c.rotate(_speed.getAngle()+180);
-		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
+			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+			c.translate(getX(), getY());
+			c.rotate(mSpeed.getAngle()+180);
+			c.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		c.restore();
 	}
 	@Override
 	public void init() {
-		_bitmap = Imports.getDiver();
-		_width = _bitmap.getWidth()/_id.frames;
-		_height = _bitmap.getHeight();
+		mBitmap = Imports.getDiver();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
-    	setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
-        _speed.setMove(true);
-        _animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
-		_speed.setAngle(_id.angle);
-		_speed.setSpeed(_id.speed);
-		_radius =  (int) FloatMath.sqrt(((float)_width*_width) + ((float)_height*_height));
+		mWidth = mBitmap.getWidth()/mId.tFrames;
+		mHeight = mBitmap.getHeight();
+
+		setX((float) (200));
+		setY((float) (170));
+		
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 	}
 	@Override
 	public boolean move() {
-		if(_speed.getMove()){
-			shiftX(_speed.getSpeed()*FloatMath.cos(_speed.getAngleRad()));
-	    	shiftY(_speed.getSpeed()*FloatMath.sin(_speed.getAngleRad()));
+		if(mSpeed.getMove()){
+			shiftX((float) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			shiftY((float) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
@@ -54,62 +51,62 @@ public class Diver extends GraphicObject{
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-            setActualY(-getActualY());
-    		_speed.shiftAngle(180);
+			setActualY(-getActualY());
+			mSpeed.shiftAngle(180);
 			break;
 		case Bottom:
-        	setActualY(height - getHeight());        	
-        	_speed.shiftAngle(180);
+			setActualY(height - getHeight());        	
+			mSpeed.shiftAngle(180);
 			break;
 		case Left:
-        	setActualX(-getActualX());
-        	_speed.shiftAngle(180);
+			setActualX(-getActualX());
+			mSpeed.shiftAngle(180);
 			break;
 		case Right:
-        	setActualX(width - getWidth());
-        	_speed.shiftAngle(180);
+			setActualX(width - getWidth());
+			mSpeed.shiftAngle(180);
 			break;
 		case TopLeft:
 			setActualX(-getActualX());
 			setActualY(-getActualY());
-    		_speed.shiftAngle(180);
+			mSpeed.shiftAngle(180);
 			break;
 		case TopRight:
 			setActualX(width - getWidth());
 			setActualY(-getActualY());
-    		_speed.shiftAngle(180);
+			mSpeed.shiftAngle(180);
 			break;
 		case BottomLeft:
 			setActualX(-getActualX());
 			setActualY(height - getHeight());        	
-        	_speed.shiftAngle(180);
+			mSpeed.shiftAngle(180);
 			break;
 		case BottomRight:
 			setActualX(width - getWidth());
 			setActualY(height - getHeight());        	
-        	_speed.shiftAngle(180);
+			mSpeed.shiftAngle(180);
 			break;
 		}
 	}
 	public void frame(){
 		// Move Objects
-        if(move()){
-        	border();
-        	checkFlip();
-        }
-        _animate.animateFrame();
+		if(move()){
+			border();
+			checkFlip();
+		}
+		mAnimate.animateFrame();
 	}
 	public void checkFlip(){
-		if(!_flipped){
-			if(_speed.getAngle()>270 || _speed.getAngle()<90){
-				_flipped = true;
-				_bitmap = Imports.getDiverFlipped();
+		if(!mFlipped){
+			if(mSpeed.getAngle()>270 || mSpeed.getAngle()<90){
+				mFlipped = true;
+				mBitmap = Imports.getDiverFlipped();
 				System.gc();
 			}
-		}else if(_flipped){
-			if(_speed.getAngle()<=270 && _speed.getAngle()>=90){
-				_flipped = false;
-				_bitmap = Imports.getDiver();
+		}else if(mFlipped){
+			if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>=90){
+				mFlipped = false;
+				mBitmap = Imports.getDiver();
 				System.gc();
 			}
 		}

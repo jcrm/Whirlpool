@@ -16,20 +16,13 @@
     	android:layout_height="fill_parent"
 	    >
 	    <Button
-	        android:id="@+id/test1"
-	        android:text="Menu"
+	        android:id="@+id/menubutton"
+	        android:text="@string/title_activity_menu"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        >
 	    </Button>
 	    
-	    <Button
-	        android:id="@+id/test2"
-	        android:text="Empty WPools"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        >
-	    </Button>
     </LinearLayout>
 
 </RelativeLayout>

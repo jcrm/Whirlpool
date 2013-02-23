@@ -3,40 +3,44 @@ package logic;
 import android.graphics.Rect;
 
 public class Animate{
-		int _frameNum = 0;
-		int _frameWidth = 0;
-		int _frameHeight = 0;
-		int _frameX = 0;
-		int _frameY = 0;
-		int _noOfFrames = 1;
-		int _delay = 3;
-		int _counter = 0;
-		private Rect portion;
+		int mFrameNum = 0;
+		int mFrameWidth = 0;
+		int mFrameHeight = 0;
+		int mFrameX = 0;
+		int mFrameY = 0;
+		int mNoOfFrames = 1;
+		int mDelay = 3;
+		int mCounter = 0;
+		private Rect mPortion;
+		private static Object mScreenLock;
 		
 		public Animate(int frames, int width, int height){
-			_noOfFrames = frames;
-			_frameWidth = width/_noOfFrames ;
-			_frameHeight = height;
-			portion = new Rect(0, 0, _frameWidth, _frameHeight);
+			mNoOfFrames = frames;
+			mFrameWidth = width/mNoOfFrames ;
+			mFrameHeight = height;
+			mPortion = new Rect(0, 0, mFrameWidth, mFrameHeight);
+			mScreenLock = Constants.getLock();
 		}
 		
 		public void animateFrame(){
-			if(_counter++ >= _delay){
-				_counter = 0;
-				_frameNum++;
+			if(mCounter++ >= mDelay){
+				mCounter = 0;
+				mFrameNum++;
 				updatePortion();
 			}
 		}
 		
 		public void updatePortion(){
-			if(_frameNum >= _noOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
-				_frameNum = 0;
+			if(mFrameNum >= mNoOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
+				mFrameNum = 0;
 			}
-			getPortion().left =  _frameNum * _frameWidth;
-			getPortion().right = getPortion().left + _frameWidth;
+			//synchronized(screenLock){
+				mPortion.left =  mFrameNum * mFrameWidth;
+				mPortion.right = getPortion().left + mFrameWidth;
+			//}
 		}
 
 		public Rect getPortion() {
-			return portion;
+			return mPortion;
 		}
 	}

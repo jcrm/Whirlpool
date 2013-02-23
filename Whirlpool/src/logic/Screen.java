@@ -2,55 +2,47 @@ package logic;
 
 public class Screen {
 	public class Point{
-		public int _x;
-		public int _y;
+		public int mX;
+		public int mY;
 		public void set(int x1, int y1){
-			_x = x1;
-			_y = y1;
+			mX = x1;
+			mY = y1;
 		}
 		public int getX(){
-			return _x;
+			return mX;
 		}
 		public int getY(){
-			return _y;
+			return mY;
 		}
 	}
 	public enum ScreenSide{
-		Top,
-		Bottom,
-		Left,
-		Right,
-		TopLeft,
-		TopRight,
-		BottomLeft,
-		BottomRight
-		;
+		Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight;
 	}
 	
 	//variables
-	private int _width;
-	private int _height;
-	private Point _centre = new Point();
+	private int mWidth;
+	private int mHeight;
+	private Point mCentre = new Point();
 	
 	Screen(){
 	}
 	//getters and setter for width and height
 	public int getWidth(){
-		return _width;
+		return mWidth;
 	}
 	public int getHeight(){
-		return _height;
+		return mHeight;
 	}
-	public void set(int wid, int hgt){
-		_width = wid;
-		_height = hgt;
-		_centre.set(wid/2, hgt/2);
+	public void set(int width, int height){
+		mWidth = width;
+		mHeight = height;
+		mCentre.set(width/2, height/2);
 	}
 	//getters for x and y components
 	public int getCentreX(){
-		return _centre.getX();
+		return mCentre.getX();
 	}
 	public int getCentreY(){
-		return _centre.getY();
+		return mCentre.getY();
 	}
 }

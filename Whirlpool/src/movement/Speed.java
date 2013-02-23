@@ -1,75 +1,73 @@
 package movement;
 
-import android.util.FloatMath;
-
 public class Speed {
 	//variables
-	private boolean _move = true;
-	private float _speed = 0;
-	private Angle _angle = new Angle(0);
-	private Angle _lastAngle = new Angle(0);
+	private boolean mMove = true;
+	private float mSpeed = 0;
+	private Angle mAngle = new Angle(0);
+	private Angle mLastAngle = new Angle(0);
 	//bounce functions
 	public void HorBounce(){
-		float angletemp = _angle.getAngle();
+		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
 			case 0:
-			case 2:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
+			case 2:	mAngle.shiftAngle(2*(90 - (int)(angletemp%90)));
 					break;
 			case 1:
-			case 3:	_angle.shiftAngle(-2*((int)(angletemp%90)));
+			case 3:	mAngle.shiftAngle(-2*((int)(angletemp%90)));
 					break;
 		}
-		_lastAngle.setAngle(_angle.getAngle());
+		mLastAngle.setAngle(mAngle.getAngle());
 	}
 	public void VerBounce(){
-		float angletemp = _angle.getAngle();
+		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
 			case 0:
-			case 2:	_angle.shiftAngle(-2*((int)(angletemp%90)));
+			case 2:	mAngle.shiftAngle(-2*((int)(angletemp%90)));
 					break;
 			case 1:
-			case 3:	_angle.shiftAngle(2*(90 - (int)(angletemp%90)));
+			case 3:	mAngle.shiftAngle(2*(90 - (int)(angletemp%90)));
 					break;
 		}
 	}
 	//getters and setters for speed
 	public float getSpeed(){
-		return _speed;
+		return mSpeed;
 	}
 	public float getXSpeed(){
-		return _speed*FloatMath.cos(_angle.getAngleRad());
+		return (float) (mSpeed*Math.cos(mAngle.getAngleRad()));
 	}
 	public float getYSpeed(){
-		return _speed*FloatMath.sin(_angle.getAngleRad());
+		return (float) (mSpeed*Math.sin(mAngle.getAngleRad()));
 	}
-	public void setSpeed(float a){
-		_speed = a;
+	public void setSpeed(float angle){
+		mSpeed = angle;
 	}
-	public void shiftSpeed(float a){
-		_speed += a;
+	public void shiftSpeed(float angle){
+		mSpeed += angle;
 	}
 	//getters and setters for move
 	public boolean getMove(){
-		return _move;
+		return mMove;
 	}
-	public void setMove(boolean a){
-		_move = a;
+	public void setMove(boolean move){
+		mMove = move;
 	}
 	//getters and setters for angle
 	public float getAngle(){
-		return _angle.getAngle();
+		return mAngle.getAngle();
 	}
 	public float getLastAngle(){
-		return _lastAngle.getAngle();
+		return mLastAngle.getAngle();
 	}
 	public float getAngleRad(){
-		return _angle.getAngleRad();
+		return mAngle.getAngleRad();
 	}
-	public void setAngle(float a){
-		_lastAngle.setAngle(_angle.getAngle());
-		_angle.setAngle(a);
+	public void setAngle(float angle){
+		mLastAngle.setAngle(mAngle.getAngle());
+		mAngle.setAngle(angle);
 	}
-	public void shiftAngle(float a){
-		_angle.shiftAngle(a);
+	public void shiftAngle(float angle){
+		mAngle.shiftAngle(angle);
 	}
 }

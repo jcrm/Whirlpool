@@ -1,81 +1,111 @@
 package states;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import example.whirlpool.R;
+
 import logic.Constants;
 import logic.Level;
-import logic.MainThread;
 import logic.Panel;
-import example.whirlpool.R;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
 public class Game extends MainActivity {
-	Panel _panel;
-	private Level level1;
-	
+	Panel mPanel;
+	private Level mLevelOne;
+	private Timer mTime;
+	private Handler mGameHandler;
+	private Level mCurrentLevel;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_game);
-		_panel = (Panel) findViewById(R.id.gameview);
+		mPanel = (Panel) findViewById(R.id.gameview);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		Constants.setState(this);
 		Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
-		
-		level1 = new Level();
-		setCurrentLevel(level1);
-		
-		((Button) findViewById(R.id.test1)).setOnClickListener(
+
+		mLevelOne = new Level();
+		setCurrentLevel(mLevelOne);
+
+
+		mPanel.init();		
+		Constants.setPanel(mPanel);
+		Constants.getLevel().init();
+		mTime= new Timer();//init timer
+
+		// creates a handler to deal wit the return from the timer
+		mGameHandler = new Handler() {
+
+			public void handleMessage(Message aMsg) {
+
+				if (aMsg.what == 0)//redraw
+					mPanel.invalidate(); 
+			}
+		};
+
+
+		mTime.schedule(new MainThread(),0, 25);
+
+
+
+		((Button) findViewById(R.id.menubutton)).setOnClickListener(
 			new Button.OnClickListener(){
-				public void onClick(View v) {
-					MainThread tempthread = Constants.getThread();
-					tempthread.onPause();
-					startActivity(new Intent(Game.this, Menu.class));
-					
+				public void onClick(View view) {
+					//MainThread tempthread = Constants.getThread();
+					synchronized(Constants.getLock()){
+						mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+						mTime.cancel();
+						startActivity(new Intent(Game.this, Menu.class));
+
+						finish();
+					}
 				}
 			}
 		);
-		((Button) findViewById(R.id.test2)).setOnClickListener(
-				new Button.OnClickListener(){
-					public void onClick(View v) {
-						//getCurrentLevel().getWPoolModel().clearDots();
-					}
-				}
-			);
 	}
-	
+
 	@Override
 	public void onPause(){
 		Panel.stopMusic();
 		super.onPause();
 	}
-	
+
 	@Override
 	public void onDestroy(){
 		Panel.stopMusic();
 		super.onDestroy();
 	}
-	
-	@Override
+
+	public Level getCurrentLevel() {
+		return mCurrentLevel;
+	}
+
+	public void setCurrentLevel(Level level) {
+		mCurrentLevel = level;
+		Constants.setLevel(level);
+	}
+
 	public void update() {
 		getCurrentLevel().update();
-		
+
 	}
 
-	@Override
-	public void onDraw(Canvas canvas) {
-		getCurrentLevel().onDraw(canvas);
-		
-	}
+	class MainThread extends TimerTask {
+		public void run() {
+			//if(!_paused){
+			update();
+			mGameHandler.sendEmptyMessage(0);
+			//}
+		}
 
-	@Override
-	public boolean needListener() {
-		return true;
 	}
-	
 }
