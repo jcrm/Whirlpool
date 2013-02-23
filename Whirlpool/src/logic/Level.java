@@ -1,7 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
-import objects.Arrow;
+
 import objects.Diver;
 import objects.Duck;
 import objects.Frog;
@@ -16,52 +16,47 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class Level {
+
+	private final WPools mWPoolModel = new WPools();
+	private ArrayList<GraphicObject> mGraphics = new ArrayList<GraphicObject>();
+	private int mLevelWidth = 0;
+	private int mLevelHeight = 0;
+	private float mScrollBy = 0;
+	private float mScrollSpeed = 0;
+	Bitmap mBackgroundImage;
+	private static Object mScreenLock;
+	Paint mPaint = new Paint();
+	Rect mRect = new Rect();
+
 	public Level(){
-		constructor();
 	}
-	
-	private void constructor(){
-		init();
-	}
-	
-	private final WPools _wPoolModel = new WPools();
-	private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
-	private int levelWidth = 0;
-	private float scrollBy = 0;
-	private float scrollSpeed = 0;
-	Paint paint = new Paint();
-	Rect rect = new Rect();
-	Bitmap backgroundImage;
-	private static Object screenLock;
-	
-	void init(){
+	public void init(){
 		setLevelWidth(2000);
-		backgroundImage = Imports.getBackground();
-		_graphics.add(new Duck());
-		Constants.setPlayer((Duck)_graphics.get(0));
-		_graphics.add(new Frog());
-		//_graphics.add(new Diver());
+		setLevelHeight(Constants.getScreen().getHeight());
+		mBackgroundImage = Imports.getBackground();
+		mGraphics.add(new Duck());
+		Constants.setPlayer((Duck)mGraphics.get(0));
+		mGraphics.add(new Frog());
+		mGraphics.add(new Diver());
 		//_graphics.add(new Shark());
 		//_graphics.add(new Boat());
-		
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL);
-		
-		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(_wPoolModel));
-		screenLock=Constants.getLock();
+
+
+		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
+		mScreenLock=Constants.getLock();
 	}
-	
+
 	public void update(){
-		for (GraphicObject graphic : _graphics){
+		for (GraphicObject graphic : mGraphics){
 			graphic.setPull(false);
-			for(Whirlpool whirl : _wPoolModel.getWpools()){
+			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				whirl.checkCollision(graphic);
 			}
-			
+
 			if(graphic.getId()==objtype.tDuck){
 				graphic.frame();	//Do everything this object does every frame, like move
 				((Duck) graphic).changeCollisionType(graphic.getPullState());
-				for(GraphicObject graphic2 : _graphics){
+				for(GraphicObject graphic2 : mGraphics){
 					((Duck) graphic).checkObjCollision(graphic2);
 				}
 			}else{
@@ -70,101 +65,93 @@ public class Level {
 
 		}
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
-			//could maybe optimise later TODO
-			for(int a = 0; a < _wPoolModel.getWpools().size(); a++){
-				_wPoolModel.getWpools().get(a).frame();
-				if(_wPoolModel.getWpools().get(a).getFinished()){
-					_wPoolModel.getWpools().remove(a);
-					a--;
-				}
+		//could maybe optimise later TODO
+		for(int a = 0; a < mWPoolModel.getWpools().size(); a++){
+			mWPoolModel.getWpools().get(a).frame();
+			if(mWPoolModel.getWpools().get(a).getFinished()){
+				mWPoolModel.getWpools().remove(a);
+				a--;
 			}
+		}
 		//}
-			synchronized(screenLock){
-				duckOnScreen();
-			}
+		synchronized(mScreenLock){
+			duckOnScreen();
+		}
 		//scroll();
 	}
-	
+
 	public void onDraw(Canvas canvas){
-		//canvas.drawColor(Color.BLUE);
-		
-		int width, num;
-		num = (int) Math.ceil((double)levelWidth/Constants.getScreen().getWidth());
-		width = Constants.getScreen().getWidth();
+		int width = Constants.getScreen().getWidth();
+		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
+
+		mPaint.setColor(Color.RED);
+		mPaint.setStyle(Paint.Style.FILL);
 		//Log.e("onDraw", String.valueOf(levelWidth) + "/" + String.valueOf(Constants.getScreen().getWidth()) + "=" + String.valueOf(num));
 		for(int a = 0; a < (num); a++){
-			rect.set((int) ((width*a)-scrollBy), 0, (int)((width*(a+1)) - scrollBy), Constants.getScreen().getHeight());
-			canvas.drawBitmap(backgroundImage, null, rect,  null);
+			mRect.set((int) ((width*a)-mScrollBy), 0, (int)((width*(a+1)) - mScrollBy), Constants.getScreen().getHeight());
+			canvas.drawBitmap(mBackgroundImage, null, mRect,  null);
 		}
-		
-		canvas.translate(-scrollBy, 0.0f);
-		
+
+		canvas.translate(-mScrollBy, 0.0f);
+
 		canvas.save();
-		
-		rect.set(0, 0, 5, canvas.getHeight());
-		canvas.drawRect(rect, paint);
-		
-		canvas.translate(levelWidth-5, 0);
-		
-		rect.set(0, 0, 5, canvas.getHeight());
-		canvas.drawRect(rect, paint);
-		
+
+			mRect.set(0, 0, 5, canvas.getHeight());
+			canvas.drawRect(mRect, mPaint);
+	
+			canvas.translate(mLevelWidth-5, 0);
+	
+			mRect.set(0, 0, 5, canvas.getHeight());
+			canvas.drawRect(mRect, mPaint);
+
 		canvas.restore();
-		
-		
-		for (Whirlpool whirlpool : _wPoolModel.getWpools()) {
+
+
+		for (Whirlpool whirlpool : mWPoolModel.getWpools()) {
 			whirlpool.draw(canvas);
 		}
-		for (GraphicObject graphic : _graphics) {
+		for (GraphicObject graphic : mGraphics) {
 			graphic.draw(canvas);
 		}
 	}
 
 	public WPools getWPoolModel() {
-		return _wPoolModel;
+		return mWPoolModel;
 	}
 	public int getLevelWidth() {
-		return levelWidth;
+		return mLevelWidth;
+	}
+	public int getLevelHeight(){
+		return mLevelHeight;
 	}
 	public void setLevelWidth(int levelWidth) {
-		this.levelWidth = levelWidth;
+		mLevelWidth = levelWidth;
+	}
+	public void setLevelHeight(int levelHeight){
+		mLevelHeight = levelHeight;
 	}
 	public float getScrollBy() {
-		return scrollBy;
+		return mScrollBy;
 	}
 	public void setScrollBy(float scrollBy) {
-		this.scrollBy = scrollBy;
+		mScrollBy = scrollBy;
 	}
-	public void shiftScrollBy(float a) {
-		scrollSpeed += a/2.0f;
-	}
-	private void scroll(){
-		scrollBy += scrollSpeed;
-		if(scrollSpeed > 1.0f)
-			scrollSpeed /= 1.5f;
-		else
-			scrollSpeed = 0.0f;
-		if(scrollBy < 0){
-			scrollBy = 0;
-		}
-		if(scrollBy + Panel.sScreen.getWidth() > levelWidth){
-			scrollBy = levelWidth - Panel.sScreen.getWidth();
-		}
-		
+	public void shiftScrollBy(float delta) {
+		mScrollSpeed += delta/2.0f;
 	}
 	public void duckOnScreen(){
-		while(Constants.getPlayer().getX() >= (Panel.sScreen.getWidth()/2)+scrollBy){
-			scrollBy++;
+		while(Constants.getPlayer().getX() >= (Panel.sScreen.getWidth()/2)+mScrollBy){
+			mScrollBy++;
 		}
-		while(Constants.getPlayer().getX() < (Panel.sScreen.getWidth()/2)+scrollBy){
-			scrollBy--;
+		while(Constants.getPlayer().getX() < (Panel.sScreen.getWidth()/2)+mScrollBy){
+			mScrollBy--;
 		}
-		if(scrollBy < 0){
-			scrollBy = 0;
+		if(mScrollBy < 0){
+			mScrollBy = 0;
 		}
-		if(scrollBy + Panel.sScreen.getWidth() > levelWidth){
-			scrollBy = levelWidth - Panel.sScreen.getWidth();
+		if(mScrollBy + Panel.sScreen.getWidth() > mLevelWidth){
+			mScrollBy = mLevelWidth - Panel.sScreen.getWidth();
 		}
 	}
-	
+
 }

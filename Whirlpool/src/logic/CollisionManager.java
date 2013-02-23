@@ -4,10 +4,9 @@ import android.view.MotionEvent;
 import java.lang.Math;
 
 import objects.GraphicObject;
-import android.util.FloatMath;
 
 //collision class
-public class Func{
+public class CollisionManager{
 	//box collision - graphic is the sprite being tested, event is the touch
 	static public boolean boxCollision(GraphicObject graphic, MotionEvent event){
     	if((event.getX()>=graphic.getX()) && (event.getX()<=graphic.getX() + graphic.getGraphic().getWidth())){
@@ -18,18 +17,18 @@ public class Func{
     	return false;
     }
 	//box collision - graphic is duck, graphic 2 is other sprite
-		static public boolean boxCollision(GraphicObject graphic, GraphicObject graphic2){
-			if((graphic.getX()+(graphic.getWidth()/2))>(graphic2.getX()-(graphic2.getWidth()/2))){
-				if((graphic.getX()-(graphic.getWidth()/2))<(graphic2.getX()+(graphic2.getWidth()/2))){
-					if((graphic.getY()+(graphic.getHeight()/2))>(graphic2.getY()-(graphic2.getHeight()/2))){
-						if((graphic.getY()-(graphic.getHeight()/2))<(graphic2.getY()+(graphic2.getHeight()/2))){
-							return true;
-						}
+	static public boolean boxCollision(GraphicObject graphic, GraphicObject graphic2){
+		if((graphic.getX()+(graphic.getWidth()/2))>(graphic2.getX()-(graphic2.getWidth()/2))){
+			if((graphic.getX()-(graphic.getWidth()/2))<(graphic2.getX()+(graphic2.getWidth()/2))){
+				if((graphic.getY()+(graphic.getHeight()/2))>(graphic2.getY()-(graphic2.getHeight()/2))){
+					if((graphic.getY()-(graphic.getHeight()/2))<(graphic2.getY()+(graphic2.getHeight()/2))){
+						return true;
 					}
 				}
 			}
-	    	return false;
-	    }
+		}
+    	return false;
+    }
 	//circle collision - graphic is the sprite being tested, event is the touch
 	static public boolean circleCollision(float x1, float y1, float r1, float x2, float y2, float r2){
 		float width, height, radius;
@@ -43,7 +42,7 @@ public class Func{
 		return false;
 	}
 	static float fMod(float num, int divide){
-		float fresult = num - FloatMath.floor(num);
+		float fresult = (float) (num - Math.floor(num));
 		return ((float)((int)num%divide) + fresult);
 	}
 	public static float calcAngle(float x1, float y1, float x2, float y2){

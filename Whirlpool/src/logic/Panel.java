@@ -5,33 +5,33 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
 import android.view.View;
 
 public class Panel extends View{
-	private static boolean _GameIsRunning;
+	private static boolean sGameIsRunning;
     static public Screen sScreen = new Screen();
     static public Resources sRes;
-    static MediaPlayer backgroundMusic;
-    private static Object screenLock;
+    static MediaPlayer sBackgroundMusic;
+    private static Object sScreenLock;
     
     public Panel(Context context) {
         super(context);
         constructor();
     }
-    public Panel(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public Panel(Context context, AttributeSet attributes) {
+        super(context, attributes);
         constructor();
     }
     private void constructor(){
         setFocusable(true);
         Constants.setScreen(sScreen);
-        screenLock = Constants.getLock();
+        sScreenLock = Constants.getLock();
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-    	synchronized(screenLock){
+    	synchronized(sScreenLock){
+    		if(Constants.getLock()!=null)
     		Constants.getLevel().onDraw(canvas);
     	}
     }
@@ -53,8 +53,8 @@ public class Panel extends View{
     }
     
     public static void stopMusic(){
-    	if(backgroundMusic != null){
-    		backgroundMusic.stop();
+    	if(sBackgroundMusic != null){
+    		sBackgroundMusic.stop();
     	}
     }
     

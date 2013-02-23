@@ -1,11 +1,10 @@
 package objects;
 import logic.Animate;
-import logic.Func;
+import logic.CollisionManager;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.FloatMath;
 import java.lang.Math;
 //used to create effect of whirlpool
 
@@ -14,7 +13,6 @@ import java.lang.Math;
  * Can be deleted until i've fixed crashing problem
  */
 public class Whirlpool extends GraphicObject{
-	private final float frogFactor = 0.8f;
 	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
 	private float radius = 40.0f;
@@ -30,10 +28,9 @@ public class Whirlpool extends GraphicObject{
 	private boolean collisionDone = false;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
-	Animate _animate;
 	
 	public Whirlpool(){
-		_id = objtype.tWhirl;
+		mId = objtype.tWhirl;
         init();
 	}
 	
@@ -48,7 +45,7 @@ public class Whirlpool extends GraphicObject{
 		//c.rotate(getRotation());
 		c.scale(dirFactor, 1);
 		
-		c.drawBitmap(getGraphic(), _animate.getPortion(), rect,  null);
+		c.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		
 		c.restore();
 		
@@ -59,16 +56,16 @@ public class Whirlpool extends GraphicObject{
 	
 	@Override
 	public void init() {
-		_bitmap = Imports.getWhirlpool();
-		_animate = new Animate(_id.frames, _bitmap.getWidth(), _bitmap.getHeight());
-		_speed.setMove(false);
-		_width = _bitmap.getWidth()/_id.frames;
-		_height = _bitmap.getHeight();
+		mBitmap = Imports.getWhirlpool();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mSpeed.setMove(false);
+		mWidth = mBitmap.getWidth()/mId.tFrames;
+		mHeight = mBitmap.getHeight();
 		/*_width = _id.width;
 		_height = _id.height;*/
-		_speed.setAngle(_id.angle);
-		_speed.setSpeed(_id.speed);
-		_radius =  (int) Math.sqrt(((float)_width*_width) + ((float)_height*_height));
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 		
 	}
 	
@@ -81,43 +78,43 @@ public class Whirlpool extends GraphicObject{
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
             setActualY(-getActualY());
 			break;
 		case Bottom:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
         	setActualY(height - getHeight());
 			break;
 		case Left:
-			_speed.HorBounce();
+			mSpeed.HorBounce();
         	setActualX(-getActualX());
 			break;
 		case Right:
-			_speed.HorBounce();
+			mSpeed.HorBounce();
         	setActualX(width - getWidth());
 			break;
 		case BottomLeft:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
         	setActualY(height - getHeight());
-        	_speed.HorBounce();
+        	mSpeed.HorBounce();
         	setActualX(-getActualX());
 			break;
 		case BottomRight:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
         	setActualY(height - getHeight());
-        	_speed.HorBounce();
+        	mSpeed.HorBounce();
         	setActualX(width - getWidth());
 			break;
 		case TopLeft:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
             setActualY(-getActualY());
-            _speed.HorBounce();
+            mSpeed.HorBounce();
         	setActualX(-getActualX());
 			break;
 		case TopRight:
-			_speed.VerBounce();
+			mSpeed.VerBounce();
             setActualY(-getActualY());
-            _speed.HorBounce();
+            mSpeed.HorBounce();
         	setActualX(width - getWidth());
 			break;
 		default:
@@ -145,7 +142,7 @@ public class Whirlpool extends GraphicObject{
 				finished = true;
 			}
 		}
-		_animate.animateFrame();
+		mAnimate.animateFrame();
 	}
 	
 	public void checkCollision(GraphicObject a){
@@ -258,13 +255,13 @@ public boolean pointCollision(float x, float y){
 		//this is the current distance from centre to graphic
 		objectRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
 		//angle of radius
-		float cAngle = Func.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
+		float cAngle = CollisionManager.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
 		cAngle+= (2 * getClockwise());//rotate obj around wpool
 
 		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*objectRadius;
 		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*objectRadius;
 
-		cAngle = Func.calcAngle(objX, objY,destX, destY);
+		cAngle = CollisionManager.calcAngle(objX, objY,destX, destY);
 
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
@@ -356,7 +353,7 @@ public boolean pointCollision(float x, float y){
 		adj1 = (float) Math.sqrt((hyp1*hyp1) - (opp1*opp1));
 		//angle from point to tangentPoint
 		angle1 = (float) Math.asin(opp1/hyp1);
-		angle2 = (float) (((Func.calcAngle(x,y,getX(),getY())))*(Math.PI/180));
+		angle2 = (float) (((CollisionManager.calcAngle(x,y,getX(),getY())))*(Math.PI/180));
 		
 		angle1 *= getClockwise();
 		angle1 = angle2 + angle1;

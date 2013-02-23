@@ -1,13 +1,11 @@
 package states;
 
-import logic.Constants;
 import logic.Level;
 import android.app.Activity;
-import android.graphics.Canvas;
 import android.os.Bundle;
 
 public abstract class MainActivity extends Activity {
-	static protected Level _currentLevel;
+	static protected Level mCurrentLevel;
 	
 	
     @Override

@@ -4,65 +4,63 @@ import objects.Duck;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import states.Game;
-import states.MainActivity;
 
 public class Constants {
-	private static Activity state;
-	private static Resources res;
-	private static Screen screen;
-	private static Level level;
-	private static Duck player;
-	private static Context context;
-	private static Panel panel;
-	private static Object screenLock = 0;
+	private static Activity sState;
+	private static Resources sRes;
+	private static Screen sScreen;
+	private static Level sLevel;
+	private static Duck sPlayer;
+	private static Context sContext;
+	private static Panel sPanel;
+	private static Object sScreenLock = 0;
 	
 	synchronized public static Object getLock() {
-		return screenLock;
+		return sScreenLock;
 	}
 	synchronized public static Activity getState() {
-		return state;
+		return sState;
 	}
 	synchronized public static void setState(Activity game) {
-		Constants.state = game;
+		sState = game;
 	}
 	synchronized public static Resources getRes() {
-		return res;
+		return sRes;
 	}
 	synchronized public static void setRes(Resources res) {
-		Constants.res = res;
+		sRes = res;
 	}
 	public static Screen getScreen() {
-		return screen;
+		return sScreen;
 	}
 	synchronized public static void setScreen(Screen screen) {
-		Constants.screen = screen;
+		sScreen = screen;
 	}
 	synchronized public static Level getLevel() {
-		return level;
+		return sLevel;
 	}
 	synchronized public static void setLevel(Level level) {
-		Constants.level = level;
+		sLevel = level;
 	}
 	synchronized public static void clearLevel() {
-		Constants.level = null;
+		sLevel = null;
 	}
 	synchronized public static Duck getPlayer() {
-		return player;
+		return sPlayer;
 	}
 	synchronized public static void setPlayer(Duck player) {
-		Constants.player = player;
+		sPlayer = player;
 	}
 	public static Context getContext() {
-		return context;
+		return sContext;
 	}
 	public static void setContext(Context context) {
-		Constants.context = context;
+		sContext = context;
 	}
 	public static Panel getPanel() {
-		return panel;
+		return sPanel;
 	}
 	public static void setPanel(Panel panel) {
-		Constants.panel = panel;
+		sPanel = panel;
 	}
 }

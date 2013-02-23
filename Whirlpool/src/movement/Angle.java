@@ -3,27 +3,27 @@ package movement;
 import java.lang.Math;
 
 class Angle{
-	private float _angle = 0;
+	private float mAngle = 0;
 	Angle(float a){
-		_angle = a;
+		mAngle = a;
 	}
 	public float getAngle(){
-		return _angle;
+		return mAngle;
 	}
 	public float getAngleRad(){
-		return (float) (_angle*Math.PI/180);
+		return (float) (mAngle*Math.PI/180);
 	}
-	public void setAngle(float a){
-		_angle = a;
+	public void setAngle(float angle){
+		mAngle = angle;
 		checkAngle();
 	}
-	public void shiftAngle(float a){
-		_angle += a;
+	public void shiftAngle(float angle){
+		mAngle += angle;
 		checkAngle();
 	}
 	private void checkAngle(){		//Makes sure it's always withing 0-360
-		if(_angle >= 360.0f || _angle < 0.0f){
-			_angle = ((_angle%360)+360)%360;
+		if(mAngle >= 360.0f || mAngle < 0.0f){
+			mAngle = ((mAngle%360)+360)%360;
 		}
 	}
 }
