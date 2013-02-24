@@ -1,7 +1,6 @@
 package com.sinkingduckstudios.whirlpool.manager;
 
 import android.view.MotionEvent;
-import java.lang.Math;
 
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 

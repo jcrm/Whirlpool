@@ -2,14 +2,14 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
+
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
-
-import android.graphics.Canvas;
-import android.graphics.Rect;
 
 public class Duck extends GraphicObject{
 	//enum for collision checking

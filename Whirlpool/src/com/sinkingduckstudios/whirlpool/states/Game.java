@@ -3,11 +3,6 @@ package com.sinkingduckstudios.whirlpool.states;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.sinkingduckstudios.whirlpool.R;
-import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Level;
-import com.sinkingduckstudios.whirlpool.logic.Panel;
-
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -17,6 +12,11 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+
+import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.logic.Level;
+import com.sinkingduckstudios.whirlpool.logic.Panel;
 
 public class Game extends MainActivity {
 	private Panel mPanel;

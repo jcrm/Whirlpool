@@ -1,13 +1,13 @@
 package com.sinkingduckstudios.whirlpool.objects;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import java.lang.Math;
-//used to create effect of whirlpool
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
+//used to create effect of whirlpool
 
 
 /*

@@ -1,11 +1,11 @@
 package com.sinkingduckstudios.whirlpool.logic;
 
-import com.sinkingduckstudios.whirlpool.manager.SoundManager;
-import com.sinkingduckstudios.whirlpool.objects.Duck;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+
+import com.sinkingduckstudios.whirlpool.manager.SoundManager;
+import com.sinkingduckstudios.whirlpool.objects.Duck;
 
 public class Constants {
 	private static Activity sState;

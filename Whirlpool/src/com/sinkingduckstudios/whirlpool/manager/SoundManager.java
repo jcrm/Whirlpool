@@ -14,12 +14,11 @@ package com.sinkingduckstudios.whirlpool.manager;
 import java.io.IOException;
 import java.util.Random;
 
-import com.sinkingduckstudios.whirlpool.R;
-import com.sinkingduckstudios.whirlpool.logic.Constants;
-
-
 import android.content.Context;
 import android.media.MediaPlayer;
+
+import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class SoundManager {
 	// global variables for the class :

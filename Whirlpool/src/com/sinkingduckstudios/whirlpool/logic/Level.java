@@ -2,20 +2,19 @@ package com.sinkingduckstudios.whirlpool.logic;
 
 import java.util.ArrayList;
 
-import com.sinkingduckstudios.whirlpool.objects.Boat;
-import com.sinkingduckstudios.whirlpool.objects.Diver;
-import com.sinkingduckstudios.whirlpool.objects.Duck;
-import com.sinkingduckstudios.whirlpool.objects.Frog;
-import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
-import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
-import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
-
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import com.sinkingduckstudios.whirlpool.objects.Boat;
+import com.sinkingduckstudios.whirlpool.objects.Diver;
+import com.sinkingduckstudios.whirlpool.objects.Duck;
+import com.sinkingduckstudios.whirlpool.objects.Frog;
+import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
+import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
+import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
 public class Level {
 

@@ -9,13 +9,13 @@
 
 package com.sinkingduckstudios.whirlpool.objects;
 
-import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+
+import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 
 public class Arrow {
 

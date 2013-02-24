@@ -2,12 +2,12 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
+
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
-
-import android.graphics.Canvas;
-import android.graphics.Rect;
 
 public class Shark extends GraphicObject{
 

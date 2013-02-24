@@ -10,12 +10,12 @@
 
 package com.sinkingduckstudios.whirlpool.logic;
 
+import android.view.MotionEvent;
+import android.view.View;
+
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.objects.Arrow;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
-
-import android.view.MotionEvent;
-import android.view.View;
 
 final class TrackingTouchListener implements View.OnTouchListener{
 	//really bad way of doing this, change asap. no structs in java.

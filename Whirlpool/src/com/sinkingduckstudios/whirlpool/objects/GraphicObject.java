@@ -2,14 +2,14 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
-
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 interface ObjectFunctions{
 	public void draw(Canvas canvas);

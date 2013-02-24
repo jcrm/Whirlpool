@@ -1,9 +1,10 @@
 package com.sinkingduckstudios.whirlpool.logic;
 
-import com.sinkingduckstudios.whirlpool.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+
+import com.sinkingduckstudios.whirlpool.R;
 
 public class Imports {
 	private static boolean mOnceImages = false;
