@@ -1,13 +1,11 @@
-/*  Start date	: 18/02/2013
- * 
- *  Description	: class used to control and play all of the sound in the game. this class will play the background music
- *			 	  continuously throughout the game and also play the sound effects for the game based on what's happening 
- *				  in the game ( i.e. ducky hits the side of the bath play one of the bounce sound effects). when needed
- *		  		  a sound effect will play at random form a list of appropriate sounds 
- * 
- * 
- * Completion date : TBC...
- * 
+/*
+ * Author: Connor Nicol
+ * Last Updated: 18/02/2013
+ * Content:
+ * class used to control and play all of the sound in the game. this class will play the background music
+ * continuously throughout the game and also play the sound effects for the game based on what's happening 
+ * in the game ( i.e. ducky hits the side of the bath play one of the bounce sound effects). when needed
+ * a sound effect will play at random form a list of appropriate sounds 
  */
 package com.sinkingduckstudios.whirlpool.manager;
 

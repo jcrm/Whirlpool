@@ -1,3 +1,10 @@
+/*
+ * Author:
+ * Last Updated:
+ * Content:
+ * 
+ * 
+ */
 package com.sinkingduckstudios.whirlpool.movement;
 
 public class Speed {
