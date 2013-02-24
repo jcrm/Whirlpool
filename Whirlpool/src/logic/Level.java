@@ -30,9 +30,9 @@ public class Level {
 
 	public Level(){
 	}
-	public void init(){
-		setLevelWidth(2000);
-		setLevelHeight(Constants.getScreen().getHeight());
+	public void init(int height){
+		mLevelWidth = 2000;
+		mLevelHeight = height;
 		mBackgroundImage = Imports.getBackground();
 		mGraphics.add(new Duck());
 		Constants.setPlayer((Duck)mGraphics.get(0));

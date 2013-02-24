@@ -1,11 +1,11 @@
 package objects;
 
 import java.util.Random;
-import logic.CollisionManager;
 import logic.Constants;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import logic.Animate;
+import manager.CollisionManager;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 

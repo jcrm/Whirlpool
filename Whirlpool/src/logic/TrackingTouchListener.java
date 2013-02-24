@@ -10,6 +10,7 @@
 
 package logic;
 
+import manager.CollisionManager;
 import objects.Arrow;
 import objects.Whirlpool;
 import android.view.MotionEvent;

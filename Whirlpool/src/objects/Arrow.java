@@ -10,7 +10,7 @@
 package objects;
 
 import logic.Constants;
-import logic.CollisionManager;
+import manager.CollisionManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;

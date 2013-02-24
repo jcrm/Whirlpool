@@ -1,5 +1,6 @@
 package logic;
 
+import manager.SoundManager;
 import objects.Duck;
 import android.app.Activity;
 import android.content.Context;

@@ -23,6 +23,7 @@ public class Panel extends View{
         constructor();
     }
     private void constructor(){
+    	
         setFocusable(true);
         Constants.setScreen(sScreen);
         sScreenLock = Constants.getLock();

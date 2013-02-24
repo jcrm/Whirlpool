@@ -1,6 +1,7 @@
 package objects;
 
 import logic.Animate;
+import logic.Constants;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
@@ -31,8 +32,8 @@ public class Frog extends GraphicObject{
 		mWidth = mBitmap.getWidth()/mId.tFrames;
 		mHeight = mBitmap.getHeight();
 
-		setX(200);
-		setY(170);
+		setX(Constants.getLevel().getLevelWidth()/2);
+		setY(Constants.getLevel().getLevelHeight()/2);
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -41,7 +42,7 @@ public class Frog extends GraphicObject{
 
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
-		setFrogRadius(80);
+		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
 	}
 
 	@Override

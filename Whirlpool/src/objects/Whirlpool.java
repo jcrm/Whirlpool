@@ -1,8 +1,8 @@
 package objects;
 import logic.Animate;
-import logic.CollisionManager;
 import logic.Imports;
 import logic.Screen.ScreenSide;
+import manager.CollisionManager;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import java.lang.Math;
@@ -37,16 +37,10 @@ public class Whirlpool extends GraphicObject{
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
-
-		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-
-		canvas.translate(getX(), getY());
-		//removed rotation because not needed with new animation
-		//c.rotate(getRotation());
-		canvas.scale(dirFactor, 1);
-
-		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
-
+			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+			canvas.translate(getX(), getY());
+			canvas.scale(dirFactor, 1);
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
 
 		if (mArrow != null){

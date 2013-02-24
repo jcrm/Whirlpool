@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -31,18 +32,18 @@ public class Game extends MainActivity {
 		mPanel = (Panel) findViewById(R.id.gameview);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		Constants.setState(this);
-		Constants.setContext(getApplicationContext());	//TODO remember to do this in all the other states
-		Constants.getSoundManager().initSound();
-        Constants.getSoundManager().playBackgroundMusic();
+		//TODO remember to do this in all the other states
 		mLevelOne = new Level();
 		setCurrentLevel(mLevelOne);
-
+		
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init();
-		mTime= new Timer();//init timer
+		Display display = getWindowManager().getDefaultDisplay(); 
 
+		Constants.getLevel().init(display.getHeight());
+		mTime= new Timer();//init timer
+		Constants.getSoundManager().playBackgroundMusic();
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
 
@@ -66,7 +67,7 @@ public class Game extends MainActivity {
 						mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 						mTime.cancel();
 						startActivity(new Intent(Game.this, Menu.class));
-
+						Constants.getSoundManager().pauseBackground();
 						finish();
 					}
 				}
