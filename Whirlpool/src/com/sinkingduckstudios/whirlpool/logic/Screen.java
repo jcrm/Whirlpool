@@ -2,8 +2,8 @@ package com.sinkingduckstudios.whirlpool.logic;
 
 public class Screen {
 	public class Point{
-		public int mX;
-		public int mY;
+		private int mX;
+		private int mY;
 		public void set(int x1, int y1){
 			mX = x1;
 			mY = y1;

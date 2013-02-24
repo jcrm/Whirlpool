@@ -24,7 +24,7 @@ public class Imports {
 			mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
 			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
 			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
-			setBoat(BitmapFactory.decodeResource(Constants.getRes(), R.drawable.temp_boat));
+			mBoat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.temp_boat);
 			mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
 			mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
 			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset_background);
@@ -104,7 +104,7 @@ public class Imports {
 		return shark;
 	}
 	public static void setShark(Bitmap shark) {
-		Imports.shark = shark;
+		mShark = shark;
 	}*/
 	public static Bitmap getWhirlpool() {
 		return mWhirlpool;

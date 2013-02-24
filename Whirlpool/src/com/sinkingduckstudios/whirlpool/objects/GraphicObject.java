@@ -5,7 +5,6 @@ import java.util.Random;
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
-import com.sinkingduckstudios.whirlpool.logic.Panel;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
@@ -52,8 +51,8 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected float mY = 0;
 	protected Bitmap mBitmap;
 	protected Speed mSpeed = new Speed();
-	private boolean mPull;// = false;
-	private static Object mScreenLock;
+	protected boolean mPull;// = false;
+	protected static Object mScreenLock;
 	protected Animate mAnimate;
 	
     public GraphicObject(){
@@ -79,7 +78,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	public boolean border(){
-		int HEIGHT = Panel.sScreen.getHeight();
+		int HEIGHT = Constants.getScreen().getHeight();
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
         if (getActualX() < 0) {

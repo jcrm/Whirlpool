@@ -3,14 +3,12 @@ package com.sinkingduckstudios.whirlpool.logic;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class Panel extends View{
-	static public Screen sScreen = new Screen();
-    static public Resources sRes;
-    static MediaPlayer sBackgroundMusic;
+	private static  Screen sScreen = new Screen();
+	private static  Resources sRes;
     private static Object sScreenLock;
     
     public Panel(Context context) {
@@ -50,13 +48,4 @@ public class Panel extends View{
     	Constants.setRes(sRes);
     	Imports.setImages();
     }
-    
-    public static void stopMusic(){
-    	if(sBackgroundMusic != null){
-    		sBackgroundMusic.stop();
-    	}
-    }
-    
-    
-
 }

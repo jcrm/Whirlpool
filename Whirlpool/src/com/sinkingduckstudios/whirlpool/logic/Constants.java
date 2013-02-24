@@ -69,7 +69,7 @@ public class Constants {
 	public static SoundManager getSoundManager() {
 		return sSoundManager;
 	}
-	public static void setSoundManager(SoundManager sSoundManager) {
-		Constants.sSoundManager = sSoundManager;
+	public static void setSoundManager(SoundManager soundManager) {
+		sSoundManager = soundManager;
 	}
 }

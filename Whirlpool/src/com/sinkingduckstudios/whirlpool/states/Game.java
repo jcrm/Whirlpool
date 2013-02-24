@@ -19,11 +19,12 @@ import android.view.Window;
 import android.widget.Button;
 
 public class Game extends MainActivity {
-	Panel mPanel;
+	private Panel mPanel;
 	private Level mLevelOne;
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
+	private boolean mPaused = false;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -77,16 +78,24 @@ public class Game extends MainActivity {
 
 	@Override
 	public void onPause(){
-		Panel.stopMusic();
+		mPaused = true;
+		Constants.getSoundManager().stopAllSounds();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy(){
-		Panel.stopMusic();
+		mPaused = true;
+		Constants.getSoundManager().stopAllSounds();
 		super.onDestroy();
 	}
-
+	@Override
+	public void onResume(){
+		mPaused = false;
+		super.onResume();
+		Constants.getSoundManager().initSound();
+		Constants.getSoundManager().playBackgroundMusic();
+	}
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
 	}
@@ -103,10 +112,10 @@ public class Game extends MainActivity {
 
 	class MainThread extends TimerTask {
 		public void run() {
-			//if(!_paused){
-			update();
-			mGameHandler.sendEmptyMessage(0);
-			//}
+			if(!mPaused){
+				update();
+				mGameHandler.sendEmptyMessage(0);
+			}
 		}
 
 	}

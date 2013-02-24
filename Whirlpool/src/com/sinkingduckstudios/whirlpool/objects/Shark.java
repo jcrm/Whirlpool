@@ -3,7 +3,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
-import com.sinkingduckstudios.whirlpool.logic.Panel;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 
 import android.graphics.Canvas;
@@ -33,8 +33,8 @@ public class Shark extends GraphicObject{
 		mWidth = mBitmap.getWidth()/mId.tFrames;
 		mHeight = mBitmap.getHeight();
 
-		setX((float) (new Random().nextInt(Panel.sScreen.getWidth())));
-		setY((float) (new Random().nextInt(Panel.sScreen.getHeight())));
+		setX((float) (new Random().nextInt(Constants.getScreen().getWidth())));
+		setY((float) (new Random().nextInt(Constants.getScreen().getHeight())));
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);

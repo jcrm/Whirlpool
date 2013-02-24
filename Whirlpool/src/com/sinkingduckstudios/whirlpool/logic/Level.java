@@ -24,10 +24,10 @@ public class Level {
 	private int mLevelWidth = 0;
 	private int mLevelHeight = 0;
 	private float mScrollBy = 0;
-	Bitmap mBackgroundImage;
+	private Bitmap mBackgroundImage;
 	private static Object mScreenLock;
-	Paint mPaint = new Paint();
-	Rect mRect = new Rect();
+	private Paint mPaint = new Paint();
+	private Rect mRect = new Rect();
 
 	public Level(){
 	}
@@ -42,7 +42,6 @@ public class Level {
 		mGraphics.add(new Boat());
 		//_graphics.add(new Shark());
 
-
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}
@@ -53,7 +52,6 @@ public class Level {
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				whirl.checkCollision(graphic);
 			}
-
 			if(graphic.getId()==objtype.tDuck){
 				graphic.frame();	//Do everything this object does every frame, like move
 				((Duck) graphic).changeCollisionType(graphic.getPullState());
@@ -140,17 +138,17 @@ public class Level {
 	public void shiftScrollBy(float delta) {
 	}
 	public void duckOnScreen(){
-		while(Constants.getPlayer().getX() >= (Panel.sScreen.getWidth()/2)+mScrollBy){
+		while(Constants.getPlayer().getX() >= (Constants.getScreen().getWidth()/2)+mScrollBy){
 			mScrollBy++;
 		}
-		while(Constants.getPlayer().getX() < (Panel.sScreen.getWidth()/2)+mScrollBy){
+		while(Constants.getPlayer().getX() < (Constants.getScreen().getWidth()/2)+mScrollBy){
 			mScrollBy--;
 		}
 		if(mScrollBy < 0){
 			mScrollBy = 0;
 		}
-		if(mScrollBy + Panel.sScreen.getWidth() > mLevelWidth){
-			mScrollBy = mLevelWidth - Panel.sScreen.getWidth();
+		if(mScrollBy + Constants.getScreen().getWidth() > mLevelWidth){
+			mScrollBy = mLevelWidth - Constants.getScreen().getWidth();
 		}
 	}
 

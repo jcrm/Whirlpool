@@ -24,30 +24,31 @@ import android.media.MediaPlayer;
 public class SoundManager {
 	// global variables for the class :
 	// media player variables for ducky
-	protected MediaPlayer mDucky[] = new MediaPlayer[6];		// an array to hold the different sounds for ducky
-	protected MediaPlayer mBounce[] = new MediaPlayer[2];		// an array to hold the different sounds for ducky bouncing
-	protected MediaPlayer mAngry = new MediaPlayer();			// a variable to hold duckys angry sound
-	protected MediaPlayer mScared = new MediaPlayer();			// a variable to hold duckys scared sound
+	private MediaPlayer mDucky[] = new MediaPlayer[6];		// an array to hold the different sounds for ducky
+	private MediaPlayer mBounce[] = new MediaPlayer[2];		// an array to hold the different sounds for ducky bouncing
+	private MediaPlayer mAngry = new MediaPlayer();			// a variable to hold duckys angry sound
+	private MediaPlayer mScared = new MediaPlayer();			// a variable to hold duckys scared sound
 
 	// variables for the enemies sounds
-	protected MediaPlayer mFrog = new MediaPlayer();			// a variable to hold the sound for the frog
-	protected MediaPlayer mDiver = new MediaPlayer();			// a variable to hold the sound for the diver
-	protected MediaPlayer mTugBoat = new MediaPlayer();			// a variable to hold the sound for the tugboat
+	private MediaPlayer mFrog = new MediaPlayer();			// a variable to hold the sound for the frog
+	private MediaPlayer mDiver = new MediaPlayer();			// a variable to hold the sound for the diver
+	private MediaPlayer mTugBoat = new MediaPlayer();			// a variable to hold the sound for the tugboat
 
 	// variables for the other sounds
-	protected MediaPlayer mAmbient = new MediaPlayer();			// used for the ambient sounds in the bath
-	protected MediaPlayer mDownPlug = new MediaPlayer();		// used fo the down the plug sound
-	protected MediaPlayer mPlug = new MediaPlayer();			// used to hold a different plug sound
-	protected MediaPlayer mPoints = new MediaPlayer();			// used to hold the sounds for the points
-	protected MediaPlayer mSplash = new MediaPlayer();			// used to hold the sound of a splash
-	protected MediaPlayer mWhirlpool = new MediaPlayer();		// used to hold the sound of the whirlpool
+	private MediaPlayer mAmbient = new MediaPlayer();			// used for the ambient sounds in the bath
+	private MediaPlayer mDownPlug = new MediaPlayer();		// used fo the down the plug sound
+	private MediaPlayer mPlug = new MediaPlayer();			// used to hold a different plug sound
+	private MediaPlayer mPoints = new MediaPlayer();			// used to hold the sounds for the points
+	private MediaPlayer mSplash = new MediaPlayer();			// used to hold the sound of a splash
+	private MediaPlayer mWhirlpool = new MediaPlayer();		// used to hold the sound of the whirlpool
 
 	//varaibles for the background music
-	protected MediaPlayer mBackGround = new MediaPlayer();		// used to hold the background music
+	private MediaPlayer mBackGround = new MediaPlayer();		// used to hold the background music
 
 	//Initialize music
 	public void initSound(){
 		Context GameContext = Constants.getContext();
+		
 		// initialise all of the sounds for the game.
 		mDucky[0] =MediaPlayer.create(GameContext, R.raw.ducky); 				// load in the sounds for ducky
 		mDucky[1] =MediaPlayer.create(GameContext, R.raw.ducky2); 
@@ -72,7 +73,6 @@ public class SoundManager {
 		mSplash = MediaPlayer.create(GameContext, R.raw.splash);				// load in splash sound
 		mWhirlpool = MediaPlayer.create(GameContext, R.raw.whirlpool2);			// load in whirlpool sound
 		mBackGround = MediaPlayer.create(GameContext, R.raw.temp_bg_music);	//load in the background music track( temporary)
-
 		// put all the music files through a try catch to make sure all the files are found and okay
 		try{
 			// try to prepare the files to makesure the application can find them and access them
@@ -117,13 +117,9 @@ public class SoundManager {
 
 	public void playDucky(){
 		//generate a random number between 0 and 5 and play the corrosponding sound
-
-		//generate a random number......
-		int RandNum = new Random().nextInt(6);			// stores the random number between 0 and 5
-
 		// play a sound depending on the random number generated
 		// switch by the random number 
-		switch (RandNum){
+		switch (new Random().nextInt(6)){
 		// if the random number is 0
 		case 0 : {
 			// play the first ducky sound
@@ -167,12 +163,8 @@ public class SoundManager {
 	// play random bounce
 	public void playBounce(){
 		//generate a random number between 0 and 2 and play the corrosponding sound
-
-		//generate a random number......
-		int RandNum = new Random().nextInt(2);			// stores the random number between 0 and 2
-
 		// use this number to decide what sound to play
-		switch (RandNum){
+		switch (new Random().nextInt(2)){
 		// if the numebr is 0
 		case 0 : {
 			// play the first sound
@@ -269,6 +261,32 @@ public class SoundManager {
 		mBackGround.pause();
 	}// end of pause
 
+	// pause all sounds
+	public void stopAllSounds(){
+		// make sure all tracks are paused
+		// use a loop for the bounce and ducky sounds to pause the full arrays
+		for( int i = 0; i < 6; i++){
+			mDucky[i].stop();
+		}
+
+		for ( int j = 0; j < 2; j++){
+			mBounce[j].stop();
+		}
+
+		//go through all of the tracks and pause them all
+		mAngry.stop();
+		mScared.stop();
+		mFrog.stop();
+		mTugBoat.stop();
+		mAmbient.stop();
+		mDownPlug.stop();
+		mPlug.stop();
+		mPoints.stop();
+		mSplash.stop();
+		mWhirlpool.stop();
+		mBackGround.stop();
+	}// end of pause
+		
 	// change the volume of all of the tracks by a set value
 	public void changeVolume(float TempVol){
 		mBackGround.setVolume(TempVol, TempVol);

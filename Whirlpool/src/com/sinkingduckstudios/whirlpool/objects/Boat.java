@@ -12,7 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public class Boat extends GraphicObject{
-	private int mBoatRadius = 0;
+	private int mBoatRadius = 30;
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
@@ -114,8 +114,8 @@ public class Boat extends GraphicObject{
 		return mBoatRadius;
 	}
 
-	public void setBoatRadius(int mBoatRadius) {
-		this.mBoatRadius = mBoatRadius;
+	public void setBoatRadius(int boatRadius) {
+		mBoatRadius = boatRadius;
 	}
 
 }
