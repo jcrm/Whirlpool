@@ -12,17 +12,17 @@ public final class R {
     }
     public static final class drawable {
         public static final int diver_sprites=0x7f020000;
-        public static final int duckdown2=0x7f020001;
-        public static final int duckleftandright2=0x7f020002;
-        public static final int duckup2=0x7f020003;
-        public static final int exitbtn=0x7f020004;
-        public static final int frog2=0x7f020005;
+        public static final int duck_down_sprites=0x7f020001;
+        public static final int duck_left_and_right_sprites=0x7f020002;
+        public static final int duck_up_sprites=0x7f020003;
+        public static final int exit_button=0x7f020004;
+        public static final int frog_sprites=0x7f020005;
         public static final int ic_action_search=0x7f020006;
         public static final int ic_launcher=0x7f020007;
-        public static final int mainmenubg=0x7f020008;
-        public static final int optionsbtn=0x7f020009;
-        public static final int playbtn=0x7f02000a;
-        public static final int wateroffset=0x7f02000b;
+        public static final int mainmenu_background=0x7f020008;
+        public static final int options_button=0x7f020009;
+        public static final int play_button=0x7f02000a;
+        public static final int wateroffset_background=0x7f02000b;
         public static final int whirlpool_sprites=0x7f02000c;
     }
     public static final class id {

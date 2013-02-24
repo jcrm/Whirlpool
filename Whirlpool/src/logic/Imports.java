@@ -23,14 +23,14 @@ public class Imports {
 			Matrix flipMatrix = new Matrix();
 			flipMatrix.setScale(1, -1);
 			System.gc();
-			mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duckleftandright2);
+			mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
 			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
 			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
 			//boat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat);
-			mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog2);
+			mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
 			//shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);
 			mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
-			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset);
+			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset_background);
 			System.gc();
 		}
 	}

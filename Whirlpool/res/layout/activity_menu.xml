@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainmenubg" >
+    android:background="@drawable/mainmenu_background" >
 
     
     <ImageButton
         android:id="@+id/game"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="@drawable/playbtn"
+        android:background="@drawable/play_button"
         android:scaleType="fitCenter"
         android:layout_marginTop="0dp"
         android:layout_centerHorizontal="true"
@@ -20,7 +20,7 @@
         android:id="@+id/options"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="@drawable/optionsbtn"
+        android:background="@drawable/options_button"
         android:scaleType="fitCenter"
         android:layout_below="@id/game"
         android:contentDescription="@string/options_screen"
@@ -31,7 +31,7 @@
         android:id="@+id/exit"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="@drawable/exitbtn"
+        android:background="@drawable/exit_button"
         android:scaleType="fitCenter"
         android:layout_below="@id/options"
         android:contentDescription="@string/exit"
