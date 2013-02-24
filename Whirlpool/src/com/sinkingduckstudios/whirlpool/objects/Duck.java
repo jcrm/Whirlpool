@@ -19,7 +19,7 @@ public class Duck extends GraphicObject{
 	//collision variables 
 	public coltype cID = coltype.cDefault;
 	private int mCollisonCount = -1;
-
+	private int mWaitTimer = 0;
 	public Duck(){
 		mId = objtype.tDuck;
 		init();
@@ -45,10 +45,10 @@ public class Duck extends GraphicObject{
 		mWidth = mBitmap.getWidth()/mId.tFrames;
 		mHeight = mBitmap.getHeight();
 
-		setX(0.0f);
-		setY(10.0f);
+		setX(30.0f);
+		setY(60.0f);
 
-		mSpeed.setMove(true);
+		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
@@ -56,6 +56,13 @@ public class Duck extends GraphicObject{
 
 	@Override
 	public boolean move() {
+		if(mWaitTimer >= 0){
+			mWaitTimer++;
+			if(mWaitTimer > 40){
+				mSpeed.setMove(true);
+				mWaitTimer = -1;
+			}
+		}
 		if(mSpeed.getMove()){
 			shiftX((float) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			shiftY((float) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
