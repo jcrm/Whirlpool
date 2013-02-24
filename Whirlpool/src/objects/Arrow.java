@@ -10,7 +10,7 @@
 package objects;
 
 import logic.Constants;
-import logic.CollisionManager;
+import manager.CollisionManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -26,7 +26,7 @@ public class Arrow {
 		init(x1,y1,x2,y2);
 	}
 	
-	public void Reposition(float x1, float y1, float x2, float y2){
+	public void reposition(float x1, float y1, float x2, float y2){
 		init(x1,y1,x2,y2);
 	}
 	

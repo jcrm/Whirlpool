@@ -7,7 +7,7 @@ public class Speed {
 	private Angle mAngle = new Angle(0);
 	private Angle mLastAngle = new Angle(0);
 	//bounce functions
-	public void HorBounce(){
+	public void horizontalBounce(){
 		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
 			case 0:
@@ -19,7 +19,7 @@ public class Speed {
 		}
 		mLastAngle.setAngle(mAngle.getAngle());
 	}
-	public void VerBounce(){
+	public void verticalBounce(){
 		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
 			case 0:

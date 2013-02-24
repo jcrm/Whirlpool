@@ -22,7 +22,7 @@ public class Panel extends View{
         super(context, attributes);
         constructor();
     }
-    private void constructor(){
+    private void constructor(){    	
         setFocusable(true);
         Constants.setScreen(sScreen);
         sScreenLock = Constants.getLock();
@@ -49,7 +49,6 @@ public class Panel extends View{
     	sRes = getResources();
     	Constants.setRes(sRes);
     	Imports.setImages();
-    	Imports.setAudio();
     }
     
     public static void stopMusic(){

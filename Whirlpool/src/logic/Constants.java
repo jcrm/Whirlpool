@@ -1,5 +1,6 @@
 package logic;
 
+import manager.SoundManager;
 import objects.Duck;
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +15,7 @@ public class Constants {
 	private static Context sContext;
 	private static Panel sPanel;
 	private static Object sScreenLock = 0;
+	private static SoundManager sSoundManager = new SoundManager();
 	
 	synchronized public static Object getLock() {
 		return sScreenLock;
@@ -62,5 +64,11 @@ public class Constants {
 	}
 	public static void setPanel(Panel panel) {
 		sPanel = panel;
+	}
+	public static SoundManager getSoundManager() {
+		return sSoundManager;
+	}
+	public static void setSoundManager(SoundManager sSoundManager) {
+		Constants.sSoundManager = sSoundManager;
 	}
 }

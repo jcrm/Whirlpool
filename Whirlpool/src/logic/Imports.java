@@ -1,17 +1,13 @@
 package logic;
 
-import java.io.IOException;
-
 import example.whirlpool.R;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.MediaPlayer;
 
 public class Imports {
 	private static boolean mOnceImages = false;
-	private static boolean mOnceAudio = false;
 	private static Bitmap mDuck;
 	private static Bitmap mDiver;
 	private static Bitmap mDiverFlipped;
@@ -20,9 +16,6 @@ public class Imports {
 	private static Bitmap mShark;
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
-	
-	private static MediaPlayer mDuckSound;
-	private static MediaPlayer mDuckHit1Sound;
 	
 	static public void setImages(){
 		if(!mOnceImages){
@@ -38,22 +31,6 @@ public class Imports {
 			//shark = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark);
 			mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
 			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset);
-			System.gc();
-		}
-	}
-	static public void setAudio(){
-		if(!mOnceAudio){
-			mOnceAudio = true;
-			mDuckSound = MediaPlayer.create(Constants.getContext(), R.raw.ducky);
-			mDuckHit1Sound = MediaPlayer.create(Constants.getContext(), R.raw.ducky5);
-			try{
-				mDuckSound.prepare();
-				mDuckHit1Sound.prepare();
-			}catch(IllegalStateException e){
-				e.printStackTrace();
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
 			System.gc();
 		}
 	}
@@ -150,20 +127,5 @@ public class Imports {
 	}
 	public static void setBackground(Bitmap background) {
 		mBackground = background;
-	}
-	public static MediaPlayer getDuckSound() {
-		return mDuckSound;
-	}
-
-	public static void setDuckSound(MediaPlayer duckSound) {
-		mDuckSound = duckSound;
-	}
-
-	public static MediaPlayer getDuckHit1Sound() {
-		return mDuckHit1Sound;
-	}
-
-	public static void setDuckHit1Sound(MediaPlayer duckHit1Sound) {
-		mDuckHit1Sound = duckHit1Sound;
 	}
 }

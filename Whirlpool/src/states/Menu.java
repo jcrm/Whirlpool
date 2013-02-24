@@ -20,11 +20,15 @@ public class Menu extends MainActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Constants.clearLevel();
         Constants.setState(this);
+        Constants.setContext(getApplicationContext());
         ImageButton game = ((ImageButton) findViewById(R.id.game));
+        Constants.getSoundManager().initSound();
+        Constants.getSoundManager().playBackgroundMusic();
         System.gc();
         game.setOnClickListener(
     		new Button.OnClickListener(){
 		        public void onClick(View view) {
+		        	Constants.getSoundManager().pauseBackground();
 	        		startActivity(new Intent(Menu.this, Game.class));
 		        }
     		}

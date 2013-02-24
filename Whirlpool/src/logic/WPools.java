@@ -7,14 +7,7 @@ import java.util.ArrayList;
 
 import objects.Whirlpool;
 
-
-/** A list of dots. */
 public class WPools {
-    /** DotChangeListener. */
-    //public interface WPoolsChangeListener {
-        /** @param dots the dots that changed. */
-      //  void onWPoolsChange(WPools wpools);
-   // }
     
     private final ArrayList<Whirlpool> wpools = new ArrayList<Whirlpool>();
     //private final List<Whirlpool> safeWPools = Collections.unmodifiableList(wpools);
@@ -51,18 +44,9 @@ public class WPools {
     	whirl.setWAngle(angle);
     	whirl.setClockwise(clockwise);
         wpools.add(whirl);
-        //notifyListener();
     }
 
-    /** Remove all dots. */
-    public void clearDots() {
+    public void clearWPools() {
     	wpools.clear();
-        //notifyListener();
     }
-
-   // private void notifyListener() {
-    //    if (null != wpoolsChangeListener) {
-    //    	wpoolsChangeListener.onWPoolsChange(this); 
-   //     }
-   // }
 }

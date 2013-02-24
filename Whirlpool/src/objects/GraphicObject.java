@@ -21,7 +21,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	public enum objtype {
 		tDefault(0, 1, 1, 0, 0, 1), 
 		tWhirl(1, 128, 128, 0, 0, 30),
-		tDuck(2, 64, 64, 8, 0, 16),
+		tDuck(2, 64, 64, 6, 0, 16),
 		//not sure what numbers need for frame width and height
 		tFrog(3, 96, 96, 4, 0, 16), 
 		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 

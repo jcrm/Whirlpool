@@ -1,6 +1,7 @@
 package objects;
 
 import logic.Animate;
+import logic.Constants;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
@@ -14,13 +15,13 @@ public class Frog extends GraphicObject{
 		init();
 	}
 	@Override
-	public void draw(Canvas c) {
-		c.save();
+	public void draw(Canvas canvas) {
+		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			c.translate(getX(), getY());
-			c.rotate((float) (-mFrogAngle*180/Math.PI));
-			c.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
-		c.restore();
+			canvas.translate(getX(), getY());
+			canvas.rotate((float) (-mFrogAngle*180/Math.PI));
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.restore();
 	}
 
 	@Override
@@ -31,8 +32,8 @@ public class Frog extends GraphicObject{
 		mWidth = mBitmap.getWidth()/mId.tFrames;
 		mHeight = mBitmap.getHeight();
 
-		setX(200);
-		setY(170);
+		setX(Constants.getLevel().getLevelWidth()/2);
+		setY(Constants.getLevel().getLevelHeight()/2);
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -41,7 +42,7 @@ public class Frog extends GraphicObject{
 
 		setFrogCentreX(getX());
 		setFrogCentreY(getY());
-		setFrogRadius(80);
+		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
 	}
 
 	@Override
@@ -59,43 +60,43 @@ public class Frog extends GraphicObject{
 	public void borderCollision(ScreenSide side, float width, float height) {
 		switch(side){
 		case Top:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
 			break;
 		case Bottom:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
 			break;
 		case Left:
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case Right:
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		case BottomLeft:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case BottomRight:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(height - getHeight());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		case TopLeft:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(-getActualX());
 			break;
 		case TopRight:
-			mSpeed.VerBounce();
+			mSpeed.verticalBounce();
 			setActualY(-getActualY());
-			mSpeed.HorBounce();
+			mSpeed.horizontalBounce();
 			setActualX(width - getWidth());
 			break;
 		default:

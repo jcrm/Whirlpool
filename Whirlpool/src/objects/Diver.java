@@ -1,6 +1,9 @@
 package objects;
 
+import java.util.Random;
+
 import logic.Animate;
+import logic.Constants;
 import logic.Imports;
 import logic.Screen.ScreenSide;
 import android.graphics.Canvas;
@@ -14,13 +17,13 @@ public class Diver extends GraphicObject{
 		init();
 	}
 	@Override
-	public void draw(Canvas c) {
-		c.save();
+	public void draw(Canvas canvas) {
+		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			c.translate(getX(), getY());
-			c.rotate(mSpeed.getAngle()+180);
-			c.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
-		c.restore();
+			canvas.translate(getX(), getY());
+			canvas.rotate(mSpeed.getAngle()+180);
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.restore();
 	}
 	@Override
 	public void init() {
@@ -30,8 +33,8 @@ public class Diver extends GraphicObject{
 		mWidth = mBitmap.getWidth()/mId.tFrames;
 		mHeight = mBitmap.getHeight();
 
-		setX((float) (200));
-		setY((float) (170));
+		setX((float) (new Random().nextInt(Constants.getLevel().getLevelWidth())));
+    	setY((float) (new Random().nextInt(Constants.getLevel().getLevelHeight())));
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
