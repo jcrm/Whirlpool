@@ -5,12 +5,12 @@
     android:orientation="horizontal"
     android:id="@+id/root" >
 
-    <logic.Panel
+    <com.sinkingduckstudios.whirlpool.logic.Panel
 	    android:id="@+id/gameview"
 	    android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         >
-	</logic.Panel>
+	</com.sinkingduckstudios.whirlpool.logic.Panel>
 	<LinearLayout
 	    android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
