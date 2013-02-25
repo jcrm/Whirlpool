@@ -62,7 +62,7 @@ public class Level {
 				graphic.frame();	//Do everything this object does every frame, like move
 				((Duck) graphic).changeCollisionType(graphic.getPullState());
 				for(GraphicObject graphic2 : mGraphics){
-					((Duck) graphic).checkObjCollision(graphic2);
+					((Duck) graphic).checkObjCollision(graphic2.getId(), graphic2.getCollision());
 				}
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
@@ -71,11 +71,11 @@ public class Level {
 		}
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
 		//could maybe optimise later TODO
-		for(int a = 0; a < mWPoolModel.getWpools().size(); a++){
-			mWPoolModel.getWpools().get(a).frame();
-			if(mWPoolModel.getWpools().get(a).getFinished()){
-				mWPoolModel.getWpools().remove(a);
-				a--;
+		for(int i = 0; i < mWPoolModel.getWpools().size(); i++){
+			mWPoolModel.getWpools().get(i).frame();
+			if(mWPoolModel.getWpools().get(i).getFinished()){
+				mWPoolModel.getWpools().remove(i);
+				i--;
 			}
 		}
 		//}
@@ -144,10 +144,10 @@ public class Level {
 	public void shiftScrollBy(float delta) {
 	}
 	public void duckOnScreen(){
-		while(Constants.getPlayer().getX() >= (Constants.getScreen().getWidth()/2)+mScrollBy){
+		while(Constants.getPlayer().getCentreX() >= (Constants.getScreen().getWidth()/2)+mScrollBy){
 			mScrollBy++;
 		}
-		while(Constants.getPlayer().getX() < (Constants.getScreen().getWidth()/2)+mScrollBy){
+		while(Constants.getPlayer().getCentreX() < (Constants.getScreen().getWidth()/2)+mScrollBy){
 			mScrollBy--;
 		}
 		if(mScrollBy < 0){

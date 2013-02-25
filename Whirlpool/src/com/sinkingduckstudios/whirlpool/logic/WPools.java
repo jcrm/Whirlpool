@@ -10,22 +10,10 @@ package com.sinkingduckstudios.whirlpool.logic;
 import java.util.ArrayList;
 
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
-//import java.util.Collections;
-//import java.util.LinkedList;
-//import java.util.List;
-
 
 public class WPools {
     
     private final ArrayList<Whirlpool> wpools = new ArrayList<Whirlpool>();
-    //private final List<Whirlpool> safeWPools = Collections.unmodifiableList(wpools);
-    
-    //private WPoolsChangeListener wpoolsChangeListener;
-    
-    /** @param l set the change listener. */
-    //public void setWPoolsChangeListener(WPoolsChangeListener l) {
-    //	wpoolsChangeListener = l;
-    //}
 
     /** @return the most recently added dot. */
     public Whirlpool getLastWpool() {
@@ -33,7 +21,9 @@ public class WPools {
     }
     
     /** @return immutable list of dots. */
-    public ArrayList<Whirlpool> getWpools() { return wpools; }
+    public ArrayList<Whirlpool> getWpools(){
+    	return wpools;
+    }
 
    
     public int checkCollision(float x, float y){
@@ -45,10 +35,10 @@ public class WPools {
     	return -1;
     }
     
-    public void addWPool(float x, float y, float size, float angle, int clockwise) {
+    public void addWPool(int x, int y, float size, float angle, int clockwise) {
     	Whirlpool whirl = new Whirlpool();
-    	whirl.setX(x);
-    	whirl.setY(y);
+    	whirl.setCentreX(x);
+    	whirl.setCentreY(y);
     	whirl.setWAngle(angle);
     	whirl.setClockwise(clockwise);
         wpools.add(whirl);

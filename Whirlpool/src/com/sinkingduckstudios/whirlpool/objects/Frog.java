@@ -7,6 +7,8 @@
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
+import java.util.Random;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -26,7 +28,7 @@ public class Frog extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getX(), getY());
+			canvas.translate(getCentreX(), getCentreY());
 			canvas.rotate((float) (-mFrogAngle*180/Math.PI));
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
@@ -36,28 +38,27 @@ public class Frog extends GraphicObject{
 	public void init() {
 		mBitmap = Imports.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-
-		mWidth = mBitmap.getWidth()/mId.tFrames;
-		mHeight = mBitmap.getHeight();
-
-		setX(Constants.getLevel().getLevelWidth()/2);
-		setY(Constants.getLevel().getLevelHeight()/2);
+		
+		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+						(Constants.getLevel().getLevelHeight()/2)-70,
+						mBitmap.getWidth()/mId.tFrames,
+						mBitmap.getHeight()
+						);	
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 
-		setFrogCentreX(getX());
-		setFrogCentreY(getY());
+		setFrogCentreX(getCentreX());
+		setFrogCentreY(getCentreY());
 		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
 	}
 
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
-			setX((float)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
-			setY((float)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
+			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
+			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
 			mFrogAngle-=mSpeed.getSpeed()/150;
 			return true;
 		}
@@ -65,47 +66,47 @@ public class Frog extends GraphicObject{
 	}
 
 	@Override
-	public void borderCollision(ScreenSide side, float width, float height) {
+	public void borderCollision(ScreenSide side, int width, int height) {
 		switch(side){
 		case Top:
 			mSpeed.verticalBounce();
-			setActualY(-getActualY());
+			setTopLeftY(-getTopLeftY());
 			break;
 		case Bottom:
 			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
+			setTopLeftY(height-getHeight());
 			break;
 		case Left:
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
 			break;
 		case Right:
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
 			break;
 		case BottomLeft:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case BottomRight:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case TopLeft:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		case TopRight:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		default:
 			break;
@@ -135,8 +136,8 @@ public class Frog extends GraphicObject{
 	public void setFrogAngle(float frogAngle) {
 		mFrogAngle = frogAngle;
 	}
-	public void setFrogRadius(float _frogRadius) {
-		mFrogRadius = _frogRadius;
+	public void setFrogRadius(float frogRadius) {
+		mFrogRadius = frogRadius;
 	}
 	public float getFrogCentreX() {
 		return mFrogCentreX;

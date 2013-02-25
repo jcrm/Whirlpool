@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
+import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
@@ -53,9 +54,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	//private variables
 	protected objtype mId = objtype.tDefault;
-	protected int mWidth, mHeight, mRadius = 0; //TODO Don't think we use Radius, might delete.
-	protected float mX = 0;
-	protected float mY = 0;
+	protected Collision mCollision = new Collision();
 	protected Bitmap mBitmap;
 	protected Speed mSpeed = new Speed();
 	protected boolean mPull;// = false;
@@ -72,7 +71,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
     
     abstract public boolean move();
     
-    abstract public void borderCollision(Screen.ScreenSide side, float width, float height);
+    abstract public void borderCollision(Screen.ScreenSide side, int width, int height);
     
     abstract public void frame();
     
@@ -85,99 +84,121 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	public boolean border(){
-		int HEIGHT = Constants.getScreen().getHeight();
+		int HEIGHT = Constants.getLevel().getLevelHeight();
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
-        if (getActualX() < 0) {
-        	if(getActualY() < 0){
-            	borderCollision(Screen.ScreenSide.TopLeft, WIDTH, HEIGHT);
-            }else if (getActualY() + getHeight() > HEIGHT){
-            	borderCollision(Screen.ScreenSide.BottomLeft, WIDTH, HEIGHT);
-            }else{
-            	borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
-            }
-        	hit = true;
-        }else if(getActualX() + getWidth() > WIDTH){
-        	if(getActualY() < 0){
+		if(getTopLeftX()<0){
+			if(getTopLeftY()<0){
+				borderCollision(Screen.ScreenSide.TopLeft, WIDTH, HEIGHT);
+			}else if(getBottomRightY()>HEIGHT){
+				borderCollision(Screen.ScreenSide.BottomLeft, WIDTH, HEIGHT);
+			}else{
+				borderCollision(Screen.ScreenSide.Left, WIDTH, HEIGHT);
+			}
+			hit = true;
+		}else if(getBottomRightX() > WIDTH){
+        	if(getTopLeftY() < 0){
             	borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
-            }else if(getActualY() + getHeight() > HEIGHT) {
+            }else if(getBottomRightY() > HEIGHT) {
             	borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
             }else{
             	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
             }
         	hit = true;
         }
-        if (getActualY() < 0) {
+		if (getTopLeftY() < 0) {
         	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
         	hit = true;
-        } else if (getActualY() + getHeight() > HEIGHT) {
+        } else if (getBottomRightY() > HEIGHT) {
         	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
         	hit = true;
         }
         return hit;
 	}
+
+	public void setCentre(int x, int y){
+		mCollision.setCentre(x, y);
+	}
+	public void setCentreX(int x){
+		mCollision.setCentreX(x);
+	}
+	public void setCentreY(int y){
+		mCollision.setCentreY(y);
+	}
+	public Point getCentre(){
+		return mCollision.getCentre();
+	}
+	public int getCentreX(){
+		return mCollision.getCentreX();
+	}
+	public int getCentreY(){
+		return mCollision.getCentreY();
+	}
 	
+	public void setTopLeft(int x, int y){
+		mCollision.setTopLeft(x, y);
+	}
+	public void setTopLeftX(int x){
+		mCollision.setTopLeftX(x);
+	}
+	public void setTopLeftY(int y){
+		mCollision.setTopLeftY(y);
+	}
+	public Point getTopLeft(){
+		return mCollision.getTopLeft();
+	}
+	public int getTopLeftX(){
+		return mCollision.getTopLeftX();
+	}
+	public int getTopLeftY(){
+		return mCollision.getTopLeftY();
+	}
 	
-	//getters and setters for X components
-    public float getX() {
-        return mX + getWidth() / 2;
-    }
-    public float getActualX() {
-        return mX;
-    }
-    public void setX(float value) {
-        mX = value - getWidth() / 2;
-    }
-    public void setActualX(float value) {
-        mX = value;
-    }
-    public void shiftX(float shift){
-    	synchronized(mScreenLock){
-    		mX += shift;
-    	}
-    }
-    //getters and setters for Y components
-    public float getY() {
-        return mY + getHeight() / 2;
-    }
-    public float getActualY() {
-        return mY;
-    }
-    public void setY(float value) {
-        mY = value - getHeight() / 2;
-    }
-    public void setActualY(float value) {
-        mY = value;
-    }
-    public void shiftY(float shift){
-    	//synchronized(screenLock){
-    		mY += shift;
-    	//}
-    }
-    
-    
-    public int getWidth(){
-		return mWidth;
+	public Point getBottomRight(){
+		return mCollision.getBottomRight();
+	}
+	public int getBottomRightX(){
+		return mCollision.getBottomRightX();
+	}
+	public int getBottomRightY(){
+		return mCollision.getBottomRightY();
+	}
+	
+	public int getWidth(){
+    	return mCollision.getWidth();
     }
     public int getHeight(){
-		return mHeight;
+    	return mCollision.getHeight();
     }
 	public void setWidth(int width){
-		mWidth = width;
+		mCollision.setWidth(width);
 	}
 	public void setHeight(int height){
-		mHeight = height;
+		mCollision.setHeight(height);
 	}
 	
-	
+	public void moveDeltaX(int deltaX){
+		synchronized(mScreenLock){
+			mCollision.moveDeltaX(deltaX);
+    	}
+	}
+	public void moveDeltaY(int deltaY){
+		synchronized(mScreenLock){
+			mCollision.moveDeltaY(deltaY);
+    	}
+	}
+	public void moveDelta(int deltaX, int deltaY){
+		synchronized(mScreenLock){
+			mCollision.moveDelta(deltaX, deltaY);
+    	}
+	}
 	//getters and setters for angles and radius
     public float getRadius(){
-    	return mRadius;
+    	return mCollision.getRadius();
     }
 	public void setRadius(int radius){
-		mRadius = radius;
+		mCollision.setRadius(radius);
 	}
-	
 	
 	public void setAngle(float a){
 		mSpeed.setAngle(a);
@@ -189,10 +210,17 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return mSpeed;
     }
     
-    public void setPull(boolean a){
-    	mPull = a;
+    public void setPull(boolean pull){
+    	mPull = pull;
     }
 	public boolean getPullState() {
-		return this.mPull;
+		return mPull;
+	}
+	
+	public void setCollision(Collision collision){
+		mCollision = collision;
+	}
+	public Collision getCollision(){
+		return mCollision;
 	}
 }

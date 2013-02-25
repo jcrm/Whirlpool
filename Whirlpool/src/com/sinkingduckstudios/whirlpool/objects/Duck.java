@@ -36,7 +36,7 @@ public class Duck extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getX(), getY());
+			canvas.translate(getCentreX(), getCentreY());
 			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
 				canvas.scale(-1, 1);
 			}
@@ -48,17 +48,12 @@ public class Duck extends GraphicObject{
 	public void init() {
 		mBitmap = Imports.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-
-		mWidth = mBitmap.getWidth()/mId.tFrames;
-		mHeight = mBitmap.getHeight();
-
-		setX(30.0f);
-		setY(60.0f);
+		
+		mCollision.init(30, 60, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
 
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 	}
 
 	@Override
@@ -71,8 +66,8 @@ public class Duck extends GraphicObject{
 			}
 		}
 		if(mSpeed.getMove()){
-			shiftX((float) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
-			shiftY((float) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
+			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
@@ -87,47 +82,47 @@ public class Duck extends GraphicObject{
 	}
 
 	@Override
-	public void borderCollision(ScreenSide side, float width, float height) {
+	public void borderCollision(ScreenSide side, int width, int height) {
 		switch(side){
 		case Top:
 			mSpeed.verticalBounce();
-			setActualY(-getActualY());
+			setTopLeftY(-getTopLeftY());
 			break;
 		case Bottom:
 			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
+			setTopLeftY(height-getHeight());
 			break;
 		case Left:
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
 			break;
 		case Right:
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
 			break;
 		case BottomLeft:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case BottomRight:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case TopLeft:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		case TopRight:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		default:
 			break;
@@ -147,18 +142,17 @@ public class Duck extends GraphicObject{
 		mAnimate.animateFrame();
 	}
 	//collision checking
-	public void checkObjCollision(GraphicObject otherGraphic){
+	public void checkObjCollision(GraphicObject.objtype id, Collision collision){
 		if(cID == coltype.cDefault){
-			switch(otherGraphic.getId()){
+			switch(id){
 			case tShark: 
-				if(CollisionManager.boxCollision(this, otherGraphic)){
-					colShark(otherGraphic.getSpeed().getSpeed(), otherGraphic.getSpeed().getAngle());
+				if(CollisionManager.circleCollision(this.mCollision, collision)){
 					cID = coltype.cShark;
 					Constants.getSoundManager().playDucky();
 				}
 				break;
 			case tDiver:
-				if(CollisionManager.boxCollision(this, otherGraphic)){
+				if(CollisionManager.circleCollision(this.mCollision, collision)){
 					colDiverFrog();
 					cID = coltype.cDiver;
 					Constants.getSoundManager().playDucky();
@@ -166,7 +160,7 @@ public class Duck extends GraphicObject{
 				break;
 			case tFrog:
 				//TODO bounding boxes for angled collisions
-				if(CollisionManager.boxCollision(this, otherGraphic)){
+				if(CollisionManager.circleCollision(this.mCollision, collision)){
 					colDiverFrog();
 					cID = coltype.cFrog;
 					Constants.getSoundManager().playDucky();

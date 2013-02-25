@@ -8,20 +8,6 @@
 package com.sinkingduckstudios.whirlpool.logic;
 
 public class Screen {
-	public class Point{
-		private int mX;
-		private int mY;
-		public void set(int x1, int y1){
-			mX = x1;
-			mY = y1;
-		}
-		public int getX(){
-			return mX;
-		}
-		public int getY(){
-			return mY;
-		}
-	}
 	public enum ScreenSide{
 		Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight;
 	}
@@ -43,7 +29,7 @@ public class Screen {
 	public void set(int width, int height){
 		mWidth = width;
 		mHeight = height;
-		mCentre.set(width/2, height/2);
+		mCentre.setPoints(width/2, height/2);
 	}
 	//getters for x and y components
 	public int getCentreX(){

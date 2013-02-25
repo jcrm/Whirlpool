@@ -51,7 +51,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 			if (mWPoolIndex > -1){ //pointing a whirl
 				mNewGesture = 2;
 				mWhirl = mWPools.getWpools().get(mWPoolIndex);
-				mArrow = (new Arrow(mWhirl.getX(), mWhirl.getY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
+				mArrow = (new Arrow(mWhirl.getCentreX(), mWhirl.getCentreY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
 				mWhirl.setArrow(mArrow);
 			}else if (mWPoolIndex == -1){ //new whirl
 				mStart[0] = event.getX();
@@ -64,8 +64,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 				findCenter();
 				mWhirl = addWPools(
 						mWPools,
-						mWCenter[0] + Constants.getLevel().getScrollBy(),
-						mWCenter[1],
+						(int) (mWCenter[0] + Constants.getLevel().getScrollBy()),
+						(int) mWCenter[1],
 						mWSize,
 						-1,// pass in -1 for no angle, probs should clean this up
 						isClockwise());
@@ -94,8 +94,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 					mRefY[mNoRef]=mLast[1];
 				}
 				findCenter();//calc current center to position wpool
-				mWhirl.setX(mWCenter[0]+ Constants.getLevel().getScrollBy());
-				mWhirl.setY(mWCenter[1]);
+				mWhirl.setCentreX((int) (mWCenter[0]+ Constants.getLevel().getScrollBy()));
+				mWhirl.setCentreY((int) mWCenter[1]);
 				mWhirl.setClockwise(isClockwise());
 				if ((mCurrent[0] - mLast[0])*mXDir < 0){//change in x direction
 					if (mXToChange == false){
@@ -141,8 +141,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 			}else if (mNewGesture == 0){
 				if (mNoRef > 2){//whirlpool made
 					findCenter();
-					mWhirl.setX(mWCenter[0]+ Constants.getLevel().getScrollBy());
-					mWhirl.setY(mWCenter[1]);
+					mWhirl.setCentreX((int) (mWCenter[0]+ Constants.getLevel().getScrollBy()));
+					mWhirl.setCentreY((int) mWCenter[1]);
 					mWhirl.setClockwise(isClockwise());
 				}else{
 					//remove whirl (gesture wasnt completed)
@@ -206,7 +206,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 
 	}
 
-	private Whirlpool addWPools(WPools wpools, float x, float y, int s, float angle, int clockwise) {
+	private Whirlpool addWPools(WPools wpools, int x, int y, int s, float angle, int clockwise) {
 		wpools.addWPool(x, y, s, angle, clockwise);
 		return wpools.getLastWpool();
 	}

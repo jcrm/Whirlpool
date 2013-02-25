@@ -46,7 +46,7 @@ public class Whirlpool extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getX(), getY());
+			canvas.translate(getCentreX(), getCentreY());
 			canvas.scale(dirFactor, 1);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
@@ -60,15 +60,12 @@ public class Whirlpool extends GraphicObject{
 	public void init() {
 		mBitmap = Imports.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mCollision.init(0, 0, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		
 		mSpeed.setMove(false);
-		mWidth = mBitmap.getWidth()/mId.tFrames;
-		mHeight = mBitmap.getHeight();
-		/*_width = _id.width;
-		_height = _id.height;*/
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
-
 	}
 
 	@Override
@@ -77,53 +74,52 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	@Override
-	public void borderCollision(ScreenSide side, float width, float height) {
+	public void borderCollision(ScreenSide side, int width, int height) {
 		switch(side){
 		case Top:
 			mSpeed.verticalBounce();
-			setActualY(-getActualY());
+			setTopLeftY(-getTopLeftY());
 			break;
 		case Bottom:
 			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
+			setTopLeftY(height-getHeight());
 			break;
 		case Left:
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
 			break;
 		case Right:
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
 			break;
 		case BottomLeft:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case BottomRight:
-			mSpeed.verticalBounce();
-			setActualY(height - getHeight());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(height-getHeight());
 			break;
 		case TopLeft:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(-getActualX());
+			setTopLeftX(-getTopLeftX());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		case TopRight:
-			mSpeed.verticalBounce();
-			setActualY(-getActualY());
 			mSpeed.horizontalBounce();
-			setActualX(width - getWidth());
+			setTopLeftX(width - getWidth());
+			mSpeed.verticalBounce();
+			setTopLeftY(-getTopLeftY());
 			break;
 		default:
 			break;
 		}
 	}
-
 	public Arrow getArrow(){
 		return mArrow;
 	}
@@ -213,8 +209,8 @@ public class Whirlpool extends GraphicObject{
 	public boolean pointCollision(float x, float y){
 
 		float distX, distY, dist;
-		distX = this.getX() - x;
-		distY = this.getY() - y;
+		distX = this.getCentreX() - x;
+		distY = this.getCentreY() - y;
 		dist = (distX*distX)+(distY*distY);
 
 		if (dist <= ( (this.getRadius()) * (this.getRadius()) ))
@@ -229,8 +225,8 @@ public class Whirlpool extends GraphicObject{
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
 
 		float distX, distY, dist;
-		distX = this.getX() - graphic.getX();
-		distY = this.getY() - graphic.getY();
+		distX = this.getCentreX() - graphic.getCentreX();
+		distY = this.getCentreY() - graphic.getCentreY();
 
 		dist = (distX*distX)+(distY*distY);
 
@@ -248,12 +244,12 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void gravity(GraphicObject graphic, float factor){
-		float objX = graphic.getX();
-		float objY = graphic.getY();
+		float objX = graphic.getCentreX();
+		float objY = graphic.getCentreY();
 		//float objSpeedX = graphic.getSpeed().getXSpeed();
 		//float objSpeedY = graphic.getSpeed().getYSpeed();
-		float wPoolCentreX = getX();
-		float wPoolCentreY = getY();
+		float wPoolCentreX = getCentreX();
+		float wPoolCentreY = getCentreY();
 		//this is the current distance from centre to graphic
 		objectRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
 		//angle of radius
@@ -347,7 +343,7 @@ public class Whirlpool extends GraphicObject{
 
 		opp1 = objectRadius;
 		//distance from center to point
-		hyp1 = (float) Math.sqrt(((x-getX())*(x-getX())) + ((y-getY())*(y-getY())));
+		hyp1 = (float) Math.sqrt(((x-getCentreX())*(x-getCentreX())) + ((y-getCentreY())*(y-getCentreY())));
 
 		if(hyp1 < opp1)
 			return false;//no arrow can be drawn, point inside whirl
@@ -355,7 +351,7 @@ public class Whirlpool extends GraphicObject{
 		adj1 = (float) Math.sqrt((hyp1*hyp1) - (opp1*opp1));
 		//angle from point to tangentPoint
 		angle1 = (float) Math.asin(opp1/hyp1);
-		angle2 = (float) (((CollisionManager.calcAngle(x,y,getX(),getY())))*(Math.PI/180));
+		angle2 = (float) (((CollisionManager.calcAngle(x,y,getCentreX(),getCentreY())))*(Math.PI/180));
 
 		angle1 *= getClockwise();
 		angle1 = angle2 + angle1;

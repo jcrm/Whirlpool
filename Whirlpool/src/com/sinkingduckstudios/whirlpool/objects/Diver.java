@@ -28,7 +28,7 @@ public class Diver extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getX(), getY());
+			canvas.translate(getCentreX(), getCentreY());
 			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
@@ -38,64 +38,66 @@ public class Diver extends GraphicObject{
 		mBitmap = Imports.getDiver();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mWidth = mBitmap.getWidth()/mId.tFrames;
-		mHeight = mBitmap.getHeight();
-
-		setX((float) (new Random().nextInt(Constants.getLevel().getLevelWidth())));
-    	setY((float) (new Random().nextInt(Constants.getLevel().getLevelHeight())));
+		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+						new Random().nextInt(Constants.getLevel().getLevelHeight()),
+						mBitmap.getWidth()/mId.tFrames,
+						mBitmap.getHeight());	
+		//reset radius because height of the image is higher than the height of the diver.
+		mCollision.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		mRadius =  (int) Math.sqrt(((float)mWidth*mWidth) + ((float)mHeight*mHeight));
 	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
-			shiftX((float) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
-			shiftY((float) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
+			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
 	}
 	@Override
-	public void borderCollision(ScreenSide side, float width, float height) {
+	public void borderCollision(ScreenSide side, int width, int height) {
 		switch(side){
 		case Top:
-			setActualY(-getActualY());
 			mSpeed.shiftAngle(180);
+			setTopLeftY(-getTopLeftY());
 			break;
 		case Bottom:
-			setActualY(height - getHeight());        	
 			mSpeed.shiftAngle(180);
+			setTopLeftY(height-getHeight());
 			break;
 		case Left:
-			setActualX(-getActualX());
 			mSpeed.shiftAngle(180);
+			setTopLeftX(-getTopLeftX());
 			break;
 		case Right:
-			setActualX(width - getWidth());
 			mSpeed.shiftAngle(180);
-			break;
-		case TopLeft:
-			setActualX(-getActualX());
-			setActualY(-getActualY());
-			mSpeed.shiftAngle(180);
-			break;
-		case TopRight:
-			setActualX(width - getWidth());
-			setActualY(-getActualY());
-			mSpeed.shiftAngle(180);
+			setTopLeftX(width - getWidth());
 			break;
 		case BottomLeft:
-			setActualX(-getActualX());
-			setActualY(height - getHeight());        	
 			mSpeed.shiftAngle(180);
+			setTopLeftX(-getWidth());
+			setTopLeftY(height-getHeight());
 			break;
 		case BottomRight:
-			setActualX(width - getWidth());
-			setActualY(height - getHeight());        	
 			mSpeed.shiftAngle(180);
+			setTopLeftX(width - getWidth());
+			setTopLeftY(height-getHeight());
+			break;
+		case TopLeft:
+			mSpeed.shiftAngle(180);
+			setTopLeftX(-getTopLeftX());
+			setTopLeftY(-getTopLeftY());
+			break;
+		case TopRight:
+			mSpeed.shiftAngle(180);
+			setTopLeftX(width - getWidth());
+			setTopLeftY(-getTopLeftY());
+			break;
+		default:
 			break;
 		}
 	}
