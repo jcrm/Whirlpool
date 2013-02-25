@@ -22,7 +22,11 @@ public class Shark extends GraphicObject{
 		mId = objtype.tShark;
 		init();
 	}
-
+	public Shark(int x, int y){
+		mId = objtype.tShark;
+		init();
+		mCollision.setCentre(x, y);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();

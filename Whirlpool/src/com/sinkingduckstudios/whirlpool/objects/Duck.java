@@ -17,6 +17,7 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
+import com.sinkingduckstudios.whirlpool.movement.Collision;
 
 public class Duck extends GraphicObject{
 	//enum for collision checking
@@ -31,7 +32,11 @@ public class Duck extends GraphicObject{
 		mId = objtype.tDuck;
 		init();
 	}
-
+	public Duck(int x, int y){
+		mId = objtype.tDuck;
+		init();
+		mCollision.setCentre(x, y);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -195,11 +200,6 @@ public class Duck extends GraphicObject{
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(new Random().nextInt(90)+135);
 		mCollisonCount = 0;
-	}
-	private void colShark(float s, float a){
-		getSpeed().setSpeed(s);
-		setAngle(a);
-		mCollisonCount = 0;    	
 	}
 
 }

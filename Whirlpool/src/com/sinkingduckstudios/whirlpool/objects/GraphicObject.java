@@ -17,6 +17,7 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
+import com.sinkingduckstudios.whirlpool.movement.Collision;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
 interface ObjectFunctions{

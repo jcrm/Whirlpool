@@ -7,7 +7,7 @@
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
-import com.sinkingduckstudios.whirlpool.objects.Collision;
+import com.sinkingduckstudios.whirlpool.movement.Collision;
 
 
 //collision class

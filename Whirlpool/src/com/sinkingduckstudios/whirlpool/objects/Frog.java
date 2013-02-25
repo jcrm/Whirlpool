@@ -24,6 +24,11 @@ public class Frog extends GraphicObject{
 		mId = objtype.tFrog;
 		init();
 	}
+	public Frog(int x, int y){
+		mId = objtype.tFrog;
+		init();
+		mCollision.setCentre(x, y);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();

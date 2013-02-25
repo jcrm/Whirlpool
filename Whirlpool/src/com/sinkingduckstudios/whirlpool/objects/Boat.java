@@ -16,7 +16,11 @@ public class Boat extends GraphicObject{
 		mId = objtype.tBoat;
 		init();
 	}
-
+	public Boat(int x, int y){
+		mId = objtype.tBoat;
+		init();
+		mCollision.setCentre(x, y);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();

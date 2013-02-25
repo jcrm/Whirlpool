@@ -24,6 +24,11 @@ public class Diver extends GraphicObject{
 		mId = objtype.tDiver;
 		init();
 	}
+	public Diver(int x, int y){
+		mId = objtype.tDiver;
+		init();
+		mCollision.setCentre(x, y);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
