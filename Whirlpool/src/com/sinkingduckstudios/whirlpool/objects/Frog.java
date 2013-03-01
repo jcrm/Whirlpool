@@ -18,6 +18,7 @@ import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 
 public class Frog extends GraphicObject{
+	//used for working out the location of the frog round the circle
 	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
 
 	public Frog(){
@@ -26,8 +27,7 @@ public class Frog extends GraphicObject{
 	}
 	public Frog(int x, int y){
 		mId = objtype.tFrog;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -44,11 +44,25 @@ public class Frog extends GraphicObject{
 		mBitmap = Imports.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 						(Constants.getLevel().getLevelHeight()/2)-70,
 						mBitmap.getWidth()/mId.tFrames,
-						mBitmap.getHeight()
-						);	
+						mBitmap.getHeight());	
+
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		//used for locating the frog round the circle
+		setFrogCentreX(getCentreX());
+		setFrogCentreY(getCentreY());
+		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
+	}
+	@Override
+	public void init(int x, int y) {
+		mBitmap = Imports.getFrog();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames,mBitmap.getHeight());	
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -58,7 +72,6 @@ public class Frog extends GraphicObject{
 		setFrogCentreY(getCentreY());
 		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
 	}
-
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){

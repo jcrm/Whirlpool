@@ -17,7 +17,7 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
-import com.sinkingduckstudios.whirlpool.movement.Collision;
+import com.sinkingduckstudios.whirlpool.movement.Properties;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
 interface ObjectFunctions{
@@ -34,8 +34,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		//not sure what numbers need for frame width and height
 		tFrog(3, 96, 96, 4, 0, 16), 
 		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 
-		tBoat(5, 96, 96, 0, 0, 1),
-		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16);
+		tBoat(5, 96, 96, 0, 0, 15),
+		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16),
+		tTorpedo(7, 64, 64, 4, new Random().nextInt(360), 10);
 		
 		int tWidth;
 		int tHeight;
@@ -55,7 +56,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	//private variables
 	protected objtype mId = objtype.tDefault;
-	protected Collision mCollision = new Collision();
+	protected Properties mProperties = new Properties();
 	protected Bitmap mBitmap;
 	protected Speed mSpeed = new Speed();
 	protected boolean mPull;// = false;
@@ -66,9 +67,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
     	mScreenLock=Constants.getLock();
     }
     
-    abstract public void draw(Canvas c);
+    abstract public void draw(Canvas canvas);
     
     abstract public void init();
+    
+    abstract public void init(int x, int y);
     
     abstract public boolean move();
     
@@ -118,87 +121,87 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 
 	public void setCentre(int x, int y){
-		mCollision.setCentre(x, y);
+		mProperties.setCentre(x, y);
 	}
 	public void setCentreX(int x){
-		mCollision.setCentreX(x);
+		mProperties.setCentreX(x);
 	}
 	public void setCentreY(int y){
-		mCollision.setCentreY(y);
+		mProperties.setCentreY(y);
 	}
 	public Point getCentre(){
-		return mCollision.getCentre();
+		return mProperties.getCentre();
 	}
 	public int getCentreX(){
-		return mCollision.getCentreX();
+		return mProperties.getCentreX();
 	}
 	public int getCentreY(){
-		return mCollision.getCentreY();
+		return mProperties.getCentreY();
 	}
 	
 	public void setTopLeft(int x, int y){
-		mCollision.setTopLeft(x, y);
+		mProperties.setTopLeft(x, y);
 	}
 	public void setTopLeftX(int x){
-		mCollision.setTopLeftX(x);
+		mProperties.setTopLeftX(x);
 	}
 	public void setTopLeftY(int y){
-		mCollision.setTopLeftY(y);
+		mProperties.setTopLeftY(y);
 	}
 	public Point getTopLeft(){
-		return mCollision.getTopLeft();
+		return mProperties.getTopLeft();
 	}
 	public int getTopLeftX(){
-		return mCollision.getTopLeftX();
+		return mProperties.getTopLeftX();
 	}
 	public int getTopLeftY(){
-		return mCollision.getTopLeftY();
+		return mProperties.getTopLeftY();
 	}
 	
 	public Point getBottomRight(){
-		return mCollision.getBottomRight();
+		return mProperties.getBottomRight();
 	}
 	public int getBottomRightX(){
-		return mCollision.getBottomRightX();
+		return mProperties.getBottomRightX();
 	}
 	public int getBottomRightY(){
-		return mCollision.getBottomRightY();
+		return mProperties.getBottomRightY();
 	}
 	
 	public int getWidth(){
-    	return mCollision.getWidth();
+    	return mProperties.getWidth();
     }
     public int getHeight(){
-    	return mCollision.getHeight();
+    	return mProperties.getHeight();
     }
 	public void setWidth(int width){
-		mCollision.setWidth(width);
+		mProperties.setWidth(width);
 	}
 	public void setHeight(int height){
-		mCollision.setHeight(height);
+		mProperties.setHeight(height);
 	}
 	
 	public void moveDeltaX(int deltaX){
 		synchronized(mScreenLock){
-			mCollision.moveDeltaX(deltaX);
+			mProperties.moveDeltaX(deltaX);
     	}
 	}
 	public void moveDeltaY(int deltaY){
 		synchronized(mScreenLock){
-			mCollision.moveDeltaY(deltaY);
+			mProperties.moveDeltaY(deltaY);
     	}
 	}
 	public void moveDelta(int deltaX, int deltaY){
 		synchronized(mScreenLock){
-			mCollision.moveDelta(deltaX, deltaY);
+			mProperties.moveDelta(deltaX, deltaY);
     	}
 	}
 	//getters and setters for angles and radius
     public float getRadius(){
-    	return mCollision.getRadius();
+    	return mProperties.getRadius();
     }
 	public void setRadius(int radius){
-		mCollision.setRadius(radius);
+		mProperties.setRadius(radius);
 	}
 	
 	public void setAngle(float a){
@@ -218,10 +221,10 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		return mPull;
 	}
 	
-	public void setCollision(Collision collision){
-		mCollision = collision;
+	public void setCollision(Properties collision){
+		mProperties = collision;
 	}
-	public Collision getCollision(){
-		return mCollision;
+	public Properties getCollision(){
+		return mProperties;
 	}
 }

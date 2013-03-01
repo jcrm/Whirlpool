@@ -18,8 +18,7 @@ public class Boat extends GraphicObject{
 	}
 	public Boat(int x, int y){
 		mId = objtype.tBoat;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -35,7 +34,7 @@ public class Boat extends GraphicObject{
 		mBitmap = Imports.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
 						mBitmap.getWidth()/mId.tFrames, 
 						mBitmap.getHeight());	
@@ -44,7 +43,18 @@ public class Boat extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-
+	@Override
+	public void init(int x, int y) {
+		mBitmap = Imports.getBoat();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+	
+		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
@@ -118,5 +128,6 @@ public class Boat extends GraphicObject{
 	public void setBoatRadius(int boatRadius) {
 		mBoatRadius = boatRadius;
 	}
+
 
 }

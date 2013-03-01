@@ -24,8 +24,7 @@ public class Shark extends GraphicObject{
 	}
 	public Shark(int x, int y){
 		mId = objtype.tShark;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -41,7 +40,7 @@ public class Shark extends GraphicObject{
 		//mBitmap = Imports.getShark();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
 						mBitmap.getWidth()/mId.tFrames, 
 						mBitmap.getHeight());	
@@ -50,7 +49,17 @@ public class Shark extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
+	@Override
+	public void init(int x, int y) {
+		//mBitmap = Imports.getShark();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){

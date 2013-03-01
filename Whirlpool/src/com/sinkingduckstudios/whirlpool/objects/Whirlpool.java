@@ -61,7 +61,18 @@ public class Whirlpool extends GraphicObject{
 		mBitmap = Imports.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(0, 0, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		mProperties.init(0, 0, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		
+		mSpeed.setMove(false);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
+	@Override
+	public void init(int x, int y) {
+		mBitmap = Imports.getWhirlpool();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);

@@ -26,8 +26,7 @@ public class Diver extends GraphicObject{
 	}
 	public Diver(int x, int y){
 		mId = objtype.tDiver;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -43,12 +42,25 @@ public class Diver extends GraphicObject{
 		mBitmap = Imports.getDiver();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 						new Random().nextInt(Constants.getLevel().getLevelHeight()),
 						mBitmap.getWidth()/mId.tFrames,
 						mBitmap.getHeight());	
 		//reset radius because height of the image is higher than the height of the diver.
-		mCollision.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
+	@Override
+	public void init(int x, int y) {
+		mBitmap = Imports.getDiver();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		//reset radius because height of the image is higher than the height of the diver.
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
