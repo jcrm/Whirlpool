@@ -7,12 +7,12 @@
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
-import com.sinkingduckstudios.whirlpool.movement.Collision;
+import com.sinkingduckstudios.whirlpool.movement.Properties;
 
 
 //collision class
 public class CollisionManager{
-	static public boolean boxCollision(Collision box1, Collision box2){
+	static public boolean boxCollision(Properties box1, Properties box2){
 		if((box2.getTopLeftX()<box1.getBottomRightX()) && (box2.getBottomRightX()>box1.getTopLeftX())){
 			if((box2.getBottomRightY()>box1.getTopLeftY()) && (box2.getTopLeftY()<box1.getBottomRightY())){
 				return true;
@@ -20,7 +20,7 @@ public class CollisionManager{
 		}
 		return false;
 	}
-	static public boolean boxCollision(Collision box1, int left, int right, int top, int bottom){
+	static public boolean boxCollision(Properties box1, int left, int right, int top, int bottom){
 		if((left<box1.getBottomRightX()) && (right>box1.getTopLeftX())){
 			if((bottom>box1.getTopLeftY()) && (top<box1.getBottomRightY())){
 				return true;
@@ -29,7 +29,7 @@ public class CollisionManager{
 		return false;
 	}
 	//circle collision - graphic is the sprite being tested, event is the touch
-	static public boolean circleCollision(Collision box1, Collision box2){
+	static public boolean circleCollision(Properties box1, Properties box2){
 		float distanceX = box1.getCentreX() - box2.getCentreX();
 		float distanceY = box1.getCentreY() - box2.getCentreY();
 		
@@ -41,7 +41,7 @@ public class CollisionManager{
 		return false;
 	}
 	//circle collision - graphic is the sprite being tested, event is the touch
-	static public boolean circleCollision(Collision box1, int x, int y, int r){
+	static public boolean circleCollision(Properties box1, int x, int y, int r){
 		float distanceX = box1.getCentreX() - x;
 		float distanceY = box1.getCentreY() - y;
 		

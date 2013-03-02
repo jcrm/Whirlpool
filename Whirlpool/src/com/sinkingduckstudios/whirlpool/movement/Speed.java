@@ -7,6 +7,8 @@
  */
 package com.sinkingduckstudios.whirlpool.movement;
 
+import com.sinkingduckstudios.whirlpool.logic.Constants;
+
 public class Speed {
 	//variables
 	private boolean mMove = true;
@@ -48,7 +50,7 @@ public class Speed {
 		return (float) (mSpeed*Math.sin(mAngle.getAngleRad()));
 	}
 	public void setSpeed(float angle){
-		mSpeed = angle;
+		mSpeed = (angle*Constants.getScreen().getRatio());
 	}
 	public void shiftSpeed(float angle){
 		mSpeed += angle;

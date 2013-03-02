@@ -11,15 +11,17 @@ import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 
 public class Boat extends GraphicObject{
-	private int mBoatRadius = 30;
+	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
+	private int mTorpedoCount = -1;
+	private boolean mCreateNewTorpedo = true;
+	
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
 	}
 	public Boat(int x, int y){
 		mId = objtype.tBoat;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -32,19 +34,29 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
+				50, 50);	
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
-						mBitmap.getWidth()/mId.tFrames, 
-						mBitmap.getHeight());	
-		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-
+	public void init(int x, int y) {
+		mProperties.init(x, y, 50, 50);	
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
+		mBitmap = Imports.getBoat();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+	
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
@@ -108,6 +120,7 @@ public class Boat extends GraphicObject{
 		if(move()){
 			border();
 		}
+		incrementCounter();
 		mAnimate.animateFrame();
 	}
 
@@ -118,5 +131,26 @@ public class Boat extends GraphicObject{
 	public void setBoatRadius(int boatRadius) {
 		mBoatRadius = boatRadius;
 	}
+	public int getTorpedoCount() {
+		return mTorpedoCount;
+	}
+	public void setTorpedoCount(int torpedoCount) {
+		mTorpedoCount = torpedoCount;
+	}
+	public void incrementCounter(){
+		if((mCreateNewTorpedo == false) && (++mTorpedoCount>=0)){
+			if(mTorpedoCount == 120){
+				mCreateNewTorpedo = true;
+				mTorpedoCount = -1;
+			}
+		}
+	}
+	public boolean getCreateNewTorpedo() {
+		return mCreateNewTorpedo;
+	}
+	public void setCreateNewTorpedo(boolean createNewTorpedo) {
+		mCreateNewTorpedo = createNewTorpedo;
+	}
+
 
 }

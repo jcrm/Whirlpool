@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class Panel extends View{
-	private static  Screen sScreen = new Screen();
 	private static  Resources sRes;
     private static Object sScreenLock;
     
@@ -29,7 +28,6 @@ public class Panel extends View{
     private void constructor(){
     	
         setFocusable(true);
-        Constants.setScreen(sScreen);
         sScreenLock = Constants.getLock();
     }
 
@@ -39,14 +37,6 @@ public class Panel extends View{
     		if(Constants.getLock()!=null)
     		Constants.getLevel().onDraw(canvas);
     	}
-    }
-
-	@Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-    	int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-    	int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
-    	this.setMeasuredDimension(parentWidth, parentHeight);
-    	sScreen.set(parentWidth, parentHeight);
     }
     public void init(){
     	//int x = findViewById(R.id.mainview).getWidth();

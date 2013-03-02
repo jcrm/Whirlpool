@@ -12,9 +12,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
 public class Imports {
-	private static boolean mOnceImages = false;
 	private static Bitmap mDuck;
 	private static Bitmap mDiver;
 	private static Bitmap mDiverFlipped;
@@ -22,61 +22,97 @@ public class Imports {
 	private static Bitmap mFrog;
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
+	private static Bitmap mTorpedo;
 	
 	static public void setImages(){
-		if(!mOnceImages){
-			mOnceImages = true;
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
-			System.gc();
-			mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
-			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
-			mBoat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.temp_boat);
-			mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
-			mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
+		if(mBackground==null){
 			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset_background);
-			System.gc();
 		}
 	}
-	public static boolean scaledBitmap(int type, int newWidth, int newHeight){
+	public void deleteImages(){
+		mDuck.recycle();
+		mDuck = null;
+		mDiver.recycle();
+		mDiver = null;
+		mDiverFlipped.recycle();
+		mDiverFlipped = null;
+		mBoat.recycle();
+		mBoat = null;
+		mFrog.recycle();
+		mFrog = null;
+		mWhirlpool.recycle();
+		mWhirlpool = null;
+		mBackground.recycle();
+		mBackground = null;
+		mTorpedo.recycle();
+		mTorpedo = null;
+	}
+	public static boolean scaledBitmap(objtype type, int newWidth, int newHeight){
 		switch(type){
-		case 0:
+		case tDefault:
 			return false;
-		case 1:
+		case tWhirl:
+			if(mWhirlpool==null){
+				mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
+			}
 			if(mWhirlpool.getWidth()!= newWidth && mWhirlpool.getHeight()!=newHeight){
 				mWhirlpool = Bitmap.createScaledBitmap(mWhirlpool, newWidth, newHeight, false);
-				System.gc();
 				return true;
 			}
-		case 2:
+			break;
+		case tDuck:
+			if(mDuck==null){
+				mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
+			}
 			if(mDuck.getWidth()!= newWidth && mDuck.getHeight()!=newHeight){
 				mDuck = Bitmap.createScaledBitmap(mDuck, newWidth, newHeight, false);
-				System.gc();
 				return true;
 			}
-		case 3:
+			break;
+		case tFrog:
+			if(mFrog==null){
+				mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
+			}
 			if(mFrog.getWidth()!= newWidth && mFrog.getHeight()!=newHeight){
 				mFrog = Bitmap.createScaledBitmap(mFrog, newWidth, newHeight, false);
-				System.gc();
 				return true;
 			}
-		case 5:
+			break;
+		case tBoat:
+			if(mBoat==null){
+				mBoat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat_sprites);
+			}
 			if(mBoat.getWidth()!= newWidth && mBoat.getHeight()!=newHeight){
 				mBoat = Bitmap.createScaledBitmap(mBoat, newWidth, newHeight, false);
-				System.gc();
 				return true;
 			}
-		case 6:
+			break;
+		case tDiver:
+			if(mDiver == null){
+				Matrix flipMatrix = new Matrix();
+				flipMatrix.setScale(1, -1);
+				mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
+				mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
+			}
 			if(mDiver.getWidth()!= newWidth && mDiver.getHeight()!=newHeight){
 				mDiver = Bitmap.createScaledBitmap(mDiver, newWidth, newHeight, false);
 				mDiverFlipped = Bitmap.createScaledBitmap(mDiverFlipped, newWidth, newHeight, false);
-				System.gc();
 				return true;
 			}
+			break;
+		case tTorpedo:
+			if(mTorpedo==null){
+				mTorpedo =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.torpedo_sprites);
+			}
+			if(mTorpedo.getWidth()!= newWidth && mTorpedo.getHeight()!=newHeight){
+				mTorpedo = Bitmap.createScaledBitmap(mTorpedo, newWidth, newHeight, false);
+				return true;
+			}
+			break;
 		default:
 			return false;
 		}
+		return false;
 	}
 	public static Bitmap getDuck() {
 		return mDuck;
@@ -108,12 +144,6 @@ public class Imports {
 	public static void setFrog(Bitmap frog) {
 		mFrog = frog;
 	}
-	/*public static Bitmap getShark() {
-		return shark;
-	}
-	public static void setShark(Bitmap shark) {
-		mShark = shark;
-	}*/
 	public static Bitmap getWhirlpool() {
 		return mWhirlpool;
 	}
@@ -125,5 +155,11 @@ public class Imports {
 	}
 	public static void setBackground(Bitmap background) {
 		mBackground = background;
+	}
+	public static Bitmap getTorpedo() {
+		return mTorpedo;
+	}
+	public static void setTorpedo(Bitmap torpedo) {
+		mTorpedo = torpedo;
 	}
 }
