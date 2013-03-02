@@ -28,11 +28,12 @@ public class Torpedo extends GraphicObject {
 	}
 
 	public void init(int x, int y, float angle){
+		mProperties.init(x, y, 50, 50);		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -41,11 +42,13 @@ public class Torpedo extends GraphicObject {
 
 	@Override
 	public void init(){
+		mProperties.init(30, 60, 50, 50);		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(30, 60, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
-
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -127,10 +130,10 @@ public class Torpedo extends GraphicObject {
 	public void setDuckSpeed(int duckX, int duckY){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed(); 
-		if(tempSpeed<8){
+		if(tempSpeed<10){
 			mSpeed.setSpeed(tempSpeed+1);
 		}else{
-			tempSpeed = 8;
+			tempSpeed = 10;
 		}
 	}
 	public int getDuckCounter() {

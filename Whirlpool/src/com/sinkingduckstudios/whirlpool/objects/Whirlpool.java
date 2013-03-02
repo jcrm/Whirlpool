@@ -16,7 +16,6 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 //used to create effect of whirlpool
 
-
 /*
  * Can be deleted until i've fixed crashing problem
  */
@@ -31,9 +30,7 @@ public class Whirlpool extends GraphicObject{
 	private final int expireTimer = 250;
 	private int expireCounter = 1;
 	private boolean finished = false;
-	private final int afterCollisionTimer = 50;
-	private int afterCollisionCounter = 0;
-	private boolean collisionDone = false;
+	private boolean collisionDone = true;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
 
@@ -58,20 +55,22 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void init() {
+		mProperties.init(0, 0, 130, 130);	
+
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mProperties.init(0, 0, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
+		mProperties.init(x, y, 130, 130);	
+
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -138,33 +137,30 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
-		if(expireCounter > 0){
+		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){
 				finished = true;
 			}
 		}
-		if(afterCollisionCounter > 0){
-			afterCollisionCounter++;
-			if(afterCollisionCounter >= afterCollisionTimer){
-				finished = true;
-			}
-		}
+		
 		mAnimate.animateFrame();
 	}
 
 	public void checkCollision(GraphicObject a){
-		if (a.getPullState() == false && !collisionDone){
-			int collide = collision(a);
-
-			if (collide == 1 || collide == 2){
-				a.setPull(true);
-				pull(a);
-				setExpireCounter(0);
-				if (testAngle(a)){
-					a.setAngle(getWAngle());
-					collisionDone = true;
-					setAfterCollisionCounter(1);
+		if (a.getId()==objtype.tDuck){
+			if (a.getPullState() == false && (!finished || !collisionDone)){
+				int collide = collision(a);
+				
+				if (collide == 1 || collide == 2){
+					collisionDone = false;
+					a.setPull(true);
+					pull(a);
+					if (testAngle(a)){
+						a.setAngle(getWAngle());
+						collisionDone = true;
+						finished = true;
+					}
 				}
 			}
 		}
@@ -196,7 +192,7 @@ public class Whirlpool extends GraphicObject{
 		return false;
 	}
 	public boolean getFinished(){
-		return finished;
+		return (finished && collisionDone);
 	}
 
 	public void setExpireCounter(int a){
@@ -394,14 +390,5 @@ public class Whirlpool extends GraphicObject{
 	public float getWAngle() {
 		return angle;
 	}
-
-	public int getAfterCollisionCounter() {
-		return afterCollisionCounter;
-	}
-
-	public void setAfterCollisionCounter(int afterCollisionCounter) {
-		this.afterCollisionCounter = afterCollisionCounter;
-	}
-
 
 }

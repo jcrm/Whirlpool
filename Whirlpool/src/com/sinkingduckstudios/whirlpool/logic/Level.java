@@ -36,20 +36,22 @@ public class Level {
 	private static Object mScreenLock;
 	private Paint mPaint = new Paint();
 	private Rect mRect = new Rect();
-
+	
 	public Level(){
 	}
 	public void init(){
-		mLevelWidth = 2000;
-		mLevelHeight = Constants.getHeight();
+		mLevelWidth = 3000;
+		mLevelHeight = Constants.getScreen().getHeight();
 		mBackgroundImage = Imports.getBackground();
-		mGraphics.add(new Duck());
+		mGraphics.add(new Duck(20,250));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog());
-		mGraphics.add(new Diver());
+		mGraphics.add(new Frog(500,250));
+		mGraphics.add(new Diver(1000,50));
 		mGraphics.add(new Boat());
 		//_graphics.add(new Shark());
-
+		//add a wpool to create bitmap at start then clear list
+		mWPoolModel.addWPool(0, 0, 10, 0, 1);
+		mWPoolModel.clearWPools();
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}

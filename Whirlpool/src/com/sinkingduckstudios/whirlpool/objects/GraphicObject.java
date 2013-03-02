@@ -14,7 +14,6 @@ import android.graphics.Canvas;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
@@ -28,26 +27,21 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 1, 1, 0, 0, 1), 
-		tWhirl(1, 128, 128, 0, 0, 30),
-		tDuck(2, 64, 64, 6, 0, 16),
+		tDefault(0, 0, 1), 
+		tWhirl(0, 0, 30),
+		tDuck(8, 0, 16),
 		//not sure what numbers need for frame width and height
-		tFrog(3, 96, 96, 4, 0, 16), 
-		tShark(4, 64, 64, 5, new Random().nextInt(360)+1, 1), 
-		tBoat(5, 96, 96, 0, 0, 15),
-		tDiver(6, 128, 128, 4, new Random().nextInt(360), 16),
-		tTorpedo(7, 64, 64, 4, new Random().nextInt(360), 10);
+		tFrog(4, 0, 16), 
+		tShark(5, new Random().nextInt(360)+1, 1), 
+		tBoat(0, 0, 15),
+		tDiver(4, new Random().nextInt(360), 16),
+		tTorpedo(4, new Random().nextInt(360), 10);
 		
-		int tWidth;
-		int tHeight;
 		float tSpeed;
 		float tAngle;
 		int tFrames;
 		
-		objtype(int type, int width, int height, float speed, float angle, int frames){
-			if(type != 0){
-				Imports.scaledBitmap(type, width*frames, height);
-			}
+		objtype(float speed, float angle, int frames){
 			//TODO set min width/height
 			tSpeed = speed;
 			tAngle = angle;
@@ -86,7 +80,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	public boolean border(){
-		int HEIGHT = Constants.getLevel().getLevelHeight();
+		int HEIGHT = 500;
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
 		if(getTopLeftX()<0){

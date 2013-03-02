@@ -41,35 +41,36 @@ public class Frog extends GraphicObject{
 
 	@Override
 	public void init() {
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+				(Constants.getLevel().getLevelHeight()/2)-70,
+				80, 80);	
+
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-						(Constants.getLevel().getLevelHeight()/2)-70,
-						mBitmap.getWidth()/mId.tFrames,
-						mBitmap.getHeight());	
-
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 		//used for locating the frog round the circle
 		setFrogCentreX(getCentreX());
 		setFrogCentreY(getCentreY());
-		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
+		setFrogRadius(180);
 	}
 	public void init(int x, int y) {
+		mProperties.init(x, y, 80, 80);	
+
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames,mBitmap.getHeight());	
-
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-
+		//used for locating the frog round the circle
 		setFrogCentreX(getCentreX());
 		setFrogCentreY(getCentreY());
-		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
+		setFrogRadius(180);
 	}
 	@Override
 	public boolean move() {

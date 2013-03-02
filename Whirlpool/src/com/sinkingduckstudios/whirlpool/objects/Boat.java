@@ -34,28 +34,28 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
+				50, 50);	
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-						new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
-						mBitmap.getWidth()/mId.tFrames, 
-						mBitmap.getHeight());	
-		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
+		mProperties.init(x, y, 50, 50);	
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
-		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		
 	}
 	@Override
 	public boolean move() {

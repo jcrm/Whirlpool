@@ -7,6 +7,7 @@
  */
 package com.sinkingduckstudios.whirlpool.movement;
 
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 
 public class Properties {
@@ -16,15 +17,19 @@ public class Properties {
 	private int mRadius = 0;
 	private int mWidth = 0;
 	private int mHeight = 0;
+	private int mOriginalWidth = 0;
+	private int mOriginalHeight = 0;
 	
 	public Properties(){
 	}
 	public void init(int x, int y, int width, int height){
 		mTopLeft.setPoints(x, y);
-		mCentre.setPoints(x+(width/2), y+(height/2));
-		mBottomRight.setPoints(x+width, y+height);
-		mWidth = width;
-		mHeight = height;
+		mOriginalWidth = width;
+		mOriginalHeight = height;
+		mWidth = (int) (width/Constants.getScreen().getRatio());
+		mHeight = (int) (height/Constants.getScreen().getRatio());
+		mCentre.setPoints(x+(mWidth/2), y+(mHeight/2));
+		mBottomRight.setPoints(x+mWidth, y+mHeight);
 		mRadius =  (int) Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2)));
 	}
 	public void setCentre(int x, int y){
@@ -116,5 +121,19 @@ public class Properties {
 	}
 	public void moveDelta(int deltaX, int deltaY){
 		setTopLeft(mTopLeft.getX()+deltaX, mTopLeft.getY()+deltaY);
+	}
+	
+	
+	public int getOriginalWidth() {
+		return mOriginalWidth;
+	}
+	public void setOriginalWidth(int originalWidth) {
+		mOriginalWidth = originalWidth;
+	}
+	public int getOriginalHeight() {
+		return mOriginalHeight;
+	}
+	public void setOriginalHeight(int originalHeight) {
+		mOriginalHeight = originalHeight;
 	}
 }

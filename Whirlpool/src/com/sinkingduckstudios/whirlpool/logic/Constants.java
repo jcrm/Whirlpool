@@ -24,7 +24,6 @@ public class Constants {
 	private static Panel sPanel;
 	private static Object sScreenLock = 0;
 	private static SoundManager sSoundManager = new SoundManager();
-	private static int WIDTH, HEIGHT = 0;
 	
 	synchronized public static Object getLock() {
 		return sScreenLock;
@@ -79,17 +78,5 @@ public class Constants {
 	}
 	public static void setSoundManager(SoundManager soundManager) {
 		sSoundManager = soundManager;
-	}
-	public static int getWidth() {
-		return WIDTH;
-	}
-	public static void setWidth(int width) {
-		WIDTH = width;
-	}
-	public static int getHeight() {
-		return HEIGHT;
-	}
-	public static void setHeight(int height) {
-		HEIGHT = height;
 	}
 }

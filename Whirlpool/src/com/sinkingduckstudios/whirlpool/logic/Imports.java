@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
 public class Imports {
 	private static Bitmap mDuck;
@@ -46,11 +47,11 @@ public class Imports {
 		mTorpedo.recycle();
 		mTorpedo = null;
 	}
-	public static boolean scaledBitmap(int type, int newWidth, int newHeight){
+	public static boolean scaledBitmap(objtype type, int newWidth, int newHeight){
 		switch(type){
-		case 0:
+		case tDefault:
 			return false;
-		case 1:
+		case tWhirl:
 			if(mWhirlpool==null){
 				mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
 			}
@@ -59,7 +60,7 @@ public class Imports {
 				return true;
 			}
 			break;
-		case 2:
+		case tDuck:
 			if(mDuck==null){
 				mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
 			}
@@ -68,7 +69,7 @@ public class Imports {
 				return true;
 			}
 			break;
-		case 3:
+		case tFrog:
 			if(mFrog==null){
 				mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
 			}
@@ -77,7 +78,7 @@ public class Imports {
 				return true;
 			}
 			break;
-		case 5:
+		case tBoat:
 			if(mBoat==null){
 				mBoat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat_sprites);
 			}
@@ -86,7 +87,7 @@ public class Imports {
 				return true;
 			}
 			break;
-		case 6:
+		case tDiver:
 			if(mDiver == null){
 				Matrix flipMatrix = new Matrix();
 				flipMatrix.setScale(1, -1);
@@ -99,7 +100,7 @@ public class Imports {
 				return true;
 			}
 			break;
-		case 7:
+		case tTorpedo:
 			if(mTorpedo==null){
 				mTorpedo =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.torpedo_sprites);
 			}

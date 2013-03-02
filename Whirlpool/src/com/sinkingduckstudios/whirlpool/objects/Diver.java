@@ -32,34 +32,35 @@ public class Diver extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
+			canvas.translate(getCentreX()/Constants.getScreen().getRatio(), getCentreY()/Constants.getScreen().getRatio());
 			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
 	}
 	@Override
 	public void init() {
-		mBitmap = Imports.getDiver();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-						new Random().nextInt(Constants.getLevel().getLevelHeight()),
-						mBitmap.getWidth()/mId.tFrames,
-						mBitmap.getHeight());	
+				new Random().nextInt(Constants.getLevel().getLevelHeight()),
+				100, 100);	
 		//reset radius because height of the image is higher than the height of the diver.
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames,getHeight());
+		mBitmap = Imports.getDiver();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
-		mBitmap = Imports.getDiver();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		mProperties.init(x, y, 100, 100);	
 		//reset radius because height of the image is higher than the height of the diver.
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames,getHeight());
+		mBitmap = Imports.getDiver();
+		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);

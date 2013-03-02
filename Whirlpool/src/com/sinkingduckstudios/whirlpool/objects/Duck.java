@@ -50,25 +50,26 @@ public class Duck extends GraphicObject{
 
 	@Override
 	public void init() {
+		mProperties.init(30, 60, 60, 60);		
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mProperties.init(30, 60, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
 
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
+		mProperties.init(x, y, 60, 60);
+		
+		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
 		mBitmap = Imports.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-	
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		
 	}
 	@Override
 	public boolean move() {
@@ -213,7 +214,7 @@ public class Duck extends GraphicObject{
 				if(mCollisionCount == 30){
 					getSpeed().setSpeed(0);
 				}else if(mCollisionCount == 45){
-					getSpeed().setSpeed(4);				
+					getSpeed().setSpeed(8);				
 					getSpeed().setAngle(0);
 					cID = CollisionType.cDefault;
 					mCollisionCount = -1;

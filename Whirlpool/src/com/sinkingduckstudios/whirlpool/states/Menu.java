@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.logic.Screen;
 
 public class Menu extends Activity {
 	boolean mPaused = false;
@@ -31,15 +32,17 @@ public class Menu extends Activity {
         
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         
-        
         Constants.clearLevel();
         Constants.setState(this);
         
         ImageButton gameButton = ((ImageButton) findViewById(R.id.game));
         Constants.setContext(getApplicationContext());
+        
+        Screen theScreen = new Screen();
         Display display = getWindowManager().getDefaultDisplay(); 
-        Constants.setHeight(display.getHeight());
-        Constants.setWidth(display.getWidth());
+    	//RelativeLayout theLayout = (RelativeLayout) findViewById(R.id.menuLayout)
+    	theScreen.set(display.getWidth(), display.getHeight());
+    	Constants.setScreen(theScreen);
         
         gameButton.setOnClickListener(goToGame);
         /*Constants.getSoundManager().initSound();
