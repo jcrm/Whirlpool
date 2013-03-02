@@ -11,7 +11,10 @@ import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 
 public class Boat extends GraphicObject{
-	private int mBoatRadius = 30;
+	private int mBoatRadius = Constants.getLevel().getLevelHeight()/3;
+	private int mTorpedoCount = -1;
+	private boolean mCreateNewTorpedo = true;
+	
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
@@ -35,7 +38,7 @@ public class Boat extends GraphicObject{
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
+						new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
 						mBitmap.getWidth()/mId.tFrames, 
 						mBitmap.getHeight());	
 		
@@ -118,6 +121,7 @@ public class Boat extends GraphicObject{
 		if(move()){
 			border();
 		}
+		incrementCounter();
 		mAnimate.animateFrame();
 	}
 
@@ -127,6 +131,26 @@ public class Boat extends GraphicObject{
 
 	public void setBoatRadius(int boatRadius) {
 		mBoatRadius = boatRadius;
+	}
+	public int getTorpedoCount() {
+		return mTorpedoCount;
+	}
+	public void setTorpedoCount(int torpedoCount) {
+		mTorpedoCount = torpedoCount;
+	}
+	public void incrementCounter(){
+		if((mCreateNewTorpedo == false) && (++mTorpedoCount>=0)){
+			if(mTorpedoCount == 30){
+				mCreateNewTorpedo = true;
+				mTorpedoCount = -1;
+			}
+		}
+	}
+	public boolean getCreateNewTorpedo() {
+		return mCreateNewTorpedo;
+	}
+	public void setCreateNewTorpedo(boolean createNewTorpedo) {
+		mCreateNewTorpedo = createNewTorpedo;
 	}
 
 

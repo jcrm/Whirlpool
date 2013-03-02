@@ -55,27 +55,6 @@ public class Menu extends Activity {
 //	Intent OptionsBackIntent = new Intent(OptionsMenu.this, Menu.class);
 //	startActivity(OptionsBackIntent);
 
-	public void update() {
-		//nothing needed in Menu State
-	}   
-	@Override
-	public void onPause(){
-		mPaused = true;
-		Constants.getSoundManager().stopAllSounds();
-		super.onPause();
-	}
 
-	@Override
-	public void onDestroy(){
-		mPaused = true;
-		Constants.getSoundManager().stopAllSounds();
-		super.onDestroy();
-	}
-	@Override
-	public void onResume(){
-		mPaused = false;
-		super.onResume();
-		Constants.getSoundManager().initSound();
-		Constants.getSoundManager().playBackgroundMusic();
-	}
-}
+}   
+

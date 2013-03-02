@@ -22,7 +22,7 @@ import com.sinkingduckstudios.whirlpool.movement.Properties;
 public class Duck extends GraphicObject{
 	//enum for collision checking
 	private enum CollisionType{
-		cDefault, cShark, cDiver, cFrog, cBoat, cBoatRadius, cTorpedo;
+		cDefault, cShark, cDiver, cFrog, cBoat, cTorpedo;
 	}
 	//collision variables 
 	public CollisionType cID = CollisionType.cDefault;
@@ -152,47 +152,55 @@ public class Duck extends GraphicObject{
 	}
 	//collision checking
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int boatRadius){
-		if(cID == CollisionType.cDefault && mCollisionCount <0){
-			switch(id){
-			case tDiver:
+		switch(id){
+		case tDiver:
+			if(cID == CollisionType.cDefault){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					cID = CollisionType.cDiver;
 					collisionDiverFrogBoat();
 				}
-				break;
-			case tFrog:
+			}
+			break;
+		case tFrog:
+			if(cID == CollisionType.cDefault){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					cID = CollisionType.cFrog;
 					collisionDiverFrogBoat();
 				}
-				break;
-			case tBoat:
-				boolean inRadius = false;
-				if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), boatRadius)){
-					Constants.getSoundManager().playDucky();
-					inRadius = true;
-				}
-				if(inRadius ==true){
+			}
+			break;
+		case tBoat:
+			boolean inRadius = false;
+			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), boatRadius)){
+				inRadius = true;
+			}
+			if(inRadius ==true){
+				if(cID == CollisionType.cDefault ){
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
 						cID = CollisionType.cBoat;
 						collisionDiverFrogBoat();
 					}
-					return true;
-				}
-				break;
-			case tTorpedo:
-				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					Constants.getSoundManager().playDucky();
 				}
 				return true;
-			case tShark: 
+			}
+			break;
+		case tTorpedo:
+			if(CollisionManager.circleCollision(mProperties, otherProperties)){
+				collisionTorpedo();
+				cID = CollisionType.cTorpedo;
+				Constants.getSoundManager().playDucky();
+				return true;
+			}
+			break;
+		case tShark: 
+			if(cID!=CollisionType.cShark && cID != CollisionType.cTorpedo){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					cID = CollisionType.cShark;
 					Constants.getSoundManager().playDucky();
 				}
 				return true;
-			default: break;
 			}
+		default: break;
 		}
 		return false;
 	}
@@ -201,15 +209,23 @@ public class Duck extends GraphicObject{
 		//TODO: This is why duck stops moving if wpool over after collide. 
 		//It wont keep counting till wpool goes away
 		//Wpool wont go away coz duck is in it. Deadlock
-		if(cID != CollisionType.cDefault && mCollisionCount >= 0){
-			if(mCollisionCount == 30){
-				getSpeed().setSpeed(0);
-				getSpeed().setAngle(0);
-			}else if(mCollisionCount == 60){
-				getSpeed().setSpeed(4);				
-				getSpeed().setAngle(0);
-				cID = CollisionType.cDefault;
-				mCollisionCount = -1;
+		if(mCollisionCount >=0){
+			if(cID == CollisionType.cBoat || cID == CollisionType.cFrog || cID == CollisionType.cDiver){
+				if(mCollisionCount == 30){
+					getSpeed().setSpeed(0);
+				}else if(mCollisionCount == 45){
+					getSpeed().setSpeed(4);				
+					getSpeed().setAngle(0);
+					cID = CollisionType.cDefault;
+					mCollisionCount = -1;
+				}
+			}else if(cID == CollisionType.cTorpedo){
+				if(mCollisionCount == 10){
+					getSpeed().setSpeed(4);				
+					getSpeed().setAngle(0);
+					cID = CollisionType.cDefault;
+					mCollisionCount = -1;
+				}
 			}
 			mCollisionCount++;
 		}
@@ -217,6 +233,11 @@ public class Duck extends GraphicObject{
 	private void collisionDiverFrogBoat(){
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(new Random().nextInt(90)+135);
+		mCollisionCount = 0;
+		Constants.getSoundManager().playDucky();
+	}
+	private void collisionTorpedo(){
+		getSpeed().setSpeed(5);
 		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
 	}

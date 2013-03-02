@@ -107,4 +107,24 @@ public class Game extends Activity {
 		}
 
 	}
+	@Override
+	public void onPause(){
+		mPaused = true;
+		Constants.getSoundManager().stopAllSounds();
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy(){
+		mPaused = true;
+		Constants.getSoundManager().stopAllSounds();
+		super.onDestroy();
+	}
+	@Override
+	public void onResume(){
+		mPaused = false;
+		super.onResume();
+		Constants.getSoundManager().initSound();
+		Constants.getSoundManager().playBackgroundMusic();
+	}
 }

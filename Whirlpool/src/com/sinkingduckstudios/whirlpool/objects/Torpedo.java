@@ -28,7 +28,8 @@ public class Torpedo extends GraphicObject {
 		mBitmap = Imports.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
+		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
