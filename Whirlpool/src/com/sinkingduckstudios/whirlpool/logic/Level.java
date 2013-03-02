@@ -96,7 +96,7 @@ public class Level {
 						case tBoat:
 							//cant edit an array will being used have to use an iterator google this when fixing it
 							if(((Boat) graphic2).getCreateNewTorpedo()){
-								objectToBeAdded.add(new Torpedo(graphic2.getCentreX(),graphic2.getBottomRightY()));
+								objectToBeAdded.add(new Torpedo(graphic2.getCentreX(),graphic2.getBottomRightY(),0));
 								((Boat) graphic2).setCreateNewTorpedo(false);
 							}
 							break;
@@ -113,6 +113,8 @@ public class Level {
 			}else if(graphic.getId()==objtype.tTorpedo){
 				if(((Torpedo) graphic).getIsReadyToDestroy()){
 					mainIterator.remove();
+				}else if(((Torpedo) graphic).updateDirection()){
+					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				}else{
 					graphic.frame();	//Do everything this object does every frame, like move
 				}

@@ -49,7 +49,6 @@ public class Shark extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-	@Override
 	public void init(int x, int y) {
 		//mBitmap = Imports.getShark();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());

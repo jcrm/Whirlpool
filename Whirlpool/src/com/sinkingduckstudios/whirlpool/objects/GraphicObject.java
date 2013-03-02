@@ -71,8 +71,6 @@ public abstract class GraphicObject {//implements ObjectFunctions{
     
     abstract public void init();
     
-    abstract public void init(int x, int y);
-    
     abstract public boolean move();
     
     abstract public void borderCollision(Screen.ScreenSide side, int width, int height);

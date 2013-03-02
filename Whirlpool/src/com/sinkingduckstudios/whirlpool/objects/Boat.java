@@ -11,7 +11,7 @@ import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 
 public class Boat extends GraphicObject{
-	private int mBoatRadius = Constants.getLevel().getLevelHeight()/3;
+	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
 	private int mTorpedoCount = -1;
 	private boolean mCreateNewTorpedo = true;
 	
@@ -46,7 +46,6 @@ public class Boat extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-	@Override
 	public void init(int x, int y) {
 		mBitmap = Imports.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
@@ -140,7 +139,7 @@ public class Boat extends GraphicObject{
 	}
 	public void incrementCounter(){
 		if((mCreateNewTorpedo == false) && (++mTorpedoCount>=0)){
-			if(mTorpedoCount == 30){
+			if(mTorpedoCount == 120){
 				mCreateNewTorpedo = true;
 				mTorpedoCount = -1;
 			}

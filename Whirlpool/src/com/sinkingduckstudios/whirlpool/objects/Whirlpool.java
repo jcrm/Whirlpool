@@ -67,7 +67,6 @@ public class Whirlpool extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-	@Override
 	public void init(int x, int y) {
 		mBitmap = Imports.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());

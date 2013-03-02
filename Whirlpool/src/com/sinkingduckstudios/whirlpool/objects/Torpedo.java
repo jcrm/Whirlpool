@@ -6,31 +6,34 @@ import android.graphics.Rect;
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 
 
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
-	public Torpedo(int x, int y){
+	private int mDuckCounter = 11;
+	
+	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
-		init(x, y);
+		init(x, y, angle);
 	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
+			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
 	}
 
-	@Override
-	public void init(int x, int y){
+	public void init(int x, int y, float angle){
 		mBitmap = Imports.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mProperties.init(x, y, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
-
+		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -43,7 +46,7 @@ public class Torpedo extends GraphicObject {
 		
 		mProperties.init(30, 60, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
 
-		mSpeed.setMove(false);
+		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
@@ -121,5 +124,27 @@ public class Torpedo extends GraphicObject {
 	public void setIsReadyToDestroy(boolean isReadyToDestroy) {
 		mIsReadyToDestroy = isReadyToDestroy;
 	}
-
+	public void setDuckSpeed(int duckX, int duckY){
+		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
+		float tempSpeed = mSpeed.getSpeed(); 
+		if(tempSpeed<8){
+			mSpeed.setSpeed(tempSpeed+1);
+		}else{
+			tempSpeed = 8;
+		}
+	}
+	public int getDuckCounter() {
+		return mDuckCounter;
+	}
+	public void setDuckCounter(int duckCounter) {
+		mDuckCounter = duckCounter;
+	}
+	public boolean updateDirection(){
+		mDuckCounter++;
+		if(mDuckCounter>10){
+			mDuckCounter = 0;
+			return true;
+		}
+		return false;
+	}
 }

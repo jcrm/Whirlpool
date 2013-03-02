@@ -59,7 +59,6 @@ public class Duck extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-	@Override
 	public void init(int x, int y) {
 		mBitmap = Imports.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
@@ -237,7 +236,7 @@ public class Duck extends GraphicObject{
 		Constants.getSoundManager().playDucky();
 	}
 	private void collisionTorpedo(){
-		getSpeed().setSpeed(5);
+		getSpeed().setSpeed(0);
 		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
 	}

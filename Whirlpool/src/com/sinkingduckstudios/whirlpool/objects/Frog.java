@@ -57,7 +57,6 @@ public class Frog extends GraphicObject{
 		setFrogCentreY(getCentreY());
 		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
 	}
-	@Override
 	public void init(int x, int y) {
 		mBitmap = Imports.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
