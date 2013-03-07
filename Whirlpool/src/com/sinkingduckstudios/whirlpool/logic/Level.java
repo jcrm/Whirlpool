@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
@@ -42,7 +43,7 @@ public class Level {
 	public void init(){
 		mLevelWidth = 3000;
 		mLevelHeight = Constants.getScreen().getHeight();
-		mBackgroundImage = Imports.getBackground();
+		mBackgroundImage = SpriteManager.getBackground();
 		mGraphics.add(new Duck(20,250));
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Frog(500,250));

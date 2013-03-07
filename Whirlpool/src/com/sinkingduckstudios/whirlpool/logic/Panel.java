@@ -43,6 +43,5 @@ public class Panel extends View{
     	//int y = findViewById(R.id.mainview).getHeight();
     	sRes = getResources();
     	Constants.setRes(sRes);
-    	Imports.setImages();
     }
 }

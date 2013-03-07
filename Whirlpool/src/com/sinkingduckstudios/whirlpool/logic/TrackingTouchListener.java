@@ -45,6 +45,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	public boolean onTouch(View view, MotionEvent event) {
 		mScaledX = (float) (event.getX()*Constants.getScreen().getRatio());
 		mScaledY = (float) (event.getY()*Constants.getScreen().getRatio());
+		mScaledX = event.getX();
+		mScaledY = event.getY();
 		switch(event.getAction()){
 
 		case MotionEvent.ACTION_DOWN:

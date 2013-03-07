@@ -10,13 +10,16 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
 public class Duck extends GraphicObject{
@@ -46,14 +49,17 @@ public class Duck extends GraphicObject{
 			}
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	@Override
 	public void init() {
 		mProperties.init(30, 60, 60, 60);		
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getDuck();
+		mBitmap = SpriteManager.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 
 		mSpeed.setMove(false);
@@ -63,8 +69,7 @@ public class Duck extends GraphicObject{
 	public void init(int x, int y) {
 		mProperties.init(x, y, 60, 60);
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getDuck();
+		mBitmap = SpriteManager.getDuck();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);

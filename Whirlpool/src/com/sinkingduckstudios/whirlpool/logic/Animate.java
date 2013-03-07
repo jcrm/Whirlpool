@@ -47,4 +47,10 @@ public class Animate{
 	public Rect getPortion() {
 		return mPortion;
 	}
+	public void Reset(int frames, int width, int height){
+		mNoOfFrames = frames;
+		mFrameWidth = width/mNoOfFrames ;
+		mFrameHeight = height;
+		mPortion = new Rect(0, 0, mFrameWidth, mFrameHeight);
+	}
 }

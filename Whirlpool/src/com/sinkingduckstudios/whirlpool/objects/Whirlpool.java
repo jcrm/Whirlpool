@@ -8,13 +8,17 @@
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 //used to create effect of whirlpool
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 /*
  * Can be deleted until i've fixed crashing problem
@@ -47,7 +51,10 @@ public class Whirlpool extends GraphicObject{
 			canvas.scale(dirFactor, 1);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
-
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 		if (mArrow != null){
 			mArrow.draw(canvas);//draw whirls directional arrow
 		}
@@ -57,19 +64,18 @@ public class Whirlpool extends GraphicObject{
 	public void init() {
 		mProperties.init(0, 0, 130, 130);	
 
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getWhirlpool();
+		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
+		
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130);	
 
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getWhirlpool();
+		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);

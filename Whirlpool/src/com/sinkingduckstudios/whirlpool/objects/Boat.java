@@ -3,12 +3,15 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
@@ -30,16 +33,20 @@ public class Boat extends GraphicObject{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
+		canvas.drawCircle(getCentreX(), getCentreY(), mBoatRadius, temp);
 	}
 
 	@Override
 	public void init() {
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
-				50, 50);	
+				96, 96);	
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getBoat();
+		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
 		mSpeed.setMove(true);
@@ -47,10 +54,9 @@ public class Boat extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 50, 50);	
+		mProperties.init(x, y, 96, 96);	
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getBoat();
+		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
 		mSpeed.setMove(true);

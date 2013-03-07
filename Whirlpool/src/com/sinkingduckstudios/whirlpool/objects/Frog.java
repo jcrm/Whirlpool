@@ -10,12 +10,15 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Frog extends GraphicObject{
 	//used for working out the location of the frog round the circle
@@ -37,6 +40,10 @@ public class Frog extends GraphicObject{
 			canvas.rotate((float) (-mFrogAngle*180/Math.PI));
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	@Override
@@ -45,8 +52,7 @@ public class Frog extends GraphicObject{
 				(Constants.getLevel().getLevelHeight()/2)-70,
 				80, 80);	
 
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getFrog();
+		mBitmap = SpriteManager.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
@@ -60,8 +66,7 @@ public class Frog extends GraphicObject{
 	public void init(int x, int y) {
 		mProperties.init(x, y, 80, 80);	
 
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getFrog();
+		mBitmap = SpriteManager.getFrog();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);

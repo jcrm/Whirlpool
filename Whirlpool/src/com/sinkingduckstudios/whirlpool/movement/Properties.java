@@ -30,7 +30,7 @@ public class Properties {
 		mHeight = (int) (height/Constants.getScreen().getRatio());
 		mCentre.setPoints(x+(mWidth/2), y+(mHeight/2));
 		mBottomRight.setPoints(x+mWidth, y+mHeight);
-		mRadius =  (int) Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2)));
+		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 	}
 	public void setCentre(int x, int y){
 		mCentre.setPoints(x, y);

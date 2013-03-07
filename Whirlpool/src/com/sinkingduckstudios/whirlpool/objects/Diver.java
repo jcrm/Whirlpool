@@ -10,12 +10,15 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Diver extends GraphicObject{
 	private boolean mFlipped;
@@ -32,21 +35,22 @@ public class Diver extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX()/Constants.getScreen().getRatio(), getCentreY()/Constants.getScreen().getRatio());
+			canvas.translate(getCentreX(), getCentreY());
 			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 	@Override
 	public void init() {
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-				new Random().nextInt(Constants.getLevel().getLevelHeight()),
-				100, 100);	
-		//reset radius because height of the image is higher than the height of the diver.
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
-		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames,getHeight());
-		mBitmap = Imports.getDiver();
+						new Random().nextInt(Constants.getLevel().getLevelHeight()),
+						100, 100);	
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
+		mBitmap = SpriteManager.getDiver();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
@@ -55,11 +59,8 @@ public class Diver extends GraphicObject{
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 100, 100);	
-		//reset radius because height of the image is higher than the height of the diver.
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
-		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames,getHeight());
-		mBitmap = Imports.getDiver();
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
+		mBitmap = SpriteManager.getDiver();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
@@ -130,13 +131,13 @@ public class Diver extends GraphicObject{
 		if(!mFlipped){
 			if(mSpeed.getAngle()>270 || mSpeed.getAngle()<90){
 				mFlipped = true;
-				mBitmap = Imports.getDiverFlipped();
+				mBitmap = SpriteManager.getDiverFlipped();
 				System.gc();
 			}
 		}else if(mFlipped){
 			if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>=90){
 				mFlipped = false;
-				mBitmap = Imports.getDiver();
+				mBitmap = SpriteManager.getDiver();
 				System.gc();
 			}
 		}

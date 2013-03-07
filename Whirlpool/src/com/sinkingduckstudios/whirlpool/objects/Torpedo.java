@@ -1,12 +1,15 @@
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 
 public class Torpedo extends GraphicObject {
@@ -25,14 +28,17 @@ public class Torpedo extends GraphicObject {
 			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	public void init(int x, int y, float angle){
 		mProperties.init(x, y, 50, 50);		
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getTorpedo();
+		mBitmap = SpriteManager.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
@@ -43,10 +49,9 @@ public class Torpedo extends GraphicObject {
 	@Override
 	public void init(){
 		mProperties.init(30, 60, 50, 50);		
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6))));
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 		
-		Imports.scaledBitmap(mId, getWidth()*mId.tFrames, getHeight());
-		mBitmap = Imports.getTorpedo();
+		mBitmap = SpriteManager.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
