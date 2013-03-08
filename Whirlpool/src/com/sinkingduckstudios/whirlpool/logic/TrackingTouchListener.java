@@ -104,8 +104,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 					if(mNoRef==3){
 						mWhirl = addWPools(
 								mWPools,
-								(int) (mWCenter[0] + Constants.getLevel().getScrollBy()),
-								(int) mWCenter[1],
+								(int) ((mWCenter[0] + Constants.getLevel().getScrollBy())*Constants.getScreen().getRatio()),
+								(int) (mWCenter[1]*Constants.getScreen().getRatio()),
 								mWSize,
 								-1,// pass in -1 for no angle, probs should clean this up
 								isClockwise());
@@ -133,8 +133,8 @@ final class TrackingTouchListener implements View.OnTouchListener{
 					if(mNoRef==3){
 						mWhirl = addWPools(
 								mWPools,
-								(int) (mWCenter[0] + Constants.getLevel().getScrollBy()),
-								(int) mWCenter[1],
+								(int) ((mWCenter[0] + Constants.getLevel().getScrollBy())*Constants.getScreen().getRatio()),
+								(int) (mWCenter[1]*Constants.getScreen().getRatio()),
 								mWSize,
 								-1,// pass in -1 for no angle, probs should clean this up
 								isClockwise());

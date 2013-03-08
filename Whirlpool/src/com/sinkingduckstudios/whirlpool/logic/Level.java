@@ -45,13 +45,12 @@ public class Level {
 		mLevelHeight = Constants.getScreen().getHeight();
 		
 		mBackgroundImage = SpriteManager.getBackground();
-		mGraphics.add(new Duck(20, 250));
+		mGraphics.add(new Duck(50, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Frog(500, 250, 180));
 		mGraphics.add(new Diver(1000, 50));
-		mGraphics.add(new Boat());
-		mWPoolModel.addWPool(0, 0, 10, 0, 1);
-		mWPoolModel.clearWPools();
+		//mGraphics.add(new Boat());
+		mWPoolModel.addWPool(50, 235, 10, -1, 1);
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}//
@@ -185,12 +184,8 @@ public class Level {
 	public void shiftScrollBy(float delta) {
 	}
 	public void duckOnScreen(){
-		while(Constants.getPlayer().getCentreX() >= (Constants.getScreen().getWidth()/2)+mScrollBy){
-			mScrollBy++;
-		}
-		while(Constants.getPlayer().getCentreX() < (Constants.getScreen().getWidth()/2)+mScrollBy){
-			mScrollBy--;
-		}
+		
+		mScrollBy = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
 		if(mScrollBy < 0){
 			mScrollBy = 0;
 		}
