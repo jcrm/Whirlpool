@@ -27,9 +27,9 @@ public class Diver extends GraphicObject{
 		mId = objtype.tDiver;
 		init();
 	}
-	public Diver(int x, int y){
+	public Diver(int x, int y, int angle){
 		mId = objtype.tDiver;
-		init(x, y);
+		init(x, y, angle);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -57,14 +57,14 @@ public class Diver extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-	public void init(int x, int y) {
+	public void init(int x, int y, int angle) {
 		mProperties.init(x, y, 100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 		mBitmap = SpriteManager.getDiver();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	@Override

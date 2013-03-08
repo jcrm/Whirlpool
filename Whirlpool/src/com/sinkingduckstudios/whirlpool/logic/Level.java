@@ -45,12 +45,12 @@ public class Level {
 		mLevelHeight = Constants.getScreen().getHeight();
 		
 		mBackgroundImage = SpriteManager.getBackground();
-		mGraphics.add(new Duck(50, 235));
+		mGraphics.add(new Duck(60, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(500, 250, 180));
-		mGraphics.add(new Diver(1000, 50));
-		//mGraphics.add(new Boat());
-		mWPoolModel.addWPool(50, 235, 10, -1, 1);
+		mGraphics.add(new Frog(500, 250, 200));
+		mGraphics.add(new Diver(1000, 50, 90));
+		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
+		mWPoolModel.addWPool(65, 235, 10, -1, 1);
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}//

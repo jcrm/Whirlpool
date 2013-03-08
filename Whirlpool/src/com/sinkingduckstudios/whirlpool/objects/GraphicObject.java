@@ -34,7 +34,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tFrog(4, 0, 16), 
 		tShark(5, new Random().nextInt(360)+1, 1), 
 		tBoat(0, 0, 15),
-		tDiver(4, new Random().nextInt(360), 16),
+		tDiver(4, 90, 16),
 		tTorpedo(4, new Random().nextInt(360), 10);
 		
 		float tSpeed;
