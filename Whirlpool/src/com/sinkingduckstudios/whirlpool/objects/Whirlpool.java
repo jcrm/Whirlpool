@@ -21,7 +21,6 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 public class Whirlpool extends GraphicObject{
 	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
-	private float radius = 40.0f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
@@ -158,6 +157,7 @@ public class Whirlpool extends GraphicObject{
 					a.setPull(true);
 					pull(a);
 					if (testAngle(a)){
+						a.resetwPoolCounter();
 						a.setAngle(getWAngle());
 						collisionDone = true;
 						finished = true;
@@ -169,6 +169,8 @@ public class Whirlpool extends GraphicObject{
 
 	public boolean testAngle(GraphicObject a){
 		if (angle == -1)//wpool not directed yet
+			return false;
+		if(!a.wPoolCounter())
 			return false;
 		float _lastAngle;
 		//check if duckie has reached his exit angle
@@ -312,36 +314,7 @@ public class Whirlpool extends GraphicObject{
 		default:
 
 		}
-	}/*
-	//changes direction by a factor depending on type of object
-	//depending on quadrant depends which directions need changing
-	void ChangeDir(GraphicObject graphic, float Factor){
-		float tempx = graphic.GetX();
-		float tempy = graphic.GetY();
-		GraphicObject.Speed speed = graphic.GetSpeed();
-		//checks if the speed is the same as the quadrant before
-		if(tempx>=centreX && tempy>=centreY){
-			if(speed.GetX()>0 && speed.GetY()>0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy>=centreY){
-			if(speed.GetX()<0 && speed.GetY()>0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy<centreY){
-			if(speed.GetX()<0 && speed.GetY()<0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx>=centreX && tempy<centreY){
-			if(speed.GetX()>0 && speed.GetY()<0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-
-	}*/
+	}
 
 	//this function is called so the math is only done once per fetch
 	//(rather than individually in each getter)
@@ -378,12 +351,6 @@ public class Whirlpool extends GraphicObject{
 	}
 	public void setPower(float power) {
 		this.power = power;
-	}
-	public float getRadius() {
-		return radius;
-	}
-	public void setRadius(float radius) {
-		this.radius = radius;
 	}
 	public void setWAngle(float angle) {
 		this.angle = angle;

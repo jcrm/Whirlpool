@@ -56,6 +56,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected boolean mPull;// = false;
 	protected static Object mScreenLock;
 	protected Animate mAnimate;
+	private int wpoolCounter;
 	
     public GraphicObject(){
     	mScreenLock=Constants.getLock();
@@ -218,5 +219,12 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	public Properties getCollision(){
 		return mProperties;
+	}
+	public boolean wPoolCounter(){
+		wpoolCounter++;
+		return (wpoolCounter>=15);
+	}
+	public void resetwPoolCounter(){
+		wpoolCounter=0;
 	}
 }
