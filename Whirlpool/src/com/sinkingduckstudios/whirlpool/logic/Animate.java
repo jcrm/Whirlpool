@@ -17,6 +17,7 @@ public class Animate{
 	private int mDelay = 3;
 	private int mCounter = 0;
 	private Rect mPortion;
+	private boolean mFinished = false;
 
 	public Animate(int frames, int width, int height){
 		mNoOfFrames = frames;
@@ -37,6 +38,7 @@ public class Animate{
 	public void updatePortion(){
 		if(mFrameNum >= mNoOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
 			mFrameNum = 0;
+			mFinished = true;
 		}
 		//synchronized(screenLock){
 		mPortion.left =  mFrameNum * mFrameWidth;
@@ -52,5 +54,13 @@ public class Animate{
 		mFrameWidth = width/mNoOfFrames ;
 		mFrameHeight = height;
 		mPortion = new Rect(0, 0, mFrameWidth, mFrameHeight);
+	}
+
+	public boolean getFinished() {
+		return mFinished;
+	}
+
+	public void setFinished(boolean finished) {
+		mFinished = finished;
 	}
 }

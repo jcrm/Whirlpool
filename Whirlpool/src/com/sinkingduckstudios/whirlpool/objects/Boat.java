@@ -15,8 +15,10 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
+	private final int mAttackFrames = 8;
 	private int mTorpedoCount = -1;
 	private boolean mCreateNewTorpedo = true;
+	private boolean mAttackMode = false;
 	
 	public Boat(){
 		mId = objtype.tBoat;
@@ -43,9 +45,9 @@ public class Boat extends GraphicObject{
 	@Override
 	public void init() {
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-				new Random().nextInt(Constants.getLevel().getLevelHeight()/2), 
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/4), 
 				96, 96);	
-		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
@@ -55,7 +57,7 @@ public class Boat extends GraphicObject{
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 96, 96);	
-		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
 	
@@ -127,6 +129,12 @@ public class Boat extends GraphicObject{
 			border();
 		}
 		incrementCounter();
+		if(mAttackMode && mAnimate.getFinished()){
+			/*mBitmap = SpriteManager.getBoat();
+			mAnimate.Reset(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+			mAttackMode = false;
+			mCreateNewTorpedo = false;*/
+		}
 		mAnimate.animateFrame();
 	}
 
@@ -157,6 +165,12 @@ public class Boat extends GraphicObject{
 	public void setCreateNewTorpedo(boolean createNewTorpedo) {
 		mCreateNewTorpedo = createNewTorpedo;
 	}
-
+	public void changeAnimation(){
+		/*if(mCreateNewTorpedo){
+			mBitmap= SpriteManager.getBoatAttack();
+			mAnimate.Reset(mAttackFrames, mBitmap.getWidth(), mBitmap.getHeight()/7);
+			mAttackMode = true;
+		}*/
+	}
 
 }

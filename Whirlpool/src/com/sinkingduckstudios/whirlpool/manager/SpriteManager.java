@@ -19,6 +19,7 @@ public class SpriteManager {
 	private static Bitmap mDiver;
 	private static Bitmap mDiverFlipped;
 	private static Bitmap mBoat;
+	private static Bitmap mBoatAttack;
 	private static Bitmap mFrog;
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
@@ -104,6 +105,11 @@ public class SpriteManager {
 	}
 	public static Bitmap getBackground() {
 		if(mBackground==null){
+			/*BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inJustDecodeBounds = true;
+			BitmapFactory.decodeResource(Constants.getRes(), R.drawable.mainmenu_background, opt);
+			opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
+			opt.inJustDecodeBounds = false;*/
 			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset_background);
 		}
 		return mBackground;
@@ -119,5 +125,25 @@ public class SpriteManager {
 	}
 	public static void setTorpedo(Bitmap torpedo) {
 		mTorpedo = torpedo;
+	}
+	public static Bitmap getBoatAttack() {
+		if(mBoatAttack==null){
+			mBoatAttack =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat_attack_sprites);
+		}
+		return mBoatAttack;
+	}
+	public static void setBoatAttack(Bitmap boatAttack) {
+		mBoatAttack = boatAttack;
+	}
+	public static int getScale(int oW, int oH, int nW, int nH){
+		int scale = 1;
+		if(oW>nW || oH>nH){
+			if(oW<oH){
+				scale=Math.round(oW/nW);
+			}else{
+				scale=Math.round(oH/nH);
+			}
+		}
+		return scale;
 	}
 }

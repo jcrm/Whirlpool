@@ -43,19 +43,18 @@ public class Level {
 	public void init(){
 		mLevelWidth = 3000;
 		mLevelHeight = Constants.getScreen().getHeight();
+		
 		mBackgroundImage = SpriteManager.getBackground();
-		mGraphics.add(new Duck(20,250));
+		mGraphics.add(new Duck(20, 250));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(500,250));
-		mGraphics.add(new Diver(1000,50));
+		mGraphics.add(new Frog(500, 250, 180));
+		mGraphics.add(new Diver(1000, 50));
 		mGraphics.add(new Boat());
-		//_graphics.add(new Shark());
-		//add a wpool to create bitmap at start then clear list
 		mWPoolModel.addWPool(0, 0, 10, 0, 1);
 		mWPoolModel.clearWPools();
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
-	}
+	}//
 
 	public void update(){
 		
@@ -97,11 +96,7 @@ public class Level {
 					if(collision){
 						switch(graphic2.getId()){
 						case tBoat:
-							//cant edit an array will being used have to use an iterator google this when fixing it
-							if(((Boat) graphic2).getCreateNewTorpedo()){
-								objectToBeAdded.add(new Torpedo(graphic2.getCentreX(),graphic2.getBottomRightY(),0));
-								((Boat) graphic2).setCreateNewTorpedo(false);
-							}
+							//((Boat) graphic2).changeAnimation();
 							break;
 						case tShark:
 							break;
@@ -112,6 +107,10 @@ public class Level {
 							break;
 						}
 					}	
+				}
+			}else if(graphic.getId()==objtype.tBoat){
+				if(((Boat) graphic).getCreateNewTorpedo()){
+					//objectToBeAdded.add(new Torpedo(graphic.getCentreX(),graphic.getBottomRightY(),0));
 				}
 			}else if(graphic.getId()==objtype.tTorpedo){
 				if(((Torpedo) graphic).getIsReadyToDestroy()){
@@ -125,7 +124,7 @@ public class Level {
 				graphic.frame();	//Do everything this object does every frame, like move
 			}
 		}
-		mGraphics.addAll(objectToBeAdded);
+		//mGraphics.addAll(objectToBeAdded);
 	}
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();

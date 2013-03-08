@@ -28,9 +28,9 @@ public class Frog extends GraphicObject{
 		mId = objtype.tFrog;
 		init();
 	}
-	public Frog(int x, int y){
+	public Frog(int x, int y, int r){
 		mId = objtype.tFrog;
-		init(x, y);
+		init(x, y, r);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -63,7 +63,7 @@ public class Frog extends GraphicObject{
 		setFrogCentreY(getCentreY());
 		setFrogRadius(180);
 	}
-	public void init(int x, int y) {
+	public void init(int x, int y, int r) {
 		mProperties.init(x, y, 80, 80);	
 
 		mBitmap = SpriteManager.getFrog();
@@ -75,7 +75,7 @@ public class Frog extends GraphicObject{
 		//used for locating the frog round the circle
 		setFrogCentreX(getCentreX());
 		setFrogCentreY(getCentreY());
-		setFrogRadius(180);
+		setFrogRadius(r);
 	}
 	@Override
 	public boolean move() {

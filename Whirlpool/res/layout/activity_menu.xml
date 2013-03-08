@@ -2,9 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainmenu_background"
     android:id="@+id/menuLayout">
-
+	<com.sinkingduckstudios.whirlpool.views.MenuView
+	    android:id="@+id/menuView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    >
+	</com.sinkingduckstudios.whirlpool.views.MenuView>
     <ImageButton
         android:id="@+id/game"
         android:layout_width="200dp"
@@ -14,7 +18,8 @@
         android:layout_marginTop="0dp"
         android:layout_centerHorizontal="true"
     	android:contentDescription="@string/start_game"
-    />
+    	>
+    </ImageButton>
 
     <ImageButton
         android:id="@+id/options"
@@ -24,7 +29,8 @@
         android:scaleType="fitCenter"
         android:layout_below="@id/game"
         android:contentDescription="@string/options_screen"
-    />
+        >
+    </ImageButton>
     
         
     <ImageButton

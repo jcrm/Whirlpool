@@ -20,9 +20,11 @@ import android.widget.ImageButton;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
+import com.sinkingduckstudios.whirlpool.views.MenuView;
 
 public class Menu extends Activity {
 	boolean mPaused = false;
+	MenuView menuView;
     //@SuppressLint("NewApi")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class Menu extends Activity {
     	Constants.setScreen(theScreen);
         
         gameButton.setOnClickListener(goToGame);
+        menuView=(MenuView)findViewById(R.id.menuView);
         /*Constants.getSoundManager().initSound();
         Constants.getSoundManager().playBackgroundMusic();*/
     }
@@ -55,6 +58,12 @@ public class Menu extends Activity {
     		finish();
         }
 	};
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		menuView.CleanUp();
+		menuView = null;
+	}
 //	Intent OptionsBackIntent = new Intent(OptionsMenu.this, Menu.class);
 //	startActivity(OptionsBackIntent);
 

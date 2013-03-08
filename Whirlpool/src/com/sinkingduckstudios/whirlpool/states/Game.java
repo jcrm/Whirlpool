@@ -23,10 +23,10 @@ import android.widget.Button;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Level;
-import com.sinkingduckstudios.whirlpool.logic.Panel;
+import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Game extends Activity {
-	private Panel mPanel;
+	private GameView mPanel;
 	private Level mLevelOne;
 	private Timer mTime;
 	private Handler mGameHandler;
@@ -40,7 +40,7 @@ public class Game extends Activity {
 		setContentView(R.layout.activity_game);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
-		mPanel = (Panel) findViewById(R.id.gameview);
+		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
 		//TODO remember to do this in all the other states

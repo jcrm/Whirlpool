@@ -14,15 +14,10 @@ import android.graphics.Rect;
 import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
-import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
-//used to create effect of whirlpool
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-/*
- * Can be deleted until i've fixed crashing problem
- */
 public class Whirlpool extends GraphicObject{
 	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
