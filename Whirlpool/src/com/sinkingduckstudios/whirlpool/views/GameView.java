@@ -10,7 +10,7 @@ package com.sinkingduckstudios.whirlpool.views;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.res.Resources;//
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
