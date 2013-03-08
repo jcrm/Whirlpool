@@ -51,7 +51,7 @@ public class Diver extends GraphicObject{
 						100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 		mBitmap = SpriteManager.getDiver();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -61,7 +61,7 @@ public class Diver extends GraphicObject{
 		mProperties.init(x, y, 100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 		mBitmap = SpriteManager.getDiver();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);

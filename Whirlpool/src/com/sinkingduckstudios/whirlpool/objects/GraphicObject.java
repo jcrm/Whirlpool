@@ -27,25 +27,29 @@ interface ObjectFunctions{
 public abstract class GraphicObject {//implements ObjectFunctions{
 	//enum used to decide what type of sprite
 	public enum objtype {
-		tDefault(0, 0, 1), 
-		tWhirl(0, 0, 30),
-		tDuck(8, 0, 16),
+		tDefault(0, 0, 1, 1, 1), 
+		tWhirl(0, 0, 30, 30, 1),
+		tDuck(8, 0, 16, 16, 1),
 		//not sure what numbers need for frame width and height
-		tFrog(4, 0, 16), 
-		tShark(5, new Random().nextInt(360)+1, 1), 
-		tBoat(0, 0, 15),
-		tDiver(4, new Random().nextInt(360), 16),
-		tTorpedo(4, new Random().nextInt(360), 10);
+		tFrog(4, 0, 16, 16, 1), 
+		tShark(5, new Random().nextInt(360)+1, 1, 1, 1), 
+		tBoat(0, 0, 15, 15, 1),
+		tDiver(4, new Random().nextInt(360), 16, 16, 1),
+		tTorpedo(4, new Random().nextInt(360), 10, 10, 1);
 		
 		float tSpeed;
 		float tAngle;
 		int tFrames;
+		int tNoOfCol;
+		int tNoOfRow;
 		
-		objtype(float speed, float angle, int frames){
+		objtype(float speed, float angle, int frames, int noOfCol, int noOfRow){
 			//TODO set min width/height
 			tSpeed = speed;
 			tAngle = angle;
 			tFrames = frames;
+			tNoOfCol = noOfCol;
+			tNoOfRow = noOfRow;
 		}
 	}
 	//private variables

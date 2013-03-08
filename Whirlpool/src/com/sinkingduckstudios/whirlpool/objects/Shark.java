@@ -45,7 +45,7 @@ public class Shark extends GraphicObject{
 	@Override
 	public void init() {
 		//mBitmap = Imports.getShark();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
@@ -58,7 +58,7 @@ public class Shark extends GraphicObject{
 	}
 	public void init(int x, int y) {
 		//mBitmap = Imports.getShark();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 

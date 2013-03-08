@@ -20,6 +20,9 @@ public class Screen {
 	
 	public Screen(){
 	}
+	public Screen(int width, int height){
+		set(width, height);
+	}
 	//getters and setter for width and height
 	public int getWidth(){
 		return mWidth;

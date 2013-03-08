@@ -60,7 +60,7 @@ public class Whirlpool extends GraphicObject{
 		mProperties.init(0, 0, 130, 130);	
 
 		mBitmap = SpriteManager.getWhirlpool();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -71,7 +71,7 @@ public class Whirlpool extends GraphicObject{
 		mProperties.init(x, y, 130, 130);	
 
 		mBitmap = SpriteManager.getWhirlpool();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);

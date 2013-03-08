@@ -60,7 +60,7 @@ public class Duck extends GraphicObject{
 		mProperties.init(30, 60, 60, 60);		
 		
 		mBitmap = SpriteManager.getDuck();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -70,7 +70,7 @@ public class Duck extends GraphicObject{
 		mProperties.init(x, y, 60, 60);
 		
 		mBitmap = SpriteManager.getDuck();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -155,8 +155,29 @@ public class Duck extends GraphicObject{
 		}
 		mAnimate.animateFrame();
 	}
-	//collision checking
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int boatRadius){
+		switch(id){
+		case tBoat:
+			boolean inRadius = false;
+			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), boatRadius)){
+				inRadius = true;
+			}
+			if(inRadius ==true){
+				if(cID == CollisionType.cDefault ){
+					if(CollisionManager.circleCollision(mProperties, otherProperties)){
+						cID = CollisionType.cBoat;
+						collisionDiverFrogBoat();
+					}
+				}
+				return true;
+			}
+			break;
+		default: break;
+		}
+		return false;
+	}
+	//collision checking
+	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties){
 		switch(id){
 		case tDiver:
 			if(cID == CollisionType.cDefault){
@@ -172,21 +193,6 @@ public class Duck extends GraphicObject{
 					cID = CollisionType.cFrog;
 					collisionDiverFrogBoat();
 				}
-			}
-			break;
-		case tBoat:
-			boolean inRadius = false;
-			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), boatRadius)){
-				inRadius = true;
-			}
-			if(inRadius ==true){
-				if(cID == CollisionType.cDefault ){
-					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cBoat;
-						collisionDiverFrogBoat();
-					}
-				}
-				return true;
 			}
 			break;
 		case tTorpedo:

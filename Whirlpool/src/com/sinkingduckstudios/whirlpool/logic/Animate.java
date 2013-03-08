@@ -13,20 +13,30 @@ public class Animate{
 	private int mFrameNum = 0;
 	private int mFrameWidth = 0;
 	private int mFrameHeight = 0;
+	private int mBitmapWidth = 0;
+	private int mBitmapHeight = 0;
+	private int mNoOfCol = 0;
+	private int mNoOfRows = 0;
 	private int mNoOfFrames = 1;
 	private int mDelay = 3;
 	private int mCounter = 0;
 	private Rect mPortion;
 	private boolean mFinished = false;
 
-	public Animate(int frames, int width, int height){
-		mNoOfFrames = frames;
-		mFrameWidth = width/mNoOfFrames ;
-		mFrameHeight = height;
+	public Animate(int totalFrames, int noOfRows, int noOfCol, int width, int height){
+		mNoOfFrames = totalFrames;
+		mBitmapWidth = width;
+		mBitmapHeight = height;
+		mNoOfCol = noOfCol;
+		mNoOfRows = noOfRows;
+		mFrameWidth = mBitmapWidth/mNoOfCol;
+		mFrameHeight = mBitmapHeight/mNoOfRows;
 		mPortion = new Rect(0, 0, mFrameWidth, mFrameHeight);
 		Constants.getLock();
 	}
-
+	public int getNoOfFrames(){
+		return mFrameNum;
+	}
 	public void animateFrame(){
 		if(mCounter++ >= mDelay){
 			mCounter = 0;
@@ -36,23 +46,29 @@ public class Animate{
 	}
 
 	public void updatePortion(){
-		if(mFrameNum >= mNoOfFrames){		//TODO No clue why I have to -3 from this to make it not show blank frames D:
+		if(mFrameNum >= mNoOfFrames){
 			mFrameNum = 0;
 			mFinished = true;
 		}
-		//synchronized(screenLock){
-		mPortion.left =  mFrameNum * mFrameWidth;
-		mPortion.right = getPortion().left + mFrameWidth;
-		//}
+		mPortion.left =  (mFrameNum%mNoOfCol) * mFrameWidth;
+		mPortion.top = (mFrameNum/mNoOfCol) * mFrameHeight;
+		mPortion.right = mPortion.left + mFrameWidth;
+		mPortion.bottom = mPortion.top +mFrameHeight;
 	}
 
 	public Rect getPortion() {
 		return mPortion;
 	}
-	public void Reset(int frames, int width, int height){
-		mNoOfFrames = frames;
-		mFrameWidth = width/mNoOfFrames ;
-		mFrameHeight = height;
+	public void Reset(int totalFrames, int noOfRows, int noOfCol, int width, int height, int delay){
+		mNoOfFrames = totalFrames;
+		mBitmapWidth = width;
+		mBitmapHeight = height;
+		mNoOfCol = noOfCol;
+		mNoOfRows = noOfRows;
+		mFrameWidth = mBitmapWidth/mNoOfCol;
+		mFrameHeight = mBitmapHeight/mNoOfRows;
+		mFinished = false;
+		mDelay = delay;
 		mPortion = new Rect(0, 0, mFrameWidth, mFrameHeight);
 	}
 

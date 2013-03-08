@@ -14,11 +14,10 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
+	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting };
+	private BoatType mBoatState = BoatType.bDefault;
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
-	private final int mAttackFrames = 8;
 	private int mTorpedoCount = -1;
-	private boolean mCreateNewTorpedo = true;
-	private boolean mAttackMode = false;
 	
 	public Boat(){
 		mId = objtype.tBoat;
@@ -44,22 +43,24 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
+		mBoatState = BoatType.bReady;
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/4), 
 				96, 96);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 	
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
+		mBoatState = BoatType.bReady;
 		mProperties.init(x, y, 96, 96);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 	
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -129,11 +130,12 @@ public class Boat extends GraphicObject{
 			border();
 		}
 		incrementCounter();
-		if(mAttackMode && mAnimate.getFinished()){
-			/*mBitmap = SpriteManager.getBoat();
-			mAnimate.Reset(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-			mAttackMode = false;
-			mCreateNewTorpedo = false;*/
+		if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
+			mBoatState = BoatType.bTorpedo;
+		}else if(mBoatState ==  BoatType.bFinishing && mAnimate.getFinished()){			
+			mBitmap = SpriteManager.getBoat();
+			mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
+			mBoatState = BoatType.bWaiting;			
 		}
 		mAnimate.animateFrame();
 	}
@@ -152,25 +154,27 @@ public class Boat extends GraphicObject{
 		mTorpedoCount = torpedoCount;
 	}
 	public void incrementCounter(){
-		if((mCreateNewTorpedo == false) && (++mTorpedoCount>=0)){
+		if((mBoatState == BoatType.bWaiting) && (++mTorpedoCount>=0)){
 			if(mTorpedoCount == 120){
-				mCreateNewTorpedo = true;
+				mBoatState = BoatType.bReady;
 				mTorpedoCount = -1;
 			}
 		}
 	}
-	public boolean getCreateNewTorpedo() {
-		return mCreateNewTorpedo;
-	}
-	public void setCreateNewTorpedo(boolean createNewTorpedo) {
-		mCreateNewTorpedo = createNewTorpedo;
+	public boolean getNewTorpedo() {
+		if(mBoatState == BoatType.bTorpedo){
+			mBoatState = BoatType.bFinishing;
+			return true;
+		}else{
+			return false;
+		}
 	}
 	public void changeAnimation(){
-		/*if(mCreateNewTorpedo){
+		if(mBoatState == BoatType.bReady){
 			mBitmap= SpriteManager.getBoatAttack();
-			mAnimate.Reset(mAttackFrames, mBitmap.getWidth(), mBitmap.getHeight()/7);
-			mAttackMode = true;
-		}*/
+			mAnimate.Reset(56, 7, 8, mBitmap.getWidth(), mBitmap.getHeight(),1);
+			mBoatState = BoatType.bAttack;
+		}
 	}
 
 }

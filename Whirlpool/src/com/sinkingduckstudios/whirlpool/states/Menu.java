@@ -40,16 +40,13 @@ public class Menu extends Activity {
         ImageButton gameButton = ((ImageButton) findViewById(R.id.game));
         Constants.setContext(getApplicationContext());
         
-        Screen theScreen = new Screen();
         Display display = getWindowManager().getDefaultDisplay(); 
-    	//RelativeLayout theLayout = (RelativeLayout) findViewById(R.id.menuLayout)
-    	theScreen.set(display.getWidth(), display.getHeight());
+    	Screen theScreen = new Screen(display.getWidth(), display.getHeight());
     	Constants.setScreen(theScreen);
+    	//RelativeLayout theLayout = (RelativeLayout) findViewById(R.id.menuLayout)
         
         gameButton.setOnClickListener(goToGame);
         menuView=(MenuView)findViewById(R.id.menuView);
-        /*Constants.getSoundManager().initSound();
-        Constants.getSoundManager().playBackgroundMusic();*/
     }
 	private OnClickListener goToGame = new OnClickListener() {
 		@Override
