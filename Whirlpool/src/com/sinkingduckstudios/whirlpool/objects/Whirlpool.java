@@ -177,21 +177,35 @@ public class Whirlpool extends GraphicObject{
 		_lastAngle = a.getSpeed().getLastAngle();
 		//for a clockwise wpool, the last angle is always gonna be smaller
 		if (dirFactor == 1){
-
-			if (_lastAngle > a.getSpeed().getAngle())
+			
+			if (_lastAngle > a.getSpeed().getAngle()){
 				//if lastangle is bigger, its passed 360
 				_lastAngle -= 360;
-			if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+				if (angle > a.getSpeed().getAngle()){
+					if (_lastAngle < angle-360 && a.getSpeed().getAngle() >= angle-360)
+						return true;
+				}else
+					if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+						return true;
+			}
+			else if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
 				return true;
 		}else{
-
-			if (_lastAngle < a.getSpeed().getAngle())
-				//if lastangle is less, its passed 0
+			
+			if (_lastAngle < a.getSpeed().getAngle()){
+				//if lastangle is bigger, its passed 360
 				_lastAngle += 360;
-			if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+				if (angle < a.getSpeed().getAngle()){
+					if (_lastAngle > angle+360 && a.getSpeed().getAngle() <= angle+360)
+						return true;
+				}else
+					if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+						return true;
+			}
+			else if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
 				return true;
 		}
-
+				
 		return false;
 	}
 	public boolean getFinished(){
