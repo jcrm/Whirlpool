@@ -64,8 +64,8 @@ public class Whirlpool extends GraphicObject{
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		
 	}
+	
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130);	
 

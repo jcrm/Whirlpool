@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-
+//
 public class MenuView extends View{
 	private Bitmap background;
 	private int WIDTH, HEIGHT = 0;

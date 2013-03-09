@@ -35,7 +35,7 @@ public class Diver extends GraphicObject{
 	public void draw(Canvas canvas) {
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
+			canvas.translate(getCentreX()/Constants.getScreen().getRatio(), getCentreY()/Constants.getScreen().getRatio());
 			canvas.rotate(mSpeed.getAngle()+180);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
