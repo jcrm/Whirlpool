@@ -23,6 +23,8 @@ public class Properties {
 	public Properties(){
 	}
 	public void init(int x, int y, int width, int height){
+		x/=Constants.getScreen().getRatio();
+		y/=Constants.getScreen().getRatio();
 		mTopLeft.setPoints(x, y);
 		mOriginalWidth = width;
 		mOriginalHeight = height;
@@ -33,17 +35,21 @@ public class Properties {
 		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 	}
 	public void setCentre(int x, int y){
+		x/=Constants.getScreen().getRatio();
+		y/=Constants.getScreen().getRatio();
 		mCentre.setPoints(x, y);
 		mTopLeft.setPoints(x-(mWidth/2), y-(mHeight/2));
 		mBottomRight.setPoints(x+(mWidth/2), y+(mHeight/2));
 	}
 	//temp comment
 	public void setCentreX(int x){
+		x/=Constants.getScreen().getRatio();
 		mCentre.setX(x);
 		mTopLeft.setX(x-(mWidth/2));
 		mBottomRight.setX(x+(mWidth/2));
 	}
 	public void setCentreY(int y){
+		y/=Constants.getScreen().getRatio();
 		mCentre.setY(y);
 		mTopLeft.setY(y-(mHeight/2));
 		mBottomRight.setY(y+(mHeight/2));
