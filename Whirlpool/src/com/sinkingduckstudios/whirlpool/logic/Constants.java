@@ -67,6 +67,7 @@ public class Constants {
 	}
 	public static void setContext(Context context) {
 		sContext = context;
+		sSoundManager.initContext(sContext);
 	}
 	public static GameView getPanel() {
 		return sPanel;

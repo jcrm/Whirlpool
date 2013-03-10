@@ -52,8 +52,8 @@ public class Game extends Activity {
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
 		mTime= new Timer();//init timer
-		Constants.getSoundManager().initSound();
-		Constants.getSoundManager().playBackgroundMusic();
+		Constants.getSoundManager().loadSounds();
+		Constants.getSoundManager().playBackground();
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
 
@@ -75,7 +75,6 @@ public class Game extends Activity {
 					//MainThread tempthread = Constants.getThread();
 					synchronized(Constants.getLock()){
 						mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-						Constants.getSoundManager().pauseBackground();
 						startActivity(new Intent(getApplicationContext(), Menu.class));
 						mTime.cancel();
 						finish();
@@ -110,21 +109,21 @@ public class Game extends Activity {
 	@Override
 	public void onPause(){
 		mPaused = true;
-		Constants.getSoundManager().stopAllSounds();
+		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy(){
 		mPaused = true;
-		Constants.getSoundManager().stopAllSounds();
+		Constants.getSoundManager().cleanup();
 		super.onDestroy();
 	}
 	@Override
 	public void onResume(){
 		mPaused = false;
 		super.onResume();
-		Constants.getSoundManager().initSound();
-		Constants.getSoundManager().playBackgroundMusic();
+		Constants.getSoundManager().loadSounds();
+		Constants.getSoundManager().playBackground();
 	}
 }
