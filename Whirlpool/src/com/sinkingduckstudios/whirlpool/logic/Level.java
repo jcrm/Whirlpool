@@ -84,30 +84,7 @@ public class Level {
 				whirl.checkCollision(graphic);
 			}
 			if(graphic.getId()==objtype.tDuck){
-				graphic.frame();	//Do everything this object does every frame, like move
-				for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
-					GraphicObject graphic2 = collisionIterator.next();
-					boolean collision = false;
-					if(graphic2.getId()==objtype.tBoat){
-						collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
-						if(collision){
-							((Boat) graphic2).changeAnimation();						
-						}
-					}else{
-						collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
-						if(collision){
-							switch(graphic2.getId()){
-							case tShark:
-								break;
-							case tTorpedo:
-								((Torpedo) graphic2).setIsReadyToDestroy(true);
-								break;
-							default:
-								break;
-							}
-						}	
-					}
-				}
+				duckCollision(graphic);
 			}else if(graphic.getId()==objtype.tBoat){
 				if(((Boat) graphic).getNewTorpedo()){
 					objectToBeAdded.add(new Torpedo(graphic.getCentreX(),graphic.getBottomRightY(),0));
@@ -193,6 +170,32 @@ public class Level {
 		}
 		if(mScrollBy + Constants.getScreen().getWidth() > mLevelWidth){
 			mScrollBy = mLevelWidth - Constants.getScreen().getWidth();
+		}
+	}
+	public void duckCollision(GraphicObject graphic){
+		graphic.frame();	//Do everything this object does every frame, like move
+		for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
+			GraphicObject graphic2 = collisionIterator.next();
+			boolean collision = false;
+			if(graphic2.getId()==objtype.tBoat){
+				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
+				if(collision){
+					((Boat) graphic2).changeAnimation();						
+				}
+			}else{
+				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+				if(collision){
+					switch(graphic2.getId()){
+					case tShark:
+						break;
+					case tTorpedo:
+						((Torpedo) graphic2).setIsReadyToDestroy(true);
+						break;
+					default:
+						break;
+					}
+				}	
+			}
 		}
 	}
 
