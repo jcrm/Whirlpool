@@ -10,23 +10,26 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
-import com.sinkingduckstudios.whirlpool.movement.Collision;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
+import com.sinkingduckstudios.whirlpool.movement.Properties;
 
 public class Duck extends GraphicObject{
 	//enum for collision checking
-	private enum coltype{
-		cDefault, cShark, cDiver, cFrog, cWhirl;
+	private enum CollisionType{
+		cDefault, cShark, cDiver, cFrog, cBoat, cTorpedo;
 	}
 	//collision variables 
-	public coltype cID = coltype.cDefault;
-	private int mCollisonCount = -1;
+	public CollisionType cID = CollisionType.cDefault;
+	private int mCollisionCount = -1;
 	private int mWaitTimer = 0;
 	public Duck(){
 		mId = objtype.tDuck;
@@ -34,8 +37,7 @@ public class Duck extends GraphicObject{
 	}
 	public Duck(int x, int y){
 		mId = objtype.tDuck;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -47,20 +49,33 @@ public class Duck extends GraphicObject{
 			}
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	@Override
 	public void init() {
-		mBitmap = Imports.getDuck();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mProperties.init(30, 60, 60, 60);		
 		
-		mCollision.init(30, 60, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());		
+		mBitmap = SpriteManager.getDuck();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-
+	public void init(int x, int y) {
+		mProperties.init(x, y, 60, 60);
+		
+		mBitmap = SpriteManager.getDuck();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mSpeed.setMove(false);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
 	@Override
 	public boolean move() {
 		if(mWaitTimer >= 0){
@@ -78,13 +93,6 @@ public class Duck extends GraphicObject{
 		return false;
 	}
 
-	public void changeCollisionType(boolean newColType){
-		if(newColType){
-			cID = coltype.cWhirl;
-		}else if (cID == coltype.cWhirl){
-			cID = coltype.cDefault;
-		}
-	}
 
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
@@ -136,70 +144,113 @@ public class Duck extends GraphicObject{
 
 	public void frame(){
 		// Move Objects
-		colMovement();
+		collisonMovement();
 		if(move()){
 			//only detect border if not in wpool
-			if (!getPullState())
+			if (!getPullState()){
 				if(border()){
 					Constants.getSoundManager().playDucky();
 				}
+			}
 		}
 		mAnimate.animateFrame();
 	}
-	//collision checking
-	public void checkObjCollision(GraphicObject.objtype id, Collision collision){
-		if(cID == coltype.cDefault){
-			switch(id){
-			case tShark: 
-				if(CollisionManager.circleCollision(this.mCollision, collision)){
-					cID = coltype.cShark;
-					Constants.getSoundManager().playDucky();
-				}
-				break;
-			case tDiver:
-				if(CollisionManager.circleCollision(this.mCollision, collision)){
-					colDiverFrog();
-					cID = coltype.cDiver;
-					Constants.getSoundManager().playDucky();
-				}
-				break;
-			case tFrog:
-				//TODO bounding boxes for angled collisions
-				if(CollisionManager.circleCollision(this.mCollision, collision)){
-					colDiverFrog();
-					cID = coltype.cFrog;
-					Constants.getSoundManager().playDucky();
-				}
-				break;
-			case tWhirl:
-				cID = coltype.cWhirl;
-				break;
-			default: break;
+	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int boatRadius){
+		switch(id){
+		case tBoat:
+			boolean inRadius = false;
+			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), boatRadius)){
+				inRadius = true;
 			}
+			if(inRadius ==true){
+				if(cID == CollisionType.cDefault ){
+					if(CollisionManager.circleCollision(mProperties, otherProperties)){
+						cID = CollisionType.cBoat;
+						collisionDiverFrogBoat();
+					}
+				}
+				return true;
+			}
+			break;
+		default: break;
 		}
+		return false;
+	}
+	//collision checking
+	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties){
+		switch(id){
+		case tDiver:
+			if(cID == CollisionType.cDefault){
+				if(CollisionManager.circleCollision(mProperties, otherProperties)){
+					cID = CollisionType.cDiver;
+					collisionDiverFrogBoat();
+				}
+			}
+			break;
+		case tFrog:
+			if(cID == CollisionType.cDefault){
+				if(CollisionManager.circleCollision(mProperties, otherProperties)){
+					cID = CollisionType.cFrog;
+					collisionDiverFrogBoat();
+				}
+			}
+			break;
+		case tTorpedo:
+			if(CollisionManager.circleCollision(mProperties, otherProperties)){
+				collisionTorpedo();
+				cID = CollisionType.cTorpedo;
+				Constants.getSoundManager().playDucky();
+				return true;
+			}
+			break;
+		case tShark: 
+			if(cID!=CollisionType.cShark && cID != CollisionType.cTorpedo){
+				if(CollisionManager.circleCollision(mProperties, otherProperties)){
+					cID = CollisionType.cShark;
+					Constants.getSoundManager().playDucky();
+				}
+				return true;
+			}
+		default: break;
+		}
+		return false;
 	}
 	//collision movement
-	private void colMovement(){
+	private void collisonMovement(){
 		//TODO: This is why duck stops moving if wpool over after collide. 
 		//It wont keep counting till wpool goes away
 		//Wpool wont go away coz duck is in it. Deadlock
-		if((cID != coltype.cDefault && cID != coltype.cWhirl) && mCollisonCount >= 0){
-			if(mCollisonCount == 30){
-				getSpeed().setSpeed(0);
-				getSpeed().setAngle(0);
-			}else if(mCollisonCount == 60){
-				getSpeed().setSpeed(4);				
-				getSpeed().setAngle(0);
-				cID = coltype.cDefault;
-				mCollisonCount = -1;
+		if(mCollisionCount >=0){
+			if(cID == CollisionType.cBoat || cID == CollisionType.cFrog || cID == CollisionType.cDiver){
+				if(mCollisionCount == 30){
+					getSpeed().setSpeed(0);
+				}else if(mCollisionCount == 45){
+					getSpeed().setSpeed(8);				
+					getSpeed().setAngle(0);
+					cID = CollisionType.cDefault;
+					mCollisionCount = -1;
+				}
+			}else if(cID == CollisionType.cTorpedo){
+				if(mCollisionCount == 10){
+					getSpeed().setSpeed(4);				
+					getSpeed().setAngle(0);
+					cID = CollisionType.cDefault;
+					mCollisionCount = -1;
+				}
 			}
-			mCollisonCount++;
+			mCollisionCount++;
 		}
 	}
-	private void colDiverFrog(){
+	private void collisionDiverFrogBoat(){
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(new Random().nextInt(90)+135);
-		mCollisonCount = 0;
+		mCollisionCount = 0;
+		Constants.getSoundManager().playDucky();
+	}
+	private void collisionTorpedo(){
+		getSpeed().setSpeed(0);
+		mCollisionCount = 0;
+		Constants.getSoundManager().playDucky();
 	}
 
 }

@@ -13,6 +13,7 @@ import android.content.res.Resources;
 
 import com.sinkingduckstudios.whirlpool.manager.SoundManager;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
+import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Constants {
 	private static Activity sState;
@@ -21,7 +22,7 @@ public class Constants {
 	private static Level sLevel;
 	private static Duck sPlayer;
 	private static Context sContext;
-	private static Panel sPanel;
+	private static GameView sPanel;
 	private static Object sScreenLock = 0;
 	private static SoundManager sSoundManager = new SoundManager();
 	
@@ -66,11 +67,12 @@ public class Constants {
 	}
 	public static void setContext(Context context) {
 		sContext = context;
+		sSoundManager.initContext(sContext);
 	}
-	public static Panel getPanel() {
+	public static GameView getPanel() {
 		return sPanel;
 	}
-	public static void setPanel(Panel panel) {
+	public static void setPanel(GameView panel) {
 		sPanel = panel;
 	}
 	public static SoundManager getSoundManager() {

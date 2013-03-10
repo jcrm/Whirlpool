@@ -3,23 +3,29 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
-	private int mBoatRadius = 30;
+	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting };
+	private BoatType mBoatState = BoatType.bDefault;
+	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
+	private int mTorpedoCount = -1;
+	
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
 	}
 	public Boat(int x, int y){
 		mId = objtype.tBoat;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -28,23 +34,38 @@ public class Boat extends GraphicObject{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
+		canvas.drawCircle(getCentreX(), getCentreY(), mBoatRadius, temp);
 	}
 
 	@Override
 	public void init() {
-		mBitmap = Imports.getBoat();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mBoatState = BoatType.bReady;
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/4), 
+				96, 96);	
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
+		mBitmap = SpriteManager.getBoat();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 	
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
-						mBitmap.getWidth()/mId.tFrames, 
-						mBitmap.getHeight());	
-		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
-
+	public void init(int x, int y) {
+		mBoatState = BoatType.bReady;
+		mProperties.init(x, y, 96, 96);	
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
+		mBitmap = SpriteManager.getBoat();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+	
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
@@ -108,6 +129,14 @@ public class Boat extends GraphicObject{
 		if(move()){
 			border();
 		}
+		incrementCounter();
+		if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
+			mBoatState = BoatType.bTorpedo;
+		}else if(mBoatState ==  BoatType.bFinishing && mAnimate.getFinished()){			
+			mBitmap = SpriteManager.getBoat();
+			mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
+			mBoatState = BoatType.bWaiting;			
+		}
 		mAnimate.animateFrame();
 	}
 
@@ -117,6 +146,35 @@ public class Boat extends GraphicObject{
 
 	public void setBoatRadius(int boatRadius) {
 		mBoatRadius = boatRadius;
+	}
+	public int getTorpedoCount() {
+		return mTorpedoCount;
+	}
+	public void setTorpedoCount(int torpedoCount) {
+		mTorpedoCount = torpedoCount;
+	}
+	public void incrementCounter(){
+		if((mBoatState == BoatType.bWaiting) && (++mTorpedoCount>=0)){
+			if(mTorpedoCount == 120){
+				mBoatState = BoatType.bReady;
+				mTorpedoCount = -1;
+			}
+		}
+	}
+	public boolean getNewTorpedo() {
+		if(mBoatState == BoatType.bTorpedo){
+			mBoatState = BoatType.bFinishing;
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public void changeAnimation(){
+		if(mBoatState == BoatType.bReady){
+			mBitmap= SpriteManager.getBoatAttack();
+			mAnimate.Reset(56, 7, 8, mBitmap.getWidth(), mBitmap.getHeight(),1);
+			mBoatState = BoatType.bAttack;
+		}
 	}
 
 }

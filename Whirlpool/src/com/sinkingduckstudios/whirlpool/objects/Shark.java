@@ -10,7 +10,10 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -24,8 +27,7 @@ public class Shark extends GraphicObject{
 	}
 	public Shark(int x, int y){
 		mId = objtype.tShark;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -34,14 +36,18 @@ public class Shark extends GraphicObject{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	@Override
 	public void init() {
 		//mBitmap = Imports.getShark();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
 						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
 						mBitmap.getWidth()/mId.tFrames, 
 						mBitmap.getHeight());	
@@ -50,7 +56,16 @@ public class Shark extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
+	public void init(int x, int y) {
+		//mBitmap = Imports.getShark();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
 
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){

@@ -7,37 +7,49 @@
  */
 package com.sinkingduckstudios.whirlpool.movement;
 
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 
-public class Collision {
+public class Properties {
 	private Point mCentre = new Point();
 	private Point mTopLeft = new Point();
 	private Point mBottomRight = new Point();
 	private int mRadius = 0;
 	private int mWidth = 0;
 	private int mHeight = 0;
+	private int mOriginalWidth = 0;
+	private int mOriginalHeight = 0;
 	
-	public Collision(){
+	public Properties(){
 	}
 	public void init(int x, int y, int width, int height){
+		x/=Constants.getScreen().getRatio();
+		y/=Constants.getScreen().getRatio();
 		mTopLeft.setPoints(x, y);
-		mCentre.setPoints(x+(width/2), y+(height/2));
-		mBottomRight.setPoints(x+width, y+height);
-		mWidth = width;
-		mHeight = height;
-		mRadius =  (int) Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2)));
+		mOriginalWidth = width;
+		mOriginalHeight = height;
+		mWidth = (int) (width/Constants.getScreen().getRatio());
+		mHeight = (int) (height/Constants.getScreen().getRatio());
+		mCentre.setPoints(x+(mWidth/2), y+(mHeight/2));
+		mBottomRight.setPoints(x+mWidth, y+mHeight);
+		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 	}
 	public void setCentre(int x, int y){
+		x/=Constants.getScreen().getRatio();
+		y/=Constants.getScreen().getRatio();
 		mCentre.setPoints(x, y);
 		mTopLeft.setPoints(x-(mWidth/2), y-(mHeight/2));
 		mBottomRight.setPoints(x+(mWidth/2), y+(mHeight/2));
 	}
+	//temp comment
 	public void setCentreX(int x){
+		x/=Constants.getScreen().getRatio();
 		mCentre.setX(x);
 		mTopLeft.setX(x-(mWidth/2));
 		mBottomRight.setX(x+(mWidth/2));
 	}
 	public void setCentreY(int y){
+		y/=Constants.getScreen().getRatio();
 		mCentre.setY(y);
 		mTopLeft.setY(y-(mHeight/2));
 		mBottomRight.setY(y+(mHeight/2));
@@ -115,5 +127,19 @@ public class Collision {
 	}
 	public void moveDelta(int deltaX, int deltaY){
 		setTopLeft(mTopLeft.getX()+deltaX, mTopLeft.getY()+deltaY);
+	}
+	
+	
+	public int getOriginalWidth() {
+		return mOriginalWidth;
+	}
+	public void setOriginalWidth(int originalWidth) {
+		mOriginalWidth = originalWidth;
+	}
+	public int getOriginalHeight() {
+		return mOriginalHeight;
+	}
+	public void setOriginalHeight(int originalHeight) {
+		mOriginalHeight = originalHeight;
 	}
 }

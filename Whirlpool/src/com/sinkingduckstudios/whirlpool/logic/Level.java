@@ -8,6 +8,7 @@
 package com.sinkingduckstudios.whirlpool.logic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,12 +16,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
+import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
 public class Level {
@@ -34,41 +37,27 @@ public class Level {
 	private static Object mScreenLock;
 	private Paint mPaint = new Paint();
 	private Rect mRect = new Rect();
-
+	
 	public Level(){
 	}
-	public void init(int height){
-		mLevelWidth = 2000;
-		mLevelHeight = height;
-		mBackgroundImage = Imports.getBackground();
-		mGraphics.add(new Duck());
+	public void init(){
+		mLevelWidth = 3000;
+		mLevelHeight = Constants.getScreen().getHeight();
+		
+		mBackgroundImage = SpriteManager.getBackground();
+		mGraphics.add(new Duck(60, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog());
-		mGraphics.add(new Diver());
-		mGraphics.add(new Boat());
-		//_graphics.add(new Shark());
-
+		mGraphics.add(new Frog(500, 250, 200));
+		mGraphics.add(new Diver(1000, 50, 90, 1000, 50, 1000, 350));
+		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
+		mWPoolModel.addWPool(65, 235, 10, -1, 1);
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
-	}
+	}//
 
 	public void update(){
-		for (GraphicObject graphic : mGraphics){
-			graphic.setPull(false);
-			for(Whirlpool whirl : mWPoolModel.getWpools()){
-				whirl.checkCollision(graphic);
-			}
-			if(graphic.getId()==objtype.tDuck){
-				graphic.frame();	//Do everything this object does every frame, like move
-				((Duck) graphic).changeCollisionType(graphic.getPullState());
-				for(GraphicObject graphic2 : mGraphics){
-					((Duck) graphic).checkObjCollision(graphic2.getId(), graphic2.getCollision());
-				}
-			}else{
-				graphic.frame();	//Do everything this object does every frame, like move
-			}
-
-		}
+		
+		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
 		//could maybe optimise later TODO
 		for(int i = 0; i < mWPoolModel.getWpools().size(); i++){
@@ -84,7 +73,37 @@ public class Level {
 		}
 		//scroll();
 	}
-
+	private void updateList(){
+		//create a temporary list to store objects that need to be added
+		ArrayList<GraphicObject> objectToBeAdded = new ArrayList<GraphicObject>();
+		
+		for(Iterator<GraphicObject> mainIterator = mGraphics.listIterator(); mainIterator.hasNext();){
+			GraphicObject graphic = mainIterator.next();
+			graphic.setPull(false);
+			for(Whirlpool whirl : mWPoolModel.getWpools()){
+				whirl.checkCollision(graphic);
+			}
+			if(graphic.getId()==objtype.tDuck){
+				duckCollision(graphic);
+			}else if(graphic.getId()==objtype.tBoat){
+				if(((Boat) graphic).getNewTorpedo()){
+					objectToBeAdded.add(new Torpedo(graphic.getCentreX(),graphic.getBottomRightY(),0));
+				}
+				graphic.frame();	//Do everything this object does every frame, like move
+			}else if(graphic.getId()==objtype.tTorpedo){
+				if(((Torpedo) graphic).getIsReadyToDestroy()){
+					mainIterator.remove();
+				}else if(((Torpedo) graphic).updateDirection()){
+					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
+				}else{
+					graphic.frame();	//Do everything this object does every frame, like move
+				}
+			}else{
+				graphic.frame();	//Do everything this object does every frame, like move
+			}
+		}
+		mGraphics.addAll(objectToBeAdded);
+	}
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
@@ -144,17 +163,39 @@ public class Level {
 	public void shiftScrollBy(float delta) {
 	}
 	public void duckOnScreen(){
-		while(Constants.getPlayer().getCentreX() >= (Constants.getScreen().getWidth()/2)+mScrollBy){
-			mScrollBy++;
-		}
-		while(Constants.getPlayer().getCentreX() < (Constants.getScreen().getWidth()/2)+mScrollBy){
-			mScrollBy--;
-		}
+		
+		mScrollBy = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
 		if(mScrollBy < 0){
 			mScrollBy = 0;
 		}
 		if(mScrollBy + Constants.getScreen().getWidth() > mLevelWidth){
 			mScrollBy = mLevelWidth - Constants.getScreen().getWidth();
+		}
+	}
+	public void duckCollision(GraphicObject graphic){
+		graphic.frame();	//Do everything this object does every frame, like move
+		for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
+			GraphicObject graphic2 = collisionIterator.next();
+			boolean collision = false;
+			if(graphic2.getId()==objtype.tBoat){
+				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
+				if(collision){
+					((Boat) graphic2).changeAnimation();						
+				}
+			}else{
+				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+				if(collision){
+					switch(graphic2.getId()){
+					case tShark:
+						break;
+					case tTorpedo:
+						((Torpedo) graphic2).setIsReadyToDestroy(true);
+						break;
+					default:
+						break;
+					}
+				}	
+			}
 		}
 	}
 

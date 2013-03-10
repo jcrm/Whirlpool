@@ -10,24 +10,27 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Frog extends GraphicObject{
+	//used for working out the location of the frog round the circle
 	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
 
 	public Frog(){
 		mId = objtype.tFrog;
 		init();
 	}
-	public Frog(int x, int y){
+	public Frog(int x, int y, int r){
 		mId = objtype.tFrog;
-		init();
-		mCollision.setCentre(x, y);
+		init(x, y, r);
 	}
 	@Override
 	public void draw(Canvas canvas) {
@@ -37,28 +40,43 @@ public class Frog extends GraphicObject{
 			canvas.rotate((float) (-mFrogAngle*180/Math.PI));
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 	}
 
 	@Override
 	public void init() {
-		mBitmap = Imports.getFrog();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mCollision.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-						(Constants.getLevel().getLevelHeight()/2)-70,
-						mBitmap.getWidth()/mId.tFrames,
-						mBitmap.getHeight()
-						);	
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+				(Constants.getLevel().getLevelHeight()/2)-70,
+				80, 80);	
 
+		mBitmap = SpriteManager.getFrog();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-
+		//used for locating the frog round the circle
 		setFrogCentreX(getCentreX());
 		setFrogCentreY(getCentreY());
-		setFrogRadius((Constants.getLevel().getLevelHeight()/2)-70);
+		setFrogRadius(180);
 	}
+	public void init(int x, int y, int r) {
+		mProperties.init(x-r, y, 80, 80);	
 
+		mBitmap = SpriteManager.getFrog();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mSpeed.setMove(true);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		//used for locating the frog round the circle
+		setFrogCentreX(x);
+		setFrogCentreY(y);
+		setFrogRadius(r);
+	}
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){

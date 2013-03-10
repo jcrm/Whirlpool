@@ -36,48 +36,44 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private final WPools mWPools;
 	private Whirlpool mWhirl;
 	private Arrow mArrow;
-
+	private float mScaledX, mScaledY;
 	TrackingTouchListener(WPools wpools) {
 		mWPools = wpools;
 		mNewGesture = 0;
 	}
 
 	public boolean onTouch(View view, MotionEvent event) {
-
+		mScaledX = (float) (event.getX()*Constants.getScreen().getRatio());
+		mScaledY = (float) (event.getY()*Constants.getScreen().getRatio());
+		mScaledX = event.getX();
+		mScaledY = event.getY();
 		switch(event.getAction()){
 
 		case MotionEvent.ACTION_DOWN:
-			mWPoolIndex =mWPools.checkCollision(event.getX(), event.getY());
+			mWPoolIndex =mWPools.checkCollision(mScaledX, mScaledY);
 			if (mWPoolIndex > -1){ //pointing a whirl
 				mNewGesture = 2;
 				mWhirl = mWPools.getWpools().get(mWPoolIndex);
-				mArrow = (new Arrow(mWhirl.getCentreX(), mWhirl.getCentreY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
+				mArrow = (new Arrow(mWhirl.getCentreX(), mWhirl.getCentreY() , (mScaledX + Constants.getLevel().getScrollBy()), mScaledY));
 				mWhirl.setArrow(mArrow);
 			}else if (mWPoolIndex == -1){ //new whirl
-				mStart[0] = event.getX();
-				mStart[1] = event.getY();
-				mLast[0] = event.getX();
-				mLast[1] = event.getY();
+				mStart[0] = mScaledX;
+				mStart[1] = mScaledY;
+				mLast[0] = mScaledX;
+				mLast[1] = mScaledY;
 				mNoRef = 0;
 				addRefPoint();
 				mNewGesture = 1;
-				findCenter();
-				mWhirl = addWPools(
-						mWPools,
-						(int) (mWCenter[0] + Constants.getLevel().getScrollBy()),
-						(int) mWCenter[1],
-						mWSize,
-						-1,// pass in -1 for no angle, probs should clean this up
-						isClockwise());
+				mWhirl=null;
 				break;
 			}
 		case MotionEvent.ACTION_MOVE:
-			mCurrent[0] = event.getX();
-			mCurrent[1] = event.getY();
+			mCurrent[0] = mScaledX;
+			mCurrent[1] = mScaledY;
 			if (mNewGesture == 2){	//arrow being drawn
-				mArrow.setVisible(mWhirl.calcTangentPoint((event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
+				mArrow.setVisible(mWhirl.calcTangentPoint((mScaledX + Constants.getLevel().getScrollBy()), mScaledY));
 				if (mArrow.getVisible())
-					mArrow.reposition(mWhirl.getTangentX(), mWhirl.getTangentY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY());
+					mArrow.reposition(mWhirl.getTangentX(), mWhirl.getTangentY() , (mScaledX + Constants.getLevel().getScrollBy()), mScaledY);
 			}else if (mNewGesture == 1){
 				//gesture has been started. determine direction.
 				mXDir = (mCurrent[0] - mStart[0]);
@@ -89,65 +85,75 @@ final class TrackingTouchListener implements View.OnTouchListener{
 				mYToChange = true;
 			}else if (mNewGesture == 0){
 
-				if(mNoRef < 3){//if no precise whirl motion has been completed yet, draw whirlpool in center
-					mRefX[mNoRef]=mLast[0];
-					mRefY[mNoRef]=mLast[1];
-				}
-				findCenter();//calc current center to position wpool
-				mWhirl.setCentreX((int) (mWCenter[0]+ Constants.getLevel().getScrollBy()));
-				mWhirl.setCentreY((int) mWCenter[1]);
-				mWhirl.setClockwise(isClockwise());
 				if ((mCurrent[0] - mLast[0])*mXDir < 0){//change in x direction
 					if (mXToChange == false){
-						mStart[0] = event.getX();
-						mStart[1] = event.getY();
-						mLast[0] = event.getX();
-						mLast[1] = event.getY();
+						mStart[0] = mScaledX;
+						mStart[1] = mScaledY;
+						mLast[0] = mScaledX;
+						mLast[1] = mScaledY;
 						mNoRef = 0;
 						mNewGesture = 1;
+						if(mWhirl!=null){
+							mWPools.getWpools().remove(mWhirl);
+							mWhirl=null;
+						}
 						break;
 					}
 					addRefPoint();
+					findCenter();
+					if(mNoRef==3){
+						mWhirl = addWPools(
+								mWPools,
+								(int) ((mWCenter[0] + Constants.getLevel().getScrollBy())*Constants.getScreen().getRatio()),
+								(int) (mWCenter[1]*Constants.getScreen().getRatio()),
+								mWSize,
+								-1,// pass in -1 for no angle, probs should clean this up
+								isClockwise());
+					}
 					mXDir*=-1;
 					mYToChange = true;
 					mXToChange = false;
 				}
 				if((mCurrent[1] - mLast[1])*mYDir < 0){//change in y direction
 					if(mYToChange == false){
-						mStart[0] = event.getX();
-						mStart[1] = event.getY();
-						mLast[0] = event.getX();
-						mLast[1] = event.getY();
+						mStart[0] = mScaledX;
+						mStart[1] = mScaledY;
+						mLast[0] = mScaledX;
+						mLast[1] = mScaledY;
 						mNoRef = 0;
 						mNewGesture = 1;
+						if(mWhirl!=null){
+							mWPools.getWpools().remove(mWhirl);
+							mWhirl=null;
+						}
 						break;
 					}
 					addRefPoint();
+					findCenter();
+					if(mNoRef==3){
+						mWhirl = addWPools(
+								mWPools,
+								(int) ((mWCenter[0] + Constants.getLevel().getScrollBy())*Constants.getScreen().getRatio()),
+								(int) (mWCenter[1]*Constants.getScreen().getRatio()),
+								mWSize,
+								-1,// pass in -1 for no angle, probs should clean this up
+								isClockwise());
+					}
 					mYDir*=-1;
 					mYToChange = false;
 					mXToChange = true;
 				}	
 			}
-			mLast[0] = event.getX();
-			mLast[1] = event.getY();
+			mLast[0] = mScaledX;
+			mLast[1] = mScaledY;
 			break;
 		case MotionEvent.ACTION_UP:
 			if(mNewGesture == 2){	
-				mArrow.setVisible(mWhirl.calcTangentPoint((event.getX() + Constants.getLevel().getScrollBy()), event.getY()));
+				mArrow.setVisible(mWhirl.calcTangentPoint((mScaledX + Constants.getLevel().getScrollBy()), mScaledY));
 				if (mArrow.getVisible()){
-					mWAngle = CollisionManager.calcAngle(mWhirl.getTangentX(), mWhirl.getTangentY() , (event.getX() + Constants.getLevel().getScrollBy()), event.getY());
+					mWAngle = CollisionManager.calcAngle(mWhirl.getTangentX(), mWhirl.getTangentY() , (mScaledX + Constants.getLevel().getScrollBy()), mScaledY);
 					mWhirl.setWAngle(mWAngle);
 				}
-			}else if (mNewGesture == 0){
-				if (mNoRef > 2){//whirlpool made
-					findCenter();
-					mWhirl.setCentreX((int) (mWCenter[0]+ Constants.getLevel().getScrollBy()));
-					mWhirl.setCentreY((int) mWCenter[1]);
-					mWhirl.setClockwise(isClockwise());
-				}else{
-					//remove whirl (gesture wasnt completed)
-					mWPools.getWpools().remove(mWhirl);
-				}    		
 			}
 			break;
 		default: return false;
@@ -209,5 +215,21 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	private Whirlpool addWPools(WPools wpools, int x, int y, int s, float angle, int clockwise) {
 		wpools.addWPool(x, y, s, angle, clockwise);
 		return wpools.getLastWpool();
+	}
+
+	public float getScaledX() {
+		return mScaledX;
+	}
+
+	public void setScaledX(float scaledX) {
+		mScaledX = scaledX;
+	}
+
+	public float getScaledY() {
+		return mScaledY;
+	}
+
+	public void setScaledY(float scaledY) {
+		mScaledY = scaledY;
 	}
 }

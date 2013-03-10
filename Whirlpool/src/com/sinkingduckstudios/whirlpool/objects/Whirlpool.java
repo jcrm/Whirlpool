@@ -8,22 +8,19 @@
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
-import com.sinkingduckstudios.whirlpool.logic.Imports;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
-//used to create effect of whirlpool
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-
-/*
- * Can be deleted until i've fixed crashing problem
- */
 public class Whirlpool extends GraphicObject{
 	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
-	private float radius = 40.0f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
@@ -31,9 +28,7 @@ public class Whirlpool extends GraphicObject{
 	private final int expireTimer = 250;
 	private int expireCounter = 1;
 	private boolean finished = false;
-	private final int afterCollisionTimer = 50;
-	private int afterCollisionCounter = 0;
-	private boolean collisionDone = false;
+	private boolean collisionDone = true;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
 
@@ -50,7 +45,10 @@ public class Whirlpool extends GraphicObject{
 			canvas.scale(dirFactor, 1);
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
-
+		Paint temp = new Paint();
+		temp.setStyle(Style.STROKE);
+		temp.setColor(Color.RED);
+		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
 		if (mArrow != null){
 			mArrow.draw(canvas);//draw whirls directional arrow
 		}
@@ -58,10 +56,21 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void init() {
-		mBitmap = Imports.getWhirlpool();
-		mAnimate = new Animate(mId.tFrames, mBitmap.getWidth(), mBitmap.getHeight());
+		mProperties.init(0, 0, 130, 130);	
+
+		mBitmap = SpriteManager.getWhirlpool();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mCollision.init(0, 0, mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
+		mSpeed.setMove(false);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		
+	}
+	public void init(int x, int y) {
+		mProperties.init(x, y, 130, 130);	
+
+		mBitmap = SpriteManager.getWhirlpool();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -128,33 +137,31 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
-		if(expireCounter > 0){
+		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){
 				finished = true;
 			}
 		}
-		if(afterCollisionCounter > 0){
-			afterCollisionCounter++;
-			if(afterCollisionCounter >= afterCollisionTimer){
-				finished = true;
-			}
-		}
+		
 		mAnimate.animateFrame();
 	}
 
 	public void checkCollision(GraphicObject a){
-		if (a.getPullState() == false && !collisionDone){
-			int collide = collision(a);
-
-			if (collide == 1 || collide == 2){
-				a.setPull(true);
-				pull(a);
-				setExpireCounter(0);
-				if (testAngle(a)){
-					a.setAngle(getWAngle());
-					collisionDone = true;
-					setAfterCollisionCounter(1);
+		if (a.getId()==objtype.tDuck){
+			if (a.getPullState() == false && (!finished || !collisionDone)){
+				int collide = collision(a);
+				
+				if (collide == 1 || collide == 2){
+					collisionDone = false;
+					a.setPull(true);
+					pull(a);
+					if (testAngle(a)){
+						a.resetwPoolCounter();
+						a.setAngle(getWAngle());
+						collisionDone = true;
+						finished = true;
+					}
 				}
 			}
 		}
@@ -163,30 +170,46 @@ public class Whirlpool extends GraphicObject{
 	public boolean testAngle(GraphicObject a){
 		if (angle == -1)//wpool not directed yet
 			return false;
+		if(!a.wPoolCounter())
+			return false;
 		float _lastAngle;
 		//check if duckie has reached his exit angle
 		_lastAngle = a.getSpeed().getLastAngle();
 		//for a clockwise wpool, the last angle is always gonna be smaller
 		if (dirFactor == 1){
-
-			if (_lastAngle > a.getSpeed().getAngle())
+			
+			if (_lastAngle > a.getSpeed().getAngle()){
 				//if lastangle is bigger, its passed 360
 				_lastAngle -= 360;
-			if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+				if (angle > a.getSpeed().getAngle()){
+					if (_lastAngle < angle-360 && a.getSpeed().getAngle() >= angle-360)
+						return true;
+				}else
+					if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+						return true;
+			}
+			else if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
 				return true;
 		}else{
-
-			if (_lastAngle < a.getSpeed().getAngle())
-				//if lastangle is less, its passed 0
+			
+			if (_lastAngle < a.getSpeed().getAngle()){
+				//if lastangle is bigger, its passed 360
 				_lastAngle += 360;
-			if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+				if (angle < a.getSpeed().getAngle()){
+					if (_lastAngle > angle+360 && a.getSpeed().getAngle() <= angle+360)
+						return true;
+				}else
+					if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+						return true;
+			}
+			else if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
 				return true;
 		}
-
+				
 		return false;
 	}
 	public boolean getFinished(){
-		return finished;
+		return (finished && collisionDone);
 	}
 
 	public void setExpireCounter(int a){
@@ -305,36 +328,7 @@ public class Whirlpool extends GraphicObject{
 		default:
 
 		}
-	}/*
-	//changes direction by a factor depending on type of object
-	//depending on quadrant depends which directions need changing
-	void ChangeDir(GraphicObject graphic, float Factor){
-		float tempx = graphic.GetX();
-		float tempy = graphic.GetY();
-		GraphicObject.Speed speed = graphic.GetSpeed();
-		//checks if the speed is the same as the quadrant before
-		if(tempx>=centreX && tempy>=centreY){
-			if(speed.GetX()>0 && speed.GetY()>0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy>=centreY){
-			if(speed.GetX()<0 && speed.GetY()>0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-		else if(tempx<centreX && tempy<centreY){
-			if(speed.GetX()<0 && speed.GetY()<0){
-				speed.SetX((float)(speed.GetX()*Factor*-1));
-			}
-		}
-		else if(tempx>=centreX && tempy<centreY){
-			if(speed.GetX()>0 && speed.GetY()<0){
-				speed.SetY((float)(speed.GetY()*Factor*-1));
-			}
-		}
-
-	}*/
+	}
 
 	//this function is called so the math is only done once per fetch
 	//(rather than individually in each getter)
@@ -372,26 +366,11 @@ public class Whirlpool extends GraphicObject{
 	public void setPower(float power) {
 		this.power = power;
 	}
-	public float getRadius() {
-		return radius;
-	}
-	public void setRadius(float radius) {
-		this.radius = radius;
-	}
 	public void setWAngle(float angle) {
 		this.angle = angle;
 	}
 	public float getWAngle() {
 		return angle;
 	}
-
-	public int getAfterCollisionCounter() {
-		return afterCollisionCounter;
-	}
-
-	public void setAfterCollisionCounter(int afterCollisionCounter) {
-		this.afterCollisionCounter = afterCollisionCounter;
-	}
-
 
 }

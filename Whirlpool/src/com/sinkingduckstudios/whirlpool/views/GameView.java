@@ -5,31 +5,31 @@
  * 
  * 
  */
-package com.sinkingduckstudios.whirlpool.logic;
+package com.sinkingduckstudios.whirlpool.views;
+
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.res.Resources;//
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class Panel extends View{
-	private static  Screen sScreen = new Screen();
+public class GameView extends View{
 	private static  Resources sRes;
     private static Object sScreenLock;
     
-    public Panel(Context context) {
+    public GameView(Context context) {
         super(context);
         constructor();
     }
-    public Panel(Context context, AttributeSet attributes) {
+    public GameView(Context context, AttributeSet attributes) {
         super(context, attributes);
         constructor();
     }
     private void constructor(){
     	
         setFocusable(true);
-        Constants.setScreen(sScreen);
         sScreenLock = Constants.getLock();
     }
 
@@ -40,19 +40,10 @@ public class Panel extends View{
     		Constants.getLevel().onDraw(canvas);
     	}
     }
-
-	@Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-    	int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-    	int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
-    	this.setMeasuredDimension(parentWidth, parentHeight);
-    	sScreen.set(parentWidth, parentHeight);
-    }
     public void init(){
     	//int x = findViewById(R.id.mainview).getWidth();
     	//int y = findViewById(R.id.mainview).getHeight();
     	sRes = getResources();
     	Constants.setRes(sRes);
-    	Imports.setImages();
     }
 }
