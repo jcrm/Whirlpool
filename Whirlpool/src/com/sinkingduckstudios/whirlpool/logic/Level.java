@@ -68,7 +68,8 @@ public class Level {
 			if(mWPoolModel.getWpools().get(i).getFinished()){
 				mWPoolModel.getWpools().remove(i);
 				i--;
-			}
+			}else
+				mWPoolModel.getWpools().get(i).collisionDone=true;
 		}
 		//}
 		synchronized(mScreenLock){

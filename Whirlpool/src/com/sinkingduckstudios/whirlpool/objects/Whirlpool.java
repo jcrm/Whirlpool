@@ -25,7 +25,7 @@ public class Whirlpool extends GraphicObject{
 	private final int expireTimer = 250;
 	private int expireCounter = 1;
 	private boolean finished = false;
-	private boolean collisionDone = true;
+	public boolean collisionDone = true;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
 

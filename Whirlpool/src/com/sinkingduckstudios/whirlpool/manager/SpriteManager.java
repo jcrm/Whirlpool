@@ -15,7 +15,7 @@ import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class SpriteManager {
-	private static Bitmap mDuck;
+	private static Bitmap mDuck[]=new Bitmap[3];
 	private static Bitmap mDiver;
 	private static Bitmap mDiverFlipped;
 	private static Bitmap mBoat;
@@ -27,10 +27,15 @@ public class SpriteManager {
 	private static Bitmap mLeftBorder;
 	private static Bitmap mRightBorder;
 	private static Bitmap mTopBorder;
+	private static Bitmap mArrow;
 	
 	public void deleteImages(){
-		mDuck.recycle();
-		mDuck = null;
+		mDuck[0].recycle();
+		mDuck[0] = null;
+		mDuck[1].recycle();
+		mDuck[1] = null;
+		mDuck[2].recycle();
+		mDuck[2] = null;
 		mDiver.recycle();
 		mDiver = null;
 		mDiverFlipped.recycle();
@@ -45,15 +50,26 @@ public class SpriteManager {
 		mBackground = null;
 		mTorpedo.recycle();
 		mTorpedo = null;
+		mLeftBorder.recycle();
+		mLeftBorder =null;
+		mRightBorder.recycle();
+		mRightBorder=null;
+		mTopBorder.recycle();
+		mTopBorder =null;
+		mArrow.recycle();
+		mArrow = null;
 	}
-	public static Bitmap getDuck() {
-		if(mDuck==null){
-			mDuck = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
+	public static Bitmap getDuck(int index) {
+		if(index<0||index>2)return null;
+		if(mDuck[index]==null){
+			mDuck[0] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
+			mDuck[1] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_up_sprites);
+			mDuck[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_down_sprites);
 		}
-		return mDuck;
+		return mDuck[index];
 	}
-	public static void setDuck(Bitmap duck) {
-		mDuck = duck;
+	public static void setDuck(int index, Bitmap duck) {
+		mDuck[index] = duck;
 	}
 	public static Bitmap getDiver() {
 		if(mDiver == null){
@@ -108,11 +124,11 @@ public class SpriteManager {
 	}
 	public static Bitmap getBackground() {
 		if(mBackground==null){
-			/*BitmapFactory.Options opt = new BitmapFactory.Options();
+			BitmapFactory.Options opt = new BitmapFactory.Options();
 			opt.inJustDecodeBounds = true;
 			BitmapFactory.decodeResource(Constants.getRes(), R.drawable.mainmenu_background, opt);
 			opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-			opt.inJustDecodeBounds = false;*/
+			opt.inJustDecodeBounds = false;
 			mBackground  = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.wateroffset_background);
 		}
 		return mBackground;
@@ -175,5 +191,11 @@ public class SpriteManager {
 	}
 	public static void setTopBorder(Bitmap topBorder) {
 		mTopBorder = topBorder;
+	}
+	public static Bitmap getArrow() {
+		if(mArrow==null){
+			mArrow=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.arrow_sprites);
+		}
+		return mArrow;
 	}
 }

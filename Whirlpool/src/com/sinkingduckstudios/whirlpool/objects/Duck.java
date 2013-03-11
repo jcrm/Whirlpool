@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -27,7 +28,8 @@ public class Duck extends GraphicObject{
 	//collision variables 
 	public CollisionType cID = CollisionType.cDefault;
 	private int mCollisionCount = -1;
-	private int mWaitTimer = 0;
+	private Bitmap mBitmap[] = new Bitmap[3];
+	private Animate mAnimate[] = new Animate[3];
 	public Duck(){
 		mId = objtype.tDuck;
 		init();
@@ -44,7 +46,8 @@ public class Duck extends GraphicObject{
 			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
 				canvas.scale(-1, 1);
 			}
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+			int i = getSpriteSheetIndex();
+			canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), rect,  null);
 		canvas.restore();
 	}
 
@@ -52,32 +55,41 @@ public class Duck extends GraphicObject{
 	public void init() {
 		mProperties.init(30, 60, 60, 60);		
 		
-		mBitmap = SpriteManager.getDuck();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		for(int i=0; i<3; i++){
+			int frames;
+			if(i==0){
+				frames = mId.tFrames;
+			}else{
+				frames = mId.tFrames+3;
+			}
+			mBitmap[i] = SpriteManager.getDuck(i);
+			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+		}
 
-		mSpeed.setMove(false);
+		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 60, 60);
 		
-		mBitmap = SpriteManager.getDuck();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		for(int i=0; i<3; i++){
+			int frames;
+			if(i==0){
+				frames = mId.tFrames;
+			}else{
+				frames = mId.tFrames+3;
+			}
+			mBitmap[i] = SpriteManager.getDuck(i);
+			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+		}
 		
-		mSpeed.setMove(false);
+		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	@Override
 	public boolean move() {
-		if(mWaitTimer >= 0){
-			mWaitTimer++;
-			if(mWaitTimer > 40){
-				mSpeed.setMove(true);
-				mWaitTimer = -1;
-			}
-		}
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
@@ -146,7 +158,7 @@ public class Duck extends GraphicObject{
 				}
 			}
 		}
-		mAnimate.animateFrame();
+		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int boatRadius){
 		switch(id){
@@ -245,5 +257,11 @@ public class Duck extends GraphicObject{
 		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
 	}
-
+	private int getSpriteSheetIndex(){
+		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
+			return 1;
+		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120)
+			return 2;
+		return 0;
+	}
 }
