@@ -3,10 +3,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Paint.Style;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -34,11 +31,6 @@ public class Boat extends GraphicObject{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
-		Paint temp = new Paint();
-		temp.setStyle(Style.STROKE);
-		temp.setColor(Color.RED);
-		canvas.drawCircle(getCentreX(), getCentreY(), getRadius(), temp);
-		canvas.drawCircle(getCentreX(), getCentreY(), mBoatRadius, temp);
 	}
 
 	@Override
