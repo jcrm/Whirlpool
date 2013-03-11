@@ -24,6 +24,9 @@ public class SpriteManager {
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
 	private static Bitmap mTorpedo;
+	private static Bitmap mLeftBorder;
+	private static Bitmap mRightBorder;
+	private static Bitmap mTopBorder;
 	
 	public void deleteImages(){
 		mDuck.recycle();
@@ -145,5 +148,32 @@ public class SpriteManager {
 			}
 		}
 		return scale;
+	}
+	public static Bitmap getLeftBorder() {
+		if(mLeftBorder==null){
+			mLeftBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.left_border);
+		}
+		return mLeftBorder;
+	}
+	public static void setLeftBorder(Bitmap leftBorder) {
+		mLeftBorder = leftBorder;
+	}
+	public static Bitmap getRightBorder() {
+		if(mRightBorder==null){
+			mRightBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.right_border);
+		}
+		return mRightBorder;
+	}
+	public static void setRightBorder(Bitmap rightBorder) {
+		mRightBorder = rightBorder;
+	}
+	public static Bitmap getTopBorder() {
+		if(mTopBorder==null){
+			mTopBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.top_border_tiling);
+		}
+		return mTopBorder;
+	}
+	public static void setTopBorder(Bitmap topBorder) {
+		mTopBorder = topBorder;
 	}
 }

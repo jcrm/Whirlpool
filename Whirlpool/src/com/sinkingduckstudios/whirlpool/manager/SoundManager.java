@@ -93,7 +93,8 @@ public class SoundManager
 		mDucky[3] = load(R.raw.ducky4);
 		mDucky[4] = load(R.raw.ducky5);
 		mDucky[5] = load(R.raw.ducky6);
-/*		mBounce[0] = load(R.raw.bounce);
+/*
+		mBounce[0] = load(R.raw.bounce);
 		mBounce[1] = load(R.raw.bounce2);
 		mAngryDucky= load(R.raw.angryducky);
 		mScaredDucky = load(R.raw.scaredducky);
@@ -111,8 +112,8 @@ public class SoundManager
 		mPoints = load(R.raw.points);
 		mSplash = load(R.raw.splash);
 		mWhirlpool = load(R.raw.whirlpool2);
-*/
 
+*/
 		mBackground =MediaPlayer.create(pContext, R.raw.temp_bg_music);
 
 	}// end LoadSounds

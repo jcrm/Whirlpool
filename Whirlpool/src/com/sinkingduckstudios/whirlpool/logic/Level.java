@@ -34,6 +34,9 @@ public class Level {
 	private int mLevelHeight = 0;
 	private float mScrollBy = 0;
 	private Bitmap mBackgroundImage;
+	private Bitmap mLeftBorderImage;
+	private Bitmap mRightBorderImage;
+	private Bitmap mTopBorderImage;
 	private static Object mScreenLock;
 	private Paint mPaint = new Paint();
 	private Rect mRect = new Rect();
@@ -43,8 +46,10 @@ public class Level {
 	public void init(){
 		mLevelWidth = 3000;
 		mLevelHeight = Constants.getScreen().getHeight();
-		
 		mBackgroundImage = SpriteManager.getBackground();
+		mLeftBorderImage = SpriteManager.getLeftBorder();
+		mRightBorderImage = SpriteManager.getRightBorder();
+		mTopBorderImage = SpriteManager.getTopBorder();
 		mGraphics.add(new Duck(60, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Frog(500, 250, 200));
@@ -87,7 +92,7 @@ public class Level {
 				duckCollision(graphic);
 			}else if(graphic.getId()==objtype.tBoat){
 				if(((Boat) graphic).getNewTorpedo()){
-					objectToBeAdded.add(new Torpedo(graphic.getCentreX(),graphic.getBottomRightY(),0));
+					objectToBeAdded.add(new Torpedo((int)(graphic.getCentreX()*Constants.getScreen().getRatio()),(int)(graphic.getBottomRightY()*Constants.getScreen().getRatio()),0));
 				}
 				graphic.frame();	//Do everything this object does every frame, like move
 			}else if(graphic.getId()==objtype.tTorpedo){
@@ -120,16 +125,18 @@ public class Level {
 
 		canvas.save();
 
-			mRect.set(0, 0, 5, canvas.getHeight());
-			canvas.drawRect(mRect, mPaint);
+			mRect.set(0, 0, mLeftBorderImage.getWidth(), mLevelHeight/2);
+			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
+			canvas.translate(0, mLevelHeight/2);
+			canvas.scale(1,-1);
+			canvas.translate(0,-mLevelHeight/2);
+			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
+			//canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
 	
-			canvas.translate(mLevelWidth-5, 0);
-	
-			mRect.set(0, 0, 5, canvas.getHeight());
-			canvas.drawRect(mRect, mPaint);
+			mRect.set(0, 0, mRightBorderImage.getWidth(), mLevelHeight/2);
+			//canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 
 		canvas.restore();
-
 
 		for (Whirlpool whirlpool : mWPoolModel.getWpools()) {
 			whirlpool.draw(canvas);
