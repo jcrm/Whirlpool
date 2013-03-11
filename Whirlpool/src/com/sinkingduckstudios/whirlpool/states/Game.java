@@ -14,11 +14,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -31,6 +33,14 @@ public class Game extends Activity {
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
+	private CountDownTimer mcountDownTimer;
+	private boolean mtimerHasStarted = false;
+	public TextView mTimertext;
+	//start time in milliseconds
+	//Will add a variable to change the time depending on the level
+	private final long startTime = 80 * 1000;
+	//Tick time in milliseconds
+	private final long interval = 1 * 1000;	
 	private boolean mPaused = false;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -46,7 +56,10 @@ public class Game extends Activity {
 		//TODO remember to do this in all the other states
 		mLevelOne = new Level();
 		setCurrentLevel(mLevelOne);
+		mTimertext = (TextView) this.findViewById(R.id.time);
 		
+		mcountDownTimer = new MyCountDownTimer(startTime, interval);
+		mTimertext.setText(mTimertext.getText() + String.valueOf(startTime/100));
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
@@ -100,6 +113,12 @@ public class Game extends Activity {
 	class MainThread extends TimerTask {
 		public void run() {
 			if(!mPaused){
+				//Timer
+				if(!mtimerHasStarted)
+				{
+					mcountDownTimer.start();
+					mtimerHasStarted = true;				
+				}
 				update();
 				mGameHandler.sendEmptyMessage(0);
 			}
@@ -125,5 +144,43 @@ public class Game extends Activity {
 		super.onResume();
 		Constants.getSoundManager().loadSounds();
 		Constants.getSoundManager().playBackground();
+	}
+	//
+	//Timer Class
+	//
+	public class MyCountDownTimer extends CountDownTimer {
+		public MyCountDownTimer(long startTime, long interval) {
+			super(startTime, interval);
+		}
+		
+		
+		@Override
+		public void onFinish(){
+			
+			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+			Constants.getSoundManager().cleanup();
+			startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+			mTime.cancel();
+			finish();
+			//finish game
+		}
+		
+		@Override
+		public void onTick(long millisUntilFinished) {
+			
+			//The code below sets up the Minute and seconds
+			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
+			String seconds;	
+			if( (millisUntilFinished/1000)%60<10)
+			{
+				seconds=new String("0" +(millisUntilFinished/1000)%60);				
+			}
+			else
+			{
+				seconds=new String("" +(millisUntilFinished/1000)%60);
+			}
+
+			mTimertext.setText("" + (millisUntilFinished/1000)/60 + ":" + seconds);
+		}
 	}
 }

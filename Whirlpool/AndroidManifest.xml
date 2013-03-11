@@ -24,6 +24,26 @@
             android:name="com.sinkingduckstudios.whirlpool.states.Game"
             android:label="@string/title_activity_game">
         </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Options"
+            >
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.ScoreScreen"
+            >
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.AudioOptions"
+            >
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.GraphicsOptions"
+            >
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.ZoneScreen"
+            >
+        </activity>
     </application>
 
 </manifest>

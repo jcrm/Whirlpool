@@ -213,6 +213,8 @@ public class Level {
 				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 				if(collision){
 				}	
+			}else{
+				((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 			}
 		}
 	}
