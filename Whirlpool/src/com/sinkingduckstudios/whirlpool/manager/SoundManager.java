@@ -59,7 +59,7 @@ public class SoundManager
 	// Constructor, setup the audio manager and store the app context
 	public SoundManager(Context appContext){
 		// the constuctor for the class.
-		mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
+		mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
 		pContext = appContext;		//get the games context 
 
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
@@ -93,7 +93,8 @@ public class SoundManager
 		mDucky[3] = load(R.raw.ducky4);
 		mDucky[4] = load(R.raw.ducky5);
 		mDucky[5] = load(R.raw.ducky6);
-/*		mBounce[0] = load(R.raw.bounce);
+/*
+		mBounce[0] = load(R.raw.bounce);
 		mBounce[1] = load(R.raw.bounce2);
 		mAngryDucky= load(R.raw.angryducky);
 		mScaredDucky = load(R.raw.scaredducky);

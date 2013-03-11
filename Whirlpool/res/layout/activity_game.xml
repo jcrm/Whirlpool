@@ -15,13 +15,18 @@
 	    android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
 	    >
-	    <Button
-	        android:id="@+id/menubutton"
-	        android:text="@string/title_activity_menu"
+
+		<Button
+		    android:id="@+id/menubutton"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/title_activity_menu" />
+
+	    <TextView
+	        android:id="@+id/time"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        >
-	    </Button>
+	        android:text="loool" />
 	    
     </LinearLayout>
 
