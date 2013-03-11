@@ -11,22 +11,23 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int boat_attack_sprites=0x7f020000;
-        public static final int boat_sprites=0x7f020001;
-        public static final int diver_sprites=0x7f020002;
-        public static final int duck_down_sprites=0x7f020003;
-        public static final int duck_left_and_right_sprites=0x7f020004;
-        public static final int duck_up_sprites=0x7f020005;
-        public static final int exit_button=0x7f020006;
-        public static final int frog_sprites=0x7f020007;
-        public static final int ic_action_search=0x7f020008;
-        public static final int ic_launcher=0x7f020009;
-        public static final int mainmenu_background=0x7f02000a;
-        public static final int options_button=0x7f02000b;
-        public static final int play_button=0x7f02000c;
-        public static final int torpedo_sprites=0x7f02000d;
-        public static final int wateroffset_background=0x7f02000e;
-        public static final int whirlpool_sprites=0x7f02000f;
+        public static final int arrow_sprites=0x7f020000;
+        public static final int boat_attack_sprites=0x7f020001;
+        public static final int boat_sprites=0x7f020002;
+        public static final int diver_sprites=0x7f020003;
+        public static final int duck_down_sprites=0x7f020004;
+        public static final int duck_left_and_right_sprites=0x7f020005;
+        public static final int duck_up_sprites=0x7f020006;
+        public static final int exit_button=0x7f020007;
+        public static final int frog_sprites=0x7f020008;
+        public static final int ic_action_search=0x7f020009;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int mainmenu_background=0x7f02000b;
+        public static final int options_button=0x7f02000c;
+        public static final int play_button=0x7f02000d;
+        public static final int torpedo_sprites=0x7f02000e;
+        public static final int wateroffset_background=0x7f02000f;
+        public static final int whirlpool_sprites=0x7f020010;
     }
     public static final class id {
         public static final int exit=0x7f080007;
