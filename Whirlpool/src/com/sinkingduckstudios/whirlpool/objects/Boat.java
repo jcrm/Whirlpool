@@ -11,10 +11,11 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
-	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting };
+	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting};
 	private BoatType mBoatState = BoatType.bDefault;
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
 	private int mTorpedoCount = -1;
+	private boolean mBroken = false;
 	
 	public Boat(){
 		mId = objtype.tBoat;
@@ -121,13 +122,15 @@ public class Boat extends GraphicObject{
 		if(move()){
 			border();
 		}
-		incrementCounter();
-		if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
-			mBoatState = BoatType.bTorpedo;
-		}else if(mBoatState ==  BoatType.bFinishing && mAnimate.getFinished()){			
-			mBitmap = SpriteManager.getBoat();
-			mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
-			mBoatState = BoatType.bWaiting;			
+		if(checkBroken() == false){
+			incrementCounter();
+			if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
+				mBoatState = BoatType.bTorpedo;
+			}else if(mBoatState ==  BoatType.bFinishing && mAnimate.getFinished()){			
+				mBitmap = SpriteManager.getBoat();
+				mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
+				mBoatState = BoatType.bWaiting;			
+			}
 		}
 		mAnimate.animateFrame();
 	}
@@ -162,10 +165,34 @@ public class Boat extends GraphicObject{
 		}
 	}
 	public void changeAnimation(){
-		if(mBoatState == BoatType.bReady){
+		if(mBoatState == BoatType.bReady && mBroken == false){
 			mBitmap= SpriteManager.getBoatAttack();
 			mAnimate.Reset(56, 7, 8, mBitmap.getWidth(), mBitmap.getHeight(),1);
 			mBoatState = BoatType.bAttack;
+		}
+	}
+	public boolean getBroken() {
+		return mBroken;
+	}
+	public void setBroken(boolean broken) {
+		mBroken = broken;
+		if(mBroken == true){
+			mBitmap = SpriteManager.getBoat();
+			mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
+		}
+	}
+	public boolean checkBroken(){
+		if(mBroken == true){
+			mBoatState = BoatType.bReady;
+			if(++mTorpedoCount>=0){
+				if(mTorpedoCount == 200){
+					mTorpedoCount = -1;
+					mBroken = false;
+				}
+			}
+			return true;
+		}else{
+			return false;
 		}
 	}
 

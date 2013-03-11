@@ -12,10 +12,9 @@ import java.util.Iterator;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
@@ -38,7 +37,6 @@ public class Level {
 	private Bitmap mRightBorderImage;
 	private Bitmap mTopBorderImage;
 	private static Object mScreenLock;
-	private Paint mPaint = new Paint();
 	private Rect mRect = new Rect();
 	
 	public Level(){
@@ -50,12 +48,12 @@ public class Level {
 		mLeftBorderImage = SpriteManager.getLeftBorder();
 		mRightBorderImage = SpriteManager.getRightBorder();
 		mTopBorderImage = SpriteManager.getTopBorder();
-		mGraphics.add(new Duck(60, 235));
+		mGraphics.add(new Duck(120, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Frog(500, 250, 200));
 		mGraphics.add(new Diver(1000, 50, 90, 1000, 50, 1000, 350));
 		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
-		mWPoolModel.addWPool(65, 235, 10, -1, 1);
+		mWPoolModel.addWPool(125, 235, 10, -1, 1);
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}//
@@ -91,6 +89,7 @@ public class Level {
 			if(graphic.getId()==objtype.tDuck){
 				duckCollision(graphic);
 			}else if(graphic.getId()==objtype.tBoat){
+				checkBoatTorpedoCollision(graphic);
 				if(((Boat) graphic).getNewTorpedo()){
 					objectToBeAdded.add(new Torpedo((int)(graphic.getCentreX()*Constants.getScreen().getRatio()),(int)(graphic.getBottomRightY()*Constants.getScreen().getRatio()),0));
 				}
@@ -109,12 +108,21 @@ public class Level {
 		}
 		mGraphics.addAll(objectToBeAdded);
 	}
+	public void checkBoatTorpedoCollision(GraphicObject graphic){
+		for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
+			GraphicObject graphic2 = collisionIterator.next();
+			if(graphic2.getId()==objtype.tTorpedo){
+				if(CollisionManager.circleCollision(graphic.getCollision(), graphic2.getCollision())){
+					((Boat) graphic).setBroken(true);
+					((Torpedo) graphic2).setIsReadyToDestroy(true);	
+				}
+			}
+		}
+	}
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
 
-		mPaint.setColor(Color.RED);
-		mPaint.setStyle(Paint.Style.FILL);
 		//Log.e("onDraw", String.valueOf(levelWidth) + "/" + String.valueOf(Constants.getScreen().getWidth()) + "=" + String.valueOf(num));
 		for(int a = 0; a < (num); a++){
 			mRect.set((int) ((width*a)-mScrollBy), 0, (int)((width*(a+1)) - mScrollBy), Constants.getScreen().getHeight());
@@ -122,8 +130,9 @@ public class Level {
 		}
 
 		canvas.translate(-mScrollBy, 0.0f);
-
 		canvas.save();
+			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),mLevelHeight/2);
+			canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
 
 			mRect.set(0, 0, mLeftBorderImage.getWidth(), mLevelHeight/2);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
@@ -131,10 +140,14 @@ public class Level {
 			canvas.scale(1,-1);
 			canvas.translate(0,-mLevelHeight/2);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
-			//canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
+			canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
 	
 			mRect.set(0, 0, mRightBorderImage.getWidth(), mLevelHeight/2);
-			//canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
+			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
+			canvas.translate(0, mLevelHeight/2);
+			canvas.scale(1,-1);
+			canvas.translate(0,-mLevelHeight/2);
+			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 
 		canvas.restore();
 
@@ -187,20 +200,18 @@ public class Level {
 			if(graphic2.getId()==objtype.tBoat){
 				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
 				if(collision){
-					((Boat) graphic2).changeAnimation();						
+					((Boat) graphic2).changeAnimation();	
 				}
-			}else{
+			}else if(graphic2.getId()==objtype.tTorpedo){
+				if(((Torpedo) graphic2).getIsReadyToDestroy()==false){
+					collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+					if(collision){
+						((Torpedo) graphic2).setIsReadyToDestroy(true);
+					}
+				}
+			}else if(graphic2.getId()==objtype.tShark){
 				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 				if(collision){
-					switch(graphic2.getId()){
-					case tShark:
-						break;
-					case tTorpedo:
-						((Torpedo) graphic2).setIsReadyToDestroy(true);
-						break;
-					default:
-						break;
-					}
 				}	
 			}
 		}

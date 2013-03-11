@@ -59,7 +59,7 @@ public class SoundManager
 	// Constructor, setup the audio manager and store the app context
 	public SoundManager(Context appContext){
 		// the constuctor for the class.
-		mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
+		mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
 		pContext = appContext;		//get the games context 
 
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
@@ -112,8 +112,8 @@ public class SoundManager
 		mPoints = load(R.raw.points);
 		mSplash = load(R.raw.splash);
 		mWhirlpool = load(R.raw.whirlpool2);
-
 */
+
 		mBackground =MediaPlayer.create(pContext, R.raw.temp_bg_music);
 
 	}// end LoadSounds
