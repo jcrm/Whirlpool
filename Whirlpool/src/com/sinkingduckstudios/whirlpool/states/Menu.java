@@ -38,6 +38,8 @@ public class Menu extends Activity {
         Constants.setState(this);
         
         ImageButton gameButton = ((ImageButton) findViewById(R.id.game));
+        ImageButton optionsButton = ((ImageButton) findViewById(R.id.options));
+        ImageButton exitButton = ((ImageButton) findViewById(R.id.exit));
         Constants.setContext(getApplicationContext());
         
         Display display = getWindowManager().getDefaultDisplay(); 
@@ -45,13 +47,29 @@ public class Menu extends Activity {
     	Constants.setScreen(theScreen);
     	//RelativeLayout theLayout = (RelativeLayout) findViewById(R.id.menuLayout)
         
-        gameButton.setOnClickListener(goToGame);
+    	gameButton.setOnClickListener(goToGame);
+        optionsButton.setOnClickListener(goToOptions);
+        exitButton.setOnClickListener(goToExit);
         menuView=(MenuView)findViewById(R.id.menuView);
     }
 	private OnClickListener goToGame = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
     		startActivity(new Intent(getApplicationContext(), Game.class));
+    		finish();
+        }
+	};
+	private OnClickListener goToOptions = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+    		startActivity(new Intent(getApplicationContext(), Options.class));
+    		finish();
+        }
+	};
+	
+	private OnClickListener goToExit = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
     		finish();
         }
 	};

@@ -85,7 +85,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	public boolean border(){
-		int HEIGHT = Constants.getLevel().getLevelHeight();
+		int HEIGHT = 500;
 		int WIDTH = Constants.getLevel().getLevelWidth();
 		boolean hit = false;
 		if(getTopLeftX()<0){

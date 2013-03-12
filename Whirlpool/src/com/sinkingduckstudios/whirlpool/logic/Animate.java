@@ -44,16 +44,18 @@ public class Animate{
 			updatePortion();
 		}
 	}
-
+	public void setDelay(int delay){
+		mDelay = delay;
+	}
 	public void updatePortion(){
-		if(mFrameNum >= mNoOfFrames){
-			mFrameNum = 0;
-			mFinished = true;
-		}
 		mPortion.left =  (mFrameNum%mNoOfCol) * mFrameWidth;
 		mPortion.top = (mFrameNum/mNoOfCol) * mFrameHeight;
 		mPortion.right = mPortion.left + mFrameWidth;
 		mPortion.bottom = mPortion.top +mFrameHeight;
+		if(mFrameNum >= mNoOfFrames-1){
+			mFrameNum = 0;
+			mFinished = true;
+		}
 	}
 
 	public Rect getPortion() {

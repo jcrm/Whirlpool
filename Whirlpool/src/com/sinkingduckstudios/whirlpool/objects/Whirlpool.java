@@ -25,7 +25,7 @@ public class Whirlpool extends GraphicObject{
 	private final int expireTimer = 250;
 	private int expireCounter = 1;
 	private boolean finished = false;
-	private boolean collisionDone = true;
+	public boolean collisionDone = true;
 	private Arrow mArrow = null;
 	private float tangentX, tangentY;
 
@@ -57,8 +57,8 @@ public class Whirlpool extends GraphicObject{
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		
 	}
+	
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130);	
 
