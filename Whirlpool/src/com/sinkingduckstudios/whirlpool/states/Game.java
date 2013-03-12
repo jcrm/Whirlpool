@@ -95,9 +95,9 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				mTime.cancel();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
-				mTime.cancel();
 				finish();
 			}
         }
@@ -132,7 +132,7 @@ public class Game extends Activity {
 				}
 				int count =update();
 				if(count==1){
-					mTime.cancel();
+					mCountDownTimer.cancel();
 				}else if(count==2){
 					mGameHandler.sendEmptyMessage(1);					
 				}
@@ -143,17 +143,17 @@ public class Game extends Activity {
 	}
 	@Override
 	public void onPause(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
-		mTime.cancel();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
-		mTime.cancel();
 		super.onDestroy();
 	}
 	@Override
@@ -174,13 +174,14 @@ public class Game extends Activity {
 		
 		@Override
 		public void onFinish(){
-			
-			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-			Constants.getSoundManager().cleanup();
-			startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
-			mTime.cancel();
-			finish();
-			//finish game
+			if(mPaused == false){
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				Constants.getSoundManager().cleanup();
+				startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+				mTime.cancel();
+				finish();
+				//finish game
+			}
 		}
 		
 		@Override
