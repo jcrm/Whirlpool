@@ -14,6 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.sinkingduckstudios.whirlpool.environment.Finish;
+import com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment;
+import com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment.envtype;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
@@ -29,6 +32,7 @@ public class Level {
 
 	private final WPools mWPoolModel = new WPools();
 	private ArrayList<GraphicObject> mGraphics = new ArrayList<GraphicObject>();
+	private ArrayList<GraphicEnvironment> mEnvironments = new ArrayList<GraphicEnvironment>();
 	private int mLevelWidth = 0;
 	private int mLevelHeight = 0;
 	private float mScrollBy = 0;
@@ -54,11 +58,17 @@ public class Level {
 		mGraphics.add(new Diver(1000, 50, 90, 1000, 50, 1000, 350));
 		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
+		Finish end = new Finish();
+    	end.setCentreX(mLevelWidth);
+    	end.setCentreY(235);
+    	end.setWAngle(-1);
+    	end.setClockwise(1);
+		mEnvironments.add(end);
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}//
 
-	public void update(){
+	public int update(){
 		
 		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
@@ -71,10 +81,22 @@ public class Level {
 			}else
 				mWPoolModel.getWpools().get(i).collisionDone=true;
 		}
+		for(GraphicEnvironment enviro: mEnvironments){
+			if(enviro.getId() == envtype.tFinish){
+				int count =((Finish) enviro).getEnd(); 
+				if(count==1){
+					return 1;
+				}else if(count == 2){
+					return 2;
+				}
+			}
+			enviro.frame();
+		}
 		//}
 		synchronized(mScreenLock){
 			duckOnScreen();
 		}
+		return 0;
 		//scroll();
 	}
 	private void updateList(){
@@ -86,6 +108,11 @@ public class Level {
 			graphic.setPull(false);
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				whirl.checkCollision(graphic);
+			}
+			for(GraphicEnvironment enviro: mEnvironments){
+				if(enviro.getId()==envtype.tFinish){
+					((Finish) enviro).checkCollision(graphic);
+				}
 			}
 			if(graphic.getId()==objtype.tDuck){
 				duckCollision(graphic);
@@ -154,6 +181,9 @@ public class Level {
 
 		for (Whirlpool whirlpool : mWPoolModel.getWpools()) {
 			whirlpool.draw(canvas);
+		}
+		for(GraphicEnvironment enviro : mEnvironments){
+			enviro.draw(canvas);
 		}
 		for (GraphicObject graphic : mGraphics) {
 			graphic.draw(canvas);
