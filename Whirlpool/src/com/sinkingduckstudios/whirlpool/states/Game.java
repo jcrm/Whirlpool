@@ -19,7 +19,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sinkingduckstudios.whirlpool.R;
@@ -81,21 +83,20 @@ public class Game extends Activity {
 		mTime.schedule(new MainThread(),0, 25);
 
 
-
-		((Button) findViewById(R.id.menubutton)).setOnClickListener(
-			new Button.OnClickListener(){
-				public void onClick(View view) {
-					//MainThread tempthread = Constants.getThread();
-					synchronized(Constants.getLock()){
-						mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-						startActivity(new Intent(getApplicationContext(), Menu.class));
-						mTime.cancel();
-						finish();
-					}
-				}
-			}
-		);
+		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
+		menuButton.setOnClickListener(goToMenu);
 	}
+	private OnClickListener goToMenu = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			synchronized(Constants.getLock()){
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				startActivity(new Intent(getApplicationContext(), Menu.class));
+				mTime.cancel();
+				finish();
+			}
+        }
+	};
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
 	}
