@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
@@ -12,6 +13,7 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
 	private int mDuckCounter = 11;
+	private int mBeepCounter = 31;
 	
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
@@ -147,5 +149,12 @@ public class Torpedo extends GraphicObject {
 			return true;
 		}
 		return false;
+	}
+	public void checkBeep(){
+		mBeepCounter++;
+		if(mBeepCounter>30){
+			mBeepCounter = 0;
+			Constants.getSoundManager().playBeepFast();
+		}
 	}
 }

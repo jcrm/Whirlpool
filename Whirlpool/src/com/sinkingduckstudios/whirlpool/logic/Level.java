@@ -85,6 +85,7 @@ public class Level {
 			if(enviro.getId() == envtype.tFinish){
 				int count =((Finish) enviro).getEnd(); 
 				if(count==1){
+					Constants.getSoundManager().playPoints();
 					return 1;
 				}else if(count == 2){
 					return 2;
@@ -124,6 +125,7 @@ public class Level {
 				graphic.frame();	//Do everything this object does every frame, like move
 			}else if(graphic.getId()==objtype.tTorpedo){
 				if(((Torpedo) graphic).getIsReadyToDestroy()){
+					Constants.getSoundManager().playExplosion();
 					mainIterator.remove();
 				}else if(((Torpedo) graphic).updateDirection()){
 					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());

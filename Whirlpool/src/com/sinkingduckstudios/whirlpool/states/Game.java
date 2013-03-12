@@ -39,7 +39,7 @@ public class Game extends Activity {
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
-	private final long mStartTime = 80 * 1000;
+	private final long mStartTime = 180 * 1000;
 	//Tick time in milliseconds
 	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
@@ -62,12 +62,12 @@ public class Game extends Activity {
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
 
+		Constants.getSoundManager().loadSounds();
+		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
 		mTime= new Timer();//init timer
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
 
@@ -160,6 +160,7 @@ public class Game extends Activity {
 	public void onResume(){
 		mPaused = false;
 		super.onResume();
+		Constants.getSoundManager().initContext(getApplicationContext());
 		Constants.getSoundManager().loadSounds();
 		Constants.getSoundManager().playBackground();
 	}
