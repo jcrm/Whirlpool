@@ -67,6 +67,11 @@ public class Game extends Activity {
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
+		
+		//if(mTime!=null)
+		//{mTime.cancel();
+		//mTime = null;
+		//}
 		mTime= new Timer();//init timer
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
