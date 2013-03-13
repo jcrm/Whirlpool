@@ -47,8 +47,8 @@ public class Level {
 	public Level(){
 	}
 	public void init(){
-		mLevelWidth = 3000;
-		mLevelHeight = Constants.getScreen().getHeight();
+		mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
+		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		mBackgroundImage = SpriteManager.getBackground();
 		mLeftBorderImage = SpriteManager.getLeftBorder();
 		mRightBorderImage = SpriteManager.getRightBorder();
@@ -57,15 +57,15 @@ public class Level {
 		mGraphics.add(new Duck(40, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Frog(600, 250, 140));
-		mGraphics.add(new Diver(2600, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(2100, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(1600, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
 		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
 		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
 		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
 		mGraphics.add(new Frog(1200, 250, 140));		
 		Finish end = new Finish();
-    	end.setCentreX(mLevelWidth);
+    	end.setCentreX(2900);
     	end.setCentreY(235);
     	end.setWAngle(-1);
     	end.setClockwise(1);
@@ -170,22 +170,22 @@ public class Level {
 
 		canvas.translate(-mScrollBy, 0.0f);
 		canvas.save();
-			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),mLevelHeight/2);
+			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),Constants.getScreen().getHeight()/2);
 			canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
 
-			mRect.set(0, 0, mLeftBorderImage.getWidth(), mLevelHeight/2);
+			mRect.set(0, 0, mLeftBorderImage.getWidth(), Constants.getScreen().getHeight()/2);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
-			canvas.translate(0, mLevelHeight/2);
+			canvas.translate(0, Constants.getScreen().getHeight()/2);
 			canvas.scale(1,-1);
-			canvas.translate(0,-mLevelHeight/2);
+			canvas.translate(0,-Constants.getScreen().getHeight()/2);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
 			canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
 	
-			mRect.set(0, 0, mRightBorderImage.getWidth(), mLevelHeight/2);
+			mRect.set(0, 0, mRightBorderImage.getWidth(), Constants.getScreen().getHeight()/2);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
-			canvas.translate(0, mLevelHeight/2);
+			canvas.translate(0, Constants.getScreen().getHeight()/2);
 			canvas.scale(1,-1);
-			canvas.translate(0,-mLevelHeight/2);
+			canvas.translate(0,-Constants.getScreen().getHeight()/2);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 
 		canvas.restore();

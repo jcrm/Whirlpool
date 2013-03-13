@@ -152,6 +152,7 @@ public class Whirlpool extends GraphicObject{
 					if (testAngle(a)){
 						a.resetwPoolCounter();
 						a.setAngle(getWAngle());
+						a.getSpeed().setSpeed(7+mArrow.getDist());
 						collisionDone = true;
 						finished = true;
 					}

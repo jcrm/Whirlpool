@@ -237,7 +237,7 @@ public class Duck extends GraphicObject{
 				}
 			}else if(cID == CollisionType.cTorpedo){
 				if(mCollisionCount == 10){
-					getSpeed().setSpeed(4);				
+					getSpeed().setSpeed(8);			
 					getSpeed().setAngle(0);
 					cID = CollisionType.cDefault;
 					mCollisionCount = -1;
