@@ -12,7 +12,8 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
-	private int mDuckCounter = 11;
+	private int mDuckCounter = 0;
+	private boolean mHitBoat = false;
 	private int mBeepCounter = 31;
 	
 	public Torpedo(int x, int y, float angle){
@@ -145,6 +146,7 @@ public class Torpedo extends GraphicObject {
 	public boolean updateDirection(){
 		mDuckCounter++;
 		if(mDuckCounter>10){
+			mHitBoat = true;
 			mDuckCounter = 0;
 			return true;
 		}
@@ -156,5 +158,11 @@ public class Torpedo extends GraphicObject {
 			mBeepCounter = 0;
 			Constants.getSoundManager().playBeepFast();
 		}
+	}
+	public boolean getHitBoat() {
+		return mHitBoat;
+	}
+	public void setHitBoat(boolean mHitBoat) {
+		this.mHitBoat = mHitBoat;
 	}
 }

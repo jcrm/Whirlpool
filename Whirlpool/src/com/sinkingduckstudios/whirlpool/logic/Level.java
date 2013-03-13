@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.logic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -52,12 +53,17 @@ public class Level {
 		mLeftBorderImage = SpriteManager.getLeftBorder();
 		mRightBorderImage = SpriteManager.getRightBorder();
 		mTopBorderImage = SpriteManager.getTopBorder();
-		mGraphics.add(new Duck(120, 235));
-		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(500, 250, 200));
-		mGraphics.add(new Diver(1000, 50, 90, 1000, 50, 1000, 350));
-		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
+		mGraphics.add(new Duck(40, 235));
+		Constants.setPlayer((Duck)mGraphics.get(0));
+		mGraphics.add(new Frog(600, 250, 140));
+		mGraphics.add(new Diver(2600, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2100, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1600, new Random().nextInt(mLevelHeight), 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
+		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
+		mGraphics.add(new Frog(1200, 250, 140));		
 		Finish end = new Finish();
     	end.setCentreX(mLevelWidth);
     	end.setCentreY(235);
@@ -130,6 +136,7 @@ public class Level {
 				}else if(((Torpedo) graphic).updateDirection()){
 					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				}else{
+					((Torpedo) graphic).checkBeep();
 					graphic.frame();	//Do everything this object does every frame, like move
 				}
 			}else{
@@ -143,8 +150,10 @@ public class Level {
 			GraphicObject graphic2 = collisionIterator.next();
 			if(graphic2.getId()==objtype.tTorpedo){
 				if(CollisionManager.circleCollision(graphic.getCollision(), graphic2.getCollision())){
+					if(((Torpedo) graphic2).getHitBoat()==true){
 					((Boat) graphic).setBroken(true);
-					((Torpedo) graphic2).setIsReadyToDestroy(true);	
+						((Torpedo) graphic2).setIsReadyToDestroy(true);
+					}
 				}
 			}
 		}

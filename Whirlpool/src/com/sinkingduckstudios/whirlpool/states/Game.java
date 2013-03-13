@@ -76,6 +76,7 @@ public class Game extends Activity {
 				if (aMsg.what == 0){//redraw
 					mPanel.invalidate();
 				}else if(aMsg.what ==1){
+					mTime.cancel();
 					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 					Constants.getSoundManager().cleanup();
 					startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
@@ -159,10 +160,10 @@ public class Game extends Activity {
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();
+		super.onResume();/*
 		Constants.getSoundManager().initContext(getApplicationContext());
 		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
+		Constants.getSoundManager().playBackground();*/
 	}
 	//
 	//Timer Class
