@@ -25,6 +25,7 @@ import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
+import com.sinkingduckstudios.whirlpool.objects.Shark;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
@@ -63,6 +64,7 @@ public class Level {
 		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
 		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
 		mGraphics.add(new Frog(1200, 250, 140));		
+		mGraphics.add(new Shark(300,300));
 		Finish end = new Finish();
     	end.setCentreX(2900);
     	end.setCentreY(235);
