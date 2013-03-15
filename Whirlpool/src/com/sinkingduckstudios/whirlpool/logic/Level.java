@@ -9,7 +9,6 @@ package com.sinkingduckstudios.whirlpool.logic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

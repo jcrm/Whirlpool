@@ -67,11 +67,11 @@ public class Game extends Activity {
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
-		
-		//if(mTime!=null)
-		//{mTime.cancel();
-		//mTime = null;
-		//}
+		//create a runable thread to pass message to handler
+		if(mTime!=null){
+			mTime.cancel();
+			mTime = null;
+		}
 		mTime= new Timer();//init timer
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
@@ -91,7 +91,7 @@ public class Game extends Activity {
 		};
 
 
-		mTime.schedule(new MainThread(),0, 25);
+		mTime.schedule(new MainThread(),0, 50);
 
 
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));

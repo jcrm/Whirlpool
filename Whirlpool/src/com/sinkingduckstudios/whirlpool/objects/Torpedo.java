@@ -12,8 +12,9 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
-	private int mDuckCounter = 0;
+	private int mDuckCounter = 10;
 	private boolean mHitBoat = false;
+	private int mHitBoatCounter = 0;
 	private int mBeepCounter = 31;
 	
 	public Torpedo(int x, int y, float angle){
@@ -57,6 +58,10 @@ public class Torpedo extends GraphicObject {
 	
 	@Override
 	public boolean move() {
+		if(mHitBoat == false && ++mHitBoatCounter > 40){
+			mHitBoatCounter = 0;
+			mHitBoat = true;
+		}
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
@@ -137,6 +142,7 @@ public class Torpedo extends GraphicObject {
 			tempSpeed = 10;
 		}
 	}
+	//try get view by id , get id layout, get height and width of view; on button click of menu
 	public int getDuckCounter() {
 		return mDuckCounter;
 	}
@@ -146,7 +152,6 @@ public class Torpedo extends GraphicObject {
 	public boolean updateDirection(){
 		mDuckCounter++;
 		if(mDuckCounter>10){
-			mHitBoat = true;
 			mDuckCounter = 0;
 			return true;
 		}
@@ -162,7 +167,7 @@ public class Torpedo extends GraphicObject {
 	public boolean getHitBoat() {
 		return mHitBoat;
 	}
-	public void setHitBoat(boolean mHitBoat) {
-		this.mHitBoat = mHitBoat;
+	public void setHitBoat(boolean hitBoat) {
+		mHitBoat = hitBoat;
 	}
 }
