@@ -31,6 +31,7 @@ public class Duck extends GraphicObject{
 	private Bitmap mBitmap[] = new Bitmap[3];
 	private Animate mAnimate[] = new Animate[3];
 	private boolean mInvincibility = false;
+	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
 	
 	public Duck(){
 		mId = objtype.tDuck;
@@ -285,5 +286,8 @@ public class Duck extends GraphicObject{
 	}
 	public void setInvincibility(boolean invincibility) {
 		mInvincibility = invincibility;
+	}
+	public static float getTopSpeed() {
+		return mTopSpeed;
 	}
 }

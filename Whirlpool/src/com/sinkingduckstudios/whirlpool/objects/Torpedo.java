@@ -12,6 +12,7 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
+	private static final float mTopSpeed = 12*Constants.getScreen().getRatio();
 	private int mDuckCounter = 10;
 	private boolean mHitBoat = false;
 	private int mHitBoatCounter = 0;
@@ -136,10 +137,10 @@ public class Torpedo extends GraphicObject {
 	public void setDuckSpeed(int duckX, int duckY){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed(); 
-		if(tempSpeed<10){
+		if(tempSpeed<mTopSpeed){
 			mSpeed.setSpeed(tempSpeed+1);
 		}else{
-			tempSpeed = 10;
+			tempSpeed = mTopSpeed;
 		}
 	}
 	//try get view by id , get id layout, get height and width of view; on button click of menu
@@ -169,5 +170,8 @@ public class Torpedo extends GraphicObject {
 	}
 	public void setHitBoat(boolean hitBoat) {
 		mHitBoat = hitBoat;
+	}
+	public float getTopSpeed() {
+		return mTopSpeed;
 	}
 }
