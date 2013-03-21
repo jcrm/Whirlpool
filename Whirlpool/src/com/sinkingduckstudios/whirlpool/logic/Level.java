@@ -162,6 +162,8 @@ public class Level {
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
+		//used to make bath tub look right, need to check on other devices
+		int bottom = 21*(Constants.getScreen().getHeight()/40);
 
 		//Log.e("onDraw", String.valueOf(levelWidth) + "/" + String.valueOf(Constants.getScreen().getWidth()) + "=" + String.valueOf(num));
 		for(int a = 0; a < (num); a++){
@@ -171,22 +173,22 @@ public class Level {
 
 		canvas.translate(-mScrollBy, 0.0f);
 		canvas.save();
-			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),Constants.getScreen().getHeight()/2);
+			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),bottom);
 			canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
 
-			mRect.set(0, 0, mLeftBorderImage.getWidth(), Constants.getScreen().getHeight()/2);
+			mRect.set(0, 0, mLeftBorderImage.getWidth(), bottom);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
-			canvas.translate(0, Constants.getScreen().getHeight()/2);
+			canvas.translate(0, bottom);
 			canvas.scale(1,-1);
-			canvas.translate(0,-Constants.getScreen().getHeight()/2);
+			canvas.translate(0,-bottom);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
 			canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
 	
-			mRect.set(0, 0, mRightBorderImage.getWidth(), Constants.getScreen().getHeight()/2);
+			mRect.set(0, 0, mRightBorderImage.getWidth(), bottom);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
-			canvas.translate(0, Constants.getScreen().getHeight()/2);
+			canvas.translate(0, bottom);
 			canvas.scale(1,-1);
-			canvas.translate(0,-Constants.getScreen().getHeight()/2);
+			canvas.translate(0,-bottom);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 
 		canvas.restore();
