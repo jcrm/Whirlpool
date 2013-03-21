@@ -12,7 +12,6 @@ import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
 public class Finish extends GraphicEnvironment{
-	private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;
@@ -304,14 +303,8 @@ public class Finish extends GraphicEnvironment{
 	//frogs are not effected 
 	public void pull(GraphicObject graphic){
 		switch(graphic.getId()){
-		case tShark:
-			gravity(graphic, sharkFactor);
-			break;
 		case tDuck:
 			gravity(graphic, 4.0f);
-			break;
-		case tBoat:
-
 			break;
 		default:
 

@@ -216,5 +216,11 @@ public class Diver extends GraphicObject{
 			mBottomBorder = mTopBorder;
 			mTopBorder = temp;
 		}
+		if(mRightBorder ==0 && mLeftBorder ==0 && mTopBorder == 0 && mBottomBorder ==0){
+			mLeftBorder = 0;
+			mTopBorder = 0;
+			mRightBorder = Constants.getLevel().getLevelWidth();
+			mBottomBorder = Constants.getLevel().getLevelHeight();
+		}
 	}
 }

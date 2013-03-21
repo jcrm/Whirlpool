@@ -31,26 +31,28 @@ public class SoundManager
 	// integer values to store the ID's for the sounds needed to play them
 	// the sounds for ducky
 	protected int mDucky[]  = new int[6];					// an array of 6 to stor the 6 sounds of ducky
-/*
+	protected int mExplosion[] = new int [3];
+	protected int mMissile[] = new int [3];
 	protected int mBounce[] = new int [2];					// an array of 2 to hold the sounds of ducky bouncing
 	protected int mAngryDucky;				// values for the angry and scared ducky sounds
 	protected int mScaredDucky;
 
- 
+	/*
 	// sounds for the enemies. frog, diver and tugboat
 	protected int mDiver;	
 	protected int mFrog;
 	protected int mTugBoat;
-
+	 */
 	// other sounds for the game
 	//protected int mBackground;				// the bacground music for the game
-	protected int mAmbientbath;				// the ambient noises' heard in a bath
-	protected int mDownplug;					// sounds to represent the noise of a plug
+	//	protected int mAmbientbath;				// the ambient noises' heard in a bath
+	//	protected int mDownplug;					// sounds to represent the noise of a plug
 	protected int mPlug;
 	protected int mPoints;					// sounds of points being gained
+
 	protected int mSplash;					//  a splash of water
-	protected int mWhirlpool;				// the sound of the whirlpool
-*/
+	//	protected int mWhirlpool;				// the sound of the whirlpool
+
 
 	protected float mMasterVolume;
 
@@ -59,7 +61,7 @@ public class SoundManager
 	// Constructor, setup the audio manager and store the app context
 	public SoundManager(Context appContext){
 		// the constuctor for the class.
-		mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
+		mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 0);		// set up the sound pool with the auidomanager
 		pContext = appContext;		//get the games context 
 
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
@@ -73,7 +75,7 @@ public class SoundManager
 	// Constructor, setup the audio manager and store the app context
 	public SoundManager(){
 		// the constuctor for the class.
-		mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);		// set up the sound pool with the auidomanager
+		mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 0);		// set up the sound pool with the auidomanager
 
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
 		mMasterVolume = 1.0f;
@@ -93,28 +95,40 @@ public class SoundManager
 		mDucky[3] = load(R.raw.ducky4);
 		mDucky[4] = load(R.raw.ducky5);
 		mDucky[5] = load(R.raw.ducky6);
-/*
+
 		mBounce[0] = load(R.raw.bounce);
 		mBounce[1] = load(R.raw.bounce2);
 		mAngryDucky= load(R.raw.angryducky);
 		mScaredDucky = load(R.raw.scaredducky);
 
+		mExplosion[0] = load(R.raw.explosion);
+		mExplosion[1] = load(R.raw.explosion2);
+		mExplosion[2] = load(R.raw.explosion3);
+		mMissile[0] = load(R.raw.beep_fast);
+		mMissile[1] = load(R.raw.beep_slow);
+		mMissile[2] = load(R.raw.caught);
+
+		/*
 		//load in the sounds for the enemies
 		mDiver = load(R.raw.diver);
 		mFrog = load(R.raw.frognoisemain);
+
 		mTugBoat = load(R.raw.tugboat);
 
 		// load in the other sounds for the game
 		//mBackground = Load(R.raw.sexyandiknowit);
 		mAmbientbath = load (R.raw.ambientbath);
 		mDownplug = load(R.raw.downplug);
+		 */
 		mPlug = load(R.raw.plug);
-		mPoints = load(R.raw.points);
+		mPoints = load(R.raw.points2);
+
 		mSplash = load(R.raw.splash);
-		mWhirlpool = load(R.raw.whirlpool2);
-*/
+		//		mWhirlpool = load(R.raw.whirlpool2);
+
 
 		mBackground =MediaPlayer.create(pContext, R.raw.temp_bg_music);
+		mBackground.setVolume(0.4f, 0.4f);
 
 	}// end LoadSounds
 
@@ -170,7 +184,7 @@ public class SoundManager
 	public void resetVolume(){
 		mLeftVolume = mMasterVolume;
 		mRightVolume = mMasterVolume;
-		mBackground.setVolume(mLeftVolume, mRightVolume);
+		mBackground.setVolume(mLeftVolume/3, mRightVolume/3);
 
 		if (mMasterVolume <= 0.0f)
 		{
@@ -233,7 +247,32 @@ public class SoundManager
 		} // end default
 		}// end switch (RandomNumber(5))
 	}// end PlayDucky
-/*
+	public void playExplosion(){
+		// play a sound depending on the random number generated
+		// switch by the random number 
+		switch (randomNumber(2)){
+		case 0 :					// if the random number is 0...
+		{
+			playSound(mExplosion[0]);	// play the first explosion sound
+			break;					// break out of the switch block so taht no other ducky sounds are played
+		}// end case 0
+
+		case 1 :					// if the random number is 1...
+		{
+			playSound(mExplosion[1]);	// play the  second explosion sound
+			break;					// break out of the switch block so taht no other ducky sounds are played
+		} // end case 1
+
+		case 2:
+			playSound(mExplosion[2]);
+			break;
+		default:					// if default is reached ( a number outside the range 0-1 is given)...
+		{
+			Log.e("sound error", "default explosion reached. ERROR!");		// display an error message in logcat.
+			break;					// break out of the switch block so taht no other ducky sounds are played
+		} // end default
+		}// end switch (RandomNumber(1))
+	}
 	// a function to play a ransdom bounce sound
 	public void playBounce(){		  
 		// play a sound depending on the random number generated
@@ -268,7 +307,16 @@ public class SoundManager
 	public void playScare(){
 		playSound(mScaredDucky);	// play the scared ducky sound.
 	}
-
+	public void playBeepFast(){
+		playSound(mMissile[0]);
+	}
+	public void playBeepSlow(){
+		playSound(mMissile[1]);
+	}
+	public void playCaught(){
+		playSound(mMissile[2]);
+	}
+	/*
 	// a function to play the diver's sound
 	public void playDiver(){
 		playSound(mDiver); 			// play the diver's sound
@@ -285,14 +333,14 @@ public class SoundManager
 	public void playTugBoat(){
 		playSound(mTugBoat);		// play the tugboats's sound
 	}
-*/
+	 */
 	// a function to play the background music looped
 	public void playBackground(){
 		//BackgroundStreamID = PlayLoopedSound(mBackground, -1);
 		mBackground.setLooping(true);
 		mBackground.start();
 	}
-/*
+	/*
 	// a function to play the ambient noise 
 	public void playAmbient(){
 		playSound(mAmbientbath);
@@ -302,7 +350,7 @@ public class SoundManager
 	public void playDownPlug(){
 		playSound(mDownplug);
 	}
-
+	 */
 	// a function to play the plug sound
 	public void playPlug(){
 		playSound(mPlug);
@@ -317,11 +365,12 @@ public class SoundManager
 	public void playSplash(){
 		playSound(mSplash);
 	}
+	/*
 	// a function to play the whirlpool sound
 	public void playWhirlpool(){
 		playSound(mWhirlpool);
 	}
- */
+	 */
 
 	// Free ALL the sounds
 	public void unloadAll(){
@@ -355,7 +404,7 @@ public class SoundManager
 	// a load function that can be called to load in a file and return a value that the sounds pool will recognise
 	protected int load(int soundID){
 		if(mSndPool == null){
-			mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);	
+			mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 0);	
 		}
 		// load function takes in 3 paramiters-
 		//										the application centext

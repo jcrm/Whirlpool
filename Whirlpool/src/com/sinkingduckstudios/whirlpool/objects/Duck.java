@@ -30,6 +30,9 @@ public class Duck extends GraphicObject{
 	private int mCollisionCount = -1;
 	private Bitmap mBitmap[] = new Bitmap[3];
 	private Animate mAnimate[] = new Animate[3];
+	private boolean mInvincibility = false;
+	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
+	
 	public Duck(){
 		mId = objtype.tDuck;
 		init();
@@ -81,7 +84,10 @@ public class Duck extends GraphicObject{
 				frames = mId.tFrames+3;
 			}
 			mBitmap[i] = SpriteManager.getDuck(i);
+			if (i<2)
 			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+			else
+				mAnimate[i] = new Animate(frames, 4, 5, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 		}
 		
 		mSpeed.setMove(true);
@@ -169,9 +175,11 @@ public class Duck extends GraphicObject{
 			}
 			if(inRadius ==true){
 				if(cID == CollisionType.cDefault ){
-					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cBoat;
-						collisionDiverFrogBoat();
+					if(mInvincibility == false){
+						if(CollisionManager.circleCollision(mProperties, otherProperties)){
+							cID = CollisionType.cBoat;
+							collisionDiverFrogBoat();
+						}
 					}
 				}
 				return true;
@@ -183,41 +191,46 @@ public class Duck extends GraphicObject{
 	}
 	//collision checking
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties){
-		switch(id){
-		case tDiver:
-			if(cID == CollisionType.cDefault){
-				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cDiver;
-					collisionDiverFrogBoat();
+			switch(id){
+			case tDiver:
+				if(cID == CollisionType.cDefault){
+					if(mInvincibility == false){
+						if(CollisionManager.circleCollision(mProperties, otherProperties)){
+							cID = CollisionType.cDiver;
+							collisionDiverFrogBoat();
+						}
+					}
 				}
-			}
-			break;
-		case tFrog:
-			if(cID == CollisionType.cDefault){
-				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cFrog;
-					collisionDiverFrogBoat();
+				break;
+			case tFrog:
+				if(cID == CollisionType.cDefault){
+					if(mInvincibility == false){
+						if(CollisionManager.circleCollision(mProperties, otherProperties)){
+							cID = CollisionType.cFrog;
+							collisionDiverFrogBoat();
+						}
+					}
 				}
-			}
-			break;
-		case tTorpedo:
-			if(CollisionManager.circleCollision(mProperties, otherProperties)){
-				collisionTorpedo();
-				cID = CollisionType.cTorpedo;
-				Constants.getSoundManager().playDucky();
-				return true;
-			}
-			break;
-		case tShark: 
-			if(cID!=CollisionType.cShark && cID != CollisionType.cTorpedo){
+				break;
+			case tTorpedo:
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cShark;
-					Constants.getSoundManager().playDucky();
+					if(mInvincibility == false){
+						collisionTorpedo();
+						cID = CollisionType.cTorpedo;
+					}
+					return true;
 				}
-				return true;
+				break;
+			case tShark: 
+				if(cID!=CollisionType.cShark && cID != CollisionType.cTorpedo){
+					if(CollisionManager.circleCollision(mProperties, otherProperties)){
+						cID = CollisionType.cShark;
+						Constants.getSoundManager().playDucky();
+					}
+					return true;
+				}
+			default: break;
 			}
-		default: break;
-		}
 		return false;
 	}
 	//collision movement
@@ -233,13 +246,20 @@ public class Duck extends GraphicObject{
 					getSpeed().setSpeed(8);				
 					getSpeed().setAngle(0);
 					cID = CollisionType.cDefault;
-					mCollisionCount = -1;
+					mInvincibility = true;
+					mCollisionCount = 0;
 				}
 			}else if(cID == CollisionType.cTorpedo){
 				if(mCollisionCount == 10){
-					getSpeed().setSpeed(4);				
+					getSpeed().setSpeed(8);			
 					getSpeed().setAngle(0);
 					cID = CollisionType.cDefault;
+					mInvincibility = true;
+					mCollisionCount = 0;
+				}
+			}else if(mInvincibility == true){
+				if(mCollisionCount == 60){
+					mInvincibility = false;
 					mCollisionCount = -1;
 				}
 			}
@@ -263,5 +283,14 @@ public class Duck extends GraphicObject{
 		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120)
 			return 2;
 		return 0;
+	}
+	public boolean getInvincibility() {
+		return mInvincibility;
+	}
+	public void setInvincibility(boolean invincibility) {
+		mInvincibility = invincibility;
+	}
+	public static float getTopSpeed() {
+		return mTopSpeed;
 	}
 }

@@ -18,6 +18,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -39,7 +40,7 @@ public class Game extends Activity {
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
-	private final long mStartTime = 80 * 1000;
+	private final long mStartTime = 180 * 1000;
 	//Tick time in milliseconds
 	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
@@ -50,7 +51,7 @@ public class Game extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_game);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
@@ -62,12 +63,17 @@ public class Game extends Activity {
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
 
+		Constants.getSoundManager().loadSounds();
+		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
+		//create a runable thread to pass message to handler
+		if(mTime!=null){
+			mTime.cancel();
+			mTime = null;
+		}
 		mTime= new Timer();//init timer
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
 
@@ -76,6 +82,7 @@ public class Game extends Activity {
 				if (aMsg.what == 0){//redraw
 					mPanel.invalidate();
 				}else if(aMsg.what ==1){
+					mTime.cancel();
 					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 					Constants.getSoundManager().cleanup();
 					startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
@@ -85,7 +92,7 @@ public class Game extends Activity {
 		};
 
 
-		mTime.schedule(new MainThread(),0, 25);
+		mTime.schedule(new MainThread(),0, 50);
 
 
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
@@ -95,9 +102,9 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				mTime.cancel();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
-				mTime.cancel();
 				finish();
 			}
         }
@@ -132,7 +139,7 @@ public class Game extends Activity {
 				}
 				int count =update();
 				if(count==1){
-					mTime.cancel();
+					mCountDownTimer.cancel();
 				}else if(count==2){
 					mGameHandler.sendEmptyMessage(1);					
 				}
@@ -143,25 +150,26 @@ public class Game extends Activity {
 	}
 	@Override
 	public void onPause(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
-		mTime.cancel();
 		super.onPause();
 	}
 
 	@Override
 	public void onDestroy(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
-		mTime.cancel();
 		super.onDestroy();
 	}
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();
+		super.onResume();/*
+		Constants.getSoundManager().initContext(getApplicationContext());
 		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
+		Constants.getSoundManager().playBackground();*/
 	}
 	//
 	//Timer Class
@@ -174,12 +182,14 @@ public class Game extends Activity {
 		
 		@Override
 		public void onFinish(){
-			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-			Constants.getSoundManager().cleanup();
-			startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
-			mTime.cancel();
-			finish();
-			//finish game
+			if(mPaused == false){
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				Constants.getSoundManager().cleanup();
+				startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+				mTime.cancel();
+				finish();
+				//finish game
+			}
 		}
 		
 		@Override

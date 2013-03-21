@@ -142,7 +142,7 @@ public class Whirlpool extends GraphicObject{
 
 	public void checkCollision(GraphicObject a){
 		if (a.getId()==objtype.tDuck){
-			if (a.getPullState() == false && (!finished || !collisionDone)){
+			if (a.getPullState() == false){
 				int collide = collision(a);
 				
 				if (collide == 1 || collide == 2){
@@ -152,6 +152,7 @@ public class Whirlpool extends GraphicObject{
 					if (testAngle(a)){
 						a.resetwPoolCounter();
 						a.setAngle(getWAngle());
+						a.getSpeed().setSpeed(7+mArrow.getDist());
 						collisionDone = true;
 						finished = true;
 					}

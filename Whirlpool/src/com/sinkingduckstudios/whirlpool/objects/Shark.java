@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Shark extends GraphicObject{
 
@@ -31,30 +32,28 @@ public class Shark extends GraphicObject{
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+			canvas.scale(-1, 1);
+			canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
 		canvas.restore();
 	}
 
 	@Override
 	public void init() {
-		//mBitmap = Imports.getShark();
+		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+				new Random().nextInt(Constants.getLevel().getLevelHeight()),
+				100, 100);	
+		mBitmap = SpriteManager.getShark();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-						new Random().nextInt(Constants.getLevel().getLevelHeight()), 
-						mBitmap.getWidth()/mId.tFrames, 
-						mBitmap.getHeight());	
-
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
-		//mBitmap = Imports.getShark();
+		mProperties.init(x, y, 100, 100);	
+		mBitmap = SpriteManager.getShark();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
-		mProperties.init(x, y,mBitmap.getWidth()/mId.tFrames, mBitmap.getHeight());	
-
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);

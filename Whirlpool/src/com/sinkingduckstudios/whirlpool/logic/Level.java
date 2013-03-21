@@ -25,6 +25,7 @@ import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
+import com.sinkingduckstudios.whirlpool.objects.Shark;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
@@ -46,20 +47,26 @@ public class Level {
 	public Level(){
 	}
 	public void init(){
-		mLevelWidth = 3000;
-		mLevelHeight = Constants.getScreen().getHeight();
+		mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
+		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		mBackgroundImage = SpriteManager.getBackground();
 		mLeftBorderImage = SpriteManager.getLeftBorder();
 		mRightBorderImage = SpriteManager.getRightBorder();
 		mTopBorderImage = SpriteManager.getTopBorder();
-		mGraphics.add(new Duck(120, 235));
-		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(500, 250, 200));
-		mGraphics.add(new Diver(1000, 50, 90, 1000, 50, 1000, 350));
-		mGraphics.add(new Boat(750,207));//207=250-(96/2) --> 96 is height
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
+		mGraphics.add(new Duck(40, 235));
+		Constants.setPlayer((Duck)mGraphics.get(0));
+		mGraphics.add(new Frog(600, 250, 140));
+		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
+		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
+		mGraphics.add(new Frog(1200, 250, 140));		
+		mGraphics.add(new Shark(300,300));
 		Finish end = new Finish();
-    	end.setCentreX(mLevelWidth);
+    	end.setCentreX(2900);
     	end.setCentreY(235);
     	end.setWAngle(-1);
     	end.setClockwise(1);
@@ -85,6 +92,7 @@ public class Level {
 			if(enviro.getId() == envtype.tFinish){
 				int count =((Finish) enviro).getEnd(); 
 				if(count==1){
+					Constants.getSoundManager().playPoints();
 					return 1;
 				}else if(count == 2){
 					return 2;
@@ -124,10 +132,12 @@ public class Level {
 				graphic.frame();	//Do everything this object does every frame, like move
 			}else if(graphic.getId()==objtype.tTorpedo){
 				if(((Torpedo) graphic).getIsReadyToDestroy()){
+					Constants.getSoundManager().playExplosion();
 					mainIterator.remove();
 				}else if(((Torpedo) graphic).updateDirection()){
 					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				}else{
+					((Torpedo) graphic).checkBeep();
 					graphic.frame();	//Do everything this object does every frame, like move
 				}
 			}else{
@@ -141,8 +151,10 @@ public class Level {
 			GraphicObject graphic2 = collisionIterator.next();
 			if(graphic2.getId()==objtype.tTorpedo){
 				if(CollisionManager.circleCollision(graphic.getCollision(), graphic2.getCollision())){
+					if(((Torpedo) graphic2).getHitBoat()==true){
 					((Boat) graphic).setBroken(true);
-					((Torpedo) graphic2).setIsReadyToDestroy(true);	
+						((Torpedo) graphic2).setIsReadyToDestroy(true);
+					}
 				}
 			}
 		}
@@ -150,6 +162,8 @@ public class Level {
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
+		//used to make bath tub look right, need to check on other devices
+		int bottom = 21*(Constants.getScreen().getHeight()/40);
 
 		//Log.e("onDraw", String.valueOf(levelWidth) + "/" + String.valueOf(Constants.getScreen().getWidth()) + "=" + String.valueOf(num));
 		for(int a = 0; a < (num); a++){
@@ -159,22 +173,22 @@ public class Level {
 
 		canvas.translate(-mScrollBy, 0.0f);
 		canvas.save();
-			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),mLevelHeight/2);
+			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),bottom);
 			canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
 
-			mRect.set(0, 0, mLeftBorderImage.getWidth(), mLevelHeight/2);
+			mRect.set(0, 0, mLeftBorderImage.getWidth(), bottom);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
-			canvas.translate(0, mLevelHeight/2);
+			canvas.translate(0, bottom);
 			canvas.scale(1,-1);
-			canvas.translate(0,-mLevelHeight/2);
+			canvas.translate(0,-bottom);
 			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
 			canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
 	
-			mRect.set(0, 0, mRightBorderImage.getWidth(), mLevelHeight/2);
+			mRect.set(0, 0, mRightBorderImage.getWidth(), bottom);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
-			canvas.translate(0, mLevelHeight/2);
+			canvas.translate(0, bottom);
 			canvas.scale(1,-1);
-			canvas.translate(0,-mLevelHeight/2);
+			canvas.translate(0,-bottom);
 			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 
 		canvas.restore();
