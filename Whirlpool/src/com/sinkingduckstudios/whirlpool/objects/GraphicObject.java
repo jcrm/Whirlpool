@@ -32,10 +32,10 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tDuck(8, 0, 16, 16, 1),
 		//not sure what numbers need for frame width and height
 		tFrog(4, 0, 16, 16, 1), 
-		tShark(5, new Random().nextInt(360)+1, 1, 1, 1), 
+		tShark(5, new Random().nextInt(360)+1, 16, 4, 4), 
 		tBoat(0, 0, 15, 15, 1),
 		tDiver(4, new Random().nextInt(360), 16, 16, 1),
-		tTorpedo(4, new Random().nextInt(360), 10, 10, 1);
+		tTorpedo(6, new Random().nextInt(360), 10, 10, 1);
 		
 		float tSpeed;
 		float tAngle;
@@ -85,8 +85,8 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	
 	public boolean border(){
-		int HEIGHT = 500;
-		int WIDTH = Constants.getLevel().getLevelWidth();
+		int HEIGHT =Constants.getLevel().getLevelHeight();
+		int WIDTH =Constants.getLevel().getLevelWidth();
 		boolean hit = false;
 		if(getTopLeftX()<0){
 			if(getTopLeftY()<0){

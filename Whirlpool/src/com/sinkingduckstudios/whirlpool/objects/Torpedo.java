@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
@@ -11,7 +12,11 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Torpedo extends GraphicObject {
 	private boolean mIsReadyToDestroy = false;
-	private int mDuckCounter = 11;
+	private static final float mTopSpeed = 12*Constants.getScreen().getRatio();
+	private int mDuckCounter = 10;
+	private boolean mHitBoat = false;
+	private int mHitBoatCounter = 0;
+	private int mBeepCounter = 31;
 	
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
@@ -54,6 +59,10 @@ public class Torpedo extends GraphicObject {
 	
 	@Override
 	public boolean move() {
+		if(mHitBoat == false && ++mHitBoatCounter > 40){
+			mHitBoatCounter = 0;
+			mHitBoat = true;
+		}
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
@@ -128,12 +137,13 @@ public class Torpedo extends GraphicObject {
 	public void setDuckSpeed(int duckX, int duckY){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed(); 
-		if(tempSpeed<10){
+		if(tempSpeed<mTopSpeed){
 			mSpeed.setSpeed(tempSpeed+1);
 		}else{
-			tempSpeed = 10;
+			tempSpeed = mTopSpeed;
 		}
 	}
+	//try get view by id , get id layout, get height and width of view; on button click of menu
 	public int getDuckCounter() {
 		return mDuckCounter;
 	}
@@ -147,5 +157,21 @@ public class Torpedo extends GraphicObject {
 			return true;
 		}
 		return false;
+	}
+	public void checkBeep(){
+		mBeepCounter++;
+		if(mBeepCounter>30){
+			mBeepCounter = 0;
+			Constants.getSoundManager().playBeepFast();
+		}
+	}
+	public boolean getHitBoat() {
+		return mHitBoat;
+	}
+	public void setHitBoat(boolean hitBoat) {
+		mHitBoat = hitBoat;
+	}
+	public float getTopSpeed() {
+		return mTopSpeed;
 	}
 }

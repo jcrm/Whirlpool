@@ -28,6 +28,9 @@ public class SpriteManager {
 	private static Bitmap mRightBorder;
 	private static Bitmap mTopBorder;
 	private static Bitmap mArrow;
+	private static Bitmap mFinish;
+	private static Bitmap mFinishHit;
+	private static Bitmap mShark;
 	
 	public void deleteImages(){
 		mDuck[0].recycle();
@@ -58,6 +61,10 @@ public class SpriteManager {
 		mTopBorder =null;
 		mArrow.recycle();
 		mArrow = null;
+		mFinish.recycle();
+		mFinish = null;
+		mShark.recycle();
+		mShark = null;
 	}
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
@@ -197,5 +204,32 @@ public class SpriteManager {
 			mArrow=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.arrow_sprites);
 		}
 		return mArrow;
+	}
+	public static Bitmap getFinish() {
+		if(mFinish==null){
+			mFinish=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point);
+		}
+		return mFinish;
+	}
+	public static void setFinish(Bitmap finish) {
+		mFinish = finish;
+	}
+	public static Bitmap getFinishHit() {
+		if(mFinishHit==null){
+			mFinishHit=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.endpoint_hit);
+		}
+		return mFinishHit;
+	}
+	public static void setFinishHit(Bitmap finishHit) {
+		mFinishHit = finishHit;
+	}
+	public static Bitmap getShark() {
+		if(mShark==null){
+			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sprites);
+		}
+		return mShark;
+	}
+	public static void setShark(Bitmap shark) {
+		mShark = shark;
 	}
 }

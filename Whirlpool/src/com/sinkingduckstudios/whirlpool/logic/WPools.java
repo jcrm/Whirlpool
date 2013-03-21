@@ -42,6 +42,7 @@ public class WPools {
     	whirl.setWAngle(angle);
     	whirl.setClockwise(clockwise);
         wpools.add(whirl);
+        Constants.getSoundManager().playSplash();
     }
 
     public void clearWPools() {

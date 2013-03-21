@@ -18,9 +18,9 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -35,14 +35,14 @@ public class Game extends Activity {
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
-	private CountDownTimer mcountDownTimer;
-	private boolean mtimerHasStarted = false;
+	private CountDownTimer mCountDownTimer;
+	private boolean mTimerHasStarted = false;
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
-	private final long startTime = 80 * 1000;
+	private final long mStartTime = 180 * 1000;
 	//Tick time in milliseconds
-	private final long interval = 1 * 1000;	
+	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -51,7 +51,7 @@ public class Game extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_game);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
@@ -60,27 +60,39 @@ public class Game extends Activity {
 		setCurrentLevel(mLevelOne);
 		mTimertext = (TextView) this.findViewById(R.id.time);
 		
-		mcountDownTimer = new MyCountDownTimer(startTime, interval);
-		mTimertext.setText(mTimertext.getText() + String.valueOf(startTime/100));
+		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
+		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
 
+		Constants.getSoundManager().loadSounds();
+		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init();
+		//create a runable thread to pass message to handler
+		if(mTime!=null){
+			mTime.cancel();
+			mTime = null;
+		}
 		mTime= new Timer();//init timer
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
 		// creates a handler to deal wit the return from the timer
 		mGameHandler = new Handler() {
 
 			public void handleMessage(Message aMsg) {
 
-				if (aMsg.what == 0)//redraw
-					mPanel.invalidate(); 
+				if (aMsg.what == 0){//redraw
+					mPanel.invalidate();
+				}else if(aMsg.what ==1){
+					mTime.cancel();
+					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+					Constants.getSoundManager().cleanup();
+					startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+					finish();
+				}
 			}
 		};
 
 
-		mTime.schedule(new MainThread(),0, 25);
+		mTime.schedule(new MainThread(),0, 50);
 
 
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
@@ -90,9 +102,9 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				mTime.cancel();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
-				mTime.cancel();
 				finish();
 			}
         }
@@ -106,21 +118,31 @@ public class Game extends Activity {
 		Constants.setLevel(level);
 	}
 
-	public void update() {
-		getCurrentLevel().update();
-
+	public int update() {
+		int count = getCurrentLevel().update(); 
+		if(count==1){
+			return 1;
+		}else if(count==2){
+			return 2;
+		}else{
+			return 0;
+		}
 	}
 
 	class MainThread extends TimerTask {
 		public void run() {
 			if(!mPaused){
 				//Timer
-				if(!mtimerHasStarted)
-				{
-					mcountDownTimer.start();
-					mtimerHasStarted = true;				
+				if(!mTimerHasStarted){
+					mCountDownTimer.start();
+					mTimerHasStarted = true;				
 				}
-				update();
+				int count =update();
+				if(count==1){
+					mCountDownTimer.cancel();
+				}else if(count==2){
+					mGameHandler.sendEmptyMessage(1);					
+				}
 				mGameHandler.sendEmptyMessage(0);
 			}
 		}
@@ -128,6 +150,7 @@ public class Game extends Activity {
 	}
 	@Override
 	public void onPause(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
 		super.onPause();
@@ -135,6 +158,7 @@ public class Game extends Activity {
 
 	@Override
 	public void onDestroy(){
+		mCountDownTimer.cancel();
 		mPaused = true;
 		Constants.getSoundManager().cleanup();
 		super.onDestroy();
@@ -142,9 +166,10 @@ public class Game extends Activity {
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();
+		super.onResume();/*
+		Constants.getSoundManager().initContext(getApplicationContext());
 		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
+		Constants.getSoundManager().playBackground();*/
 	}
 	//
 	//Timer Class
@@ -157,13 +182,14 @@ public class Game extends Activity {
 		
 		@Override
 		public void onFinish(){
-			
-			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-			Constants.getSoundManager().cleanup();
-			startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
-			mTime.cancel();
-			finish();
-			//finish game
+			if(mPaused == false){
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				Constants.getSoundManager().cleanup();
+				startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+				mTime.cancel();
+				finish();
+				//finish game
+			}
 		}
 		
 		@Override
@@ -172,12 +198,9 @@ public class Game extends Activity {
 			//The code below sets up the Minute and seconds
 			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
 			String seconds;	
-			if( (millisUntilFinished/1000)%60<10)
-			{
+			if( (millisUntilFinished/1000)%60<10){
 				seconds=new String("0" +(millisUntilFinished/1000)%60);				
-			}
-			else
-			{
+			}else{
 				seconds=new String("" +(millisUntilFinished/1000)%60);
 			}
 

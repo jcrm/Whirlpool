@@ -62,7 +62,9 @@ public class Arrow {
 			canvas.restore();
 		}
 	}
-	
+	public float getDist(){
+	    return mDist/250f;
+	}
 	public void setVisible(boolean visible){
 		mVisible = visible;
 	}
