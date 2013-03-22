@@ -11,6 +11,9 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
@@ -44,6 +47,17 @@ public class Duck extends GraphicObject{
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
+			/*ColorMatrix cm = new ColorMatrix();
+			cm.set(new float[]{
+								0.8f,0,0,0,100,
+								0,0.4f,0,0,80,
+								0,0,0.9f,0,20,
+								0,0,0,1,0
+								
+			});
+			Paint paint = new Paint();
+			paint.setColorFilter(new ColorMatrixColorFilter(cm));
+			 */
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
