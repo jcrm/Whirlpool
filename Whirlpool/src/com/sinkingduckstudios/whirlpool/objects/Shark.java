@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -18,7 +19,14 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Shark extends GraphicObject{
-
+	public enum SharkType{
+		tDefault, tAsleep, tFollow, tAttack, tRetreat;
+	}
+	private SharkType mSharkState = SharkType.tDefault;
+	private Bitmap mAttackBitmap;
+	private Bitmap mAsleepBitmap;
+	private Animate mAttackAnimation;
+	private Animate mAsleepAnimation;
 	public Shark(){
 		mId = objtype.tShark;
 		init();
@@ -48,6 +56,8 @@ public class Shark extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
+		
+		mSharkState = SharkType.tAsleep;
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 100, 100);	
@@ -57,6 +67,8 @@ public class Shark extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
+		
+		mSharkState = SharkType.tAsleep;
 	}
 	@Override
 	public boolean move() {
@@ -122,6 +134,12 @@ public class Shark extends GraphicObject{
 			border();
 		}
 		mAnimate.animateFrame();
+	}
+	public SharkType getSharkState() {
+		return mSharkState;
+	}
+	public void setSharkState(SharkType sharkState) {
+		mSharkState = sharkState;
 	}
 
 }

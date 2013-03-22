@@ -57,6 +57,7 @@ public class Menu extends Activity {
 	private OnClickListener goToGame = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			//Constants.getScreen().set(menuView.getWidth(), menuView.getHeight());
     		startActivity(new Intent(getApplicationContext(), Game.class));
     		finish();
         }
