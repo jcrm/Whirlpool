@@ -17,6 +17,8 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 public class SpriteManager {
 	private static Bitmap mDuck[]=new Bitmap[3];
 	private static Bitmap mDiver;
+	private static Bitmap mDiverUp;
+	private static Bitmap mDiverDown;
 	private static Bitmap mDiverFlipped;
 	private static Bitmap mBoat;
 	private static Bitmap mBoatAttack;
@@ -24,6 +26,7 @@ public class SpriteManager {
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
 	private static Bitmap mTorpedo;
+	private static Bitmap mTorpedoExplosion;
 	private static Bitmap mLeftBorder;
 	private static Bitmap mRightBorder;
 	private static Bitmap mTopBorder;
@@ -31,6 +34,10 @@ public class SpriteManager {
 	private static Bitmap mFinish;
 	private static Bitmap mFinishHit;
 	private static Bitmap mShark;
+	private static Bitmap mSharkUp;
+	private static Bitmap mSharkDown;
+	private static Bitmap mSharkSleep;
+	private static Bitmap mSharkAttack;
 	
 	public void deleteImages(){
 		mDuck[0].recycle();
@@ -41,6 +48,10 @@ public class SpriteManager {
 		mDuck[2] = null;
 		mDiver.recycle();
 		mDiver = null;
+		mDiverUp.recycle();
+		mDiverUp = null;
+		mDiverDown.recycle();
+		mDiverDown = null;
 		mDiverFlipped.recycle();
 		mDiverFlipped = null;
 		mBoat.recycle();
@@ -53,6 +64,8 @@ public class SpriteManager {
 		mBackground = null;
 		mTorpedo.recycle();
 		mTorpedo = null;
+		mTorpedoExplosion.recycle();
+		mTorpedoExplosion = null;
 		mLeftBorder.recycle();
 		mLeftBorder =null;
 		mRightBorder.recycle();
@@ -65,6 +78,14 @@ public class SpriteManager {
 		mFinish = null;
 		mShark.recycle();
 		mShark = null;
+		mSharkUp.recycle();
+		mSharkUp= null;
+		mSharkDown.recycle();
+		mSharkDown= null;
+		mSharkSleep.recycle();
+		mSharkSleep= null;
+		mSharkAttack.recycle();
+		mSharkAttack= null;
 	}
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
@@ -82,7 +103,7 @@ public class SpriteManager {
 		if(mDiver == null){
 			Matrix flipMatrix = new Matrix();
 			flipMatrix.setScale(1, -1);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
+			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
 			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
 		}
 		return mDiver;
@@ -94,7 +115,7 @@ public class SpriteManager {
 		if(mDiverFlipped == null){
 			Matrix flipMatrix = new Matrix();
 			flipMatrix.setScale(1, -1);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
+			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
 			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
 		}
 		return mDiverFlipped;
@@ -225,7 +246,7 @@ public class SpriteManager {
 	}
 	public static Bitmap getShark() {
 		if(mShark==null){
-			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sprites);
+			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_left_and_right_sprites);
 		}
 		return mShark;
 	}

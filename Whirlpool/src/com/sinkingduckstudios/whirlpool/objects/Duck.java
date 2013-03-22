@@ -98,10 +98,10 @@ public class Duck extends GraphicObject{
 				frames = mId.tFrames+3;
 			}
 			mBitmap[i] = SpriteManager.getDuck(i);
-			if (i<2)
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+			if (i==0)
+			mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 			else
-				mAnimate[i] = new Animate(frames, 4, 5, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+				mAnimate[i] = new Animate(19, 3, 7, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 		}
 		
 		mSpeed.setMove(true);
