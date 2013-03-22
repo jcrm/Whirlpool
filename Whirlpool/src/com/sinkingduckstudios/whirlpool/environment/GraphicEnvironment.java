@@ -14,7 +14,8 @@ public abstract class GraphicEnvironment {
 	//enum used to decide what type of sprite
 	public enum envtype {
 		tDefault(0, 0, 1, 1, 1), 
-		tFinish(0, 0, 30, 30, 1);
+		tFinish(0, 0, 30, 30, 1),
+		tLifeRinf(0,0,20,8,3);
 
 		float tSpeed;
 		float tAngle;
