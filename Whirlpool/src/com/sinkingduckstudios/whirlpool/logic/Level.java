@@ -26,6 +26,7 @@ import com.sinkingduckstudios.whirlpool.objects.Frog;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 import com.sinkingduckstudios.whirlpool.objects.Shark;
+import com.sinkingduckstudios.whirlpool.objects.Shark.SharkType;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
@@ -69,7 +70,7 @@ public class Level {
 		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
 		mGraphics.add(new Frog(600, 250, 140));
 		mGraphics.add(new Frog(1200, 250, 140));		
-		mGraphics.add(new Shark(300,300));
+		mGraphics.add(new Shark(2300,300));
 		Finish end = new Finish();
     	end.setCentreX(2900);
     	end.setCentreY(235);
@@ -255,8 +256,9 @@ public class Level {
 						}
 					}
 				}else if(graphic2.getId()==objtype.tShark){
-					collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+					collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Shark) graphic2).getSharkRadius());
 					if(collision){
+						((Shark) graphic2).setSharkState(SharkType.tFollow);
 					}	
 				}else{
 					((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());

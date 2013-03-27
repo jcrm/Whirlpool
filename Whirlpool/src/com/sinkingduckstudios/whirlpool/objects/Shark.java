@@ -25,8 +25,13 @@ public class Shark extends GraphicObject{
 	private SharkType mSharkState = SharkType.tDefault;
 	private Bitmap mUpBitmap;
 	private Bitmap mDownBitmap;
+	private Bitmap mAsleepBitmap;
+	private Bitmap mAttackBitmap;
 	private Animate mUpAnimate;
 	private Animate mDownAnimate;
+	private Animate mAttackAnimate;
+	private Animate mAsleepAnimate;
+	private int mSharkRadius = Constants.getLevel().getLevelHeight()/4;
 	
 	public Shark(){
 		mId = objtype.tShark;
@@ -41,11 +46,12 @@ public class Shark extends GraphicObject{
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
-			canvas.scale(-1, 1);
 			switch(getSpriteSheetIndex()){
-			case 0: canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null); break;
+			case 0: canvas.scale(-1, 1); canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null); break;
 			case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect,  null); break;
 			case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect,  null); break;
+			case 3: canvas.drawBitmap(mAsleepBitmap, mAsleepAnimate.getPortion(), rect,  null); break;
+			case 4: canvas.drawBitmap(mAttackBitmap, mAttackAnimate.getPortion(), rect,  null); break;
 				default: break;
 			}
 		canvas.restore();
@@ -60,10 +66,14 @@ public class Shark extends GraphicObject{
 		mBitmap = SpriteManager.getShark();
 		mUpBitmap = SpriteManager.getSharkUp();
 		mDownBitmap = SpriteManager.getSharkDown();
+		mAsleepBitmap = SpriteManager.getSharkAsleep();
+		mAttackBitmap = SpriteManager.getSharkAttack();
 		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
 		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
+		mAsleepAnimate = new Animate(33, 5, 8, mAsleepBitmap.getWidth(), mAsleepBitmap.getHeight());
+		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -77,10 +87,14 @@ public class Shark extends GraphicObject{
 		mBitmap = SpriteManager.getShark();
 		mUpBitmap = SpriteManager.getSharkUp();
 		mDownBitmap = SpriteManager.getSharkDown();
+		mAsleepBitmap = SpriteManager.getSharkAsleep();
+		mAttackBitmap = SpriteManager.getSharkAttack();
 		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
 		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
+		mAsleepAnimate = new Animate(33, 5, 8, mAsleepBitmap.getWidth(), mAsleepBitmap.getHeight());
+		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -90,7 +104,7 @@ public class Shark extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		if(mSpeed.getMove()){
+		if(mSpeed.getMove() && mSharkState != SharkType.tAsleep){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
@@ -155,6 +169,8 @@ public class Shark extends GraphicObject{
 		case 0: mAnimate.animateFrame(); break;
 		case 1: mUpAnimate.animateFrame(); break;
 		case 2: mDownAnimate.animateFrame(); break;
+		case 3: mAsleepAnimate.animateFrame(); break;
+		case 4: mAttackAnimate.animateFrame(); break;
 			default: break;
 		}
 	}
@@ -165,10 +181,24 @@ public class Shark extends GraphicObject{
 		mSharkState = sharkState;
 	}
 	private int getSpriteSheetIndex(){
-		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
+		if(mSharkState == SharkType.tAsleep){
+			return 3;
+		}
+		if(mSharkState == SharkType.tAttack){
+			return 4;
+		}
+		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300){
 			return 1;
-		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120)
+		}
+		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120){
 			return 2;
+		}
 		return 0;
+	}
+	public int getSharkRadius() {
+		return mSharkRadius;
+	}
+	public void setSharkRadius(int sharkRadius) {
+		mSharkRadius = sharkRadius;
 	}
 }

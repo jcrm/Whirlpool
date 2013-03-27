@@ -270,4 +270,22 @@ public class SpriteManager {
 	public static void setSharkDown(Bitmap shark) {
 		mSharkDown = shark;
 	}
+	public static Bitmap getSharkAsleep() {
+		if(mSharkSleep==null){
+			mSharkSleep=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sleeping_sprites);
+		}
+		return mSharkSleep;
+	}
+	public static void setSharkAsleep(Bitmap shark) {
+		mSharkSleep = shark;
+	}
+	public static Bitmap getSharkAttack() {
+		if(mSharkAttack==null){
+			mSharkAttack=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_bite_sprites);
+		}
+		return mSharkAttack;
+	}
+	public static void setSharkAttack(Bitmap shark) {
+		mSharkAttack = shark;
+	}
 }
