@@ -11,9 +11,6 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
@@ -34,6 +31,7 @@ public class Duck extends GraphicObject{
 	private Bitmap mBitmap[] = new Bitmap[3];
 	private Animate mAnimate[] = new Animate[3];
 	private boolean mInvincibility = false;
+	private boolean mFinished = false;
 	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
 	
 	public Duck(){
@@ -315,5 +313,11 @@ public class Duck extends GraphicObject{
 	}
 	public static float getTopSpeed() {
 		return mTopSpeed;
+	}
+	public boolean getFinished() {
+		return mFinished;
+	}
+	public void setFinished(boolean finished) {
+		mFinished = finished;
 	}
 }

@@ -9,7 +9,6 @@ package com.sinkingduckstudios.whirlpool.manager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -19,7 +18,6 @@ public class SpriteManager {
 	private static Bitmap mDiver;
 	private static Bitmap mDiverUp;
 	private static Bitmap mDiverDown;
-	private static Bitmap mDiverFlipped;
 	private static Bitmap mBoat;
 	private static Bitmap mBoatAttack;
 	private static Bitmap mFrog;
@@ -52,8 +50,6 @@ public class SpriteManager {
 		mDiverUp = null;
 		mDiverDown.recycle();
 		mDiverDown = null;
-		mDiverFlipped.recycle();
-		mDiverFlipped = null;
 		mBoat.recycle();
 		mBoat = null;
 		mFrog.recycle();
@@ -101,27 +97,12 @@ public class SpriteManager {
 	}
 	public static Bitmap getDiver() {
 		if(mDiver == null){
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
 			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
-			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
 		}
 		return mDiver;
 	}
 	public static void setDiver(Bitmap diver) {
 		mDiver = diver;
-	}
-	public static Bitmap getDiverFlipped() {
-		if(mDiverFlipped == null){
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
-			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
-		}
-		return mDiverFlipped;
-	}
-	public static void setDiverFlipped(Bitmap diverflipped) {
-		mDiverFlipped = diverflipped;
 	}
 	public static Bitmap getBoat() {
 		if(mBoat==null){
@@ -252,5 +233,23 @@ public class SpriteManager {
 	}
 	public static void setShark(Bitmap shark) {
 		mShark = shark;
+	}
+	public static Bitmap getDiverUp(){
+		if(mDiverUp == null){
+			mDiverUp = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_up_sprites);
+		}
+		return mDiverUp;
+	}
+	public static void setDiverUp(Bitmap diver) {
+		mDiverUp = diver;
+	}
+	public static Bitmap getDiverDown(){
+		if(mDiverDown == null){
+			mDiverDown = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_down_sprites);
+		}
+		return mDiverDown;
+	}
+	public static void setDiverDown(Bitmap diver) {
+		mDiverDown = diver;
 	}
 }

@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -24,6 +25,10 @@ public class Diver extends GraphicObject{
 	private int mRightBorder;
 	private int mTopBorder;
 	private int mBottomBorder;
+	private Bitmap mUpBitmap;
+	private Bitmap mDownBitmap;
+	private Animate mDownAnimate;
+	private Animate mUpAnimate;
 
 	public Diver(){
 		mId = objtype.tDiver;
@@ -48,12 +53,30 @@ public class Diver extends GraphicObject{
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
-			if(mSpeed.getAngle()>=180){
-				canvas.rotate(mSpeed.getAngle()-180);
-			}else{
-				canvas.rotate(mSpeed.getAngle()+180);				
+			switch(getSpriteSheetIndex()){
+			case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>=180){
+						canvas.rotate(mSpeed.getAngle()+180);
+					}else if(mSpeed.getAngle()>90 && mSpeed.getAngle()<180){
+						canvas.rotate(mSpeed.getAngle()+180);				
+					}else if (mSpeed.getAngle() ==0){
+						canvas.scale(1, -1);
+						canvas.rotate(mSpeed.getAngle()+180);								
+					}else if(mSpeed.getAngle()>270){
+						canvas.rotate(mSpeed.getAngle()+180);				
+						canvas.scale(1, -1);
+					}else{
+						canvas.scale(-1, 1);
+						canvas.rotate(mSpeed.getAngle()-90);
+					}
+					canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
+					break;
+			case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect,  null);
+					break;
+			case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect,  null);
+					break;
+				default: break;
 			}
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+			
 		canvas.restore();
 	}
 	@Override
@@ -62,8 +85,14 @@ public class Diver extends GraphicObject{
 						new Random().nextInt(Constants.getLevel().getLevelHeight()),
 						100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
+		
 		mBitmap = SpriteManager.getDiver();
+		mUpBitmap = SpriteManager.getDiverUp();
+		mDownBitmap = SpriteManager.getDiverDown();
+		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
+		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -72,8 +101,14 @@ public class Diver extends GraphicObject{
 	public void init(int x, int y, int angle) {
 		mProperties.init(x, y, 100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
+		
 		mBitmap = SpriteManager.getDiver();
+		mUpBitmap = SpriteManager.getDiverUp();
+		mDownBitmap = SpriteManager.getDiverDown();
+		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
+		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
@@ -188,9 +223,15 @@ public class Diver extends GraphicObject{
 			checkFlip();
 		}
 		mAnimate.animateFrame();
+		switch(getSpriteSheetIndex()){
+		case 0: mAnimate.animateFrame(); break;
+		case 1: mUpAnimate.animateFrame(); break;
+		case 2: mDownAnimate.animateFrame(); break;
+			default: break;
+		}
 	}
 	public void checkFlip(){
-		if(!mFlipped){
+		/*if(!mFlipped){
 			if(mSpeed.getAngle()>270 || mSpeed.getAngle()<90){
 				mFlipped = true;
 				mBitmap = SpriteManager.getDiverFlipped();
@@ -202,7 +243,7 @@ public class Diver extends GraphicObject{
 				mBitmap = SpriteManager.getDiver();
 				System.gc();
 			}
-		}
+		}*/
 	}
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
@@ -226,5 +267,12 @@ public class Diver extends GraphicObject{
 			mRightBorder = Constants.getLevel().getLevelWidth();
 			mBottomBorder = Constants.getLevel().getLevelHeight();
 		}
+	}
+	private int getSpriteSheetIndex(){
+		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
+			return 1;
+		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120)
+			return 2;
+		return 0;
 	}
 }
