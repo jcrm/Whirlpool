@@ -23,10 +23,9 @@ public class Shark extends GraphicObject{
 		tDefault, tAsleep, tFollow, tAttack, tRetreat;
 	}
 	private SharkType mSharkState = SharkType.tDefault;
-	private Bitmap mAttackBitmap;
-	private Bitmap mAsleepBitmap;
-	private Animate mAttackAnimation;
-	private Animate mAsleepAnimation;
+	private Bitmap mExtraBitmaps[] = new Bitmap [4];
+	private Animate mExtraAnimate[] = new Animate[4];
+	
 	public Shark(){
 		mId = objtype.tShark;
 		init();

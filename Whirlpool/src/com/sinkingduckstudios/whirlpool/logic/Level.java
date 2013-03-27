@@ -56,13 +56,13 @@ public class Level {
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
 		mGraphics.add(new Duck(40, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(600, 250, 140));
-		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
 		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
+		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
 		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
+		mGraphics.add(new Frog(600, 250, 140));
 		mGraphics.add(new Frog(1200, 250, 140));		
 		mGraphics.add(new Shark(300,300));
 		Finish end = new Finish();

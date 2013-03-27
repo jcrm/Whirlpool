@@ -48,7 +48,11 @@ public class Diver extends GraphicObject{
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
-			canvas.rotate(mSpeed.getAngle()+180);
+			if(mSpeed.getAngle()>=180){
+				canvas.rotate(mSpeed.getAngle()-180);
+			}else{
+				canvas.rotate(mSpeed.getAngle()+180);				
+			}
 			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
 		canvas.restore();
 	}
