@@ -23,8 +23,10 @@ public class Shark extends GraphicObject{
 		tDefault, tAsleep, tFollow, tAttack, tRetreat;
 	}
 	private SharkType mSharkState = SharkType.tDefault;
-	private Bitmap mExtraBitmaps[] = new Bitmap [4];
-	private Animate mExtraAnimate[] = new Animate[4];
+	private Bitmap mUpBitmap;
+	private Bitmap mDownBitmap;
+	private Animate mUpAnimate;
+	private Animate mDownAnimate;
 	
 	public Shark(){
 		mId = objtype.tShark;
@@ -40,7 +42,12 @@ public class Shark extends GraphicObject{
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.scale(-1, 1);
-			canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
+			switch(getSpriteSheetIndex()){
+			case 0: canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null); break;
+			case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect,  null); break;
+			case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect,  null); break;
+				default: break;
+			}
 		canvas.restore();
 	}
 
@@ -49,8 +56,14 @@ public class Shark extends GraphicObject{
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
 				100, 100);	
+		
 		mBitmap = SpriteManager.getShark();
+		mUpBitmap = SpriteManager.getSharkUp();
+		mDownBitmap = SpriteManager.getSharkDown();
+		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
+		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -59,9 +72,15 @@ public class Shark extends GraphicObject{
 		mSharkState = SharkType.tAsleep;
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 100, 100);	
+		mProperties.init(x, y, 100, 100);
+		
 		mBitmap = SpriteManager.getShark();
+		mUpBitmap = SpriteManager.getSharkUp();
+		mDownBitmap = SpriteManager.getSharkDown();
+		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
+		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
@@ -132,7 +151,12 @@ public class Shark extends GraphicObject{
 		if(move()){
 			border();
 		}
-		mAnimate.animateFrame();
+		switch(getSpriteSheetIndex()){
+		case 0: mAnimate.animateFrame(); break;
+		case 1: mUpAnimate.animateFrame(); break;
+		case 2: mDownAnimate.animateFrame(); break;
+			default: break;
+		}
 	}
 	public SharkType getSharkState() {
 		return mSharkState;
@@ -140,5 +164,11 @@ public class Shark extends GraphicObject{
 	public void setSharkState(SharkType sharkState) {
 		mSharkState = sharkState;
 	}
-
+	private int getSpriteSheetIndex(){
+		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
+			return 1;
+		if (getSpeed().getAngle()>60 && getSpeed().getAngle()<120)
+			return 2;
+		return 0;
+	}
 }

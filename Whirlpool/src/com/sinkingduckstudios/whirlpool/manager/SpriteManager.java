@@ -252,4 +252,22 @@ public class SpriteManager {
 	public static void setDiverDown(Bitmap diver) {
 		mDiverDown = diver;
 	}
+	public static Bitmap getSharkUp() {
+		if(mSharkUp==null){
+			mSharkUp=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_up_sprites);
+		}
+		return mSharkUp;
+	}
+	public static void setSharkUp(Bitmap shark) {
+		mSharkUp = shark;
+	}
+	public static Bitmap getSharkDown() {
+		if(mSharkDown==null){
+			mSharkDown=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_down_sprites);
+		}
+		return mSharkDown;
+	}
+	public static void setSharkDown(Bitmap shark) {
+		mSharkDown = shark;
+	}
 }

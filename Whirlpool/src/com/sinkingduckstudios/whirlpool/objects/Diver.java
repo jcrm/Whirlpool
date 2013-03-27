@@ -20,15 +20,14 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Diver extends GraphicObject{
-	private boolean mFlipped;
 	private int mLeftBorder;
 	private int mRightBorder;
 	private int mTopBorder;
 	private int mBottomBorder;
 	private Bitmap mUpBitmap;
 	private Bitmap mDownBitmap;
-	private Animate mDownAnimate;
 	private Animate mUpAnimate;
+	private Animate mDownAnimate;
 
 	public Diver(){
 		mId = objtype.tDiver;
@@ -54,17 +53,15 @@ public class Diver extends GraphicObject{
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			switch(getSpriteSheetIndex()){
-			case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>=180){
-						canvas.rotate(mSpeed.getAngle()+180);
-					}else if(mSpeed.getAngle()>90 && mSpeed.getAngle()<180){
-						canvas.rotate(mSpeed.getAngle()+180);				
+			case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>90){
+						canvas.rotate(mSpeed.getAngle()+180);		
 					}else if (mSpeed.getAngle() ==0){
 						canvas.scale(1, -1);
 						canvas.rotate(mSpeed.getAngle()+180);								
 					}else if(mSpeed.getAngle()>270){
 						canvas.rotate(mSpeed.getAngle()+180);				
 						canvas.scale(1, -1);
-					}else{
+					}else if(mSpeed.getAngle()<=90){
 						canvas.scale(-1, 1);
 						canvas.rotate(mSpeed.getAngle()-90);
 					}
@@ -220,9 +217,7 @@ public class Diver extends GraphicObject{
 		// Move Objects
 		if(move()){
 			border();
-			checkFlip();
 		}
-		mAnimate.animateFrame();
 		switch(getSpriteSheetIndex()){
 		case 0: mAnimate.animateFrame(); break;
 		case 1: mUpAnimate.animateFrame(); break;
@@ -230,25 +225,9 @@ public class Diver extends GraphicObject{
 			default: break;
 		}
 	}
-	public void checkFlip(){
-		/*if(!mFlipped){
-			if(mSpeed.getAngle()>270 || mSpeed.getAngle()<90){
-				mFlipped = true;
-				mBitmap = SpriteManager.getDiverFlipped();
-				System.gc();
-			}
-		}else if(mFlipped){
-			if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>=90){
-				mFlipped = false;
-				mBitmap = SpriteManager.getDiver();
-				System.gc();
-			}
-		}*/
-	}
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
-		// TODO Auto-generated method stub
-		
+		borderCollision(side);
 	}
 	private void checkBorderConditions(){
 		if(mRightBorder < mLeftBorder){
