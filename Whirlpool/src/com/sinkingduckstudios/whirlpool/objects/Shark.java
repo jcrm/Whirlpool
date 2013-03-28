@@ -15,13 +15,16 @@ import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Shark extends GraphicObject{
 	public enum SharkType{
 		tDefault, tAsleep, tFollow, tAttack, tRetreat;
 	}
+	private static final float mTopSpeed = 12*Constants.getScreen().getRatio();
 	private SharkType mSharkState = SharkType.tDefault;
 	private Bitmap mUpBitmap;
 	private Bitmap mDownBitmap;
@@ -31,7 +34,11 @@ public class Shark extends GraphicObject{
 	private Animate mDownAnimate;
 	private Animate mAttackAnimate;
 	private Animate mAsleepAnimate;
-	private int mSharkRadius = Constants.getLevel().getLevelHeight()/4;
+	private int mSharkRadius = Constants.getLevel().getLevelHeight()/2;
+	private int mDuckCounter = 10;
+	private int mWaitCounter = 40;
+	private int mWaitTime = 40; 
+	private Point mStart;
 	
 	public Shark(){
 		mId = objtype.tShark;
@@ -47,7 +54,11 @@ public class Shark extends GraphicObject{
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			switch(getSpriteSheetIndex()){
-			case 0: canvas.scale(-1, 1); canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null); break;
+			case 0:
+				if(mSpeed.getAngle() >=270 || mSpeed.getAngle() <=90){
+					canvas.scale(-1, 1);
+				}
+				canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null); break;
 			case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect,  null); break;
 			case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect,  null); break;
 			case 3: canvas.drawBitmap(mAsleepBitmap, mAsleepAnimate.getPortion(), rect,  null); break;
@@ -61,14 +72,14 @@ public class Shark extends GraphicObject{
 	public void init() {
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
-				100, 100);	
-		
+				100, 100);
+		mStart = new Point(getCentreX(), getCentreY());
 		mBitmap = SpriteManager.getShark();
 		mUpBitmap = SpriteManager.getSharkUp();
 		mDownBitmap = SpriteManager.getSharkDown();
 		mAsleepBitmap = SpriteManager.getSharkAsleep();
 		mAttackBitmap = SpriteManager.getSharkAttack();
-		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
 		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
@@ -83,13 +94,14 @@ public class Shark extends GraphicObject{
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 100, 100);
-		
+		mStart = new Point(getCentreX(), getCentreY());
 		mBitmap = SpriteManager.getShark();
 		mUpBitmap = SpriteManager.getSharkUp();
 		mDownBitmap = SpriteManager.getSharkDown();
 		mAsleepBitmap = SpriteManager.getSharkAsleep();
 		mAttackBitmap = SpriteManager.getSharkAttack();
 		
+		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
 		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
@@ -200,5 +212,38 @@ public class Shark extends GraphicObject{
 	}
 	public void setSharkRadius(int sharkRadius) {
 		mSharkRadius = sharkRadius;
+	}
+	public void setDuckPosition(int duckX, int duckY){
+		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
+		float tempSpeed = mSpeed.getSpeed(); 
+		if(tempSpeed<mTopSpeed){
+			mSpeed.setSpeed(tempSpeed+1);
+		}else{
+			mSpeed.setSpeed(mTopSpeed);
+		}
+	}
+	public boolean updateDirection(){
+		mDuckCounter++;
+		if(mDuckCounter>10){
+			mDuckCounter = 0;
+			return true;
+		}
+		return false;
+	}
+	public boolean checkTime(){
+		mWaitCounter++;
+		if(mWaitCounter>= mWaitTime){
+			mWaitCounter = 0;
+			return true;
+		}
+		return false;
+	}
+	public void returnToStart(){
+		mSpeed.setAngle(180+CollisionManager.calcAngle(mStart.getX(), mStart.getY(), getCentreX(), getCentreY()));
+	}
+	public void checkAtStart(){		
+		if(CollisionManager.circleCollision(getCentreX(), getCentreY(), 10, mStart.getX(), mStart.getY(), 10)){
+			mSharkState = SharkType.tAsleep;
+		}
 	}
 }

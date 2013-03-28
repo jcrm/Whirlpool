@@ -197,7 +197,6 @@ public class Duck extends GraphicObject{
 			break;
 		case tShark:
 			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
-				inRadius = true;
 				return true;
 			}
 			break;
@@ -238,8 +237,8 @@ public class Duck extends GraphicObject{
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
 						cID = CollisionType.cShark;
 						collisionShark();
+						return true;
 					}
-					return true;
 				}
 				break;
 			default: break;

@@ -105,7 +105,9 @@ public class Diver extends GraphicObject{
 		
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
+		mUpAnimate.setDelay(2);
 		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
+		mDownAnimate.setDelay(2);
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);

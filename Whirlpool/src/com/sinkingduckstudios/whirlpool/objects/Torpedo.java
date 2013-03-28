@@ -134,13 +134,13 @@ public class Torpedo extends GraphicObject {
 	public void setIsReadyToDestroy(boolean isReadyToDestroy) {
 		mIsReadyToDestroy = isReadyToDestroy;
 	}
-	public void setDuckSpeed(int duckX, int duckY){
+	public void setDuckPosition(int duckX, int duckY){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed(); 
 		if(tempSpeed<mTopSpeed){
 			mSpeed.setSpeed(tempSpeed+1);
 		}else{
-			tempSpeed = mTopSpeed;
+			mSpeed.setSpeed(mTopSpeed);
 		}
 	}
 	//try get view by id , get id layout, get height and width of view; on button click of menu
