@@ -19,7 +19,6 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 public class Arrow {
 
 	private float mStartX, mStartY, mEndX, mEndY;
-	private float mPointer1X, mPointer2X, mPointer1Y, mPointer2Y;
 	private boolean mVisible;
 	private float mAngle,mDist;
 	private Bitmap mBitmap;

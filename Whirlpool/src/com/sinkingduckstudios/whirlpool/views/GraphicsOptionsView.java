@@ -21,8 +21,6 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 public class GraphicsOptionsView extends View{
 	
 	private Bitmap background;
-	private int WIDTH, HEIGHT = 0;
-	
 	public GraphicsOptionsView(Context context) {
 		
 		super(context);
@@ -56,8 +54,6 @@ public class GraphicsOptionsView extends View{
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 		setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-		WIDTH = widthMeasureSpec;
-		HEIGHT =heightMeasureSpec;
 	}
 	@Override
 	protected void onDraw(Canvas canvas){
