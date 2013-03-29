@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <com.sinkingduckstudios.whirlpool.views.OptionsView
+	    android:id="@+id/optionsView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    >
+	</com.sinkingduckstudios.whirlpool.views.OptionsView>
+
+    <ImageButton
+        android:id="@+id/audio"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/audio_button"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/graphics"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/audio"
+        android:layout_below="@+id/audio"
+        android:background="@drawable/graphics_button"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/op_return"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/back_button"
+        android:scaleType="fitCenter" />
+
+</RelativeLayout>
