@@ -32,7 +32,7 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		tDuck(8, 0, 16, 4, 4),
 		//not sure what numbers need for frame width and height
 		tFrog(4, 0, 16, 4, 4), 
-		tShark(2, 90, 31, 8, 4), 
+		tShark(5, 90, 31, 8, 4), 
 		tBoat(0, 0, 16, 4, 4),
 		tDiver(4, new Random().nextInt(360), 16, 4, 4),
 		tTorpedo(6, new Random().nextInt(360), 10, 4, 3);
@@ -203,6 +203,9 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	
 	public void setAngle(float a){
 		mSpeed.setAngle(a);
+	}
+	public void setSpeed(float speed){
+		mSpeed.setSpeed(speed);
 	}
     public Bitmap getGraphic() {
         return mBitmap;
