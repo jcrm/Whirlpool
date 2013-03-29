@@ -137,63 +137,66 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
-	public void checkCollision(GraphicObject a){
-		if (a.getId()==objtype.tDuck){
-			if (a.getPullState() == false && (!finished || !collisionDone)){
-				int collide = collision(a);
+	public boolean checkCollision(GraphicObject graphic){
+		boolean hit = false;
+		if (graphic.getId()==objtype.tDuck){
+			if (graphic.getPullState() == false && (!finished || !collisionDone)){
+				int collide = collision(graphic);
 				
 				if (collide == 1 || collide == 2){
+					hit = true;
 					collisionDone = false;
-					a.setPull(true);
+					graphic.setPull(true);
 					mHit = true;
-					pull(a);
-					if (testAngle(a)){
-						a.resetwPoolCounter();
-						a.setAngle(getWAngle());
+					pull(graphic);
+					if (testAngle(graphic)){
+						graphic.resetwPoolCounter();
+						graphic.setAngle(getWAngle());
 						collisionDone = true;
 						finished = true;
 					}
 				}
 			}
 		}
+		return hit;
 	}
 
-	public boolean testAngle(GraphicObject a){
+	public boolean testAngle(GraphicObject graphic){
 		if (angle == -1)//wpool not directed yet
 			return false;
-		if(!a.wPoolCounter())
+		if(!graphic.wPoolCounter())
 			return false;
 		float _lastAngle;
 		//check if duckie has reached his exit angle
-		_lastAngle = a.getSpeed().getLastAngle();
+		_lastAngle = graphic.getSpeed().getLastAngle();
 		//for a clockwise wpool, the last angle is always gonna be smaller
 		if (dirFactor == 1){
 			
-			if (_lastAngle > a.getSpeed().getAngle()){
+			if (_lastAngle > graphic.getSpeed().getAngle()){
 				//if lastangle is bigger, its passed 360
 				_lastAngle -= 360;
-				if (angle > a.getSpeed().getAngle()){
-					if (_lastAngle < angle-360 && a.getSpeed().getAngle() >= angle-360)
+				if (angle > graphic.getSpeed().getAngle()){
+					if (_lastAngle < angle-360 && graphic.getSpeed().getAngle() >= angle-360)
 						return true;
 				}else
-					if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+					if (_lastAngle < angle && graphic.getSpeed().getAngle() >= angle)
 						return true;
 			}
-			else if (_lastAngle < angle && a.getSpeed().getAngle() >= angle)
+			else if (_lastAngle < angle && graphic.getSpeed().getAngle() >= angle)
 				return true;
 		}else{
 			
-			if (_lastAngle < a.getSpeed().getAngle()){
+			if (_lastAngle < graphic.getSpeed().getAngle()){
 				//if lastangle is bigger, its passed 360
 				_lastAngle += 360;
-				if (angle < a.getSpeed().getAngle()){
-					if (_lastAngle > angle+360 && a.getSpeed().getAngle() <= angle+360)
+				if (angle < graphic.getSpeed().getAngle()){
+					if (_lastAngle > angle+360 && graphic.getSpeed().getAngle() <= angle+360)
 						return true;
 				}else
-					if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+					if (_lastAngle > angle && graphic.getSpeed().getAngle() <= angle)
 						return true;
 			}
-			else if (_lastAngle > angle && a.getSpeed().getAngle() <= angle)
+			else if (_lastAngle > angle && graphic.getSpeed().getAngle() <= angle)
 				return true;
 		}
 				

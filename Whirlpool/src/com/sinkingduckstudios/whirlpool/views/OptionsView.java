@@ -20,8 +20,6 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class OptionsView extends View{
 	private Bitmap background;
-	private int WIDTH, HEIGHT = 0;
-	
 	public OptionsView(Context context) {
 		super(context);
 		setFocusable(true);
@@ -54,8 +52,6 @@ public class OptionsView extends View{
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 		setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-		WIDTH = widthMeasureSpec;
-		HEIGHT =heightMeasureSpec;
 	}
 	@Override
 	protected void onDraw(Canvas canvas){

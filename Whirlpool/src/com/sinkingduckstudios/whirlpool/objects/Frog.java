@@ -58,6 +58,7 @@ public class Frog extends GraphicObject{
 	}
 	public void init(int x, int y, int r) {
 		mProperties.init(x-r, y, 80, 80);	
+
 		mBitmap = SpriteManager.getFrog();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		

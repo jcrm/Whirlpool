@@ -26,6 +26,7 @@ import com.sinkingduckstudios.whirlpool.objects.Frog;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 import com.sinkingduckstudios.whirlpool.objects.Shark;
+import com.sinkingduckstudios.whirlpool.objects.Shark.SharkType;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
@@ -56,15 +57,15 @@ public class Level {
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
 		mGraphics.add(new Duck(40, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		mGraphics.add(new Frog(600, 250, 140));
-		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
-		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
 		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
+		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
+		mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
 		mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
+		mGraphics.add(new Frog(600, 250, 140));
 		mGraphics.add(new Frog(1200, 250, 140));		
-		mGraphics.add(new Shark(300,300));
+		mGraphics.add(new Shark(600,300));
 		Finish end = new Finish();
     	end.setCentreX(2900);
     	end.setCentreY(235);
@@ -76,7 +77,6 @@ public class Level {
 	}//
 
 	public int update(){
-		
 		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
 		//could maybe optimise later TODO
@@ -118,12 +118,14 @@ public class Level {
 				whirl.checkCollision(graphic);
 			}
 			for(GraphicEnvironment enviro: mEnvironments){
-				if(enviro.getId()==envtype.tFinish){
-					((Finish) enviro).checkCollision(graphic);
+				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck){
+					if(((Finish) enviro).checkCollision(graphic)){
+						((Duck) graphic).setFinished(true);
+					}
 				}
 			}
 			if(graphic.getId()==objtype.tDuck){
-				duckCollision(graphic);
+				duckMovement(graphic);
 			}else if(graphic.getId()==objtype.tBoat){
 				checkBoatTorpedoCollision(graphic);
 				if(((Boat) graphic).getNewTorpedo()){
@@ -135,11 +137,13 @@ public class Level {
 					Constants.getSoundManager().playExplosion();
 					mainIterator.remove();
 				}else if(((Torpedo) graphic).updateDirection()){
-					((Torpedo) graphic).setDuckSpeed(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
+					((Torpedo) graphic).setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				}else{
 					((Torpedo) graphic).checkBeep();
 					graphic.frame();	//Do everything this object does every frame, like move
 				}
+			}else if(graphic.getId()==objtype.tShark){
+				sharkMovement(graphic);
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
 			}
@@ -189,6 +193,7 @@ public class Level {
 		for (Whirlpool whirlpool : mWPoolModel.getWpools()) {
 			whirlpool.draw(canvas);
 		}
+		
 		for(GraphicEnvironment enviro : mEnvironments){
 			enviro.draw(canvas);
 		}
@@ -230,31 +235,78 @@ public class Level {
 			mScrollBy = mLevelWidth - Constants.getScreen().getWidth();
 		}
 	}
-	public void duckCollision(GraphicObject graphic){
+	public void duckMovement(GraphicObject graphic){
 		graphic.frame();	//Do everything this object does every frame, like move
-		for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
-			GraphicObject graphic2 = collisionIterator.next();
-			boolean collision = false;
-			if(graphic2.getId()==objtype.tBoat){
-				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
-				if(collision){
-					((Boat) graphic2).changeAnimation();	
-				}
-			}else if(graphic2.getId()==objtype.tTorpedo){
-				if(((Torpedo) graphic2).getIsReadyToDestroy()==false){
-					collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+		if(((Duck) graphic).getFinished() == false){
+			for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
+				GraphicObject graphic2 = collisionIterator.next();
+				boolean collision = false;
+				if(graphic2.getId()==objtype.tBoat){
+					collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
 					if(collision){
-						((Torpedo) graphic2).setIsReadyToDestroy(true);
+						((Boat) graphic2).changeAnimation();	
 					}
+				}else if(graphic2.getId()==objtype.tTorpedo){
+					if(((Torpedo) graphic2).getIsReadyToDestroy()==false){
+						collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+						if(collision){
+							((Torpedo) graphic2).setIsReadyToDestroy(true);
+						}
+					}
+				}else if(graphic2.getId()==objtype.tShark){
+					if(((Shark) graphic2).getSharkState() == SharkType.tAsleep){
+						collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Shark) graphic2).getSharkRadius());
+						if(collision && ((Shark) graphic2).checkTime()){
+							((Shark) graphic2).setSharkState(SharkType.tFollow);
+						}
+					}else if(((Shark) graphic2).getSharkState() == SharkType.tFollow){
+						collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+						if(collision){							
+							((Shark) graphic2).setSharkState(SharkType.tAttack);
+							((Shark) graphic2).moveToDrop();
+							((Duck) graphic).setSharkAttack(true);
+							graphic.setSpeed(graphic2.getSpeed().getSpeed());
+							graphic.setAngle(graphic2.getSpeed().getAngle());
+							graphic.setCentreX((int)(graphic2.getCentreX()*Constants.getScreen().getRatio()));
+							graphic.setCentreY((int)(graphic2.getCentreY()*Constants.getScreen().getRatio()));
+						}else if(((Duck) graphic).getInvincibility() == true){
+							collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Shark) graphic2).getSharkRadius());
+							if(collision){
+								((Shark) graphic2).setSharkState(SharkType.tWait);
+							}
+						}
+					}
+				}else{
+					((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 				}
-			}else if(graphic2.getId()==objtype.tShark){
-				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
-				if(collision){
-				}	
-			}else{
-				((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 			}
 		}
 	}
-
+	private void sharkMovement(GraphicObject graphic){
+		if(((Shark) graphic).updateDirection()){
+			if(((Shark) graphic).getSharkState() == SharkType.tFollow){
+				((Shark) graphic).setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
+			}
+		}
+		if(((Shark) graphic).getSharkState() == SharkType.tAttack){
+			((Shark) graphic).moveToDrop();
+		}
+		if(((Shark) graphic).getSharkState() == SharkType.tAttack){
+			Constants.getPlayer().setCentre((int)(graphic.getCentreX()*Constants.getScreen().getRatio()), (int)(graphic.getCentreY()*Constants.getScreen().getRatio()));
+			if(((Shark) graphic).getMovedToDrop()){
+				Constants.getPlayer().setSharkAttack(false);
+				((Shark) graphic).setSharkState(SharkType.tRetreat);
+			}
+		}
+		if(((Shark) graphic).getSharkState() == SharkType.tRetreat){
+			((Shark) graphic).returnToStart();						
+			((Shark) graphic).checkAtStart();
+		}
+		if(((Shark) graphic).getSharkState() == SharkType.tWait){
+			if(Constants.getPlayer().getInvincibility() == false){
+				((Shark) graphic).setSharkState(SharkType.tFollow);
+			}
+		}
+		graphic.frame();
+	}
 }

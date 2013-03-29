@@ -9,7 +9,6 @@ package com.sinkingduckstudios.whirlpool.manager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -17,13 +16,15 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 public class SpriteManager {
 	private static Bitmap mDuck[]=new Bitmap[3];
 	private static Bitmap mDiver;
-	private static Bitmap mDiverFlipped;
+	private static Bitmap mDiverUp;
+	private static Bitmap mDiverDown;
 	private static Bitmap mBoat;
 	private static Bitmap mBoatAttack;
 	private static Bitmap mFrog;
 	private static Bitmap mWhirlpool;
 	private static Bitmap mBackground;
 	private static Bitmap mTorpedo;
+	private static Bitmap mTorpedoExplosion;
 	private static Bitmap mLeftBorder;
 	private static Bitmap mRightBorder;
 	private static Bitmap mTopBorder;
@@ -31,6 +32,10 @@ public class SpriteManager {
 	private static Bitmap mFinish;
 	private static Bitmap mFinishHit;
 	private static Bitmap mShark;
+	private static Bitmap mSharkUp;
+	private static Bitmap mSharkDown;
+	private static Bitmap mSharkSleep;
+	private static Bitmap mSharkAttack;
 	
 	public void deleteImages(){
 		mDuck[0].recycle();
@@ -41,8 +46,10 @@ public class SpriteManager {
 		mDuck[2] = null;
 		mDiver.recycle();
 		mDiver = null;
-		mDiverFlipped.recycle();
-		mDiverFlipped = null;
+		mDiverUp.recycle();
+		mDiverUp = null;
+		mDiverDown.recycle();
+		mDiverDown = null;
 		mBoat.recycle();
 		mBoat = null;
 		mFrog.recycle();
@@ -53,6 +60,8 @@ public class SpriteManager {
 		mBackground = null;
 		mTorpedo.recycle();
 		mTorpedo = null;
+		mTorpedoExplosion.recycle();
+		mTorpedoExplosion = null;
 		mLeftBorder.recycle();
 		mLeftBorder =null;
 		mRightBorder.recycle();
@@ -65,6 +74,14 @@ public class SpriteManager {
 		mFinish = null;
 		mShark.recycle();
 		mShark = null;
+		mSharkUp.recycle();
+		mSharkUp= null;
+		mSharkDown.recycle();
+		mSharkDown= null;
+		mSharkSleep.recycle();
+		mSharkSleep= null;
+		mSharkAttack.recycle();
+		mSharkAttack= null;
 	}
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
@@ -80,27 +97,12 @@ public class SpriteManager {
 	}
 	public static Bitmap getDiver() {
 		if(mDiver == null){
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
-			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
+			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
 		}
 		return mDiver;
 	}
 	public static void setDiver(Bitmap diver) {
 		mDiver = diver;
-	}
-	public static Bitmap getDiverFlipped() {
-		if(mDiverFlipped == null){
-			Matrix flipMatrix = new Matrix();
-			flipMatrix.setScale(1, -1);
-			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_sprites);
-			mDiverFlipped = Bitmap.createBitmap(mDiver, 0, 0, mDiver.getWidth(), mDiver.getHeight(), flipMatrix, false);
-		}
-		return mDiverFlipped;
-	}
-	public static void setDiverFlipped(Bitmap diverflipped) {
-		mDiverFlipped = diverflipped;
 	}
 	public static Bitmap getBoat() {
 		if(mBoat==null){
@@ -225,11 +227,65 @@ public class SpriteManager {
 	}
 	public static Bitmap getShark() {
 		if(mShark==null){
-			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sprites);
+			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_left_and_right_sprites);
 		}
 		return mShark;
 	}
 	public static void setShark(Bitmap shark) {
 		mShark = shark;
+	}
+	public static Bitmap getDiverUp(){
+		if(mDiverUp == null){
+			mDiverUp = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_up_sprites);
+		}
+		return mDiverUp;
+	}
+	public static void setDiverUp(Bitmap diver) {
+		mDiverUp = diver;
+	}
+	public static Bitmap getDiverDown(){
+		if(mDiverDown == null){
+			mDiverDown = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_down_sprites);
+		}
+		return mDiverDown;
+	}
+	public static void setDiverDown(Bitmap diver) {
+		mDiverDown = diver;
+	}
+	public static Bitmap getSharkUp() {
+		if(mSharkUp==null){
+			mSharkUp=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_up_sprites);
+		}
+		return mSharkUp;
+	}
+	public static void setSharkUp(Bitmap shark) {
+		mSharkUp = shark;
+	}
+	public static Bitmap getSharkDown() {
+		if(mSharkDown==null){
+			mSharkDown=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_down_sprites);
+		}
+		return mSharkDown;
+	}
+	public static void setSharkDown(Bitmap shark) {
+		mSharkDown = shark;
+	}
+	public static Bitmap getSharkAsleep() {
+		if(mSharkSleep==null){
+			mSharkSleep=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sleeping_sprites);
+		}
+		return mSharkSleep;
+	}
+	public static void setSharkAsleep(Bitmap shark) {
+		mSharkSleep = shark;
+	}
+	public static Bitmap getSharkAttack() {
+		if(mSharkAttack==null){
+			mSharkAttack=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_bite_sprites);
+		}
+		return mSharkAttack;
+	}
+	public static void setSharkAttack(Bitmap shark) {
+		mSharkAttack = shark;
 	}
 }

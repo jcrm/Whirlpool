@@ -93,7 +93,7 @@ public class Game extends Activity {
 		};
 
 
-		mTime.schedule(new MainThread(),0, 50);
+		mTime.schedule(new MainThread(),0, 25);
 
 
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));

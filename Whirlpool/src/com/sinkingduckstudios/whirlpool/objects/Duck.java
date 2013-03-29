@@ -31,6 +31,8 @@ public class Duck extends GraphicObject{
 	private Bitmap mBitmap[] = new Bitmap[3];
 	private Animate mAnimate[] = new Animate[3];
 	private boolean mInvincibility = false;
+	private boolean mFinished = false;
+	private boolean mSharkAttack = false;
 	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
 	
 	public Duck(){
@@ -43,15 +45,28 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
-		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
-				canvas.scale(-1, 1);
-			}
-			int i = getSpriteSheetIndex();
-			canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), rect,  null);
-		canvas.restore();
+		if(mSharkAttack == false){
+			canvas.save();
+				/*ColorMatrix cm = new ColorMatrix();
+				cm.set(new float[]{
+									0.8f,0,0,0,100,
+									0,0.4f,0,0,80,
+									0,0,0.9f,0,20,
+									0,0,0,1,0
+									
+				});
+				Paint paint = new Paint();
+				paint.setColorFilter(new ColorMatrixColorFilter(cm));
+				 */
+				Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+				canvas.translate(getCentreX(), getCentreY());
+				if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
+					canvas.scale(-1, 1);
+				}
+				int i = getSpriteSheetIndex();
+				canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), rect,  null);
+			canvas.restore();
+		}
 	}
 
 	@Override
@@ -84,10 +99,10 @@ public class Duck extends GraphicObject{
 				frames = mId.tFrames+3;
 			}
 			mBitmap[i] = SpriteManager.getDuck(i);
-			if (i<2)
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+			if (i==0)
+			mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 			else
-				mAnimate[i] = new Animate(frames, 4, 5, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+				mAnimate[i] = new Animate(19, 3, 7, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 		}
 		
 		mSpeed.setMove(true);
@@ -96,7 +111,7 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		if(mSpeed.getMove()){
+		if(mSpeed.getMove() && mSharkAttack == false){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
@@ -185,7 +200,6 @@ public class Duck extends GraphicObject{
 			break;
 		case tShark:
 			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
-				inRadius = true;
 				return true;
 			}
 			break;
@@ -225,9 +239,10 @@ public class Duck extends GraphicObject{
 				if(cID!=CollisionType.cShark && mInvincibility == false){
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
 						cID = CollisionType.cShark;
-						collisionShark();
+						mCollisionCount = 0;
+						mSharkAttack = true;
+						return true;
 					}
-					return true;
 				}
 				break;
 			default: break;
@@ -259,9 +274,19 @@ public class Duck extends GraphicObject{
 					mCollisionCount = 0;
 				}
 			}else if(cID == CollisionType.cShark){
-				cID = CollisionType.cDefault;
-				mInvincibility = false;
-				mCollisionCount = -1;
+				if(mSharkAttack == false){
+					if(mCollisionCount == 10){
+						cID = CollisionType.cDefault;
+						mInvincibility = true;
+						getSpeed().setSpeed(8);	
+						mCollisionCount = -1;
+					}else{
+						getSpeed().setSpeed(0);			
+						getSpeed().setAngle(0);					
+					}
+				}else{
+					mCollisionCount = 0;
+				}
 			}else if(mInvincibility == true){
 				if(mCollisionCount == 60){
 					mInvincibility = false;
@@ -282,10 +307,6 @@ public class Duck extends GraphicObject{
 		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
 	}
-	private void collisionShark(){
-		mCollisionCount = 0;
-		Constants.getSoundManager().playDucky();
-	}
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
 			return 1;
@@ -301,5 +322,17 @@ public class Duck extends GraphicObject{
 	}
 	public static float getTopSpeed() {
 		return mTopSpeed;
+	}
+	public boolean getFinished() {
+		return mFinished;
+	}
+	public void setFinished(boolean finished) {
+		mFinished = finished;
+	}
+	public boolean getSharkAttack() {
+		return mSharkAttack;
+	}
+	public void setSharkAttack(boolean sharkAttack) {
+		mSharkAttack = sharkAttack;
 	}
 }
