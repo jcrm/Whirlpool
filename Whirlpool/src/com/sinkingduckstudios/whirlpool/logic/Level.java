@@ -20,6 +20,7 @@ import com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment.envtype;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
+import com.sinkingduckstudios.whirlpool.objects.Collectable;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
@@ -44,7 +45,7 @@ public class Level {
 	private Bitmap mTopBorderImage;
 	private static Object mScreenLock;
 	private Rect mRect = new Rect();
-	
+	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 	public Level(){
 	}
 	public void init(){
@@ -55,7 +56,8 @@ public class Level {
 		mRightBorderImage = SpriteManager.getRightBorder();
 		mTopBorderImage = SpriteManager.getTopBorder();
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
-		mGraphics.add(new Duck(40, 235));
+		mFollowThis = new Duck(40, 235);
+		mGraphics.add(mFollowThis);
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
 		mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
@@ -72,6 +74,9 @@ public class Level {
     	end.setWAngle(-1);
     	end.setClockwise(1);
 		mEnvironments.add(end);
+		mGraphics.add(new Collectable(500,50));
+		mGraphics.add(new Collectable(1000,400));
+		mGraphics.add(new Collectable(2000,190));
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}//
@@ -144,6 +149,13 @@ public class Level {
 				}
 			}else if(graphic.getId()==objtype.tShark){
 				sharkMovement(graphic);
+			}else if(graphic.getId()==objtype.tCollectable){
+				boolean collided = ((Collectable)graphic).getCollided();
+				graphic.frame();
+				if (collided!=((Collectable)graphic).getCollided()){
+					((Collectable)graphic).setFollowing(mFollowThis);
+					mFollowThis=graphic;
+				}
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
 			}

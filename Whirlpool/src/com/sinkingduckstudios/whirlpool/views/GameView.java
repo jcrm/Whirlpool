@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.views;
 
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;//
 import android.graphics.Canvas;
@@ -33,7 +34,8 @@ public class GameView extends View{
         sScreenLock = Constants.getLock();
     }
 
-    @Override
+    @SuppressLint("WrongCall")
+	@Override
     public void onDraw(Canvas canvas) {
     	synchronized(sScreenLock){
     		if(Constants.getLock()!=null)
