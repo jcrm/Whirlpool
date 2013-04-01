@@ -29,7 +29,10 @@ public class Finish extends GraphicEnvironment{
 		mId = envtype.tFinish;
 		init();
 	}
-
+	public Finish(int x, int y, int wa, int c){
+		mId = envtype.tFinish;
+		init(x,y,wa,c);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -72,7 +75,23 @@ public class Finish extends GraphicEnvironment{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
+	public void init(int x, int y, int wa, int c){
+		mProperties.init(x, y, 130, 130);	
 
+		mBitmap = SpriteManager.getFinish();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mHitBitmap = SpriteManager.getFinishHit();
+		mHitAnimate = new Animate(40, 5, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		
+		mSpeed.setMove(false);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		setCentreX(x);
+    	setCentreY(y);
+    	setWAngle(angle);
+    	setClockwise(c);
+	}
 	@Override
 	public boolean move() {
 		return false;
