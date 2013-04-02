@@ -58,10 +58,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected Properties mProperties = new Properties();
 	protected Bitmap mBitmap;
 	protected Speed mSpeed = new Speed();
-	protected boolean mPull;// = false;
+	protected int mPullState;//state of object in wpool
 	protected static Object mScreenLock;
 	protected Animate mAnimate;
-	private int wpoolCounter;
+	protected int wpoolCounter;
+	protected Whirlpool mPulledBy;
 	
     public GraphicObject(){
     	mScreenLock=Constants.getLock();
@@ -118,51 +119,51 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return hit;
 	}
 
-	public void setCentre(int x, int y){
+	public void setCentre(float x, float y){
 		mProperties.setCentre(x, y);
 	}
-	public void setCentreX(int x){
+	public void setCentreX(float x){
 		mProperties.setCentreX(x);
 	}
-	public void setCentreY(int y){
+	public void setCentreY(float y){
 		mProperties.setCentreY(y);
 	}
 	public Point getCentre(){
 		return mProperties.getCentre();
 	}
-	public int getCentreX(){
+	public float getCentreX(){
 		return mProperties.getCentreX();
 	}
-	public int getCentreY(){
+	public float getCentreY(){
 		return mProperties.getCentreY();
 	}
 	
-	public void setTopLeft(int x, int y){
+	public void setTopLeft(float x, float y){
 		mProperties.setTopLeft(x, y);
 	}
-	public void setTopLeftX(int x){
+	public void setTopLeftX(float x){
 		mProperties.setTopLeftX(x);
 	}
-	public void setTopLeftY(int y){
+	public void setTopLeftY(float y){
 		mProperties.setTopLeftY(y);
 	}
 	public Point getTopLeft(){
 		return mProperties.getTopLeft();
 	}
-	public int getTopLeftX(){
+	public float getTopLeftX(){
 		return mProperties.getTopLeftX();
 	}
-	public int getTopLeftY(){
+	public float getTopLeftY(){
 		return mProperties.getTopLeftY();
 	}
 	
 	public Point getBottomRight(){
 		return mProperties.getBottomRight();
 	}
-	public int getBottomRightX(){
+	public float getBottomRightX(){
 		return mProperties.getBottomRightX();
 	}
-	public int getBottomRightY(){
+	public float getBottomRightY(){
 		return mProperties.getBottomRightY();
 	}
 	
@@ -179,17 +180,17 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 		mProperties.setHeight(height);
 	}
 	
-	public void moveDeltaX(int deltaX){
+	public void moveDeltaX(float deltaX){
 		synchronized(mScreenLock){
 			mProperties.moveDeltaX(deltaX);
     	}
 	}
-	public void moveDeltaY(int deltaY){
+	public void moveDeltaY(float deltaY){
 		synchronized(mScreenLock){
 			mProperties.moveDeltaY(deltaY);
     	}
 	}
-	public void moveDelta(int deltaX, int deltaY){
+	public void moveDelta(float deltaX, float deltaY){
 		synchronized(mScreenLock){
 			mProperties.moveDelta(deltaX, deltaY);
     	}
@@ -215,11 +216,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
         return mSpeed;
     }
     
-    public void setPull(boolean pull){
-    	mPull = pull;
+    public void setPulledState(int state){
+    	mPullState = state;
     }
-	public boolean getPullState() {
-		return mPull;
+	public int getPulledState() {
+		return mPullState;
 	}
 	
 	public void setCollision(Properties collision){
@@ -234,5 +235,11 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	}
 	public void resetwPoolCounter(){
 		wpoolCounter=0;
+	}
+	public void setPulledBy(Whirlpool whirlpool) {
+		mPulledBy=whirlpool;
+	}
+	public Whirlpool getPulledBy() {
+		return mPulledBy;
 	}
 }

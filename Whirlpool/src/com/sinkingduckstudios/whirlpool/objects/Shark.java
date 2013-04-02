@@ -76,7 +76,7 @@ public class Shark extends GraphicObject{
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
 				100, 100);
 		mStart = new Point(getCentreX(), getCentreY());		
-		float dX = new Random().nextInt(getCentreX());
+		float dX = new Random().nextInt((int)getCentreX());
 		float dY = new Random().nextInt(Constants.getLevel().getLevelHeight());
 		mDropLocation = new Point((int)dX,(int)dY);
 		
@@ -104,7 +104,7 @@ public class Shark extends GraphicObject{
 		mProperties.init(x, y, 100, 100);
 		
 		mStart = new Point(getCentreX(), getCentreY());
-		float dX = new Random().nextInt(getCentreX());
+		float dX = new Random().nextInt((int)getCentreX());
 		float dY = new Random().nextInt(Constants.getLevel().getLevelHeight());
 		mDropLocation = new Point((int)dX,(int)dY);
 		
@@ -236,8 +236,8 @@ public class Shark extends GraphicObject{
 	public void setSharkRadius(int sharkRadius) {
 		mSharkRadius = sharkRadius;
 	}
-	public void setDuckPosition(int duckX, int duckY){
-		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
+	public void setDuckPosition(float f, float g){
+		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 	}
 	public boolean updateDirection(){
 		mDuckCounter++;

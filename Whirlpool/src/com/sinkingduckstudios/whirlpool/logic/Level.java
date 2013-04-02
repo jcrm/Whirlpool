@@ -118,10 +118,17 @@ public class Level {
 		
 		for(Iterator<GraphicObject> mainIterator = mGraphics.listIterator(); mainIterator.hasNext();){
 			GraphicObject graphic = mainIterator.next();
-			graphic.setPull(false);
+			
+			boolean isColliding = false;
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
-				whirl.checkCollision(graphic);
+				if(whirl.checkCollision(graphic))
+					isColliding=true;
 			}
+			if(!isColliding){
+				graphic.setPulledBy(null);
+				graphic.setPulledState(Constants.STATE_FREE);
+			}
+			
 			for(GraphicEnvironment enviro: mEnvironments){
 				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck){
 					if(((Finish) enviro).checkCollision(graphic)){

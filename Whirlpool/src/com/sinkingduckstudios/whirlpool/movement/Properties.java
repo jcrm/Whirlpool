@@ -22,7 +22,7 @@ public class Properties {
 	
 	public Properties(){
 	}
-	public void init(int x, int y, int width, int height){
+	public void init(float x, float y, int width, int height){
 		x/=Constants.getScreen().getRatio();
 		y/=Constants.getScreen().getRatio();
 		mTopLeft.setPoints(x, y);
@@ -34,7 +34,7 @@ public class Properties {
 		mBottomRight.setPoints(x+mWidth, y+mHeight);
 		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 	}
-	public void setCentre(int x, int y){
+	public void setCentre(float x, float y){
 		x/=Constants.getScreen().getRatio();
 		y/=Constants.getScreen().getRatio();
 		mCentre.setPoints(x, y);
@@ -42,30 +42,30 @@ public class Properties {
 		mBottomRight.setPoints(x+(mWidth/2), y+(mHeight/2));
 	}
 	//temp comment
-	public void setCentreX(int x){
+	public void setCentreX(float x){
 		x/=Constants.getScreen().getRatio();
 		mCentre.setX(x);
 		mTopLeft.setX(x-(mWidth/2));
 		mBottomRight.setX(x+(mWidth/2));
 	}
-	public void setCentreY(int y){
+	public void setCentreY(float y){
 		y/=Constants.getScreen().getRatio();
 		mCentre.setY(y);
 		mTopLeft.setY(y-(mHeight/2));
 		mBottomRight.setY(y+(mHeight/2));
 	}
 	
-	public void setTopLeft(int x, int y){
+	public void setTopLeft(float x, float y){
 		mTopLeft.setPoints(x, y);
 		mBottomRight.setPoints(x+mWidth,y+mHeight);
 		mCentre.setPoints(x+(mWidth/2),y+(mHeight/2));
 	}
-	public void setTopLeftX(int x){
+	public void setTopLeftX(float x){
 		mTopLeft.setX(x);
 		mBottomRight.setX(x+mWidth);
 		mCentre.setX(x+(mWidth/2));
 	}
-	public void setTopLeftY(int y){
+	public void setTopLeftY(float y){
 		mTopLeft.setY(y);
 		mBottomRight.setY(y+mHeight);
 		mCentre.setY(y+(mHeight/2));
@@ -80,22 +80,22 @@ public class Properties {
 	public Point getBottomRight(){
 		return mBottomRight;
 	}
-	public int getCentreX(){
+	public float getCentreX(){
 		return mCentre.getX();
 	}
-	public int getCentreY(){
+	public float getCentreY(){
 		return mCentre.getY();
 	}
-	public int getTopLeftX(){
+	public float getTopLeftX(){
 		return mTopLeft.getX();
 	}
-	public int getTopLeftY(){
+	public float getTopLeftY(){
 		return mTopLeft.getY();
 	}
-	public int getBottomRightX(){
+	public float getBottomRightX(){
 		return mBottomRight.getX();
 	}
-	public int getBottomRightY(){
+	public float getBottomRightY(){
 		return mBottomRight.getY();
 	}
 	
@@ -119,13 +119,13 @@ public class Properties {
 		mRadius = radius;
 	}
 	
-	public void moveDeltaX(int deltaX){
+	public void moveDeltaX(float deltaX){
 		setTopLeftX(mTopLeft.getX()+deltaX);
 	}
-	public void moveDeltaY(int deltaY){
+	public void moveDeltaY(float deltaY){
 		setTopLeftY(mTopLeft.getY()+deltaY);
 	}
-	public void moveDelta(int deltaX, int deltaY){
+	public void moveDelta(float deltaX, float deltaY){
 		setTopLeft(mTopLeft.getX()+deltaX, mTopLeft.getY()+deltaY);
 	}
 	
