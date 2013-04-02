@@ -111,10 +111,11 @@ public final class R {
         public static final int points=0x7f040014;
         public static final int points2=0x7f040015;
         public static final int scaredducky=0x7f040016;
-        public static final int splash=0x7f040017;
-        public static final int temp_bg_music=0x7f040018;
-        public static final int tugboat=0x7f040019;
-        public static final int whirlpool2=0x7f04001a;
+        public static final int sexyandiknowit=0x7f040017;
+        public static final int splash=0x7f040018;
+        public static final int temp_bg_music=0x7f040019;
+        public static final int tugboat=0x7f04001a;
+        public static final int whirlpool2=0x7f04001b;
     }
     public static final class string {
         public static final int app_name=0x7f050000;

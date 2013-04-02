@@ -67,7 +67,7 @@ public class Game extends Activity {
 		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init(4,false,3000);
+		Constants.getLevel().init(1,false);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){

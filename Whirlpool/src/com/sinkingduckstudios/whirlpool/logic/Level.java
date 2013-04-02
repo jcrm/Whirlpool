@@ -58,8 +58,7 @@ public class Level {
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}
-	public void init(int lNumber, boolean replay, int width){
-		mLevelWidth = (int) (width/Constants.getScreen().getRatio());
+	public void init(int lNumber, boolean replay){
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
 		
@@ -78,9 +77,18 @@ public class Level {
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
 		mGraphics.add(new Duck(40, 235));
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		
+		int width = 3000;
 		switch(lNumber){
 		case 1:
+			mGraphics.add(new Diver(500, 350, 90, 0, 400, 0, 500));
+			mGraphics.add(new Diver(450, 50, 90, 0, 0, 0, 235));
+			mGraphics.add(new Diver(550, 50, 90, 0, 0, 0, 235));
+			mGraphics.add(new Frog(300, 250, 140));
+			mGraphics.add(new Frog(800, 250, 140));
+			mEnvironments.add(new Finish(900, 235, -1, 1));
+			width = 1000;
+			break;
+		case 2:
 			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
 			mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
 			mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
@@ -88,10 +96,12 @@ public class Level {
 			mGraphics.add(new Frog(1200, 250, 140));
 			mEnvironments.add(new Finish(2900, 235, -1, 1));
 			break;
-		case 2:
-			mEnvironments.add(new Finish(2900, 235, -1, 1));
-			break;
 		case 3:
+			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
+			mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
+			mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
+			mGraphics.add(new Frog(600, 250, 140));
+			mGraphics.add(new Frog(1200, 250, 140));
 			mEnvironments.add(new Finish(2900, 235, -1, 1));
 			break;
 		case 4:
@@ -121,6 +131,7 @@ public class Level {
 				default: break;
 			}
 		}
+		mLevelWidth = (int) (width/Constants.getScreen().getRatio());
 	}
 	public int update(){
 		updateList();
