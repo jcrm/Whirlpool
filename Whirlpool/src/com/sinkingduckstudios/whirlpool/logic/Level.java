@@ -20,7 +20,7 @@ import com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment.envtype;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
-//import com.sinkingduckstudios.whirlpool.objects.Collectable;
+import com.sinkingduckstudios.whirlpool.objects.Collectable;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
@@ -54,7 +54,7 @@ public class Level {
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
 		
-		levelNumber(1,false);
+		levelNumber(1);
 		
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
@@ -63,7 +63,10 @@ public class Level {
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
 		
-		levelNumber(lNumber, replay);
+		levelNumber(lNumber);
+		if(replay){
+			replayLevel(lNumber);
+		}
 		
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
@@ -74,37 +77,41 @@ public class Level {
 		mRightBorderImage = SpriteManager.getRightBorder();
 		mTopBorderImage = SpriteManager.getTopBorder();
 	}
-	private void levelNumber(int lNumber, boolean replay){
-		mWPoolModel.addWPool(125, 235, 10, -1, 1);
-		mFollowThis = new Duck(40, 235);
+	private void levelNumber(int lNumber){
+		mWPoolModel.addWPool(125, 255, 10, -1, 1);
+		mFollowThis = new Duck(40, 250);
 		mGraphics.add(mFollowThis);
 		Constants.setPlayer((Duck)mGraphics.get(0));
-		int width = 3000;
 		switch(lNumber){
 		case 1:
-			mGraphics.add(new Diver(500, 350, 90, 0, 400, 0, 500));
-			mGraphics.add(new Diver(450, 50, 90, 0, 0, 0, 235));
-			mGraphics.add(new Diver(550, 50, 90, 0, 0, 0, 235));
-			mGraphics.add(new Frog(300, 250, 140));
-			mGraphics.add(new Frog(800, 250, 140));
-			mEnvironments.add(new Finish(900, 235, -1, 1));
-			width = 1000;
+			mGraphics.add(new Diver(750, 350, 90, 0, 100, 0, 500));
+			mGraphics.add(new Diver(500, 50, 90, 0, 0, 0, 235));
+			mGraphics.add(new Diver(900, 50, 90, 0, 0, 0, 235));
+			mGraphics.add(new Frog(400, 250, 80));
+			mGraphics.add(new Frog(1200, 250, 70));
+			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(1400, 250, -1, 1));
 			break;
 		case 2:
-			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
-			mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
-			mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
-			mGraphics.add(new Frog(600, 250, 140));
-			mGraphics.add(new Frog(1200, 250, 140));
-			mEnvironments.add(new Finish(2900, 235, -1, 1));
+			mGraphics.add(new Diver(100, 0, 45, 100, 0, 400, 250));
+			mGraphics.add(new Diver(100, 500, 135, 100, 250, 400, 500));
+			mGraphics.add(new Diver(600, 500, 135, 0, 0, 0, 0));
+			mGraphics.add(new Frog(600, 250, 75));
+			mGraphics.add(new Frog(1250, 250, 140));
+			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(1250, 250, -1, 1));
 			break;
 		case 3:
-			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
-			mGraphics.add(new Diver(1000, 50, 90, 0, 0, 0, 0));
-			mGraphics.add(new Diver(1600, 50, 90, 0, 0, 0, 0));
-			mGraphics.add(new Frog(600, 250, 140));
-			mGraphics.add(new Frog(1200, 250, 140));
-			mEnvironments.add(new Finish(2900, 235, -1, 1));
+			mGraphics.add(new Diver(250, 0, 90, 0, 0, 0, 0));
+			mGraphics.add(new Diver(375, 0, 90, 0, 0, 0, 0));
+			mGraphics.add(new Diver(500, 50, 90, 0, 0, 0, 250));
+			mGraphics.add(new Diver(500, 450, 90, 0, 250, 0, 500));
+			mGraphics.add(new Diver(500, 250, 0, 0, 0, 0, 0));
+			mGraphics.add(new Diver(1000, 250, 135, 1000, 0, 1300, 250));
+			mGraphics.add(new Diver(1000, 250, 45, 1000, 250, 1300, 500));
+			mGraphics.add(new Diver(1400, 50, 90, 0, 0, 0, 0));
+			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(1200, 250, -1, 1));
 			break;
 		case 4:
 			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
@@ -116,31 +123,76 @@ public class Level {
 			mGraphics.add(new Frog(600, 250, 140));
 			mGraphics.add(new Frog(1200, 250, 140));		
 			mGraphics.add(new Shark(600,300));
+			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(2900, 250, -1, 1));
+			break;
+		case 5: 
+			mGraphics.add(new Diver(100, 50, 0, 0, 0, 900, 0));
+			mGraphics.add(new Diver(100, 400, 0, 0, 0, 900, 0));
+			mGraphics.add(new Diver(1600, 50, 90, 1500, 0, 0, 2000));
+			mGraphics.add(new Diver(2100, 200, 45, 0, 0, 0, 0));
+			mGraphics.add(new Diver(2600, 100, 135, 0, 0, 0, 0));
+			mGraphics.add(new Frog(400, 250, 100));
+			mGraphics.add(new Frog(900, 250, 100));	
+			mGraphics.add(new Frog(1200, 200, 100));
+			mGraphics.add(new Frog(1500, 350, 100));	
+			mGraphics.add(new Frog(1700, 200, 100));
+			mGraphics.add(new Frog(2350, 200, 100));	
+			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(2900, 250, -1, 1));
+			break;
+		case 6:
+			mGraphics.add(new Diver(800, 50, 90, 0, 0, 0, 300));
+			mGraphics.add(new Diver(1000, 450, 90, 0, 50, 0, 500));
+			mGraphics.add(new Diver(1500, 250, 45, 1000, 0, 1500, 400));
+			mGraphics.add(new Diver(1500, 250, 135, 1500, 0, 2000, 400));
+			mGraphics.add(new Diver(2100, 100, 90, 0, 50, 0, 500));
+			mGraphics.add(new Frog(2500, 150, 100));
+			mGraphics.add(new Frog(2500, 350, 100));
+			mGraphics.add(new Boat(600,300));//207=250-(96/2) --> 96 is height
+			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 235, -1, 1));
 			break;
 		default: 
-			mEnvironments.add(new Finish(2900, 235, -1, 1));
+			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
+			mEnvironments.add(new Finish(2900, 250, -1, 1));
 			break;
 		}
-		if(replay){
-			switch(lNumber){
-			case 1:
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				/*
-				mGraphics.add(new Collectable(500,50));
-				mGraphics.add(new Collectable(1000,400));
-				mGraphics.add(new Collectable(2000,190));
-				*/
-				break;
-				default: break;
-			}
+	}
+	private void replayLevel(int lNumber){
+		switch(lNumber){
+		case 1:
+			mGraphics.add(new Collectable(600,250));
+			mGraphics.add(new Collectable(1200,250));
+			mGraphics.add(new Collectable(750,450));
+			break;
+		case 2:
+			mGraphics.add(new Collectable(800,250));
+			mGraphics.add(new Collectable(250,50));
+			mGraphics.add(new Collectable(250,450));
+			break;
+		case 3:
+			mGraphics.add(new Collectable(500,250));
+			mGraphics.add(new Collectable(1350,50));
+			mGraphics.add(new Collectable(1350,450));
+			break;
+		case 4:
+			mGraphics.add(new Collectable(500,50));
+			mGraphics.add(new Collectable(1000,400));
+			mGraphics.add(new Collectable(2100,350));
+			break;
+		case 5: 
+			mGraphics.add(new Collectable(500,50));
+			mGraphics.add(new Collectable(1500,400));
+			mGraphics.add(new Collectable(2000,190));
+			break;
+		case 6:
+			mGraphics.add(new Collectable(600,425));
+			mGraphics.add(new Collectable(1500,50));
+			mGraphics.add(new Collectable(2500,350));
+			break;
+		default: break;
 		}
-		mLevelWidth = (int) (width/Constants.getScreen().getRatio());
 	}
 	public int update(){
 		updateList();
@@ -151,7 +203,7 @@ public class Level {
 			if(torpedo.getIsReadyToDestroy()){
 				Constants.getSoundManager().playExplosion();
 				tIterator.remove();
-			}else if(torpedo.updateDirection()){
+			}else if(torpedo.updateDirection() && torpedo.getExplosion() == false){
 				torpedo.setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				torpedo.frame();
 			}else{
@@ -213,14 +265,14 @@ public class Level {
 				}
 				graphic.frame();	//Do everything this object does every frame, like move
 			}else if(graphic.getId()==objtype.tShark){
-				sharkMovement(graphic);/*
+				sharkMovement(graphic);
 			}else if(graphic.getId()==objtype.tCollectable){
 				boolean collided = ((Collectable)graphic).getCollided();
 				graphic.frame();
 				if (collided!=((Collectable)graphic).getCollided()){
 					((Collectable)graphic).setFollowing(mFollowThis);
 					mFollowThis=graphic;
-				}*/
+				}
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
 			}
@@ -231,7 +283,7 @@ public class Level {
 			if(CollisionManager.circleCollision(graphic.getCollision(), torpedo.getCollision())){
 				if(torpedo.getHitBoat()==true){
 					((Boat) graphic).setBroken(true);
-					torpedo.setIsReadyToDestroy(true);
+					torpedo.setExplosion(true);
 				}
 			}
 		}
@@ -326,10 +378,10 @@ public class Level {
 			}
 			for(Torpedo torpedo : mTorpedoes){
 				boolean collision = false;
-				if(torpedo.getIsReadyToDestroy()==false){
+				if(torpedo.getIsReadyToDestroy()==false && torpedo.getExplosion() == false){
 					collision = ((Duck) graphic).checkObjectCollision(torpedo.getId(), torpedo.getCollision());
 					if(collision){
-						torpedo.setIsReadyToDestroy(true);
+						torpedo.setExplosion(true);
 					}
 				}
 			}

@@ -18,9 +18,9 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -67,7 +67,7 @@ public class Game extends Activity {
 		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init(1,false);
+		Constants.getLevel().init(6,true);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){

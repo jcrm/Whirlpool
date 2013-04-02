@@ -1,5 +1,6 @@
 package com.sinkingduckstudios.whirlpool.objects;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -18,6 +19,10 @@ public class Torpedo extends GraphicObject {
 	private int mHitBoatCounter = 0;
 	private int mBeepCounter = 31;
 	private boolean mIsTracking; //tracking duck?
+	private Bitmap mExplosionBitmap;
+	private Animate mExplosionAnimate;
+	private boolean mExplosion = false;
+	
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
 		init(x, y, angle);
@@ -28,7 +33,11 @@ public class Torpedo extends GraphicObject {
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.rotate(mSpeed.getAngle()+180);
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+			if(mExplosion){
+				canvas.drawBitmap(mExplosionBitmap, mExplosionAnimate.getPortion(), rect,  null);
+			}else{
+				canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+			}
 		canvas.restore();
 	}
 
@@ -38,6 +47,9 @@ public class Torpedo extends GraphicObject {
 		
 		mBitmap = SpriteManager.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mExplosionBitmap = SpriteManager.getTorpedoExplosion();
+		mExplosionAnimate = new Animate(11, 3, 4, mExplosionBitmap.getWidth(), mExplosionBitmap.getHeight());
 		
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
@@ -117,7 +129,15 @@ public class Torpedo extends GraphicObject {
 		if(move()){
 			border();
 		}
-		mAnimate.animateFrame();
+		if(mExplosion){
+			if(mExplosionAnimate.getFinished() == false){
+				mExplosionAnimate.animateFrame();
+			}else{
+				mIsReadyToDestroy = true;
+			}
+		}else{
+			mAnimate.animateFrame();
+		}
 	}
 
 	public boolean getIsReadyToDestroy() {
@@ -174,5 +194,11 @@ public class Torpedo extends GraphicObject {
 	}
 	public float getTopSpeed() {
 		return mTopSpeed;
+	}
+	public boolean getExplosion() {
+		return mExplosion;
+	}
+	public void setExplosion(boolean explosion) {
+		mExplosion = explosion;
 	}
 }
