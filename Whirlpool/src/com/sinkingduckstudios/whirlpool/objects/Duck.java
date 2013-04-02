@@ -47,17 +47,7 @@ public class Duck extends GraphicObject{
 	public void draw(Canvas canvas) {
 		if(mSharkAttack == false){
 			canvas.save();
-				/*ColorMatrix cm = new ColorMatrix();
-				cm.set(new float[]{
-									0.8f,0,0,0,100,
-									0,0.4f,0,0,80,
-									0,0,0.9f,0,20,
-									0,0,0,1,0
-									
-				});
-				Paint paint = new Paint();
-				paint.setColorFilter(new ColorMatrixColorFilter(cm));
-				 */
+				
 				Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 				canvas.translate(getCentreX(), getCentreY());
 				if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
@@ -112,8 +102,8 @@ public class Duck extends GraphicObject{
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove() && mSharkAttack == false){
-			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
-			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
+			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
@@ -173,7 +163,7 @@ public class Duck extends GraphicObject{
 		collisonMovement();
 		if(move()){
 			//only detect border if not in wpool
-			if (!getPullState()){
+			if (getPulledState()==Constants.STATE_FREE){
 				if(border()){
 					Constants.getSoundManager().playDucky();
 				}
@@ -185,7 +175,7 @@ public class Duck extends GraphicObject{
 		boolean inRadius = false;
 		switch(id){
 		case tBoat:
-			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
+			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				inRadius = true;
 			}
 			if(inRadius ==true){
@@ -199,7 +189,7 @@ public class Duck extends GraphicObject{
 			}
 			break;
 		case tShark:
-			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
+			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				return true;
 			}
 			break;

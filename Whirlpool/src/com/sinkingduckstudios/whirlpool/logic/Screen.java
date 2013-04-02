@@ -41,10 +41,10 @@ public class Screen {
 		mCentre.setPoints(width/2, height/2);
 	}
 	//getters for x and y components
-	public int getCentreX(){
+	public float getCentreX(){
 		return mCentre.getX();
 	}
-	public int getCentreY(){
+	public float getCentreY(){
 		return mCentre.getY();
 	}
 }

@@ -20,6 +20,7 @@ import com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment.envtype;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.Boat;
+//import com.sinkingduckstudios.whirlpool.objects.Collectable;
 import com.sinkingduckstudios.whirlpool.objects.Diver;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.objects.Frog;
@@ -45,7 +46,7 @@ public class Level {
 	private Bitmap mTopBorderImage;
 	private static Object mScreenLock;
 	private Rect mRect = new Rect();
-	
+	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 	public Level(){
 	}
 	public void init(){
@@ -75,7 +76,8 @@ public class Level {
 	}
 	private void levelNumber(int lNumber, boolean replay){
 		mWPoolModel.addWPool(125, 235, 10, -1, 1);
-		mGraphics.add(new Duck(40, 235));
+		mFollowThis = new Duck(40, 235);
+		mGraphics.add(mFollowThis);
 		Constants.setPlayer((Duck)mGraphics.get(0));
 		int width = 3000;
 		switch(lNumber){
@@ -128,6 +130,13 @@ public class Level {
 				break;
 			case 3:
 				break;
+			case 4:
+				/*
+				mGraphics.add(new Collectable(500,50));
+				mGraphics.add(new Collectable(1000,400));
+				mGraphics.add(new Collectable(2000,190));
+				*/
+				break;
 				default: break;
 			}
 		}
@@ -177,10 +186,17 @@ public class Level {
 	private void updateList(){		
 		for(Iterator<GraphicObject> mainIterator = mGraphics.listIterator(); mainIterator.hasNext();){
 			GraphicObject graphic = mainIterator.next();
-			graphic.setPull(false);
+			
+			boolean isColliding = false;
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
-				whirl.checkCollision(graphic);
+				if(whirl.checkCollision(graphic))
+					isColliding=true;
 			}
+			if(!isColliding){
+				graphic.setPulledBy(null);
+				graphic.setPulledState(Constants.STATE_FREE);
+			}
+			
 			for(GraphicEnvironment enviro: mEnvironments){
 				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck){
 					if(((Finish) enviro).checkCollision(graphic)){
@@ -197,7 +213,14 @@ public class Level {
 				}
 				graphic.frame();	//Do everything this object does every frame, like move
 			}else if(graphic.getId()==objtype.tShark){
-				sharkMovement(graphic);
+				sharkMovement(graphic);/*
+			}else if(graphic.getId()==objtype.tCollectable){
+				boolean collided = ((Collectable)graphic).getCollided();
+				graphic.frame();
+				if (collided!=((Collectable)graphic).getCollided()){
+					((Collectable)graphic).setFollowing(mFollowThis);
+					mFollowThis=graphic;
+				}*/
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
 			}

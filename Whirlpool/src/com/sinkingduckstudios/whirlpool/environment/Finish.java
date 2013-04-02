@@ -5,10 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
+import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
 public class Finish extends GraphicEnvironment{
@@ -156,28 +158,25 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
-	public boolean checkCollision(GraphicObject graphic){
-		boolean hit = false;
-		if (graphic.getId()==objtype.tDuck){
-			if (graphic.getPullState() == false && (!finished || !collisionDone)){
-				int collide = collision(graphic);
-				
-				if (collide == 1 || collide == 2){
-					hit = true;
-					collisionDone = false;
-					graphic.setPull(true);
-					mHit = true;
-					pull(graphic);
-					if (testAngle(graphic)){
-						graphic.resetwPoolCounter();
-						graphic.setAngle(getWAngle());
-						collisionDone = true;
-						finished = true;
-					}
-				}
+	
+	public boolean checkCollision(GraphicObject a){
+		if (a.getId()==objtype.tDuck ){
+			boolean collide = collision(a);
+			
+			if (collide&&a.getPulledBy()==null){
+				a.setPulledState(Constants.STATE_FINISHING);
 			}
+			
+			if (collide&&a.getPulledState()==Constants.STATE_FINISHING){//if the duck is touching finish
+				
+				collisionDone = false;
+				pull(a);//pull round whirlpool
+				mHit=true;
+				return true;
+			}
+			
 		}
-		return hit;
+		return false;
 	}
 
 	public boolean testAngle(GraphicObject graphic){
@@ -252,7 +251,7 @@ public class Finish extends GraphicEnvironment{
 
 	}
 
-	public int collision(GraphicObject graphic){
+	public boolean collision(GraphicObject graphic){
 
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
 
@@ -262,16 +261,8 @@ public class Finish extends GraphicEnvironment{
 
 		dist = (distX*distX)+(distY*distY);
 
-		//if (graphic.GetPullState()==false){ //if you can pull the object
-
-		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
-			return 2;
-		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
-			return 1;
-
-		//}
-
-		return 0;
+		return(dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ));
+		
 
 	}
 

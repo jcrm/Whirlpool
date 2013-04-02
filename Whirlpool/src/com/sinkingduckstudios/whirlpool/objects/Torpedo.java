@@ -17,7 +17,7 @@ public class Torpedo extends GraphicObject {
 	private boolean mHitBoat = false;
 	private int mHitBoatCounter = 0;
 	private int mBeepCounter = 31;
-	
+	private boolean mIsTracking; //tracking duck?
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
 		init(x, y, angle);
@@ -40,21 +40,14 @@ public class Torpedo extends GraphicObject {
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
+		mIsTracking=true;
 	}
 
 	@Override
 	public void init(){
-		mProperties.init(30, 60, 50, 50);		
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
-		
-		mBitmap = SpriteManager.getTorpedo();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+		init(30,60,mId.tAngle);
 	}
 	
 	@Override
@@ -134,8 +127,14 @@ public class Torpedo extends GraphicObject {
 	public void setIsReadyToDestroy(boolean isReadyToDestroy) {
 		mIsReadyToDestroy = isReadyToDestroy;
 	}
-	public void setDuckPosition(int duckX, int duckY){
-		mSpeed.setAngle(180+CollisionManager.calcAngle(duckX, duckY, getCentreX(), getCentreY()));
+	public boolean getTracking(){
+		return mIsTracking;
+	}
+	public void setTracking(boolean b){
+		mIsTracking=b;
+	}
+	public void setDuckPosition(float f, float g){
+		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed(); 
 		if(tempSpeed<mTopSpeed){
 			mSpeed.setSpeed(tempSpeed+1);
@@ -151,10 +150,12 @@ public class Torpedo extends GraphicObject {
 		mDuckCounter = duckCounter;
 	}
 	public boolean updateDirection(){
-		mDuckCounter++;
-		if(mDuckCounter>10){
-			mDuckCounter = 0;
-			return true;
+		if(mIsTracking){
+			mDuckCounter++;
+			if(mDuckCounter>10){
+				mDuckCounter = 0;
+				return true;
+			}
 		}
 		return false;
 	}

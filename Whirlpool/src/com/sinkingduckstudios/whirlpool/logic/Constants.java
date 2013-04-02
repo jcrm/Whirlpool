@@ -26,6 +26,12 @@ public class Constants {
 	private static Object sScreenLock = 0;
 	private static SoundManager sSoundManager = new SoundManager();
 	
+	
+	public static int STATE_FREE = 0;
+	public static int STATE_PULLED = 1;
+	public static int STATE_LEAVING = 2;
+	public static int STATE_FINISHING = 3;
+	
 	synchronized public static Object getLock() {
 		return sScreenLock;
 	}
