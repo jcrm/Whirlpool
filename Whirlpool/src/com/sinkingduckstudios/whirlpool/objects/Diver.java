@@ -41,10 +41,10 @@ public class Diver extends GraphicObject{
 	public Diver(int x, int y, int angle, int left, int top, int right, int bottom){
 		mId = objtype.tDiver;
 		init(x, y, angle);
-		mLeftBorder = left;
-		mTopBorder = top;
-		mRightBorder = right;
-		mBottomBorder = bottom;
+		mLeftBorder = (int) (left/Constants.getScreen().getRatio());
+		mTopBorder = (int) (top/Constants.getScreen().getRatio());
+		mRightBorder = (int) (right/Constants.getScreen().getRatio());
+		mBottomBorder = (int) (bottom/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
 	@Override
@@ -78,22 +78,9 @@ public class Diver extends GraphicObject{
 	}
 	@Override
 	public void init() {
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 						new Random().nextInt(Constants.getLevel().getLevelHeight()),
-						100, 100);	
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
-		
-		mBitmap = SpriteManager.getDiver();
-		mUpBitmap = SpriteManager.getDiverUp();
-		mDownBitmap = SpriteManager.getDiverDown();
-		
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
-		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
-		
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+						0);	
 	}
 	public void init(int x, int y, int angle) {
 		mProperties.init(x, y, 100, 100);	

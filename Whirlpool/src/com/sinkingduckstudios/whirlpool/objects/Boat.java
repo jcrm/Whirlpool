@@ -36,20 +36,13 @@ public class Boat extends GraphicObject{
 
 	@Override
 	public void init() {
-		mBoatState = BoatType.bReady;
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
-				new Random().nextInt(Constants.getLevel().getLevelHeight()/4), 
-				96, 96);	
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
-		mBitmap = SpriteManager.getBoat();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-	
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/4));
 	}
 	public void init(int x, int y) {
 		mBoatState = BoatType.bReady;
+		x-=((96/Constants.getScreen().getRatio())/2);
+		y-=((96/Constants.getScreen().getRatio())/2);
 		mProperties.init(x, y, 96, 96);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();

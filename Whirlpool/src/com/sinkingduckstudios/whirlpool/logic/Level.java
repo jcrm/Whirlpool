@@ -149,7 +149,7 @@ public class Level {
 			mGraphics.add(new Diver(2100, 100, 90, 0, 50, 0, 500));
 			mGraphics.add(new Frog(2500, 150, 100));
 			mGraphics.add(new Frog(2500, 350, 100));
-			mGraphics.add(new Boat(600,300));//207=250-(96/2) --> 96 is height
+			mGraphics.add(new Boat(600,250));//207=250-(96/2) --> 96 is height
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 235, -1, 1));
 			break;
@@ -198,8 +198,19 @@ public class Level {
 		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
 		//could maybe optimise later TODO
+		Constants.setDuckDist(9000000);//max dist
 		for(Iterator<Torpedo> tIterator = mTorpedoes.listIterator(); tIterator.hasNext();){
 			Torpedo torpedo = tIterator.next();
+			boolean isColliding = false;
+			for(Whirlpool whirl : mWPoolModel.getWpools()){
+				if(whirl.checkCollision(torpedo))
+					isColliding=true;
+			}
+			if(!isColliding){
+				torpedo.setPulledBy(null);
+				torpedo.setPulledState(Constants.STATE_FREE);
+			}
+					
 			if(torpedo.getIsReadyToDestroy()){
 				Constants.getSoundManager().playExplosion();
 				tIterator.remove();
@@ -210,7 +221,12 @@ public class Level {
 				torpedo.checkBeep();
 				torpedo.frame();	//Do everything this object does every frame, like move
 			}
+			float theDist = torpedo.getDist();
+			if (theDist<Constants.getDuckDist())
+				Constants.setDuckDist(theDist);	
 		}
+		float vol = 1 - (Constants.getDuckDist()/9000000);
+		Constants.getSoundManager().alterBeepVolume(vol);
 		for(int i = 0; i < mWPoolModel.getWpools().size(); i++){
 			mWPoolModel.getWpools().get(i).frame();
 			if(mWPoolModel.getWpools().get(i).getFinished()){

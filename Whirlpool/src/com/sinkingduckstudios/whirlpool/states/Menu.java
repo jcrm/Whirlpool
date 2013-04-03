@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import com.sinkingduckstudios.whirlpool.R;
@@ -30,11 +28,9 @@ public class Menu extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_menu);
         
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         
         Constants.clearLevel();
         Constants.setState(this);
@@ -45,7 +41,8 @@ public class Menu extends Activity {
         Constants.setContext(getApplicationContext());
         
         Display display = getWindowManager().getDefaultDisplay(); 
-    	Screen theScreen = new Screen(display.getWidth(), display.getHeight());
+    	@SuppressWarnings("deprecation")
+		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
     	Constants.setScreen(theScreen);
     	//RelativeLayout theLayout = (RelativeLayout) findViewById(R.id.menuLayout)
         
@@ -58,7 +55,7 @@ public class Menu extends Activity {
 		@Override
 		public void onClick(View view) {
 			//Constants.getScreen().set(menuView.getWidth(), menuView.getHeight());
-    		startActivity(new Intent(getApplicationContext(), Game.class));
+    		startActivity(new Intent(getApplicationContext(), ZoneScreen.class));
     		finish();
         }
 	};
