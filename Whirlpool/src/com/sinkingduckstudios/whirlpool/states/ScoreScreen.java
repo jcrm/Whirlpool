@@ -14,8 +14,6 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import com.sinkingduckstudios.whirlpool.R;
@@ -50,6 +48,7 @@ public class ScoreScreen extends Activity {
 		Constants.setContext(getApplicationContext());
 		
 		Display display = getWindowManager().getDefaultDisplay();
+		@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
 		
@@ -67,7 +66,10 @@ public class ScoreScreen extends Activity {
     		finish();
         }
 	};
-	
+	public void onBackPressed(){
+		startActivity(new Intent(getApplicationContext(), Menu.class));
+		finish();
+	}
 	@Override
 	public void onDestroy(){
 		super.onDestroy();

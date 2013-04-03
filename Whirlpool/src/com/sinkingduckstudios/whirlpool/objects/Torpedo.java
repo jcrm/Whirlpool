@@ -205,4 +205,16 @@ public class Torpedo extends GraphicObject {
 	public void setExplosion(boolean explosion) {
 		mExplosion = explosion;
 	}
+	public float getDist() {
+		float x1 = getCentreX();
+		float y1 = getCentreY();
+		float x2 = Constants.getPlayer().getCentreX();
+		float y2 = Constants.getPlayer().getCentreY();
+		
+		float distX = x2-x1;
+		float distY = y2-y1;
+		
+		return (distX*distX)+(distY*distY); 
+		
+	}
 }

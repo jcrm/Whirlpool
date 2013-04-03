@@ -17,7 +17,7 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Whirlpool extends GraphicObject{
-	private final float sharkFactor = 0.5f;
+	//private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;

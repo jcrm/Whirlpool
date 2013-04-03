@@ -10,6 +10,7 @@ package com.sinkingduckstudios.whirlpool.states;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -17,18 +18,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Level;
-import com.sinkingduckstudios.whirlpool.manager.SoundManager;
 import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Game extends Activity {
@@ -46,6 +43,7 @@ public class Game extends Activity {
 	//Tick time in milliseconds
 	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -113,11 +111,22 @@ public class Game extends Activity {
 				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), Menu.class));
+				startActivity(new Intent(getApplicationContext(), ZoneScreen.class));
 				finish();
 			}
 		}
 	};
+	
+	public void onBackPressed(){
+		synchronized(Constants.getLock()){
+			mTime.cancel();
+			Constants.getSoundManager().unloadAll();
+			Constants.getSoundManager().cleanup();
+			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+			startActivity(new Intent(getApplicationContext(), ZoneScreen.class));
+			finish();
+		}
+	}
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
 	}

@@ -198,6 +198,7 @@ public class Level {
 		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
 		//could maybe optimise later TODO
+		Constants.setDuckDist(9000000);//max dist
 		for(Iterator<Torpedo> tIterator = mTorpedoes.listIterator(); tIterator.hasNext();){
 			Torpedo torpedo = tIterator.next();
 			boolean isColliding = false;
@@ -220,7 +221,12 @@ public class Level {
 				torpedo.checkBeep();
 				torpedo.frame();	//Do everything this object does every frame, like move
 			}
+			float theDist = torpedo.getDist();
+			if (theDist<Constants.getDuckDist())
+				Constants.setDuckDist(theDist);	
 		}
+		float vol = 1 - (Constants.getDuckDist()/9000000);
+		Constants.getSoundManager().alterBeepVolume(vol);
 		for(int i = 0; i < mWPoolModel.getWpools().size(); i++){
 			mWPoolModel.getWpools().get(i).frame();
 			if(mWPoolModel.getWpools().get(i).getFinished()){

@@ -13,9 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageButton;
 
 import com.sinkingduckstudios.whirlpool.R;
@@ -41,6 +39,7 @@ public class ZoneScreen extends Activity{
 		Constants.setContext(getApplicationContext());
 		
 		Display display = getWindowManager().getDefaultDisplay();
+		@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
 		
@@ -52,11 +51,14 @@ public class ZoneScreen extends Activity{
 	private OnClickListener goToBath = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-    		startActivity(new Intent(getApplicationContext(), Game.class));
+    		startActivity(new Intent(getApplicationContext(), Loading.class));
     		finish();
         }
 	};
-	
+	public void onBackPressed(){
+		startActivity(new Intent(getApplicationContext(), Menu.class));
+		finish();
+	}
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
