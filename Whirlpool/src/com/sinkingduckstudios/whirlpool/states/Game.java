@@ -10,7 +10,6 @@ package com.sinkingduckstudios.whirlpool.states;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -31,6 +30,7 @@ import com.sinkingduckstudios.whirlpool.views.GameView;
 public class Game extends Activity {
 	private GameView mPanel;
 	private Level mLevel;
+	private int levelselected;
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
@@ -43,11 +43,12 @@ public class Game extends Activity {
 	//Tick time in milliseconds
 	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
-	
+	public int timepassed;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
+		Intent game = getIntent();
+		levelselected = game.getIntExtra("levelselected", 0);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_game);
 		mPanel = (GameView) findViewById(R.id.gameview);
@@ -71,7 +72,7 @@ public class Game extends Activity {
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init(6,true);
+		Constants.getLevel().init(levelselected,true);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
@@ -99,7 +100,7 @@ public class Game extends Activity {
 
 		mTime.schedule(new MainThread(),0, 25);
 
-
+		timepassed=0;
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
 		menuButton.setOnClickListener(goToMenu);
 	}
@@ -111,7 +112,7 @@ public class Game extends Activity {
 				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), ZoneScreen.class));
+				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
 				finish();
 			}
 		}
@@ -123,7 +124,7 @@ public class Game extends Activity {
 			Constants.getSoundManager().unloadAll();
 			Constants.getSoundManager().cleanup();
 			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-			startActivity(new Intent(getApplicationContext(), ZoneScreen.class));
+			startActivity(new Intent(getApplicationContext(), LevelSelect.class));
 			finish();
 		}
 	}
@@ -218,17 +219,19 @@ public class Game extends Activity {
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-
+			
 			//The code below sets up the Minute and seconds
 			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
 			String seconds;	
-			if( (millisUntilFinished/1000)%60<10){
-				seconds=new String("0" +(millisUntilFinished/1000)%60);				
+			
+			timepassed++;
+			if( (timepassed)%60<10){
+				seconds=new String("0" +(timepassed)%60);				
 			}else{
-				seconds=new String("" +(millisUntilFinished/1000)%60);
+				seconds=new String("" +(timepassed)%60);
 			}
 
-			mTimertext.setText("" + (millisUntilFinished/1000)/60 + ":" + seconds);
+			mTimertext.setText("" + (timepassed)/60 + ":" + seconds);
 		}
 	}
 }

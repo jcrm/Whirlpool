@@ -51,7 +51,7 @@ public class ZoneScreen extends Activity{
 	private OnClickListener goToBath = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-    		startActivity(new Intent(getApplicationContext(), Loading.class));
+    		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
     		finish();
         }
 	};
