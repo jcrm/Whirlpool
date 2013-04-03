@@ -288,4 +288,13 @@ public class SpriteManager {
 	public static void setSharkAttack(Bitmap shark) {
 		mSharkAttack = shark;
 	}
+	public static Bitmap getTorpedoExplosion() {
+		if(mTorpedoExplosion==null){
+			mTorpedoExplosion =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.torpedo_explosion_sprites);
+		}
+		return mTorpedoExplosion;
+	}
+	public static void setTorpedoExplosion(Bitmap torpedo) {
+		mTorpedoExplosion = torpedo;
+	}
 }

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
@@ -29,7 +30,10 @@ public class Finish extends GraphicEnvironment{
 		mId = envtype.tFinish;
 		init();
 	}
-
+	public Finish(int x, int y, int wa, int c){
+		mId = envtype.tFinish;
+		init(x,y,wa,c);
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -72,7 +76,23 @@ public class Finish extends GraphicEnvironment{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
+	public void init(int x, int y, int wa, int c){
+		mProperties.init(x, y, 130, 130);	
 
+		mBitmap = SpriteManager.getFinish();
+		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
+		
+		mHitBitmap = SpriteManager.getFinishHit();
+		mHitAnimate = new Animate(40, 5, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		
+		mSpeed.setMove(false);
+		mSpeed.setAngle(mId.tAngle);
+		mSpeed.setSpeed(mId.tSpeed);
+		setCentreX(x);
+    	setCentreY(y);
+    	setWAngle(angle);
+    	setClockwise(c);
+	}
 	@Override
 	public boolean move() {
 		return false;
@@ -137,28 +157,25 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
-	public boolean checkCollision(GraphicObject graphic){
-		boolean hit = false;
-		if (graphic.getId()==objtype.tDuck){
-			if (graphic.getPullState() == false && (!finished || !collisionDone)){
-				int collide = collision(graphic);
-				
-				if (collide == 1 || collide == 2){
-					hit = true;
-					collisionDone = false;
-					graphic.setPull(true);
-					mHit = true;
-					pull(graphic);
-					if (testAngle(graphic)){
-						graphic.resetwPoolCounter();
-						graphic.setAngle(getWAngle());
-						collisionDone = true;
-						finished = true;
-					}
-				}
+	
+	public boolean checkCollision(GraphicObject a){
+		if (a.getId()==objtype.tDuck ){
+			boolean collide = collision(a);
+			
+			if (collide&&a.getPulledBy()==null){
+				a.setPulledState(Constants.STATE_FINISHING);
 			}
+			
+			if (collide&&a.getPulledState()==Constants.STATE_FINISHING){//if the duck is touching finish
+				
+				collisionDone = false;
+				pull(a);//pull round whirlpool
+				mHit=true;
+				return true;
+			}
+			
 		}
-		return hit;
+		return false;
 	}
 
 	public boolean testAngle(GraphicObject graphic){
@@ -233,7 +250,7 @@ public class Finish extends GraphicEnvironment{
 
 	}
 
-	public int collision(GraphicObject graphic){
+	public boolean collision(GraphicObject graphic){
 
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
 
@@ -243,16 +260,8 @@ public class Finish extends GraphicEnvironment{
 
 		dist = (distX*distX)+(distY*distY);
 
-		//if (graphic.GetPullState()==false){ //if you can pull the object
-
-		if (dist <= ( ((this.getRadius()/2) + (graphic.getRadius()/2)) * ((this.getRadius()/2) + (graphic.getRadius()/2)) ))
-			return 2;
-		else if (dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ))
-			return 1;
-
-		//}
-
-		return 0;
+		return(dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ));
+		
 
 	}
 

@@ -18,9 +18,9 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -31,7 +31,7 @@ import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Game extends Activity {
 	private GameView mPanel;
-	private Level mLevelOne;
+	private Level mLevel;
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
@@ -56,8 +56,8 @@ public class Game extends Activity {
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
 		//TODO remember to do this in all the other states
-		mLevelOne = new Level();
-		setCurrentLevel(mLevelOne);
+		mLevel = new Level();
+		setCurrentLevel(mLevel);
 		mTimertext = (TextView) this.findViewById(R.id.time);
 		
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
@@ -67,7 +67,7 @@ public class Game extends Activity {
 		Constants.getSoundManager().playBackground();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init();
+		Constants.getLevel().init(6,true);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
