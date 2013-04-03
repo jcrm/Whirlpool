@@ -41,6 +41,8 @@ public class Boat extends GraphicObject{
 	}
 	public void init(int x, int y) {
 		mBoatState = BoatType.bReady;
+		x-=((96/Constants.getScreen().getRatio())/2);
+		y-=((96/Constants.getScreen().getRatio())/2);
 		mProperties.init(x, y, 96, 96);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();

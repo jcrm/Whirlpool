@@ -149,7 +149,7 @@ public class Level {
 			mGraphics.add(new Diver(2100, 100, 90, 0, 50, 0, 500));
 			mGraphics.add(new Frog(2500, 150, 100));
 			mGraphics.add(new Frog(2500, 350, 100));
-			mGraphics.add(new Boat(600,300));//207=250-(96/2) --> 96 is height
+			mGraphics.add(new Boat(600,250));//207=250-(96/2) --> 96 is height
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 235, -1, 1));
 			break;
@@ -200,6 +200,16 @@ public class Level {
 		//could maybe optimise later TODO
 		for(Iterator<Torpedo> tIterator = mTorpedoes.listIterator(); tIterator.hasNext();){
 			Torpedo torpedo = tIterator.next();
+			boolean isColliding = false;
+			for(Whirlpool whirl : mWPoolModel.getWpools()){
+				if(whirl.checkCollision(torpedo))
+					isColliding=true;
+			}
+			if(!isColliding){
+				torpedo.setPulledBy(null);
+				torpedo.setPulledState(Constants.STATE_FREE);
+			}
+					
 			if(torpedo.getIsReadyToDestroy()){
 				Constants.getSoundManager().playExplosion();
 				tIterator.remove();

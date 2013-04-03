@@ -57,7 +57,7 @@ public class SoundManager
  	
 
  	
- 	protected MediaPlayer mBackground = new MediaPlayer();
+ 	protected MediaPlayer mBackground;
  	
 	// Constructor, setup the audio manager and store the app context
 	public SoundManager(Context appContext)
@@ -71,12 +71,9 @@ public class SoundManager
 		mLeftVolume =mMasterVolume;			// the volume of the left speaker, set to on full
 		mRightVolume = mMasterVolume;			// the volume of the right speaker, set to on full
 		
-		// load all sounds.
-		loadDucky();
-		loadOtherSounds();
-		loadFrog();
-		loadDiver();
-		loadTugBoat();
+		if(mBackground ==null){
+			mBackground = new MediaPlayer();
+		}
 	}//  end consturctor
 
 	
@@ -152,8 +149,11 @@ public class SoundManager
 		if(mWhirlpool==0){
 			mWhirlpool = load(R.raw.whirlpool2);
 		}
-		
-		mBackground =MediaPlayer.create(pContext, R.raw.temp_bg_music);
+		if(mBackground ==null){
+			mBackground = new MediaPlayer();
+		}
+		if(!mBackground.isPlaying())
+			mBackground =MediaPlayer.create(pContext, R.raw.temp_bg_music);
 		
 		if (mAmbientbath == 0){ return false;}
 		if (mDownplug == 0){ return false;}
@@ -450,8 +450,13 @@ public class SoundManager
 	// a function to play the background music looped
 	public void playBackGround ()
 	{
-		mBackground.setLooping(true);
-		mBackground.start();
+		if(mBackground !=null){
+			if(!mBackground.isPlaying()){
+				mBackground.setLooping(true);
+				mBackground.start();
+				Log.w("backgroud","played");
+			}
+		}
 	}
 	
 	// a function to play the ambient noise 
@@ -528,7 +533,7 @@ public class SoundManager
 		//													  - loop, 0 = not looped, -1 = loop infinatly, +int = loops that number of times;
 		//													  - rate, the rate at whitch the sounds is to be played 
 		// play the sound required.
-		if(SoundID != 0){
+		if(SoundID != 0 && mSndPool != null){
 			mSndPool.play(SoundID, mLeftVolume, mRightVolume, 1, 0, mRate);
 		}
 	}// end PlaySound
@@ -579,6 +584,8 @@ public class SoundManager
 	{
 		mSndPool.autoResume();	//resume the sound pools sounds
 		mBackground.start();	// resume the background music
+		Log.w("backgroud","resumed");
+
 	}
 	
 	// a function to clean up/ release all of the resourses

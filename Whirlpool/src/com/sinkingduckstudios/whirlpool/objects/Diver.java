@@ -41,10 +41,10 @@ public class Diver extends GraphicObject{
 	public Diver(int x, int y, int angle, int left, int top, int right, int bottom){
 		mId = objtype.tDiver;
 		init(x, y, angle);
-		mLeftBorder = left;
-		mTopBorder = top;
-		mRightBorder = right;
-		mBottomBorder = bottom;
+		mLeftBorder = (int) (left/Constants.getScreen().getRatio());
+		mTopBorder = (int) (top/Constants.getScreen().getRatio());
+		mRightBorder = (int) (right/Constants.getScreen().getRatio());
+		mBottomBorder = (int) (bottom/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
 	@Override

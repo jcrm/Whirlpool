@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -48,7 +49,7 @@ public class Game extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_game);
 		mPanel = (GameView) findViewById(R.id.gameview);
@@ -58,16 +59,18 @@ public class Game extends Activity {
 		mLevel = new Level();
 		setCurrentLevel(mLevel);
 		mTimertext = (TextView) this.findViewById(R.id.time);
-		
+
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
-		Constants.setSoundManager(new SoundManager(getApplicationContext()));
-		Constants.getSoundManager().loadDucky();/*
-		Constants.getSoundManager().loadDiver();
-		Constants.getSoundManager().loadFrog();
-		Constants.getSoundManager().loadTugBoat();*/
-		Constants.getSoundManager().loadOtherSounds();
-		Constants.getSoundManager().playBackGround();
+		Constants.createSoundManager(getApplicationContext());
+
+//		Constants.getSoundManager().loadDucky();
+//		Constants.getSoundManager().loadDiver();
+//		Constants.getSoundManager().loadFrog();
+//		Constants.getSoundManager().loadTugBoat();
+//		Constants.getSoundManager().loadOtherSounds();
+//		Constants.getSoundManager().playBackGround();
+
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init(6,true);
@@ -107,11 +110,13 @@ public class Game extends Activity {
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
 				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
 				finish();
 			}
-        }
+		}
 	};
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
@@ -173,11 +178,11 @@ public class Game extends Activity {
 	public void onResume(){
 		mPaused = false;
 		super.onResume();
-		Constants.setSoundManager(new SoundManager(getApplicationContext()));
+		Constants.createSoundManager(getApplicationContext());
 		Constants.getSoundManager().loadDucky();
-		/*Constants.getSoundManager().loadDiver();
+		Constants.getSoundManager().loadDiver();
 		Constants.getSoundManager().loadFrog();
-		Constants.getSoundManager().loadTugBoat();*/
+		Constants.getSoundManager().loadTugBoat();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().playBackGround();
 	}
@@ -188,8 +193,8 @@ public class Game extends Activity {
 		public MyCountDownTimer(long startTime, long interval) {
 			super(startTime, interval);
 		}
-		
-		
+
+
 		@Override
 		public void onFinish(){
 			if(mPaused == false){
@@ -201,10 +206,10 @@ public class Game extends Activity {
 				//finish game
 			}
 		}
-		
+
 		@Override
 		public void onTick(long millisUntilFinished) {
-			
+
 			//The code below sets up the Minute and seconds
 			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
 			String seconds;	

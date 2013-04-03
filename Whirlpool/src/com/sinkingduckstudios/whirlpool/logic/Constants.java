@@ -25,13 +25,13 @@ public class Constants {
 	private static GameView sPanel;
 	private static Object sScreenLock = 0;
 	private static SoundManager sSoundManager;
-	
-	
+
+
 	public static int STATE_FREE = 0;
 	public static int STATE_PULLED = 1;
 	public static int STATE_LEAVING = 2;
 	public static int STATE_FINISHING = 3;
-	
+
 	synchronized public static Object getLock() {
 		return sScreenLock;
 	}
@@ -83,7 +83,8 @@ public class Constants {
 	public static SoundManager getSoundManager() {
 		return sSoundManager;
 	}
-	public static void setSoundManager(SoundManager soundManager) {
-		sSoundManager = soundManager;
+	public static void createSoundManager(Context appContext) {
+		if(sSoundManager==null)
+			sSoundManager = new SoundManager(appContext);
 	}
 }
