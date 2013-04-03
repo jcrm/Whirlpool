@@ -72,33 +72,8 @@ public class Shark extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-				new Random().nextInt(Constants.getLevel().getLevelHeight()),
-				100, 100);
-		mStart = new Point(getCentreX(), getCentreY());		
-		float dX = new Random().nextInt((int)getCentreX());
-		float dY = new Random().nextInt(Constants.getLevel().getLevelHeight());
-		mDropLocation = new Point((int)dX,(int)dY);
-		
-		mBitmap = SpriteManager.getShark();
-		mUpBitmap = SpriteManager.getSharkUp();
-		mDownBitmap = SpriteManager.getSharkDown();
-		mAsleepBitmap = SpriteManager.getSharkAsleep();
-		mAttackBitmap = SpriteManager.getSharkAttack();
-		
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
-		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
-		mAsleepAnimate = new Animate(33, 5, 8, mAsleepBitmap.getWidth(), mAsleepBitmap.getHeight());
-		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
-		
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
-		mSharkRadius = mProperties.getRadius()*2;
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
-		
-		mSharkState = SharkType.tAsleep;
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+				new Random().nextInt(Constants.getLevel().getLevelHeight()));
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 100, 100);
@@ -121,12 +96,10 @@ public class Shark extends GraphicObject{
 		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mSharkRadius = mProperties.getRadius()*2;
-		Log.v("Shark Init Speed", Float.toString(mSharkRadius));
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		Log.v("Shark Speed", Float.toString(mSpeed.getSpeed()));
 		
 		mSharkState = SharkType.tAsleep;
 	}

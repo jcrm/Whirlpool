@@ -126,8 +126,10 @@ public class Torpedo extends GraphicObject {
 
 	@Override
 	public void frame() {
-		if(move()){
-			border();
+		if(mExplosion == false){
+			if(move()){
+				border();
+			}
 		}
 		if(mExplosion){
 			if(mExplosionAnimate.getFinished() == false){
@@ -180,10 +182,12 @@ public class Torpedo extends GraphicObject {
 		return false;
 	}
 	public void checkBeep(){
-		mBeepCounter++;
-		if(mBeepCounter>30){
-			mBeepCounter = 0;
-			Constants.getSoundManager().playBeepFast();
+		if(mExplosion == false){
+			mBeepCounter++;
+			if(mBeepCounter>30){
+				mBeepCounter = 0;
+				Constants.getSoundManager().playBeepFast();
+			}
 		}
 	}
 	public boolean getHitBoat() {

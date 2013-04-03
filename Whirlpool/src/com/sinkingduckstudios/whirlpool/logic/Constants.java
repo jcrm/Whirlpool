@@ -24,7 +24,7 @@ public class Constants {
 	private static Context sContext;
 	private static GameView sPanel;
 	private static Object sScreenLock = 0;
-	private static SoundManager sSoundManager = new SoundManager();
+	private static SoundManager sSoundManager;
 	
 	
 	public static int STATE_FREE = 0;
@@ -73,7 +73,6 @@ public class Constants {
 	}
 	public static void setContext(Context context) {
 		sContext = context;
-		sSoundManager.initContext(sContext);
 	}
 	public static GameView getPanel() {
 		return sPanel;

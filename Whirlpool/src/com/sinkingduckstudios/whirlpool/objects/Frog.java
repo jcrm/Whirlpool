@@ -41,20 +41,12 @@ public class Frog extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				(Constants.getLevel().getLevelHeight()/2)-70,
-				80, 80);	
+				180);	
 
 		mBitmap = SpriteManager.getFrog();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
-		//used for locating the frog round the circle
-		setFrogCentreX(getCentreX());
-		setFrogCentreY(getCentreY());
-		setFrogRadius(180);
 	}
 	public void init(int x, int y, int r) {
 		mProperties.init(x-r, y, 80, 80);	
@@ -75,7 +67,7 @@ public class Frog extends GraphicObject{
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
-			mFrogAngle-=mSpeed.getSpeed()/150;
+			mFrogAngle-=mSpeed.getSpeed()/100;
 			return true;
 		}
 		return false;

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Level;
+import com.sinkingduckstudios.whirlpool.manager.SoundManager;
 import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Game extends Activity {
@@ -48,10 +49,8 @@ public class Game extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_game);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.activity_game);
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
@@ -62,9 +61,13 @@ public class Game extends Activity {
 		
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
-
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
+		Constants.setSoundManager(new SoundManager(getApplicationContext()));
+		Constants.getSoundManager().loadDucky();/*
+		Constants.getSoundManager().loadDiver();
+		Constants.getSoundManager().loadFrog();
+		Constants.getSoundManager().loadTugBoat();*/
+		Constants.getSoundManager().loadOtherSounds();
+		Constants.getSoundManager().playBackGround();
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init(6,true);
@@ -153,6 +156,7 @@ public class Game extends Activity {
 	public void onPause(){
 		mCountDownTimer.cancel();
 		mPaused = true;
+		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
@@ -161,16 +165,21 @@ public class Game extends Activity {
 	public void onDestroy(){
 		mCountDownTimer.cancel();
 		mPaused = true;
+		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onDestroy();
 	}
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();/*
-		Constants.getSoundManager().initContext(getApplicationContext());
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();*/
+		super.onResume();
+		Constants.setSoundManager(new SoundManager(getApplicationContext()));
+		Constants.getSoundManager().loadDucky();
+		/*Constants.getSoundManager().loadDiver();
+		Constants.getSoundManager().loadFrog();
+		Constants.getSoundManager().loadTugBoat();*/
+		Constants.getSoundManager().loadOtherSounds();
+		Constants.getSoundManager().playBackGround();
 	}
 	//
 	//Timer Class
