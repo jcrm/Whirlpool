@@ -29,7 +29,11 @@ public class Loading extends Activity {
         new Handler().postDelayed (new Runnable(){
         	@Override
         	public void run(){
-        		startActivity(new Intent(getApplicationContext(), Game.class));
+        		Intent game = (new Intent(getApplicationContext(),Game.class));
+    			
+    			game.putExtra("levelselected", getIntent().getIntExtra("levelselected", 0));
+    			
+    			startActivity(game);
         		finish();
         	}
         },500);

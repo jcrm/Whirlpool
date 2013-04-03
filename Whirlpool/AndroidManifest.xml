@@ -48,6 +48,10 @@
             android:name="com.sinkingduckstudios.whirlpool.states.ZoneScreen"
             >
         </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.LevelSelect"
+            >
+        </activity>
     </application>
 
 </manifest>
