@@ -11,6 +11,8 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
@@ -45,6 +47,13 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
 		if(mSharkAttack == false){
 			canvas.save();
 				
@@ -86,6 +95,7 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, (mSpeed.getAngle()+180));
 		if(mSpeed.getMove() && mSharkAttack == false){
 			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

@@ -35,7 +35,7 @@ public class ZoneScreen extends Activity{
 		Constants.setState(this);
 		
 		ImageButton bathZoneButton = ((ImageButton)findViewById(R.id.bathzone));
-		
+		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		Constants.setContext(getApplicationContext());
 		
 		Display display = getWindowManager().getDefaultDisplay();
@@ -44,7 +44,7 @@ public class ZoneScreen extends Activity{
 		Constants.setScreen(theScreen);
 		
 		bathZoneButton.setOnClickListener(goToBath);
-		
+		returnButton.setOnClickListener(goToMenu);
 		zoneScreenView=(ZoneScreenView)findViewById(R.id.zoneScreenView);
 	}
 	
@@ -52,6 +52,13 @@ public class ZoneScreen extends Activity{
 		@Override
 		public void onClick(View view) {
     		startActivity(new Intent(getApplicationContext(), Loading.class));
+    		finish();
+        }
+	};
+	private OnClickListener goToMenu = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+    		startActivity(new Intent(getApplicationContext(), Menu.class));
     		finish();
         }
 	};

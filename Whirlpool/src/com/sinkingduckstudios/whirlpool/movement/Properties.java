@@ -19,6 +19,8 @@ public class Properties {
 	private int mHeight = 0;
 	private int mOriginalWidth = 0;
 	private int mOriginalHeight = 0;
+	public Point mOriginalRect[] = new Point[4];
+	public Point mCollisionRect[] = new Point[4];
 	
 	public Properties(){
 	}
@@ -33,6 +35,16 @@ public class Properties {
 		mCentre.setPoints(x+(mWidth/2), y+(mHeight/2));
 		mBottomRight.setPoints(x+mWidth, y+mHeight);
 		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
+		
+		mOriginalRect[0] = new Point(getTopLeftX(), getTopLeftY());
+		mOriginalRect[1] = new Point(getBottomRightX(), getTopLeftY());
+		mOriginalRect[2] = new Point(getTopLeftX(), getBottomRightY());
+		mOriginalRect[3] = new Point(getBottomRightX(), getBottomRightY());
+		
+		mCollisionRect[0] = new Point(getTopLeftX(), getTopLeftY());
+		mCollisionRect[1] = new Point(getBottomRightX(), getTopLeftY());
+		mCollisionRect[2] = new Point(getTopLeftX(), getBottomRightY());
+		mCollisionRect[3] = new Point(getBottomRightX(), getBottomRightY());
 	}
 	public void setCentre(float x, float y){
 		x/=Constants.getScreen().getRatio();
