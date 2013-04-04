@@ -52,6 +52,7 @@ public class Diver extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -62,6 +63,7 @@ public class Diver extends GraphicObject{
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -97,8 +99,7 @@ public class Diver extends GraphicObject{
 	public void init(int x, int y, int angle) {
 		mGraphicType = 1;
 		mIsPlaying = false;
-
-		mProperties.init(x, y, 100, 100);	
+		mProperties.init(x, y, 100, 100,0.85f,0.35f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 
 		mBitmap = SpriteManager.getDiver();
@@ -114,11 +115,11 @@ public class Diver extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

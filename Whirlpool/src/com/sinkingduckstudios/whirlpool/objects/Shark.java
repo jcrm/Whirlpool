@@ -53,6 +53,7 @@ public class Shark extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -60,6 +61,7 @@ public class Shark extends GraphicObject{
 		for(int i = 0; i<4;i++){
 			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -86,7 +88,7 @@ public class Shark extends GraphicObject{
 	public void init(int x, int y) {
 		mGraphicType = 4;
 		mIsPlaying = false;
-		mProperties.init(x, y, 100, 100);
+		mProperties.init(x, y, 100, 100,0.65f,0.65f);
 
 		mStart = new Point(getCentreX(), getCentreY());
 		float dX = new Random().nextInt((int)getCentreX());
@@ -115,7 +117,7 @@ public class Shark extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkState != SharkType.tAsleep && mSharkState != SharkType.tWait){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

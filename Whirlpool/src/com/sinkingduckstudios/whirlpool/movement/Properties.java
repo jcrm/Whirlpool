@@ -14,17 +14,29 @@ public class Properties {
 	private Point mCentre = new Point();
 	private Point mTopLeft = new Point();
 	private Point mBottomRight = new Point();
+	//These relate to the real part of the bitmap the image takes up (for collision purposes)
+	private Point mRealCentre = new Point();
+	private Point mRealTopLeft = new Point();
+	private Point mRealBottomRight = new Point();
 	private int mRadius = 0;
 	private int mWidth = 0;
 	private int mHeight = 0;
 	private int mOriginalWidth = 0;
 	private int mOriginalHeight = 0;
+	private float mXRatio=0.0f, mYRatio=0.0f;
+	private float mXOffset = 0.5f, mYOffset=0.5f;
 	public Point mOriginalRect[] = new Point[4];
 	public Point mCollisionRect[] = new Point[4];
+	public float mAngle=0.0f;
 	
 	public Properties(){
 	}
-	public void init(float x, float y, int width, int height){
+	
+	public void init(float x, float y, int width, int height, float xRatio, float yRatio){
+	init(x,y,width,height,xRatio,yRatio,0.5f,0.5f);
+	}
+	
+	public void init(float x, float y, int width, int height, float xRatio, float yRatio, float xOffset, float yOffset){
 		x/=Constants.getScreen().getRatio();
 		y/=Constants.getScreen().getRatio();
 		mTopLeft.setPoints(x, y);
@@ -36,15 +48,29 @@ public class Properties {
 		mBottomRight.setPoints(x+mWidth, y+mHeight);
 		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 		
-		mOriginalRect[0] = new Point(x, y);
-		mOriginalRect[1] = new Point(x+width, y);
-		mOriginalRect[2] = new Point(x, y+height);
-		mOriginalRect[3] = new Point(x+width, y+height);
+		mXRatio = xRatio;
+		mYRatio = yRatio;
+		mXOffset = xOffset;
+		mYOffset = yOffset;
 		
-		mCollisionRect[0] = new Point(x, y);
-		mCollisionRect[1] = new Point(x+width, y);
-		mCollisionRect[2] = new Point(x, y+height);
-		mCollisionRect[3] = new Point(x+width, y+height);
+		float x1 = (x+(mWidth*mXOffset))-((mWidth*xRatio)/2);
+		float y1 = (y+(mHeight*mYOffset))-((mHeight*yRatio)/2);
+		mRealTopLeft.setPoints(x1, y1);
+		float x2 = (x+(mWidth*mXOffset))+((mWidth*xRatio)/2);
+		float y2 = (y+(mHeight*mYOffset))+((mHeight*yRatio)/2);
+		mRealBottomRight.setPoints(x2, y2);
+		
+		mRealCentre.setPoints(x1+((mWidth*xRatio)/2),y1+((mHeight*yRatio)/2));
+		
+		mOriginalRect[0] = new Point(x1, y1);
+		mOriginalRect[1] = new Point(x1+(mWidth*xRatio), y1);
+		mOriginalRect[2] = new Point(x1, y1+(mHeight*yRatio));
+		mOriginalRect[3] = new Point(x1+(mWidth*xRatio), y1+(mHeight*yRatio));
+		
+		mCollisionRect[0] = new Point(x1, y1);
+		mCollisionRect[1] = new Point(x1+(mWidth*xRatio), y1);
+		mCollisionRect[2] = new Point(x1, y1+(mHeight*yRatio));
+		mCollisionRect[3] = new Point(x1+(mWidth*xRatio), y1+(mHeight*yRatio));
 	}
 	public void setCentre(float x, float y){
 		x/=Constants.getScreen().getRatio();
@@ -52,6 +78,17 @@ public class Properties {
 		mCentre.setPoints(x, y);
 		mTopLeft.setPoints(x-(mWidth/2), y-(mHeight/2));
 		mBottomRight.setPoints(x+(mWidth/2), y+(mHeight/2));
+		
+		x = mTopLeft.getX();
+		y = mTopLeft.getY();
+		
+		float x1 = (x+(mWidth*mXOffset))-((mWidth*mXRatio)/2);
+		float y1 = (y+(mHeight*mYOffset))-((mHeight*mYRatio)/2);
+		mRealTopLeft.setPoints(x1, y1);
+		float x2 = (x+(mWidth*mXOffset))+((mWidth*mXRatio)/2);
+		float y2 = (y+(mHeight*mYOffset))+((mHeight*mYRatio)/2);
+		mRealBottomRight.setPoints(x2, y2);
+		mRealCentre.setPoints(x1+((mWidth*mXRatio)/2),y1+((mHeight*mYRatio)/2));
 	}
 	//temp comment
 	public void setCentreX(float x){
@@ -59,38 +96,88 @@ public class Properties {
 		mCentre.setX(x);
 		mTopLeft.setX(x-(mWidth/2));
 		mBottomRight.setX(x+(mWidth/2));
+		
+		x = mTopLeft.getX();
+		
+		float x1 = (x+(mWidth*mXOffset))-((mWidth*mXRatio)/2);
+		mRealTopLeft.setX(x1);
+		float x2 = (x+(mWidth*mXOffset))+((mWidth*mXRatio)/2);
+		mRealBottomRight.setX(x2);
+		mRealCentre.setX(x1+((mWidth*mXRatio)/2));
 	}
 	public void setCentreY(float y){
 		y/=Constants.getScreen().getRatio();
 		mCentre.setY(y);
 		mTopLeft.setY(y-(mHeight/2));
 		mBottomRight.setY(y+(mHeight/2));
+		
+		y = mTopLeft.getY();
+		
+		float y1 = (y+(mHeight*mYOffset))-((mHeight*mYRatio)/2);
+		mRealTopLeft.setY(y1);
+		float y2 = (y+(mHeight*mYOffset))+((mHeight*mYRatio)/2);
+		mRealBottomRight.setY(y2);
+		mRealCentre.setY(y1+((mHeight*mYRatio)/2));
 	}
 	
 	public void setTopLeft(float x, float y){
+		//THIS BREAKS LIFE IF YOU INCLUDE, DONT KNOW WHY, YOLO.
+		//x/=Constants.getScreen().getRatio();
+		//y/=Constants.getScreen().getRatio();
 		mTopLeft.setPoints(x, y);
 		mBottomRight.setPoints(x+mWidth,y+mHeight);
 		mCentre.setPoints(x+(mWidth/2),y+(mHeight/2));
+		
+		float x1 = (x+(mWidth*mXOffset))-((mWidth*mXRatio)/2);
+		float y1 = (y+(mHeight*mYOffset))-((mHeight*mYRatio)/2);
+		mRealTopLeft.setPoints(x1, y1);
+		float x2 = (x+(mWidth*mXOffset))+((mWidth*mXRatio)/2);
+		float y2 = (y+(mHeight*mYOffset))+((mHeight*mYRatio)/2);
+		mRealBottomRight.setPoints(x2, y2);
+		mRealCentre.setPoints(x1+((mWidth*mXRatio)/2),y1+((mHeight*mYRatio)/2));
 	}
 	public void setTopLeftX(float x){
+		//x/=Constants.getScreen().getRatio();
 		mTopLeft.setX(x);
 		mBottomRight.setX(x+mWidth);
 		mCentre.setX(x+(mWidth/2));
+		
+		float x1 = (x+(mWidth*mXOffset))-((mWidth*mXRatio)/2);
+		mRealTopLeft.setX(x1);
+		float x2 = (x+(mWidth*mXOffset))+((mWidth*mXRatio)/2);
+		mRealBottomRight.setX(x2);
+		mRealCentre.setX(x1+((mWidth*mXRatio)/2));
 	}
 	public void setTopLeftY(float y){
+		//y/=Constants.getScreen().getRatio();
 		mTopLeft.setY(y);
 		mBottomRight.setY(y+mHeight);
 		mCentre.setY(y+(mHeight/2));
+		
+		float y1 = (y+(mHeight*mYOffset))-((mHeight*mYRatio)/2);
+		mRealTopLeft.setY(y1);
+		float y2 = (y+(mHeight*mYOffset))+((mHeight*mYRatio)/2);
+		mRealBottomRight.setY(y2);
+		mRealCentre.setY(y1+((mHeight*mYRatio)/2));
 	}
 	
 	public Point getCentre(){
 		return mCentre;
 	}
+	public Point getRealCentre(){
+		return mRealCentre;
+	}
 	public Point getTopLeft(){
 		return mTopLeft;
 	}
+	public Point getRealTopLeft(){
+		return mRealTopLeft;
+	}
 	public Point getBottomRight(){
 		return mBottomRight;
+	}
+	public Point getRealBottomRight(){
+		return mRealBottomRight;
 	}
 	public float getCentreX(){
 		return mCentre.getX();
@@ -154,10 +241,23 @@ public class Properties {
 	public void setOriginalHeight(int originalHeight) {
 		mOriginalHeight = originalHeight;
 	}
-	public void updtaeOriginal(){
-		mOriginalRect[0].setPoints(getTopLeftX()*Constants.getScreen().getRatio(), getTopLeftY()*Constants.getScreen().getRatio());
-		mOriginalRect[1].setPoints(getBottomRightX()*Constants.getScreen().getRatio(), getTopLeftY()*Constants.getScreen().getRatio());
-		mOriginalRect[2].setPoints(getTopLeftX()*Constants.getScreen().getRatio(), getBottomRightY()*Constants.getScreen().getRatio());
-		mOriginalRect[3].setPoints(getBottomRightX()*Constants.getScreen().getRatio(), getBottomRightY()*Constants.getScreen().getRatio()); 
+	public void updateOriginal(){
+		
+		float x1 = (getTopLeftX()+(mWidth*mXOffset))-((mWidth*mXRatio)/2);
+		float y1 = (getTopLeftY()+(mHeight*mYOffset))-((mHeight*mYRatio)/2);
+		float x2 = (getTopLeftX()+(mWidth*mXOffset))+((mWidth*mXRatio)/2);
+		float y2 = (getTopLeftY()+(mHeight*mYOffset))+((mHeight*mYRatio)/2);
+		
+		mOriginalRect[0].setPoints(x1*Constants.getScreen().getRatio(), y1*Constants.getScreen().getRatio());
+		mOriginalRect[1].setPoints(x2*Constants.getScreen().getRatio(), y1*Constants.getScreen().getRatio());
+		mOriginalRect[2].setPoints(x1*Constants.getScreen().getRatio(), y2*Constants.getScreen().getRatio());
+		mOriginalRect[3].setPoints(x2*Constants.getScreen().getRatio(), y2*Constants.getScreen().getRatio()); 
+	}
+
+	public void updateAngle(float angle) {
+		mAngle = angle;
+	}
+	public float getAngle() {
+		return mAngle;
 	}
 }

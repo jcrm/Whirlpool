@@ -37,6 +37,7 @@ public class ScoreScreenView extends View {
 		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
 		opt.inJustDecodeBounds = false;
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.other_background, opt);
+		Constants.setRes(getResources());
 		mEmptyStar = SpriteManager.getEmptyStar();
 		mFullStar = SpriteManager.getFullStar();
 		mBackgroundRect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
@@ -56,6 +57,7 @@ public class ScoreScreenView extends View {
 		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, 500, 500);
 		opt.inJustDecodeBounds = false;
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.other_background, opt);
+		Constants.setRes(getResources());
 		mEmptyStar = SpriteManager.getEmptyStar();
 		mFullStar = SpriteManager.getFullStar();
 		mBackgroundRect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());

@@ -29,6 +29,7 @@ public class Boat extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -36,6 +37,7 @@ public class Boat extends GraphicObject{
 		for(int i = 0; i<4;i++){
 			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -55,7 +57,7 @@ public class Boat extends GraphicObject{
 		mBoatState = BoatType.bReady;
 		x-=((96/Constants.getScreen().getRatio())/2);
 		y-=((96/Constants.getScreen().getRatio())/2);
-		mProperties.init(x, y, 96, 96);	
+		mProperties.init(x, y, 96, 96,0.9f,0.4f,0.5f,0.65f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -63,7 +65,7 @@ public class Boat extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
 	@Override
 	public boolean move() {

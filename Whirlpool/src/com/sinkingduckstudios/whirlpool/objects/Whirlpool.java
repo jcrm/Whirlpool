@@ -38,13 +38,15 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
 		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX()*Constants.getScreen().getRatio(), mProperties.mCollisionRect[i].getY()*Constants.getScreen().getRatio(), paint);
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -58,7 +60,7 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(0, 0, 130, 130);	
+		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -69,7 +71,7 @@ public class Whirlpool extends GraphicObject{
 
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 130, 130);	
+		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -91,7 +93,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){
@@ -120,7 +122,7 @@ public class Whirlpool extends GraphicObject{
 					a.setPulledState(Constants.STATE_LEAVING);//leaving a wpool
 					resetwPoolCounter();
 					a.setAngle(getWAngle());
-					a.getSpeed().setSpeed(7+mArrow.getDist());
+					a.getSpeed().setSpeed(objtype.tDuck.tSpeed+mArrow.getDist());
 					collisionDone = true;
 					finished = true;
 				}

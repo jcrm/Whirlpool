@@ -31,6 +31,7 @@ public class Torpedo extends GraphicObject {
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -38,6 +39,7 @@ public class Torpedo extends GraphicObject {
 		for(int i = 0; i<4;i++){
 			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -51,7 +53,7 @@ public class Torpedo extends GraphicObject {
 	}
 
 	public void init(int x, int y, float angle){
-		mProperties.init(x, y, 50, 50);	
+		mProperties.init(x, y, 50, 50,0.5f,0.5f,0.35f,0.5f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 
 		mBitmap = SpriteManager.getTorpedo();
@@ -73,7 +75,7 @@ public class Torpedo extends GraphicObject {
 
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mHitBoat == false && ++mHitBoatCounter > 40){
 			mHitBoatCounter = 0;
 			mHitBoat = true;

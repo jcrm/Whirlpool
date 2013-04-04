@@ -38,6 +38,7 @@ public class Collectable extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -50,6 +51,7 @@ public class Collectable extends GraphicObject{
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+		*/
 		canvas.save();
 
 		canvas.translate(getCentreX(), getCentreY());
@@ -82,7 +84,7 @@ public class Collectable extends GraphicObject{
 
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 30, 30);	
+		mProperties.init(x, y, 30, 30,1.0f,1.0f);	
 
 		for(int i=0; i<3; i++){
 			int frames;
@@ -120,7 +122,7 @@ public class Collectable extends GraphicObject{
 
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		int destX,destY;
 
 		destX=((int) (mFollowing.getCentreX()*Constants.getScreen().getRatio()));
