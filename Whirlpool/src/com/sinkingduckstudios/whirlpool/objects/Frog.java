@@ -2,8 +2,8 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ *
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -38,23 +38,19 @@ public class Frog extends GraphicObject{
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
-		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
-		paint.setColor(Color.BLACK);
-		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
-		paint.setColor(Color.MAGENTA);
-		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
 		paint.setColor(Color.GREEN);
 		canvas.drawPoint(getCentreX(), getCentreY(), paint);
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			canvas.rotate((float) (-mFrogAngle*180/Math.PI));
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		canvas.translate(getCentreX(), getCentreY());
+		canvas.rotate((float) (-mFrogAngle*180/Math.PI));
+		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
 	}
 
@@ -72,7 +68,7 @@ public class Frog extends GraphicObject{
 
 		mBitmap = SpriteManager.getFrog();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
+
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -84,7 +80,7 @@ public class Frog extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, (float) (-(mFrogAngle*2)*180/Math.PI));
+		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle*180/Math.PI));
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));

@@ -3,7 +3,7 @@
  * Last Updated: 02/04/2013
  * Content:
  * Holder for collectable ducks, can be initialised with position
- * 
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -52,14 +52,14 @@ public class Collectable extends GraphicObject{
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
-			
+
 		canvas.translate(getCentreX(), getCentreY());
 		if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
 			canvas.scale(-1, 1);
 		}
 		int i = getSpriteSheetIndex();
-		canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), mRect,  mPaint);
-		
+		canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), mRect, mPaint);
+
 		canvas.restore();
 	}
 
@@ -76,11 +76,11 @@ public class Collectable extends GraphicObject{
 			return 2;
 		return 0;
 	}
-	
+
 	@Override
 	public void init() {
 		init(0,0);
-		
+
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 30, 30);	
@@ -94,28 +94,28 @@ public class Collectable extends GraphicObject{
 			}
 			mBitmap[i] = SpriteManager.getDuck(i);
 			if (i==0)
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+				mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 			else
 				mAnimate[i] = new Animate(19, 3, 7, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 		}
-		
+
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		
+
 		mHasCollided=false;
-		
+
 		ColorMatrix cm = new ColorMatrix();
 		cm.set(new float[]{
-							0.8f,0,0,0,100,
-							0,0.4f,0,0,80,
-							0,0,0.9f,0,20,
-							0,0,0,1,0
-							
+				0.8f,0,0,0,100,
+				0,0.4f,0,0,80,
+				0,0,0.9f,0,20,
+				0,0,0,1,0
+
 		});
 		mPaint = new Paint();
 		mPaint.setColorFilter(new ColorMatrixColorFilter(cm));
-		
+
 		mRect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 	}
 
@@ -123,17 +123,17 @@ public class Collectable extends GraphicObject{
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		int destX,destY;
-		
+
 		destX=((int) (mFollowing.getCentreX()*Constants.getScreen().getRatio()));
 		destX+=((int) (mFollowing.getWidth()*Math.cos(mFollowing.getSpeed().getAngleRad()+Math.PI)));
 		destY=((int) (mFollowing.getCentreY()*Constants.getScreen().getRatio()));
 		destY+=((int) (mFollowing.getWidth()*Math.sin(mFollowing.getSpeed().getAngleRad()+Math.PI)));
-		
+
 		setAngle(CollisionManager.calcAngle(getCentreX()*Constants.getScreen().getRatio(),getCentreY()*Constants.getScreen().getRatio(),destX, destY));
 		setSpeed(mFollowing.getSpeed().getSpeed()/Constants.getScreen().getRatio());
 		moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 		moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
-		
+
 		//setCentreX(destX);
 		//setCentreY(destY);
 		return false;
@@ -141,50 +141,50 @@ public class Collectable extends GraphicObject{
 
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
-//		switch(side){
-//		case Top:
-//			mSpeed.verticalBounce();
-//			setTopLeftY(-getTopLeftY());
-//			break;
-//		case Bottom:
-//			mSpeed.verticalBounce();
-//			setTopLeftY(height-getHeight());
-//			break;
-//		case Left:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(-getTopLeftX());
-//			break;
-//		case Right:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(width - getWidth());
-//			break;
-//		case BottomLeft:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(-getWidth());
-//			mSpeed.verticalBounce();
-//			setTopLeftY(height-getHeight());
-//			break;
-//		case BottomRight:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(width - getWidth());
-//			mSpeed.verticalBounce();
-//			setTopLeftY(height-getHeight());
-//			break;
-//		case TopLeft:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(-getTopLeftX());
-//			mSpeed.verticalBounce();
-//			setTopLeftY(-getTopLeftY());
-//			break;
-//		case TopRight:
-//			mSpeed.horizontalBounce();
-//			setTopLeftX(width - getWidth());
-//			mSpeed.verticalBounce();
-//			setTopLeftY(-getTopLeftY());
-//			break;
-//		default:
-//			break;
-//		}
+		// switch(side){
+		// case Top:
+		// mSpeed.verticalBounce();
+		// setTopLeftY(-getTopLeftY());
+		// break;
+		// case Bottom:
+		// mSpeed.verticalBounce();
+		// setTopLeftY(height-getHeight());
+		// break;
+		// case Left:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(-getTopLeftX());
+		// break;
+		// case Right:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(width - getWidth());
+		// break;
+		// case BottomLeft:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(-getWidth());
+		// mSpeed.verticalBounce();
+		// setTopLeftY(height-getHeight());
+		// break;
+		// case BottomRight:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(width - getWidth());
+		// mSpeed.verticalBounce();
+		// setTopLeftY(height-getHeight());
+		// break;
+		// case TopLeft:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(-getTopLeftX());
+		// mSpeed.verticalBounce();
+		// setTopLeftY(-getTopLeftY());
+		// break;
+		// case TopRight:
+		// mSpeed.horizontalBounce();
+		// setTopLeftX(width - getWidth());
+		// mSpeed.verticalBounce();
+		// setTopLeftY(-getTopLeftY());
+		// break;
+		// default:
+		// break;
+		// }
 	}
 
 	public void frame(){
@@ -194,7 +194,7 @@ public class Collectable extends GraphicObject{
 			mHasCollided = collision(Constants.getPlayer());
 		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
-	
+
 	public boolean collision(Duck graphic){
 
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision

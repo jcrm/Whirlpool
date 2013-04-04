@@ -96,13 +96,13 @@ public class CollisionManager{
 		float sine = (float) Math.sin(angle);
 		float cosine = (float) Math.cos(angle);
 		
-		point.setX(point.getX()-centre.getX());
-		point.setY(point.getY()-centre.getY());
+		point.setX(point.getX()-(centre.getX()*Constants.getScreen().getRatio()));
+		point.setY(point.getY()-(centre.getY()*Constants.getScreen().getRatio()));
 		
 		float newX = (point.getX() * sine) - (point.getY() * cosine);
 		float newY = (point.getX() * cosine) + (point.getY() * sine);
 		
-		point.setX((newX+centre.getX())/Constants.getScreen().getRatio());
-		point.setY((newY+centre.getY())/Constants.getScreen().getRatio());
+		point.setX((newX+(centre.getX()*Constants.getScreen().getRatio()))/Constants.getScreen().getRatio());
+		point.setY((newY+(centre.getY()*Constants.getScreen().getRatio()))/Constants.getScreen().getRatio());
 	}
 }

@@ -24,7 +24,7 @@ public class Torpedo extends GraphicObject {
 	private Bitmap mExplosionBitmap;
 	private Animate mExplosionAnimate;
 	private boolean mExplosion = false;
-	
+
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
 		init(x, y, angle);
@@ -35,35 +35,31 @@ public class Torpedo extends GraphicObject {
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
-		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
-		paint.setColor(Color.BLACK);
-		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
-		paint.setColor(Color.MAGENTA);
-		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
 		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			canvas.rotate(mSpeed.getAngle()+180);
-			if(mExplosion){
-				canvas.drawBitmap(mExplosionBitmap, mExplosionAnimate.getPortion(), rect,  null);
-			}else{
-				canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
-			}
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		canvas.translate(getCentreX(), getCentreY());
+		canvas.rotate(mSpeed.getAngle()+180);
+		if(mExplosion){
+			canvas.drawBitmap(mExplosionBitmap, mExplosionAnimate.getPortion(), rect, null);
+		}else{
+			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
+		}
 		canvas.restore();
 	}
 
 	public void init(int x, int y, float angle){
-		mProperties.init(x, y, 50, 50);		
+		mProperties.init(x, y, 50, 50);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
-		
+
 		mBitmap = SpriteManager.getTorpedo();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
+
 		mExplosionBitmap = SpriteManager.getTorpedoExplosion();
 		mExplosionAnimate = new Animate(11, 3, 4, mExplosionBitmap.getWidth(), mExplosionBitmap.getHeight());
-		
+
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -74,7 +70,7 @@ public class Torpedo extends GraphicObject {
 	public void init(){
 		init(30,60,mId.tAngle);
 	}
-	
+
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
@@ -171,7 +167,7 @@ public class Torpedo extends GraphicObject {
 	}
 	public void setDuckPosition(float f, float g){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
-		float tempSpeed = mSpeed.getSpeed(); 
+		float tempSpeed = mSpeed.getSpeed();
 		if(tempSpeed<mTopSpeed){
 			mSpeed.setSpeed(tempSpeed+1);
 		}else{
@@ -224,11 +220,11 @@ public class Torpedo extends GraphicObject {
 		float y1 = getCentreY();
 		float x2 = Constants.getPlayer().getCentreX();
 		float y2 = Constants.getPlayer().getCentreY();
-		
+
 		float distX = x2-x1;
 		float distY = y2-y1;
-		
-		return (distX*distX)+(distY*distY); 
-		
+
+		return (distX*distX)+(distY*distY);
+
 	}
 }

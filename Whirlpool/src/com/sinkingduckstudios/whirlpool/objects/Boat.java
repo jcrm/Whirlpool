@@ -19,7 +19,7 @@ public class Boat extends GraphicObject{
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
 	private int mTorpedoCount = -1;
 	private boolean mBroken = false;
-	
+
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
@@ -34,23 +34,19 @@ public class Boat extends GraphicObject{
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
-		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
-		paint.setColor(Color.BLACK);
-		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
-		paint.setColor(Color.MAGENTA);
-		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
 		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		canvas.translate(getCentreX(), getCentreY());
+		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
 	}
 
 	@Override
 	public void init() {
-		init(new Random().nextInt(Constants.getLevel().getLevelWidth()), 
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/4));
 	}
 	public void init(int x, int y) {
@@ -61,7 +57,7 @@ public class Boat extends GraphicObject{
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mBitmap = SpriteManager.getBoat();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-	
+
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -134,10 +130,10 @@ public class Boat extends GraphicObject{
 			incrementCounter();
 			if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
 				mBoatState = BoatType.bTorpedo;
-			}else if(mBoatState ==  BoatType.bFinishing && mAnimate.getFinished()){			
+			}else if(mBoatState == BoatType.bFinishing && mAnimate.getFinished()){	
 				mBitmap = SpriteManager.getBoat();
 				mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
-				mBoatState = BoatType.bWaiting;			
+				mBoatState = BoatType.bWaiting;	
 			}
 		}
 		mAnimate.animateFrame();
