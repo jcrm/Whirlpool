@@ -24,7 +24,8 @@ public class CinematicView extends View{
 		super(context);
 		setFocusable(true);
 		setMinimumWidth(100);
-		setMinimumHeight(100);	
+		setMinimumHeight(100);
+    	Constants.setRes(getResources());
 		for(int i = 0; i<6; i++){
 			mCinematic[i] = SpriteManager.getCinematic(i);
 		}
@@ -35,6 +36,7 @@ public class CinematicView extends View{
 		setFocusable(true);
 		setMinimumWidth(100);
 		setMinimumHeight(100);
+		Constants.setRes(getResources());
 		for(int i = 0; i<6; i++){
 			mCinematic[i] = SpriteManager.getCinematic(i);
 		}

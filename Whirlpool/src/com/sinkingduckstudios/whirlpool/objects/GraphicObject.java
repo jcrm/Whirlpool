@@ -64,6 +64,8 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	protected Animate mAnimate;
 	protected int wpoolCounter;
 	protected Whirlpool mPulledBy;
+	protected boolean mIsPlaying;
+	protected int mGraphicType;				// for ease sake, 1 = diver, 2 = frog, 3 = boat, 4 = shark
 	
     public GraphicObject(){
     	mScreenLock=Constants.getLock();
@@ -286,4 +288,19 @@ public abstract class GraphicObject {//implements ObjectFunctions{
 	public Whirlpool getPulledBy() {
 		return mPulledBy;
 	}
+	public void setIsPlaying(boolean IsOnPlaying){
+		mIsPlaying = IsOnPlaying;
+	}
+	public boolean getIsPlaying(){
+		return mIsPlaying;
+	}
+	
+	public void setType(int enemyType){
+		mGraphicType = enemyType;
+	}
+	
+	public int getType(){
+		return mGraphicType;
+	}
+
 }

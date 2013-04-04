@@ -40,13 +40,25 @@ public class Level {
 	private int mLevelWidth = 0;
 	private int mLevelHeight = 0;
 	private float mScrollBy = 0;
+	
 	private Bitmap mBackgroundImage;
 	private Bitmap mLeftBorderImage;
 	private Bitmap mRightBorderImage;
 	private Bitmap mTopBorderImage;
+	
+	private int DiverCounter;
+	private int FrogCounter;
+	private int TugBoatCounter;
+	private int SharkCounter;
+	
+	private boolean mPointsPlaying;
+
+	
 	private static Object mScreenLock;
 	private Rect mRect = new Rect();
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
+	
+	
 	public Level(){
 	}
 	public void init(){
@@ -55,7 +67,13 @@ public class Level {
 		initImages();
 		
 		levelNumber(1);
+		mPointsPlaying = false;
 		
+		DiverCounter = 0;
+		FrogCounter = 0;
+		TugBoatCounter = 0;
+		SharkCounter = 0;
+
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}
@@ -67,7 +85,13 @@ public class Level {
 		if(replay){
 			replayLevel(lNumber);
 		}
+		mPointsPlaying = false;
 		
+		DiverCounter = 0;
+		FrogCounter = 0;
+		TugBoatCounter = 0;
+		SharkCounter = 0;
+
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}
@@ -246,6 +270,67 @@ public class Level {
 			}
 			enviro.frame();
 		}
+		
+		//go through the list of graphics objects
+				for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
+					GraphicObject Enemy = gIterator.next();
+		  			// if the enemy is on screen...
+					if (enemiesOnScreen(Enemy)){
+						// find out the enemies type and play the relevant type
+						switch (Enemy.getType()){
+							//diver
+							case 1 : {
+								if (Enemy.getIsPlaying() == false){
+									Constants.getSoundManager().playDiver();
+									Enemy.setIsPlaying(true);
+									DiverCounter = 0;
+								}
+								DiverCounter ++;
+								if (DiverCounter >= 500){
+									Enemy.setIsPlaying(false);
+								}
+								break;
+							}
+							//frog
+							case 2 :{
+								if (Enemy.getIsPlaying() == false){
+									Constants.getSoundManager().playFrog();
+									Enemy.setIsPlaying(true);
+									FrogCounter = 0;
+								}
+								
+								FrogCounter ++;
+								
+								if (FrogCounter >= 500){
+									Enemy.setIsPlaying(false);
+								}
+								break;
+							}
+							//tugbout
+							case 3 :{
+								if (Enemy.getIsPlaying() == false){
+									Constants.getSoundManager().playTugBoat();
+									Enemy.setIsPlaying(true);
+									TugBoatCounter = 0;
+								}
+								TugBoatCounter ++;
+								if (TugBoatCounter >= 500){
+									Enemy.setIsPlaying(false);
+								}
+								break;
+							}
+							
+							//shark
+							case 4 : {
+								break;
+							}
+						}// end switch enemytype
+					}
+				} //end for graphics objects
+				
+				
+
+		
 		synchronized(mScreenLock){
 			duckOnScreen();
 		}
@@ -455,4 +540,27 @@ public class Level {
 		}
 		graphic.frame();
 	}
+	private boolean enemiesOnScreen(GraphicObject TempEnemy){
+		// work out the boundries opf the screen and then see what enemies are in that boundry
+		//work out the edges of the screen
+		float LeftEdge = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
+		float RightEdge =Constants.getPlayer().getCentreX()+ Constants.getScreen().getWidth()/2;
+		float TopEdge =Constants.getPlayer().getCentreX()- Constants.getScreen().getHeight()/2;
+		float BottomEdge =Constants.getPlayer().getCentreX()+ Constants.getScreen().getHeight()/2;
+		
+		// get the edges of the enemy sprite
+		float EnemyLeftEdge = (TempEnemy.getCentreX() -(TempEnemy.getWidth()/2));
+		float EnemyRightEdge = (TempEnemy.getCentreX() + (TempEnemy.getWidth()/2));
+		float EnemyTopEdge = (TempEnemy.getCentreY() - (TempEnemy.getHeight()/2));
+		float EnemyBottomEdge = (TempEnemy.getCentreY() + (TempEnemy.getHeight()/2));
+		
+		//using the edges of the screen and the enemy sprite, do a  bounding box calculation to see if the enemy is inside the screen	
+		if (RightEdge < EnemyLeftEdge) { return false; }		
+		if (BottomEdge < EnemyTopEdge) { return false; }
+		if (LeftEdge > EnemyRightEdge) { return false; }
+		if (TopEdge > EnemyBottomEdge) { return false; }
+		
+		return true;
+	}
+
 }

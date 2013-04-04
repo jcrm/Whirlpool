@@ -49,6 +49,9 @@ public class Boat extends GraphicObject{
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/4));
 	}
 	public void init(int x, int y) {
+		mGraphicType = 3;
+		mIsPlaying = false;
+		
 		mBoatState = BoatType.bReady;
 		x-=((96/Constants.getScreen().getRatio())/2);
 		y-=((96/Constants.getScreen().getRatio())/2);

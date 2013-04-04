@@ -25,7 +25,6 @@ public class Cinematic extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_cinematic);
         cinematicView=(CinematicView)findViewById(R.id.cinematicView);
-        mSlide = 0;
         new Handler().postDelayed (new Runnable(){
         	@Override
         	public void run(){
@@ -40,7 +39,7 @@ public class Cinematic extends Activity {
         			mSlide++;
         		}
         	}
-        },1600);
+        },50);
     }
 	
 

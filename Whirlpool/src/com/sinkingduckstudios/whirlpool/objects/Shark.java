@@ -84,6 +84,8 @@ public class Shark extends GraphicObject{
 				new Random().nextInt(Constants.getLevel().getLevelHeight()));
 	}
 	public void init(int x, int y) {
+		mGraphicType = 4;
+		mIsPlaying = false;
 		mProperties.init(x, y, 100, 100);
 
 		mStart = new Point(getCentreX(), getCentreY());
