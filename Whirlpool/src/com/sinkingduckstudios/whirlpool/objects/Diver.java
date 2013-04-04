@@ -56,9 +56,13 @@ public class Diver extends GraphicObject{
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX()*Constants.getScreen().getRatio(), mProperties.mCollisionRect[i].getY()*Constants.getScreen().getRatio(), paint);
-		}
+		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
+		paint.setColor(Color.BLACK);
+		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
+		paint.setColor(Color.MAGENTA);
+		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);

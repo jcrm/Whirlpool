@@ -155,9 +155,9 @@ public class Properties {
 		mOriginalHeight = originalHeight;
 	}
 	public void updtaeOriginal(){
-		mOriginalRect[0].setPoints(getTopLeftX(), getTopLeftY());
-		mOriginalRect[1].setPoints(getBottomRightX(), getTopLeftY());
-		mOriginalRect[2].setPoints(getTopLeftX(), getBottomRightY());
-		mOriginalRect[3].setPoints(getBottomRightX(), getBottomRightY()); 
+		mOriginalRect[0].setPoints(getTopLeftX()*Constants.getScreen().getRatio(), getTopLeftY()*Constants.getScreen().getRatio());
+		mOriginalRect[1].setPoints(getBottomRightX()*Constants.getScreen().getRatio(), getTopLeftY()*Constants.getScreen().getRatio());
+		mOriginalRect[2].setPoints(getTopLeftX()*Constants.getScreen().getRatio(), getBottomRightY()*Constants.getScreen().getRatio());
+		mOriginalRect[3].setPoints(getBottomRightX()*Constants.getScreen().getRatio(), getBottomRightY()*Constants.getScreen().getRatio()); 
 	}
 }

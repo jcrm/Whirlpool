@@ -7,6 +7,7 @@
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
@@ -101,7 +102,7 @@ public class CollisionManager{
 		float newX = (point.getX() * sine) - (point.getY() * cosine);
 		float newY = (point.getX() * cosine) + (point.getY() * sine);
 		
-		point.setX(newX+centre.getX());
-		point.setY(newY+centre.getY());
+		point.setX((newX+centre.getX())/Constants.getScreen().getRatio());
+		point.setY((newY+centre.getY())/Constants.getScreen().getRatio());
 	}
 }
