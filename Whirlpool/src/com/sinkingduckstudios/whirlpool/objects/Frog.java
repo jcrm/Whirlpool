@@ -80,7 +80,7 @@ public class Frog extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle*180/Math.PI));
+		CollisionManager.updateCollisionRect(mProperties, (float) (-(mFrogAngle*2)*180/Math.PI));
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
