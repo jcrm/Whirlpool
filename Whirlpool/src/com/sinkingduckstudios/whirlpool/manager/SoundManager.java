@@ -502,7 +502,8 @@ public class SoundManager
 
 	public void alterBeepVolume(float v){
 		if (v==0){
-			mSndPool.stop(mMissileStreamId);
+			if(mSndPool!=null)
+				mSndPool.stop(mMissileStreamId);
 			mMissileStreamId=0;
 			mMissilePlaying=false;
 			return;
