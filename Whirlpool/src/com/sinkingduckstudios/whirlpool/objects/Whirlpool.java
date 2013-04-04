@@ -39,6 +39,7 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -46,6 +47,7 @@ public class Whirlpool extends GraphicObject{
 		for(int i = 0; i<4;i++){
 			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -169,7 +171,7 @@ public class Whirlpool extends GraphicObject{
 					a.setPulledState(Constants.STATE_LEAVING);//leaving a wpool
 					resetwPoolCounter();
 					a.setAngle(getWAngle());
-					a.getSpeed().setSpeed(7+mArrow.getDist());
+					a.getSpeed().setSpeed(objtype.tDuck.tSpeed+mArrow.getDist());
 					collisionDone = true;
 					finished = true;
 				}

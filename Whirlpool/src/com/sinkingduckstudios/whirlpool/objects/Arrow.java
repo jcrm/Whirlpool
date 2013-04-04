@@ -62,7 +62,7 @@ public class Arrow {
 		}
 	}
 	public float getDist(){
-	    return mDist/250f;
+	    return mDist/100f;
 	}
 	public void setVisible(boolean visible){
 		mVisible = visible;

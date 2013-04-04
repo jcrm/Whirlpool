@@ -39,6 +39,7 @@ public class Collectable extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -51,6 +52,7 @@ public class Collectable extends GraphicObject{
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+		*/
 		canvas.save();
 
 		canvas.translate(getCentreX(), getCentreY());
