@@ -51,7 +51,7 @@ public class Torpedo extends GraphicObject {
 	}
 
 	public void init(int x, int y, float angle){
-		mProperties.init(x, y, 50, 50);	
+		mProperties.init(x, y, 50, 50,0.5f,0.5f,0.35f,0.5f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 
 		mBitmap = SpriteManager.getTorpedo();
@@ -73,7 +73,7 @@ public class Torpedo extends GraphicObject {
 
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mHitBoat == false && ++mHitBoatCounter > 40){
 			mHitBoatCounter = 0;
 			mHitBoat = true;

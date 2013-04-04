@@ -32,8 +32,8 @@ public final class R {
         public static final int duck_left_and_right_sprites=0x7f020012;
         public static final int duck_up_sprites=0x7f020013;
         public static final int end_point=0x7f020014;
-        public static final int endpoint_hit=0x7f020015;
-        public static final int endpoint_sprites=0x7f020016;
+        public static final int end_point_old=0x7f020015;
+        public static final int endpoint_hit=0x7f020016;
         public static final int endpointhit_sprites=0x7f020017;
         public static final int exit_button=0x7f020018;
         public static final int frog_sprites=0x7f020019;

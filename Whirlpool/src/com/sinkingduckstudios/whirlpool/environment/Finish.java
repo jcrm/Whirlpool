@@ -50,7 +50,7 @@ public class Finish extends GraphicEnvironment{
 
 	@Override
 	public void init() {
-		mProperties.init(0, 0, 130, 130);	
+		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getFinish();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -64,7 +64,7 @@ public class Finish extends GraphicEnvironment{
 		
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 130, 130);	
+		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getFinish();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -77,7 +77,7 @@ public class Finish extends GraphicEnvironment{
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y, int wa, int c){
-		mProperties.init(x, y, 130, 130);	
+		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getFinish();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());

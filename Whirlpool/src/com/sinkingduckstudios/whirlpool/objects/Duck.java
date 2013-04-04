@@ -79,7 +79,7 @@ public class Duck extends GraphicObject{
 		init(30, 60);
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 60, 60);
+		mProperties.init(x, y, 60, 60,0.6f,0.6f);
 
 		for(int i=0; i<3; i++){
 			int frames;
@@ -101,7 +101,7 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkAttack == false){
 			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
@@ -172,6 +172,8 @@ public class Duck extends GraphicObject{
 		}
 		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
+	
+	//fml plz rename 
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int radius){
 		boolean inRadius = false;
 		switch(id){
@@ -182,8 +184,10 @@ public class Duck extends GraphicObject{
 			if(inRadius ==true){
 				if(cID == CollisionType.cDefault && mInvincibility == false){
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cBoat;
-						collisionDiverFrogBoat();
+						if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+							cID = CollisionType.cBoat;
+							collisionDiverFrogBoat();
+						}
 					}
 				}
 				return true;
@@ -204,24 +208,30 @@ public class Duck extends GraphicObject{
 		case tDiver:
 			if(cID == CollisionType.cDefault && mInvincibility == false){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cDiver;
-					collisionDiverFrogBoat();
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cDiver;
+						collisionDiverFrogBoat();
+					}
 				}
 			}
 			break;
 		case tFrog:
 			if(cID == CollisionType.cDefault && mInvincibility == false){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cFrog;
-					collisionDiverFrogBoat();
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cFrog;
+						collisionDiverFrogBoat();
+					}
 				}
 			}
 			break;
 		case tTorpedo:
 			if(CollisionManager.circleCollision(mProperties, otherProperties)){
 				if(cID != CollisionType.cShark && mInvincibility == false){
-					cID = CollisionType.cTorpedo;
-					collisionTorpedo();
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cTorpedo;
+						collisionTorpedo();
+					}
 				}
 				return true;
 			}
@@ -229,10 +239,12 @@ public class Duck extends GraphicObject{
 		case tShark:
 			if(cID!=CollisionType.cShark && mInvincibility == false){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					cID = CollisionType.cShark;
-					mCollisionCount = 0;
-					mSharkAttack = true;
-					return true;
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cShark;
+						mCollisionCount = 0;
+						mSharkAttack = true;
+						return true;
+					}
 				}
 			}
 			break;

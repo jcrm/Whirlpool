@@ -28,7 +28,7 @@ class Angle{
 		mAngle += angle;
 		checkAngle();
 	}
-	private void checkAngle(){		//Makes sure it's always withing 0-360
+	private void checkAngle(){		//Makes sure it's always within 0-360
 		if(mAngle >= 360.0f || mAngle < 0.0f){
 			mAngle = ((mAngle%360)+360)%360;
 		}

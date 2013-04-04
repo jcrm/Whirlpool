@@ -25,7 +25,7 @@ public class LifeRing extends GraphicEnvironment{
 	public void init() {
 		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
-				100, 100);	
+				100, 100,1.0f,1.0f);	
 		mBitmap = SpriteManager.getShark();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
@@ -34,7 +34,7 @@ public class LifeRing extends GraphicEnvironment{
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 100, 100);	
+		mProperties.init(x, y, 100, 100,1.0f,1.0f);	
 		mBitmap = SpriteManager.getShark();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		

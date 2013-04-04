@@ -95,7 +95,7 @@ public class Diver extends GraphicObject{
 				0);	
 	}
 	public void init(int x, int y, int angle) {
-		mProperties.init(x, y, 100, 100);	
+		mProperties.init(x, y, 100, 100,0.85f,0.35f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 
 		mBitmap = SpriteManager.getDiver();
@@ -111,11 +111,11 @@ public class Diver extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

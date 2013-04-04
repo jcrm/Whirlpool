@@ -85,7 +85,7 @@ public class Shark extends GraphicObject{
 				new Random().nextInt(Constants.getLevel().getLevelHeight()));
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 100, 100);
+		mProperties.init(x, y, 100, 100,0.65f,0.65f);
 
 		mStart = new Point(getCentreX(), getCentreY());
 		float dX = new Random().nextInt((int)getCentreX());
@@ -114,7 +114,7 @@ public class Shark extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkState != SharkType.tAsleep && mSharkState != SharkType.tWait){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

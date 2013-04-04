@@ -30,6 +30,32 @@ public class CollisionManager{
 		}
 		return false;
 	}
+	//rotational bounding box collision
+	//only call after a bounding circle check, which is cheaper
+	static public boolean boundingBoxCollision(Properties box1, Properties box2){
+		double boxAngle = box2.getAngle();
+    	//carAngle = 360 - carAngle;
+    	double s = Math.sin(boxAngle);
+    	double c = Math.cos(boxAngle);
+    	float testX, testY;
+    	
+    	for (int i = 0; i < 4; i++){
+    	// translate point back to origin:
+    	testX = box1.mCollisionRect[i].getX() - box2.getRealCentre().getX();
+    	testY = box1.mCollisionRect[i].getY() - box2.getRealCentre().getY();
+    	// rotate point
+    	float newX = (int)(testX * c - testY * s);
+    	float newY = (int)(testX * s + testY * c);
+    	// translate point back:
+    	testX = newX + box2.getRealCentre().getX();
+    	testY = newY + box2.getRealCentre().getY();
+    	
+    	if ((testX > box2.getRealTopLeft().getX()) && (testX < box2.getRealBottomRight().getX()))
+    		if ((testY > box2.getRealTopLeft().getY()) && (testY < box2.getRealBottomRight().getY()))
+    			return true;
+    	}
+    	return false;
+	}
 	//circle collision - graphic is the sprite being tested, event is the touch
 	static public boolean circleCollision(Properties box1, Properties box2){
 		float distanceX = box1.getCentreX() - box2.getCentreX();
@@ -86,7 +112,8 @@ public class CollisionManager{
 		return fMod((fMod((angle1), 360)+360), 360);
 	}
 	static public void updateCollisionRect(Properties box1, float angle){
-		box1.updtaeOriginal();
+		box1.updateOriginal();
+		box1.updateAngle(angle);
 		for(int i = 0; i<4; i++){
 			box1.mCollisionRect[i].setPoints(box1.mOriginalRect[i].getX(), box1.mOriginalRect[i].getY());
 			RotatePoint(box1.getCentre(),angle,box1.mCollisionRect[i]);
@@ -99,8 +126,8 @@ public class CollisionManager{
 		point.setX(point.getX()-(centre.getX()*Constants.getScreen().getRatio()));
 		point.setY(point.getY()-(centre.getY()*Constants.getScreen().getRatio()));
 		
-		float newX = (point.getX() * sine) - (point.getY() * cosine);
-		float newY = (point.getX() * cosine) + (point.getY() * sine);
+		float newX = (point.getX() * cosine) - (point.getY() * sine);
+		float newY = (point.getX() * sine) + (point.getY() * cosine);
 		
 		point.setX((newX+(centre.getX()*Constants.getScreen().getRatio()))/Constants.getScreen().getRatio());
 		point.setY((newY+(centre.getY()*Constants.getScreen().getRatio()))/Constants.getScreen().getRatio());

@@ -59,7 +59,7 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(0, 0, 130, 130);	
+		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -70,7 +70,7 @@ public class Whirlpool extends GraphicObject{
 
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 130, 130);	
+		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -140,7 +140,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
-		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){
