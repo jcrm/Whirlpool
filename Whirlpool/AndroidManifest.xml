@@ -28,6 +28,10 @@
             android:name="com.sinkingduckstudios.whirlpool.states.Loading"
             android:label="@string/title_activity_loading">
         </activity>
+         <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Cinematic"
+            android:label="@string/title_activity_cinematic">
+        </activity>
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Options"
             >

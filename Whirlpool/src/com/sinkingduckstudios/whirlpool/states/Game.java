@@ -13,10 +13,12 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -91,7 +93,10 @@ public class Game extends Activity {
 					mTime.cancel();
 					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 					Constants.getSoundManager().cleanup();
-					startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+					Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
+					scorescreen.putExtra("timepassed", timepassed);
+					scorescreen.putExtra("levelselected", levelselected);
+					startActivity(scorescreen);
 					finish();
 				}
 			}
@@ -209,9 +214,12 @@ public class Game extends Activity {
 		public void onFinish(){
 			if(mPaused == false){
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				Constants.getSoundManager().cleanup();
-				startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
 				mTime.cancel();
+				Constants.getSoundManager().cleanup();
+				Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
+				scorescreen.putExtra("timepassed", timepassed);
+				scorescreen.putExtra("levelselected", levelselected);
+				startActivity(scorescreen);
 				finish();
 				//finish game
 			}
@@ -230,7 +238,8 @@ public class Game extends Activity {
 			}else{
 				seconds=new String("" +(timepassed)%60);
 			}
-
+			mTimertext.setGravity(Gravity.CENTER_HORIZONTAL);
+			mTimertext.setTextColor(Color.BLACK);
 			mTimertext.setText("" + (timepassed)/60 + ":" + seconds);
 		}
 	}

@@ -41,7 +41,7 @@ public class Finish extends GraphicEnvironment{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.scale(dirFactor, 1);
 			if(mHit == false){
-				canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+				canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
 			}else{
 				canvas.drawBitmap(mHitBitmap, mHitAnimate.getPortion(), rect,  null);				
 			}
@@ -56,7 +56,7 @@ public class Finish extends GraphicEnvironment{
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 
 		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(40, 5, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		mHitAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mHitBitmap.getWidth(), mHitBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
@@ -83,7 +83,7 @@ public class Finish extends GraphicEnvironment{
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(40, 5, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		mHitAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mHitBitmap.getWidth(), mHitBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);

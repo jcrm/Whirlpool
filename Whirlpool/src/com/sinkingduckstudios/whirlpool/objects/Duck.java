@@ -17,7 +17,6 @@ import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
@@ -113,55 +112,6 @@ public class Duck extends GraphicObject{
 			return true;
 		}
 		return false;
-	}
-
-
-	@Override
-	public void borderCollision(ScreenSide side, int width, int height) {
-		switch(side){
-		case Top:
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case Bottom:
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case Left:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			break;
-		case Right:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			break;
-		case BottomLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case BottomRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case TopLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case TopRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		default:
-			break;
-		}
 	}
 
 	public void frame(){

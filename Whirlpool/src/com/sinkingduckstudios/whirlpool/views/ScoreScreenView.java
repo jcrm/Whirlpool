@@ -17,9 +17,15 @@ import android.view.View;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class ScoreScreenView extends View {
 	private Bitmap background;
+	private Bitmap mEmptyStar;
+	private Bitmap mFullStar;
+	private Rect mBackgroundRect;
+	private Rect mStarRect[] = new Rect[3];
+	
 	public ScoreScreenView(Context context) {
 		super(context);
 		setFocusable(true);
@@ -31,6 +37,13 @@ public class ScoreScreenView extends View {
 		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
 		opt.inJustDecodeBounds = false;
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.other_background, opt);
+		Constants.setRes(getResources());
+		mEmptyStar = SpriteManager.getEmptyStar();
+		mFullStar = SpriteManager.getFullStar();
+		mBackgroundRect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
+		mStarRect[0] = new Rect((Constants.getScreen().getWidth()/2)-125,(Constants.getScreen().getWidth()/2)-75,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
+		mStarRect[1] = new Rect((Constants.getScreen().getWidth()/2)-25,(Constants.getScreen().getWidth()/2)+25,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
+		mStarRect[2] = new Rect((Constants.getScreen().getWidth()/2)+75,(Constants.getScreen().getWidth()/2)+125,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
 	}
 	
 	public ScoreScreenView(Context context, AttributeSet attrs) {
@@ -44,7 +57,13 @@ public class ScoreScreenView extends View {
 		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, 500, 500);
 		opt.inJustDecodeBounds = false;
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.other_background, opt);
-		
+		Constants.setRes(getResources());
+		mEmptyStar = SpriteManager.getEmptyStar();
+		mFullStar = SpriteManager.getFullStar();
+		mBackgroundRect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
+		mStarRect[0] = new Rect((Constants.getScreen().getWidth()/2)-125,(Constants.getScreen().getWidth()/2)-75,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
+		mStarRect[1] = new Rect((Constants.getScreen().getWidth()/2)-25,(Constants.getScreen().getWidth()/2)+25,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
+		mStarRect[2] = new Rect((Constants.getScreen().getWidth()/2)+75,(Constants.getScreen().getWidth()/2)+125,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
 	}
 	
 	@Override
@@ -53,14 +72,20 @@ public class ScoreScreenView extends View {
 	}
 	@Override
 	protected void onDraw(Canvas canvas){
-		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-		canvas.drawBitmap(background, null, rect, null);
 		
+		canvas.drawBitmap(background, null, mBackgroundRect, null);
+		for(int i = 0; i<3; i++){			
+			canvas.drawBitmap(mEmptyStar, null, mStarRect[i], null);
+		}
 	}
 	
 	public void CleanUp() {
 		background.recycle();
 		background = null;
+		mEmptyStar.recycle();
+		mEmptyStar = null;
+		mFullStar.recycle();
+		mFullStar = null;
 		// TODO Auto-generated method stub
 		
 	}

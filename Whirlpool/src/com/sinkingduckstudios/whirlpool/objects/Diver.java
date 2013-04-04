@@ -97,6 +97,8 @@ public class Diver extends GraphicObject{
 				0);	
 	}
 	public void init(int x, int y, int angle) {
+		mGraphicType = 1;
+		mIsPlaying = false;
 		mProperties.init(x, y, 100, 100,0.85f,0.35f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
 

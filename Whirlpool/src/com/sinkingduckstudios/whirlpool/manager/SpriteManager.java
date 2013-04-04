@@ -14,6 +14,7 @@ import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class SpriteManager {
+	private static Bitmap mCinematic[]=new Bitmap[6];
 	private static Bitmap mDuck[]=new Bitmap[3];
 	private static Bitmap mDiver;
 	private static Bitmap mDiverUp;
@@ -36,6 +37,8 @@ public class SpriteManager {
 	private static Bitmap mSharkDown;
 	private static Bitmap mSharkSleep;
 	private static Bitmap mSharkAttack;
+	private static Bitmap mEmptyStar;
+	private static Bitmap mFullStar;
 	
 	public void deleteImages(){
 		mDuck[0].recycle();
@@ -82,6 +85,10 @@ public class SpriteManager {
 		mSharkSleep= null;
 		mSharkAttack.recycle();
 		mSharkAttack= null;
+		mEmptyStar.recycle();
+		mEmptyStar = null;
+		mFullStar.recycle();
+		mFullStar = null;
 	}
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
@@ -91,6 +98,18 @@ public class SpriteManager {
 			mDuck[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_down_sprites);
 		}
 		return mDuck[index];
+	}
+	public static Bitmap getCinematic(int index) {
+		if(index<0||index>5)return null;
+		if(mCinematic[index]==null){
+			mCinematic[0] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_1);
+			mCinematic[1] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_2);
+			mCinematic[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_3);
+			mCinematic[3] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_4);
+			mCinematic[4] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_5);
+			mCinematic[5] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_6);
+		}
+		return mCinematic[index];
 	}
 	public static void setDuck(int index, Bitmap duck) {
 		mDuck[index] = duck;
@@ -209,7 +228,7 @@ public class SpriteManager {
 	}
 	public static Bitmap getFinish() {
 		if(mFinish==null){
-			mFinish=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point);
+			mFinish=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point_sprites);
 		}
 		return mFinish;
 	}
@@ -218,7 +237,7 @@ public class SpriteManager {
 	}
 	public static Bitmap getFinishHit() {
 		if(mFinishHit==null){
-			mFinishHit=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.endpoint_hit);
+			mFinishHit=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point_hit_sprites);
 		}
 		return mFinishHit;
 	}
@@ -296,5 +315,17 @@ public class SpriteManager {
 	}
 	public static void setTorpedoExplosion(Bitmap torpedo) {
 		mTorpedoExplosion = torpedo;
+	}
+	public static Bitmap getEmptyStar(){
+		if(mEmptyStar==null){
+			mEmptyStar = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.star_empty);
+		}
+		return mEmptyStar;
+	}
+	public static Bitmap getFullStar(){
+		if(mFullStar==null){
+			mFullStar = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.star_full);
+		}
+		return mFullStar;
 	}
 }

@@ -5,6 +5,7 @@
     <string name="title_activity_game">Game</string>
     <string name="title_activity_menu">Menu</string>
     <string name="title_activity_loading">Loading</string>
+    <string name="title_activity_cinematic">Cinematic</string>
     <string name="start_game">Start Game</string>
     <string name="options_screen">Options Screen</string>
     <string name="exit">Exit</string>

@@ -16,7 +16,6 @@ import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
@@ -62,11 +61,10 @@ public class Frog extends GraphicObject{
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				(Constants.getLevel().getLevelHeight()/2)-70,
 				180);	
-
-		mBitmap = SpriteManager.getFrog();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 	}
 	public void init(int x, int y, int r) {
+		mGraphicType = 2;
+		mIsPlaying = false;
 		mProperties.init(x-r, y, 80, 80,0.7f,0.6f);	
 
 		mBitmap = SpriteManager.getFrog();
@@ -91,54 +89,6 @@ public class Frog extends GraphicObject{
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public void borderCollision(ScreenSide side, int width, int height) {
-		switch(side){
-		case Top:
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case Bottom:
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case Left:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			break;
-		case Right:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			break;
-		case BottomLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case BottomRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case TopLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case TopRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		default:
-			break;
-		}
 	}
 
 	public void frame(){
