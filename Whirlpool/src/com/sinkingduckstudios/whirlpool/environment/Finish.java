@@ -41,7 +41,7 @@ public class Finish extends GraphicEnvironment{
 			canvas.translate(getCentreX(), getCentreY());
 			canvas.scale(dirFactor, 1);
 			if(mHit == false){
-				canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+				canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
 			}else{
 				canvas.drawBitmap(mHitBitmap, mHitAnimate.getPortion(), rect,  null);				
 			}
