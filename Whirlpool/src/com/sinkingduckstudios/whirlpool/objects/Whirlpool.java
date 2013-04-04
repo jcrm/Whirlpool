@@ -2,8 +2,8 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ *
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -50,7 +50,7 @@ public class Whirlpool extends GraphicObject{
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
 		canvas.scale(dirFactor, 1);
-		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
 		if (mArrow != null){
 			mArrow.draw(canvas);//draw whirls directional arrow
@@ -160,7 +160,7 @@ public class Whirlpool extends GraphicObject{
 				a.setPulledBy(this);
 			}
 			if (a.getPulledState()==Constants.STATE_PULLED&&collide&&a.getPulledBy()==this){//if the object is able to be pulled, and is colliding
-				
+
 				if(a.getId()==objtype.tTorpedo)
 					((Torpedo)a).setTracking(false);//stop a torpedo tracking duck
 				collisionDone = false;

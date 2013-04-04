@@ -2,8 +2,8 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ *
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -57,57 +57,57 @@ public class Diver extends GraphicObject{
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
 		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(),paint);
 		}
 		paint.setColor(Color.WHITE);
 		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
 		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			switch(getSpriteSheetIndex()){
-			case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>90){
-						canvas.rotate(mSpeed.getAngle()+180);		
-					}else if (mSpeed.getAngle() ==0){
-						canvas.scale(1, -1);
-						canvas.rotate(mSpeed.getAngle()+180);								
-					}else if(mSpeed.getAngle()>270){
-						canvas.rotate(mSpeed.getAngle()+180);				
-						canvas.scale(1, -1);
-					}else if(mSpeed.getAngle()<=90){
-						canvas.scale(-1, 1);
-						canvas.rotate(mSpeed.getAngle()-90);
-					}
-					canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
-					break;
-			case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect,  null);
-					break;
-			case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect,  null);
-					break;
-				default: break;
-			}
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		canvas.translate(getCentreX(), getCentreY());
+		switch(getSpriteSheetIndex()){
+		case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>90){
+			canvas.rotate(mSpeed.getAngle()+180);	
+		}else if (mSpeed.getAngle() ==0){
+			canvas.scale(1, -1);
+			canvas.rotate(mSpeed.getAngle()+180);	
+		}else if(mSpeed.getAngle()>270){
+			canvas.rotate(mSpeed.getAngle()+180);	
+			canvas.scale(1, -1);
+		}else if(mSpeed.getAngle()<=90){
+			canvas.scale(-1, 1);
+			canvas.rotate(mSpeed.getAngle()-90);
+		}
+		canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect, null);
+		break;
+		case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect, null);
+		break;
+		case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect, null);
+		break;
+		default: break;
+		}
 		canvas.restore();
 	}
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-						new Random().nextInt(Constants.getLevel().getLevelHeight()),
-						0);	
+				new Random().nextInt(Constants.getLevel().getLevelHeight()),
+				0);	
 	}
 	public void init(int x, int y, int angle) {
 		mProperties.init(x, y, 100, 100);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
-		
+
 		mBitmap = SpriteManager.getDiver();
 		mUpBitmap = SpriteManager.getDiverUp();
 		mDownBitmap = SpriteManager.getDiverDown();
-		
+
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
 		mUpAnimate.setDelay(2);
 		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
 		mDownAnimate.setDelay(2);
-		
+
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
@@ -213,9 +213,9 @@ public class Diver extends GraphicObject{
 				hit = true;
 			}
 		}
-        return hit;
+		return hit;
 	}
-	
+
 	public void frame(){
 		// Move Objects
 		if(move()){
@@ -225,7 +225,7 @@ public class Diver extends GraphicObject{
 		case 0: mAnimate.animateFrame(); break;
 		case 1: mUpAnimate.animateFrame(); break;
 		case 2: mDownAnimate.animateFrame(); break;
-			default: break;
+		default: break;
 		}
 	}
 	@Override
