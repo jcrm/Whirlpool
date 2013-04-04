@@ -169,7 +169,7 @@ public class Whirlpool extends GraphicObject{
 				pull(a);//pull round whirlpool
 				if (testAngle(a)){
 					a.setPulledState(Constants.STATE_LEAVING);//leaving a wpool
-					resetwPoolCounter();
+					a.resetwPoolCounter();
 					a.setAngle(getWAngle());
 					a.getSpeed().setSpeed(objtype.tDuck.tSpeed+mArrow.getDist());
 					collisionDone = true;
