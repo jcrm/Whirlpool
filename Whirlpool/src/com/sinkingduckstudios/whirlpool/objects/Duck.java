@@ -54,6 +54,12 @@ public class Duck extends GraphicObject{
 		for(int i = 0; i<4;i++){
 			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
 		}
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(getCentreX(), getCentreY(), paint);
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+		
 		if(mSharkAttack == false){
 			canvas.save();
 				
@@ -95,7 +101,7 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
-		CollisionManager.updateCollisionRect(mProperties, (mSpeed.getAngle()+180));
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkAttack == false){
 			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

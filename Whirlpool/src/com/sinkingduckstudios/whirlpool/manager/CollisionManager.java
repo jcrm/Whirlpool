@@ -7,7 +7,6 @@
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
-import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
@@ -86,22 +85,23 @@ public class CollisionManager{
 		return fMod((fMod((angle1), 360)+360), 360);
 	}
 	static public void updateCollisionRect(Properties box1, float angle){
-		float sAngle = (float) Math.sin(angle);
-		float cAngle = (float) Math.cos(angle);
-		Point topleft = box1.mOriginalRect[0];
-		Point topright = box1.mOriginalRect[1];
-		Point bottomleft = box1.mOriginalRect[2];
-		Point bottomright = box1.mOriginalRect[3];
-		float aboutX = box1.getCentreX();
-		float aboutY = box1.getCentreY();
-		box1.mCollisionRect[0].setX((topleft.getX()*cAngle) - (topleft.getY()*sAngle) +((aboutX*(1-cAngle))+(aboutY*sAngle)));
-		box1.mCollisionRect[1].setX((topright.getX()*cAngle) - (topright.getY()*sAngle) +((aboutX*(1-cAngle))+(aboutY*sAngle)));
-		box1.mCollisionRect[2].setX((bottomleft.getX()*cAngle) - (bottomleft.getY()*sAngle) +((aboutX*(1-cAngle))+(aboutY*sAngle)));
-		box1.mCollisionRect[3].setX((bottomright.getX()*cAngle) - (bottomright.getY()*sAngle) +((aboutX*(1-cAngle))+(aboutY*sAngle)));
+		box1.updtaeOriginal();
+		for(int i = 0; i<4; i++){
+			box1.mCollisionRect[i].setPoints(box1.mOriginalRect[i].getX(), box1.mOriginalRect[i].getY());
+			RotatePoint(box1.getCentre(),(float) angle,box1.mCollisionRect[i]);
+		}
+	}
+	private static void RotatePoint(Point centre, float angle, Point point){
+		float sine = (float) Math.sin(angle);
+		float cosine = (float) Math.cos(angle);
 		
-		box1.mCollisionRect[0].setY((topleft.getX()*sAngle) + (topleft.getY()*cAngle) +((aboutY*(1-cAngle))-(aboutX*sAngle)));
-		box1.mCollisionRect[1].setY((topright.getX()*sAngle) + (topright.getY()*cAngle) +((aboutY*(1-cAngle))-(aboutX*sAngle)));
-		box1.mCollisionRect[2].setY((bottomleft.getX()*sAngle) + (bottomleft.getY()*cAngle) +((aboutY*(1-cAngle))-(aboutX*sAngle)));
-		box1.mCollisionRect[3].setY((bottomright.getX()*sAngle) + (bottomright.getY()*cAngle) +((aboutY*(1-cAngle))-(aboutX*sAngle)));
+		point.setX(point.getX()-centre.getX());
+		point.setY(point.getY()-centre.getY());
+		
+		float newX = (point.getX() * cosine) - (point.getY() * sine);
+		float newY = (point.getX() * sine) + (point.getY() * cosine);
+		
+		point.setX(newX+centre.getX());
+		point.setY(newY+centre.getY());
 	}
 }

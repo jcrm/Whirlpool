@@ -10,11 +10,14 @@ package com.sinkingduckstudios.whirlpool.objects;
 import java.util.Random;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Frog extends GraphicObject{
@@ -31,6 +34,18 @@ public class Frog extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(getCentreX(), getCentreY(), paint);
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
@@ -61,9 +76,11 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(x);
 		setFrogCentreY(y);
 		setFrogRadius(r);
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle*180/Math.PI));
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));

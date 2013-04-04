@@ -9,6 +9,7 @@ package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -38,6 +39,18 @@ public class Collectable extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(getCentreX(), getCentreY(), paint);
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
 			
 		canvas.translate(getCentreX(), getCentreY());
@@ -108,6 +121,7 @@ public class Collectable extends GraphicObject{
 
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		int destX,destY;
 		
 		destX=((int) (mFollowing.getCentreX()*Constants.getScreen().getRatio()));

@@ -36,15 +36,15 @@ public class Properties {
 		mBottomRight.setPoints(x+mWidth, y+mHeight);
 		mRadius =  (int) (Math.sqrt(((float)(mWidth/2)*(mWidth/2)) + ((float)(mHeight/2)*(mHeight/2))) -(mWidth/8));
 		
-		mOriginalRect[0] = new Point(getTopLeftX(), getTopLeftY());
-		mOriginalRect[1] = new Point(getBottomRightX(), getTopLeftY());
-		mOriginalRect[2] = new Point(getTopLeftX(), getBottomRightY());
-		mOriginalRect[3] = new Point(getBottomRightX(), getBottomRightY());
+		mOriginalRect[0] = new Point(x, y);
+		mOriginalRect[1] = new Point(x+width, y);
+		mOriginalRect[2] = new Point(x, y+height);
+		mOriginalRect[3] = new Point(x+width, y+height);
 		
-		mCollisionRect[0] = new Point(getTopLeftX(), getTopLeftY());
-		mCollisionRect[1] = new Point(getBottomRightX(), getTopLeftY());
-		mCollisionRect[2] = new Point(getTopLeftX(), getBottomRightY());
-		mCollisionRect[3] = new Point(getBottomRightX(), getBottomRightY());
+		mCollisionRect[0] = new Point(x, y);
+		mCollisionRect[1] = new Point(x+width, y);
+		mCollisionRect[2] = new Point(x, y+height);
+		mCollisionRect[3] = new Point(x+width, y+height);
 	}
 	public void setCentre(float x, float y){
 		x/=Constants.getScreen().getRatio();
@@ -153,5 +153,11 @@ public class Properties {
 	}
 	public void setOriginalHeight(int originalHeight) {
 		mOriginalHeight = originalHeight;
+	}
+	public void updtaeOriginal(){
+		mOriginalRect[0].setPoints(getTopLeftX(), getTopLeftY());
+		mOriginalRect[1].setPoints(getBottomRightX(), getTopLeftY());
+		mOriginalRect[2].setPoints(getTopLeftX(), getBottomRightY());
+		mOriginalRect[3].setPoints(getBottomRightX(), getBottomRightY()); 
 	}
 }

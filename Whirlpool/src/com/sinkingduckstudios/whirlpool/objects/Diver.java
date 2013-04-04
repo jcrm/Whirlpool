@@ -57,8 +57,11 @@ public class Diver extends GraphicObject{
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(10);
 		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX()*Constants.getScreen().getRatio(), mProperties.mCollisionRect[i].getY()*Constants.getScreen().getRatio(), paint);
 		}
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
@@ -112,10 +115,10 @@ public class Diver extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
-			CollisionManager.updateCollisionRect(mProperties, (mSpeed.getAngle()+180));
 			return true;
 		}
 		return false;
