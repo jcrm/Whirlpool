@@ -88,7 +88,7 @@ public class CollisionManager{
 		box1.updtaeOriginal();
 		for(int i = 0; i<4; i++){
 			box1.mCollisionRect[i].setPoints(box1.mOriginalRect[i].getX(), box1.mOriginalRect[i].getY());
-			RotatePoint(box1.getCentre(),(float) angle,box1.mCollisionRect[i]);
+			RotatePoint(box1.getCentre(),angle,box1.mCollisionRect[i]);
 		}
 	}
 	private static void RotatePoint(Point centre, float angle, Point point){
@@ -98,8 +98,8 @@ public class CollisionManager{
 		point.setX(point.getX()-centre.getX());
 		point.setY(point.getY()-centre.getY());
 		
-		float newX = (point.getX() * cosine) - (point.getY() * sine);
-		float newY = (point.getX() * sine) + (point.getY() * cosine);
+		float newX = (point.getX() * sine) - (point.getY() * cosine);
+		float newY = (point.getX() * cosine) + (point.getY() * sine);
 		
 		point.setX(newX+centre.getX());
 		point.setY(newY+centre.getY());
