@@ -59,7 +59,7 @@ public class LevelSelect extends Activity{
 			
 			//mLevelSelect = 1;
 			
-			Intent loading = (new Intent(getApplicationContext(),Loading.class));
+			Intent loading = (new Intent(getApplicationContext(),Cinematic.class));
 			
 			loading.putExtra("levelselected", 1);
 			

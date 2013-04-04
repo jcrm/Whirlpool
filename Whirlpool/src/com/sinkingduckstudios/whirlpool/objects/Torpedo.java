@@ -88,42 +88,51 @@ public class Torpedo extends GraphicObject {
 
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
+		boolean hit = false;
 		switch(side){
 		case Top:
+			hit = true;
 			mSpeed.verticalBounce();
 			setTopLeftY(-getTopLeftY());
 			break;
 		case Bottom:
+			hit = true;
 			mSpeed.verticalBounce();
 			setTopLeftY(height-getHeight());
 			break;
 		case Left:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(-getTopLeftX());
 			break;
 		case Right:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(width - getWidth());
 			break;
 		case BottomLeft:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(-getWidth());
 			mSpeed.verticalBounce();
 			setTopLeftY(height-getHeight());
 			break;
 		case BottomRight:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(width - getWidth());
 			mSpeed.verticalBounce();
 			setTopLeftY(height-getHeight());
 			break;
 		case TopLeft:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(-getTopLeftX());
 			mSpeed.verticalBounce();
 			setTopLeftY(-getTopLeftY());
 			break;
 		case TopRight:
+			hit = true;
 			mSpeed.horizontalBounce();
 			setTopLeftX(width - getWidth());
 			mSpeed.verticalBounce();
@@ -131,6 +140,9 @@ public class Torpedo extends GraphicObject {
 			break;
 		default:
 			break;
+		}
+		if(hit == true && mIsTracking == false){
+			mExplosion = true;
 		}
 	}
 

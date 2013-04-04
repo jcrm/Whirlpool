@@ -3,12 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
     <com.sinkingduckstudios.whirlpool.views.ScoreScreenView
 	    android:id="@+id/scorescreenView"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    >
 	</com.sinkingduckstudios.whirlpool.views.ScoreScreenView>
+    
     
 
     <ImageButton
@@ -21,7 +23,15 @@
         android:scaleType="fitCenter" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/highscore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/op_return"
+        android:layout_centerHorizontal="true"
+        android:text="HighScore: " />
+
+    <TextView
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/op_return"
