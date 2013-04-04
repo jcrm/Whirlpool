@@ -13,9 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageButton;
 
 import com.sinkingduckstudios.whirlpool.R;
@@ -30,35 +28,44 @@ public class ZoneScreen extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_zonescreen);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		setContentView(R.layout.activity_zonescreen);
 		
 		Constants.clearLevel();
 		Constants.setState(this);
 		
 		ImageButton bathZoneButton = ((ImageButton)findViewById(R.id.bathzone));
-		
+		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		Constants.setContext(getApplicationContext());
 		
 		Display display = getWindowManager().getDefaultDisplay();
+		@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
 		
 		bathZoneButton.setOnClickListener(goToBath);
-		
+		returnButton.setOnClickListener(goToMenu);
 		zoneScreenView=(ZoneScreenView)findViewById(R.id.zoneScreenView);
 	}
 	
 	private OnClickListener goToBath = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-    		startActivity(new Intent(getApplicationContext(), Game.class));
+    		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
     		finish();
         }
 	};
-	
+	private OnClickListener goToMenu = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+    		startActivity(new Intent(getApplicationContext(), Menu.class));
+    		finish();
+        }
+	};
+	public void onBackPressed(){
+		startActivity(new Intent(getApplicationContext(), Menu.class));
+		finish();
+	}
 	@Override
 	public void onDestroy(){
 		super.onDestroy();

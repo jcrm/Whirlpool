@@ -8,6 +8,8 @@
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
@@ -17,7 +19,7 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Whirlpool extends GraphicObject{
-	private final float sharkFactor = 0.5f;
+	//private final float sharkFactor = 0.5f;
 	private float power = 0.05f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
 	private float angle = 0.0f;
@@ -37,6 +39,13 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -131,6 +140,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){

@@ -11,12 +11,15 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
+import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Diver extends GraphicObject{
@@ -41,14 +44,24 @@ public class Diver extends GraphicObject{
 	public Diver(int x, int y, int angle, int left, int top, int right, int bottom){
 		mId = objtype.tDiver;
 		init(x, y, angle);
-		mLeftBorder = left;
-		mTopBorder = top;
-		mRightBorder = right;
-		mBottomBorder = bottom;
+		mLeftBorder = (int) (left/Constants.getScreen().getRatio());
+		mTopBorder = (int) (top/Constants.getScreen().getRatio());
+		mRightBorder = (int) (right/Constants.getScreen().getRatio());
+		mBottomBorder = (int) (bottom/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
@@ -73,27 +86,13 @@ public class Diver extends GraphicObject{
 					break;
 				default: break;
 			}
-			
 		canvas.restore();
 	}
 	@Override
 	public void init() {
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 						new Random().nextInt(Constants.getLevel().getLevelHeight()),
-						100, 100);	
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
-		
-		mBitmap = SpriteManager.getDiver();
-		mUpBitmap = SpriteManager.getDiverUp();
-		mDownBitmap = SpriteManager.getDiverDown();
-		
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		mUpAnimate = new Animate(28, 7, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
-		mDownAnimate = new Animate(28, 7, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
-		
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+						0);	
 	}
 	public void init(int x, int y, int angle) {
 		mProperties.init(x, y, 100, 100);	
@@ -112,9 +111,11 @@ public class Diver extends GraphicObject{
 		mSpeed.setMove(true);
 		mSpeed.setAngle(angle);
 		mSpeed.setSpeed(mId.tSpeed);
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

@@ -11,6 +11,8 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -52,6 +54,17 @@ public class Shark extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
+		paint.setColor(Color.BLACK);
+		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
+		paint.setColor(Color.MAGENTA);
+		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
 		canvas.save();
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
@@ -72,33 +85,8 @@ public class Shark extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-				new Random().nextInt(Constants.getLevel().getLevelHeight()),
-				100, 100);
-		mStart = new Point(getCentreX(), getCentreY());		
-		float dX = new Random().nextInt((int)getCentreX());
-		float dY = new Random().nextInt(Constants.getLevel().getLevelHeight());
-		mDropLocation = new Point((int)dX,(int)dY);
-		
-		mBitmap = SpriteManager.getShark();
-		mUpBitmap = SpriteManager.getSharkUp();
-		mDownBitmap = SpriteManager.getSharkDown();
-		mAsleepBitmap = SpriteManager.getSharkAsleep();
-		mAttackBitmap = SpriteManager.getSharkAttack();
-		
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		mUpAnimate = new Animate(10, 3, 4, mUpBitmap.getWidth(), mUpBitmap.getHeight());
-		mDownAnimate = new Animate(29, 8, 4, mDownBitmap.getWidth(), mDownBitmap.getHeight());
-		mAsleepAnimate = new Animate(33, 5, 8, mAsleepBitmap.getWidth(), mAsleepBitmap.getHeight());
-		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
-		
-		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
-		mSharkRadius = mProperties.getRadius()*2;
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
-		
-		mSharkState = SharkType.tAsleep;
+		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
+				new Random().nextInt(Constants.getLevel().getLevelHeight()));
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 100, 100);
@@ -121,17 +109,16 @@ public class Shark extends GraphicObject{
 		mAttackAnimate = new Animate(8, 2, 4, mAttackBitmap.getWidth(), mAttackBitmap.getHeight());
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/4)*(getHeight()/4))));
 		mSharkRadius = mProperties.getRadius()*2;
-		Log.v("Shark Init Speed", Float.toString(mSharkRadius));
 
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
-		Log.v("Shark Speed", Float.toString(mSpeed.getSpeed()));
 		
 		mSharkState = SharkType.tAsleep;
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkState != SharkType.tAsleep && mSharkState != SharkType.tWait){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));

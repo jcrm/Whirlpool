@@ -7,6 +7,8 @@
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
+import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
 
@@ -82,5 +84,25 @@ public class CollisionManager{
 			angle1 = 360.0f - fMod(Math.abs(angle1), 90);
 		}
 		return fMod((fMod((angle1), 360)+360), 360);
+	}
+	static public void updateCollisionRect(Properties box1, float angle){
+		box1.updtaeOriginal();
+		for(int i = 0; i<4; i++){
+			box1.mCollisionRect[i].setPoints(box1.mOriginalRect[i].getX(), box1.mOriginalRect[i].getY());
+			RotatePoint(box1.getCentre(),angle,box1.mCollisionRect[i]);
+		}
+	}
+	private static void RotatePoint(Point centre, float angle, Point point){
+		float sine = (float) Math.sin(angle);
+		float cosine = (float) Math.cos(angle);
+		
+		point.setX(point.getX()-centre.getX());
+		point.setY(point.getY()-centre.getY());
+		
+		float newX = (point.getX() * sine) - (point.getY() * cosine);
+		float newY = (point.getX() * cosine) + (point.getY() * sine);
+		
+		point.setX((newX+centre.getX())/Constants.getScreen().getRatio());
+		point.setY((newY+centre.getY())/Constants.getScreen().getRatio());
 	}
 }

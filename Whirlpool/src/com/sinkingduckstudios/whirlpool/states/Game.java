@@ -18,9 +18,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -31,7 +29,8 @@ import com.sinkingduckstudios.whirlpool.views.GameView;
 
 public class Game extends Activity {
 	private GameView mPanel;
-	private Level mLevelOne;
+	private Level mLevel;
+	private int levelselected;
 	private Timer mTime;
 	private Handler mGameHandler;
 	private Level mCurrentLevel;
@@ -44,30 +43,36 @@ public class Game extends Activity {
 	//Tick time in milliseconds
 	private final long mInterval = 1 * 1000;	
 	private boolean mPaused = false;
+	public int timepassed;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_game);
+		Intent game = getIntent();
+		levelselected = game.getIntExtra("levelselected", 0);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		setContentView(R.layout.activity_game);
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
 		//TODO remember to do this in all the other states
-		mLevelOne = new Level();
-		setCurrentLevel(mLevelOne);
+		mLevel = new Level();
+		setCurrentLevel(mLevel);
 		mTimertext = (TextView) this.findViewById(R.id.time);
-		
+
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
+		Constants.createSoundManager(getApplicationContext());
 
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();
+//		Constants.getSoundManager().loadDucky();
+//		Constants.getSoundManager().loadDiver();
+//		Constants.getSoundManager().loadFrog();
+//		Constants.getSoundManager().loadTugBoat();
+//		Constants.getSoundManager().loadOtherSounds();
+//		Constants.getSoundManager().playBackGround();
+
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init();
+		Constants.getLevel().init(levelselected,true);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
@@ -95,7 +100,7 @@ public class Game extends Activity {
 
 		mTime.schedule(new MainThread(),0, 25);
 
-
+		timepassed=0;
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
 		menuButton.setOnClickListener(goToMenu);
 	}
@@ -104,12 +109,25 @@ public class Game extends Activity {
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
 				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), Menu.class));
+				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
 				finish();
 			}
-        }
+		}
 	};
+	
+	public void onBackPressed(){
+		synchronized(Constants.getLock()){
+			mTime.cancel();
+			Constants.getSoundManager().unloadAll();
+			Constants.getSoundManager().cleanup();
+			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+			startActivity(new Intent(getApplicationContext(), LevelSelect.class));
+			finish();
+		}
+	}
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
 	}
@@ -153,6 +171,7 @@ public class Game extends Activity {
 	public void onPause(){
 		mCountDownTimer.cancel();
 		mPaused = true;
+		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
@@ -161,16 +180,21 @@ public class Game extends Activity {
 	public void onDestroy(){
 		mCountDownTimer.cancel();
 		mPaused = true;
+		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onDestroy();
 	}
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();/*
-		Constants.getSoundManager().initContext(getApplicationContext());
-		Constants.getSoundManager().loadSounds();
-		Constants.getSoundManager().playBackground();*/
+		super.onResume();
+		Constants.createSoundManager(getApplicationContext());
+		Constants.getSoundManager().loadDucky();
+		Constants.getSoundManager().loadDiver();
+		Constants.getSoundManager().loadFrog();
+		Constants.getSoundManager().loadTugBoat();
+		Constants.getSoundManager().loadOtherSounds();
+		Constants.getSoundManager().playBackGround();
 	}
 	//
 	//Timer Class
@@ -179,8 +203,8 @@ public class Game extends Activity {
 		public MyCountDownTimer(long startTime, long interval) {
 			super(startTime, interval);
 		}
-		
-		
+
+
 		@Override
 		public void onFinish(){
 			if(mPaused == false){
@@ -192,20 +216,22 @@ public class Game extends Activity {
 				//finish game
 			}
 		}
-		
+
 		@Override
 		public void onTick(long millisUntilFinished) {
 			
 			//The code below sets up the Minute and seconds
 			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
 			String seconds;	
-			if( (millisUntilFinished/1000)%60<10){
-				seconds=new String("0" +(millisUntilFinished/1000)%60);				
+			
+			timepassed++;
+			if( (timepassed)%60<10){
+				seconds=new String("0" +(timepassed)%60);				
 			}else{
-				seconds=new String("" +(millisUntilFinished/1000)%60);
+				seconds=new String("" +(timepassed)%60);
 			}
 
-			mTimertext.setText("" + (millisUntilFinished/1000)/60 + ":" + seconds);
+			mTimertext.setText("" + (timepassed)/60 + ":" + seconds);
 		}
 	}
 }

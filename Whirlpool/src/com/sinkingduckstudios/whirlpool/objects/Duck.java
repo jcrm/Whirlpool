@@ -11,6 +11,8 @@ import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
@@ -45,6 +47,23 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		canvas.drawPoint(mProperties.mCollisionRect[0].getX(), mProperties.mCollisionRect[0].getY(), paint);
+		paint.setColor(Color.BLACK);
+		canvas.drawPoint(mProperties.mCollisionRect[1].getX(), mProperties.mCollisionRect[1].getY(), paint);
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(mProperties.mCollisionRect[2].getX(), mProperties.mCollisionRect[2].getY(), paint);
+		paint.setColor(Color.MAGENTA);
+		canvas.drawPoint(mProperties.mCollisionRect[3].getX(), mProperties.mCollisionRect[3].getY(), paint);
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(getCentreX(), getCentreY(), paint);
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+		
 		if(mSharkAttack == false){
 			canvas.save();
 				
@@ -61,22 +80,7 @@ public class Duck extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(30, 60, 60, 60);		
-		
-		for(int i=0; i<3; i++){
-			int frames;
-			if(i==0){
-				frames = mId.tFrames;
-			}else{
-				frames = mId.tFrames+3;
-			}
-			mBitmap[i] = SpriteManager.getDuck(i);
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
-		}
-
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+		init(30, 60);
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 60, 60);
@@ -101,6 +105,7 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, -mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkAttack == false){
 			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
