@@ -60,6 +60,7 @@ public class Cinematic extends Activity {
     			mTime.cancel();
     			startActivity(loading);
         		finish();
+        		cinematicView.CleanUp();
     		}else{
         		mSlide++;
     		}

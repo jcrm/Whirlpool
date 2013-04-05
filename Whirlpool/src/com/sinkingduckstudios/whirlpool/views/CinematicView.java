@@ -49,10 +49,11 @@ public class CinematicView extends View{
 	@Override
 	protected void onDraw(Canvas canvas){
 		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-		canvas.drawBitmap(mCinematic[Cinematic.mSlide], null, rect, null);
+		if(mCinematic[Cinematic.mSlide] != null && mCinematic[Cinematic.mSlide].isRecycled() ==false){
+			canvas.drawBitmap(mCinematic[Cinematic.mSlide], null, rect, null);			
+		}
 		
 	}
-	
 	public void CleanUp() {
 		for(int i = 0; i < 6; i++){
 			mCinematic[i].recycle();
