@@ -92,7 +92,7 @@ public class SpriteManager {
 	}
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
-		if(mDuck[index]==null){
+		if(mDuck[index]==null || mDuck[index].isRecycled()){
 			mDuck[0] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_left_and_right_sprites);
 			mDuck[1] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_up_sprites);
 			mDuck[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.duck_down_sprites);
@@ -101,7 +101,7 @@ public class SpriteManager {
 	}
 	public static Bitmap getCinematic(int index) {
 		if(index<0||index>5)return null;
-		if(mCinematic[index]==null){
+		if(mCinematic[index]==null || mCinematic[index].isRecycled()){
 			mCinematic[0] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_1);
 			mCinematic[1] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_2);
 			mCinematic[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_3);
@@ -115,7 +115,7 @@ public class SpriteManager {
 		mDuck[index] = duck;
 	}
 	public static Bitmap getDiver() {
-		if(mDiver == null){
+		if(mDiver == null || mDiver.isRecycled()){
 			mDiver = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_left_and_right_sprites);
 		}
 		return mDiver;
@@ -124,7 +124,7 @@ public class SpriteManager {
 		mDiver = diver;
 	}
 	public static Bitmap getBoat() {
-		if(mBoat==null){
+		if(mBoat==null || mBoat.isRecycled()){
 			mBoat = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat_sprites);
 		}
 		return mBoat;
@@ -133,7 +133,7 @@ public class SpriteManager {
 		mBoat = boat;
 	}
 	public static Bitmap getFrog() {
-		if(mFrog==null){
+		if(mFrog==null || mFrog.isRecycled()){
 			mFrog = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.frog_sprites);
 		}
 		return mFrog;
@@ -142,7 +142,7 @@ public class SpriteManager {
 		mFrog = frog;
 	}
 	public static Bitmap getWhirlpool() {
-		if(mWhirlpool==null){
+		if(mWhirlpool==null || mWhirlpool.isRecycled()){
 			mWhirlpool = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.whirlpool_sprites);
 		}
 		return mWhirlpool;
@@ -151,7 +151,7 @@ public class SpriteManager {
 		mWhirlpool = whirlpool;
 	}
 	public static Bitmap getBackground() {
-		if(mBackground==null){
+		if(mBackground==null || mBackground.isRecycled()){
 			BitmapFactory.Options opt = new BitmapFactory.Options();
 			opt.inJustDecodeBounds = true;
 			BitmapFactory.decodeResource(Constants.getRes(), R.drawable.mainmenu_background, opt);
@@ -165,7 +165,7 @@ public class SpriteManager {
 		mBackground = background;
 	}
 	public static Bitmap getTorpedo() {
-		if(mTorpedo==null){
+		if(mTorpedo==null || mTorpedo.isRecycled()){
 			mTorpedo =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.torpedo_sprites);
 		}
 		return mTorpedo;
@@ -174,7 +174,7 @@ public class SpriteManager {
 		mTorpedo = torpedo;
 	}
 	public static Bitmap getBoatAttack() {
-		if(mBoatAttack==null){
+		if(mBoatAttack==null || mBoatAttack.isRecycled()){
 			mBoatAttack =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.boat_attack_sprites);
 		}
 		return mBoatAttack;
@@ -194,7 +194,7 @@ public class SpriteManager {
 		return scale;
 	}
 	public static Bitmap getLeftBorder() {
-		if(mLeftBorder==null){
+		if(mLeftBorder==null || mLeftBorder.isRecycled()){
 			mLeftBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.left_border);
 		}
 		return mLeftBorder;
@@ -203,7 +203,7 @@ public class SpriteManager {
 		mLeftBorder = leftBorder;
 	}
 	public static Bitmap getRightBorder() {
-		if(mRightBorder==null){
+		if(mRightBorder==null || mRightBorder.isRecycled()){
 			mRightBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.right_border);
 		}
 		return mRightBorder;
@@ -212,7 +212,7 @@ public class SpriteManager {
 		mRightBorder = rightBorder;
 	}
 	public static Bitmap getTopBorder() {
-		if(mTopBorder==null){
+		if(mTopBorder==null || mTopBorder.isRecycled()){
 			mTopBorder=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.top_border_tiling);
 		}
 		return mTopBorder;
@@ -221,13 +221,13 @@ public class SpriteManager {
 		mTopBorder = topBorder;
 	}
 	public static Bitmap getArrow() {
-		if(mArrow==null){
+		if(mArrow==null || mArrow.isRecycled()){
 			mArrow=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.arrow_sprites);
 		}
 		return mArrow;
 	}
 	public static Bitmap getFinish() {
-		if(mFinish==null){
+		if(mFinish==null || mFinish.isRecycled()){
 			mFinish=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point_sprites);
 		}
 		return mFinish;
@@ -236,7 +236,7 @@ public class SpriteManager {
 		mFinish = finish;
 	}
 	public static Bitmap getFinishHit() {
-		if(mFinishHit==null){
+		if(mFinishHit==null || mFinishHit.isRecycled()){
 			mFinishHit=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point_hit_sprites);
 		}
 		return mFinishHit;
@@ -245,7 +245,7 @@ public class SpriteManager {
 		mFinishHit = finishHit;
 	}
 	public static Bitmap getShark() {
-		if(mShark==null){
+		if(mShark==null || mShark.isRecycled()){
 			mShark=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_left_and_right_sprites);
 		}
 		return mShark;
@@ -254,7 +254,7 @@ public class SpriteManager {
 		mShark = shark;
 	}
 	public static Bitmap getDiverUp(){
-		if(mDiverUp == null){
+		if(mDiverUp == null || mDiverUp.isRecycled()){
 			mDiverUp = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_up_sprites);
 		}
 		return mDiverUp;
@@ -263,7 +263,7 @@ public class SpriteManager {
 		mDiverUp = diver;
 	}
 	public static Bitmap getDiverDown(){
-		if(mDiverDown == null){
+		if(mDiverDown == null || mDiverDown.isRecycled()){
 			mDiverDown = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.diver_down_sprites);
 		}
 		return mDiverDown;
@@ -272,7 +272,7 @@ public class SpriteManager {
 		mDiverDown = diver;
 	}
 	public static Bitmap getSharkUp() {
-		if(mSharkUp==null){
+		if(mSharkUp==null || mSharkUp.isRecycled()){
 			mSharkUp=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_up_sprites);
 		}
 		return mSharkUp;
@@ -281,7 +281,7 @@ public class SpriteManager {
 		mSharkUp = shark;
 	}
 	public static Bitmap getSharkDown() {
-		if(mSharkDown==null){
+		if(mSharkDown==null || mSharkDown.isRecycled()){
 			mSharkDown=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_down_sprites);
 		}
 		return mSharkDown;
@@ -290,7 +290,7 @@ public class SpriteManager {
 		mSharkDown = shark;
 	}
 	public static Bitmap getSharkAsleep() {
-		if(mSharkSleep==null){
+		if(mSharkSleep==null || mSharkSleep.isRecycled()){
 			mSharkSleep=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_sleeping_sprites);
 		}
 		return mSharkSleep;
@@ -299,7 +299,7 @@ public class SpriteManager {
 		mSharkSleep = shark;
 	}
 	public static Bitmap getSharkAttack() {
-		if(mSharkAttack==null){
+		if(mSharkAttack==null || mSharkAttack.isRecycled()){
 			mSharkAttack=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.shark_bite_sprites);
 		}
 		return mSharkAttack;
@@ -308,7 +308,7 @@ public class SpriteManager {
 		mSharkAttack = shark;
 	}
 	public static Bitmap getTorpedoExplosion() {
-		if(mTorpedoExplosion==null){
+		if(mTorpedoExplosion==null || mTorpedoExplosion.isRecycled()){
 			mTorpedoExplosion =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.torpedo_explosion_sprites);
 		}
 		return mTorpedoExplosion;
@@ -317,13 +317,13 @@ public class SpriteManager {
 		mTorpedoExplosion = torpedo;
 	}
 	public static Bitmap getEmptyStar(){
-		if(mEmptyStar==null){
+		if(mEmptyStar==null || mEmptyStar.isRecycled()){
 			mEmptyStar = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.star_empty);
 		}
 		return mEmptyStar;
 	}
 	public static Bitmap getFullStar(){
-		if(mFullStar==null){
+		if(mFullStar==null || mFullStar.isRecycled()){
 			mFullStar = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.star_full);
 		}
 		return mFullStar;

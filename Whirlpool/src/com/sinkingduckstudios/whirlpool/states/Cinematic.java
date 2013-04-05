@@ -36,8 +36,6 @@ public class Cinematic extends Activity {
 			mTime.cancel();
 			mTime = null;
 		}
-		mTime= new Timer();//init timer
-		mTime.schedule(new MainThread(),0, 1500);
 		
 		// creates a handler to deal wit the return from the timer
 		mHandler = new Handler() {
@@ -49,6 +47,9 @@ public class Cinematic extends Activity {
 				}
 			}
 		};
+		
+		mTime= new Timer();//init timer
+		mTime.schedule(new MainThread(),0, 1500);
     }
 	class MainThread extends TimerTask {
 		public void run() {

@@ -2,17 +2,22 @@ package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.views.LevelSelectView;
 
 public class LevelSelect extends Activity{
@@ -59,7 +64,7 @@ public class LevelSelect extends Activity{
 		level1Button.setLayoutParams(buttonParams);
 		level1Button.setX(xstep-(scale/2));
 		level1Button.setY(ystep-(scale/2));
-		
+	
 		xstep += theWidth/4;
 		
 		level2Button.setLayoutParams(buttonParams);
@@ -99,6 +104,15 @@ public class LevelSelect extends Activity{
 		level6Button.setOnClickListener(goToLevel6);
 		returnButton.setOnClickListener(goToZone);
 		levelSelectView=(LevelSelectView)findViewById(R.id.levelSelectView);
+		
+		SharedPreferences prefs = getSharedPreferences("HighScores", MODE_PRIVATE);
+		int stars[] = new int[6];
+		
+		for(int i = 0; i < 6; i++){
+			stars[i] =  prefs.getInt("Stars_lvl"+Integer.toString(i+1), 0);
+		}
+		
+		levelSelectView.initStars(stars);
 	}
 	
 	private OnClickListener goToLevel1 = new OnClickListener() {
