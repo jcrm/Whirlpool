@@ -75,30 +75,23 @@ public class ScoreScreenView extends View {
 	protected void onDraw(Canvas canvas){
 		
 		canvas.drawBitmap(background, null, mBackgroundRect, null);
-		if(mFullStar != null && mFullStar.isRecycled()){
-			canvas.translate(Constants.getScreen().getWidth()/2,Constants.getScreen().getHeight()/3);
-			canvas.drawBitmap(mFullStar, null, mStarRect[0], null);
-		}
+		
+		canvas.translate(Constants.getScreen().getWidth()/2,Constants.getScreen().getHeight()/3);
+		canvas.drawBitmap(mFullStar, null, mStarRect[0], null);
+		
 		canvas.translate(-(Constants.getScreen().getHeight()/4),(Constants.getScreen().getHeight()/5));
 		
 		if(mStars>=2)
-			if(mFullStar != null && mFullStar.isRecycled()==false){
-				canvas.drawBitmap(mFullStar, null, mStarRect[1], null);
-			}
+			canvas.drawBitmap(mFullStar, null, mStarRect[1], null);
 		else
-			if(mEmptyStar != null && mEmptyStar.isRecycled()==false){
-				canvas.drawBitmap(mEmptyStar, null, mStarRect[1], null);
-			}
+			canvas.drawBitmap(mEmptyStar, null, mStarRect[1], null);
+		
 		canvas.translate((Constants.getScreen().getHeight()/2f),0);
 		
 		if(mStars==3)
-			if(mFullStar != null && mFullStar.isRecycled()==false){
-				canvas.drawBitmap(mFullStar, null, mStarRect[2], null);
-			}
+			canvas.drawBitmap(mFullStar, null, mStarRect[2], null);
 		else
-			if(mEmptyStar != null && mEmptyStar.isRecycled()==false){
-				canvas.drawBitmap(mEmptyStar, null, mStarRect[2], null);
-			}
+			canvas.drawBitmap(mEmptyStar, null, mStarRect[2], null);
 	}
 	
 	public void CleanUp() {
