@@ -82,21 +82,21 @@ public class ScoreScreenView extends View {
 		canvas.translate(-(Constants.getScreen().getHeight()/4),(Constants.getScreen().getHeight()/5));
 		
 		if(mStars>=2)
-			if(mFullStar != null && mFullStar.isRecycled()){
+			if(mFullStar != null && mFullStar.isRecycled()==false){
 				canvas.drawBitmap(mFullStar, null, mStarRect[1], null);
 			}
 		else
-			if(mEmptyStar != null && mEmptyStar.isRecycled()){
+			if(mEmptyStar != null && mEmptyStar.isRecycled()==false){
 				canvas.drawBitmap(mEmptyStar, null, mStarRect[1], null);
 			}
 		canvas.translate((Constants.getScreen().getHeight()/2f),0);
 		
 		if(mStars==3)
-			if(mFullStar != null && mFullStar.isRecycled()){
+			if(mFullStar != null && mFullStar.isRecycled()==false){
 				canvas.drawBitmap(mFullStar, null, mStarRect[2], null);
 			}
 		else
-			if(mEmptyStar != null && mEmptyStar.isRecycled()){
+			if(mEmptyStar != null && mEmptyStar.isRecycled()==false){
 				canvas.drawBitmap(mEmptyStar, null, mStarRect[2], null);
 			}
 	}
