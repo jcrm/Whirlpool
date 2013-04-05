@@ -25,6 +25,7 @@ public class ScoreScreenView extends View {
 	private Bitmap mFullStar;
 	private Rect mBackgroundRect;
 	private Rect mStarRect[] = new Rect[3];
+	private int mStars=0;
 	
 	public ScoreScreenView(Context context) {
 		super(context);
@@ -61,9 +62,9 @@ public class ScoreScreenView extends View {
 		mEmptyStar = SpriteManager.getEmptyStar();
 		mFullStar = SpriteManager.getFullStar();
 		mBackgroundRect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-		mStarRect[0] = new Rect((Constants.getScreen().getWidth()/2)-125,(Constants.getScreen().getWidth()/2)-75,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
-		mStarRect[1] = new Rect((Constants.getScreen().getWidth()/2)-25,(Constants.getScreen().getWidth()/2)+25,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
-		mStarRect[2] = new Rect((Constants.getScreen().getWidth()/2)+75,(Constants.getScreen().getWidth()/2)+125,(Constants.getScreen().getHeight()/4)-25, (Constants.getScreen().getHeight()/4)+25);
+		mStarRect[0] = new Rect(-(Constants.getScreen().getHeight()/6),-(Constants.getScreen().getHeight()/6),(Constants.getScreen().getHeight()/6), (Constants.getScreen().getHeight()/6));
+		mStarRect[1] = new Rect(-(Constants.getScreen().getHeight()/6),-(Constants.getScreen().getHeight()/6),(Constants.getScreen().getHeight()/6), (Constants.getScreen().getHeight()/6));
+		mStarRect[2] = new Rect(-(Constants.getScreen().getHeight()/6),-(Constants.getScreen().getHeight()/6),(Constants.getScreen().getHeight()/6), (Constants.getScreen().getHeight()/6));
 	}
 	
 	@Override
@@ -74,9 +75,30 @@ public class ScoreScreenView extends View {
 	protected void onDraw(Canvas canvas){
 		
 		canvas.drawBitmap(background, null, mBackgroundRect, null);
-		for(int i = 0; i<3; i++){			
-			canvas.drawBitmap(mEmptyStar, null, mStarRect[i], null);
+		if(mFullStar != null && mFullStar.isRecycled()){
+			canvas.translate(Constants.getScreen().getWidth()/2,Constants.getScreen().getHeight()/3);
+			canvas.drawBitmap(mFullStar, null, mStarRect[0], null);
 		}
+		canvas.translate(-(Constants.getScreen().getHeight()/4),(Constants.getScreen().getHeight()/5));
+		
+		if(mStars>=2)
+			if(mFullStar != null && mFullStar.isRecycled()){
+				canvas.drawBitmap(mFullStar, null, mStarRect[1], null);
+			}
+		else
+			if(mEmptyStar != null && mEmptyStar.isRecycled()){
+				canvas.drawBitmap(mEmptyStar, null, mStarRect[1], null);
+			}
+		canvas.translate((Constants.getScreen().getHeight()/2f),0);
+		
+		if(mStars==3)
+			if(mFullStar != null && mFullStar.isRecycled()){
+				canvas.drawBitmap(mFullStar, null, mStarRect[2], null);
+			}
+		else
+			if(mEmptyStar != null && mEmptyStar.isRecycled()){
+				canvas.drawBitmap(mEmptyStar, null, mStarRect[2], null);
+			}
 	}
 	
 	public void CleanUp() {
@@ -100,6 +122,11 @@ public class ScoreScreenView extends View {
 			}
 		}
 		return scale;
+	}
+
+	public void setStars(int stars) {
+		mStars = stars;
+		
 	}
 
 }
