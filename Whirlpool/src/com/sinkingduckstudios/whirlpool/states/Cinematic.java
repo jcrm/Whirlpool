@@ -31,7 +31,7 @@ public class Cinematic extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_cinematic);
         cinematicView=(CinematicView)findViewById(R.id.cinematicView);
-        
+        mSlide = -1;
         if(mTime!=null){
 			mTime.cancel();
 			mTime = null;

@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -42,6 +43,53 @@ public class LevelSelect extends Activity{
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		
 		Constants.setContext(getApplicationContext());
+		
+		int theHeight = Constants.getScreen().getHeight();
+		int theWidth = Constants.getScreen().getWidth();
+		
+		int scale = theHeight/3;
+		if ((theWidth/4)< scale)
+			scale = theWidth/4;
+		
+		int xstep=theWidth/4; int ystep=theHeight/3;
+		
+		RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
+		        scale, scale);
+		
+		level1Button.setLayoutParams(buttonParams);
+		level1Button.setX(xstep-(scale/2));
+		level1Button.setY(ystep-(scale/2));
+		
+		xstep += theWidth/4;
+		
+		level2Button.setLayoutParams(buttonParams);
+		level2Button.setX(xstep-(scale/2));
+		level2Button.setY(ystep-(scale/2));
+		
+		xstep += theWidth/4;
+		
+		level3Button.setLayoutParams(buttonParams);
+		level3Button.setX(xstep-(scale/2));
+		level3Button.setY(ystep-(scale/2));	
+		
+		ystep+= theHeight/3;
+		xstep = theWidth/4;
+		
+		level4Button.setLayoutParams(buttonParams);
+		level4Button.setX(xstep-(scale/2));
+		level4Button.setY(ystep-(scale/2));	
+		
+		xstep += theWidth/4;
+		
+		level5Button.setLayoutParams(buttonParams);
+		level5Button.setX(xstep-(scale/2));
+		level5Button.setY(ystep-(scale/2));	
+		
+		xstep += theWidth/4;
+		
+		level6Button.setLayoutParams(buttonParams);
+		level6Button.setX(xstep-(scale/2));
+		level6Button.setY(ystep-(scale/2));	
 		
 		level1Button.setOnClickListener(goToLevel1);
 		level2Button.setOnClickListener(goToLevel2);
