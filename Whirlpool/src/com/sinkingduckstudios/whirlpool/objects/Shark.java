@@ -176,10 +176,12 @@ public class Shark extends GraphicObject{
 		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 	}
 	public boolean updateDirection(){
-		mDuckCounter++;
-		if(mDuckCounter>10){
-			mDuckCounter = 0;
-			return true;
+		if(this.getPulledState()!=Constants.STATE_PULLED){
+			mDuckCounter++;
+			if(mDuckCounter>10){
+				mDuckCounter = 0;
+				return true;
+			}
 		}
 		return false;
 	}

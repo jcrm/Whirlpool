@@ -22,7 +22,7 @@ public class Whirlpool extends GraphicObject{
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
-	private final int expireTimer = 250;
+	private final int expireTimer = 200;
 	private int expireCounter = 1;
 	private boolean finished = false;
 	public boolean collisionDone = true;
@@ -103,7 +103,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public boolean checkCollision(GraphicObject a){
-		if (a.getId()==objtype.tDuck || a.getId()==objtype.tTorpedo){// || a.getId()==objtype.tShark){
+		if (a.getId()==objtype.tDuck || a.getId()==objtype.tTorpedo || a.getId()==objtype.tShark){
 			boolean collide = collision(a);
 
 			if (a.getPulledState()==Constants.STATE_FREE&&collide){
@@ -114,7 +114,12 @@ public class Whirlpool extends GraphicObject{
 
 				if(a.getId()==objtype.tTorpedo)
 					((Torpedo)a).setTracking(false);//stop a torpedo tracking duck
-				collisionDone = false;
+				
+				if(a.getId()==objtype.tShark || a.getId()==objtype.tTorpedo)
+					collisionDone = true;
+				else	//Never dissipate if a duck is inside
+					collisionDone = false;
+				
 				pull(a);//pull round whirlpool
 				if (testAngle(a)){
 					a.setPulledState(Constants.STATE_LEAVING);//leaving a wpool
