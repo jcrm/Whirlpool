@@ -13,17 +13,13 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.views.ScoreScreenView;
 
 public class ScoreScreen extends Activity {
@@ -222,15 +218,12 @@ public class ScoreScreen extends Activity {
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		scorescreenView.CleanUp();
 		scorescreenView = null;
-		/*
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-	    SharedPreferences.Editor editor = settings.edit();
-	    */
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
-
 	
 	private int LEVEL_ONE_AVERAGE = 40;
 	private int LEVEL_ONE_GOOD = 20;

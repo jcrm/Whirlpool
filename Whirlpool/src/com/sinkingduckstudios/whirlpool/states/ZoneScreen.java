@@ -68,9 +68,12 @@ public class ZoneScreen extends Activity{
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		zoneScreenView.CleanUp();
 		zoneScreenView = null;
+        // TODO Auto-generated method stub
+        Runtime.getRuntime().gc();
+        System.gc();
+        super.onDestroy();
 	}
 	
 }

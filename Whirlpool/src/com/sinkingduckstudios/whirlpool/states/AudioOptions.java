@@ -61,9 +61,11 @@ public class AudioOptions extends Activity{
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		audioOptionsView.CleanUp();
 		audioOptionsView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 }

@@ -45,21 +45,12 @@ public class Shark extends GraphicObject{
 		mId = objtype.tShark;
 		init();
 	}
-	public Shark(int x, int y){
+	public Shark(int x, int y, int dx, int dy){
 		mId = objtype.tShark;
-		init(x, y);
+		init(x, y, dx, dy);
 	}
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -72,7 +63,11 @@ public class Shark extends GraphicObject{
 		case 1: canvas.drawBitmap(mUpBitmap, mUpAnimate.getPortion(), rect, null); break;
 		case 2: canvas.drawBitmap(mDownBitmap, mDownAnimate.getPortion(), rect, null); break;
 		case 3: canvas.drawBitmap(mAsleepBitmap, mAsleepAnimate.getPortion(), rect, null); break;
-		case 4: canvas.drawBitmap(mAttackBitmap, mAttackAnimate.getPortion(), rect, null); break;
+		case 4: 
+			if(mSpeed.getAngle() >=270 || mSpeed.getAngle() <=90){
+				canvas.scale(-1, 1);
+			}
+			canvas.drawBitmap(mAttackBitmap, mAttackAnimate.getPortion(), rect, null); break;
 		default: break;
 		}
 		canvas.restore();
@@ -81,16 +76,18 @@ public class Shark extends GraphicObject{
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
-				new Random().nextInt(Constants.getLevel().getLevelHeight()));
+				new Random().nextInt(Constants.getLevel().getLevelHeight()),
+				new Random().nextInt((int) (getCentreX()+(getCentreX()/4))),
+				new Random().nextInt(Constants.getLevel().getLevelHeight()/2));
 	}
-	public void init(int x, int y) {
+	public void init(int x, int y, int dx, int dy) {
 		mGraphicType = 4;
 		mIsPlaying = false;
 		mProperties.init(x, y, 100, 100,0.65f,0.65f);
 
 		mStart = new Point(getCentreX(), getCentreY());
-		float dX = new Random().nextInt((int)getCentreX());
-		float dY = new Random().nextInt(Constants.getLevel().getLevelHeight());
+		float dX = dx/Constants.getScreen().getRatio();
+		float dY = dy/Constants.getScreen().getRatio();
 		mDropLocation = new Point((int)dX,(int)dY);
 
 		mBitmap = SpriteManager.getShark();

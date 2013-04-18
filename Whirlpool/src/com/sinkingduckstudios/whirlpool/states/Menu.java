@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
+import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.views.MenuView;
 
 public class Menu extends Activity {
@@ -50,6 +51,14 @@ public class Menu extends Activity {
         optionsButton.setOnClickListener(goToOptions);
         exitButton.setOnClickListener(goToExit);
         menuView=(MenuView)findViewById(R.id.menuView);
+        SpriteManager.unloadBoat();
+        SpriteManager.unloadDuck();
+        SpriteManager.unloadDiver();
+        SpriteManager.unloadFrog();
+        SpriteManager.unloadShark();
+        SpriteManager.unloadStar();
+        SpriteManager.unloadWhirlpool();
+        SpriteManager.unloadTorpedo();
     }
 	private OnClickListener goToGame = new OnClickListener() {
 		@Override
@@ -75,9 +84,11 @@ public class Menu extends Activity {
 	};
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		menuView.CleanUp();
 		menuView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 //	Intent OptionsBackIntent = new Intent(OptionsMenu.this, Menu.class);
 //	startActivity(OptionsBackIntent);

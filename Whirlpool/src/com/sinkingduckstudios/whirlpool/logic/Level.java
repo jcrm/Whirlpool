@@ -40,35 +40,35 @@ public class Level {
 	private int mLevelWidth = 0;
 	private int mLevelHeight = 0;
 	private float mScrollBy = 0;
-	
+
 	private Bitmap mBackgroundImage;
 	private Bitmap mLeftBorderImage;
 	private Bitmap mRightBorderImage;
 	private Bitmap mTopBorderImage;
-	
+
 	private int DiverCounter;
 	private int FrogCounter;
 	private int TugBoatCounter;
 	private int SharkCounter;
-	
+
 	private boolean mPointsPlaying;
 
-	
+
 	private static Object mScreenLock;
 	private Rect mRect = new Rect();
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
-	
-	
+
+
 	public Level(){
 	}
 	public void init(){
 		mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
-		
+
 		levelNumber(1);
 		mPointsPlaying = false;
-		
+
 		DiverCounter = 0;
 		FrogCounter = 0;
 		TugBoatCounter = 0;
@@ -80,13 +80,13 @@ public class Level {
 	public void init(int lNumber, boolean replay){
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
-		
+
 		levelNumber(lNumber);
 		if(replay){
 			replayLevel(lNumber);
 		}
 		mPointsPlaying = false;
-		
+
 		DiverCounter = 0;
 		FrogCounter = 0;
 		TugBoatCounter = 0;
@@ -146,7 +146,7 @@ public class Level {
 			mGraphics.add(new Boat(1200,207));//207=250-(96/2) --> 96 is height
 			mGraphics.add(new Frog(600, 250, 140));
 			mGraphics.add(new Frog(1200, 250, 140));		
-			mGraphics.add(new Shark(600,300));
+			mGraphics.add(new Shark(600,300,300,150));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250, -1, 1));
 			break;
@@ -234,7 +234,7 @@ public class Level {
 				torpedo.setPulledBy(null);
 				torpedo.setPulledState(Constants.STATE_FREE);
 			}
-					
+
 			if(torpedo.getIsReadyToDestroy()){
 				Constants.getSoundManager().playExplosion();
 				tIterator.remove();
@@ -270,80 +270,80 @@ public class Level {
 			}
 			enviro.frame();
 		}
-		
+
 		//go through the list of graphics objects
-				for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
-					GraphicObject Enemy = gIterator.next();
-		  			// if the enemy is on screen...
-					if (enemiesOnScreen(Enemy)){
-						// find out the enemies type and play the relevant type
-						switch (Enemy.getType()){
-							//diver
-							case 1 : {
-								if (Enemy.getIsPlaying() == false){
-									Constants.getSoundManager().playDiver();
-									Enemy.setIsPlaying(true);
-									DiverCounter = 0;
-								}
-								DiverCounter ++;
-								if (DiverCounter >= 500){
-									Enemy.setIsPlaying(false);
-								}
-								break;
-							}
-							//frog
-							case 2 :{
-								if (Enemy.getIsPlaying() == false){
-									Constants.getSoundManager().playFrog();
-									Enemy.setIsPlaying(true);
-									FrogCounter = 0;
-								}
-								
-								FrogCounter ++;
-								
-								if (FrogCounter >= 500){
-									Enemy.setIsPlaying(false);
-								}
-								break;
-							}
-							//tugbout
-							case 3 :{
-								if (Enemy.getIsPlaying() == false){
-									Constants.getSoundManager().playTugBoat();
-									Enemy.setIsPlaying(true);
-									TugBoatCounter = 0;
-								}
-								TugBoatCounter ++;
-								if (TugBoatCounter >= 500){
-									Enemy.setIsPlaying(false);
-								}
-								break;
-							}
-							
-							//shark
-							case 4 : {
-								if (Enemy.getIsPlaying() == false)
-								{
-									Constants.getSoundManager().playShark();
-									Enemy.setIsPlaying(true);
-									SharkCounter = 0;
-								}
-								
-								SharkCounter ++;
-								if(SharkCounter >= 500)
-								{
-									Enemy.setIsPlaying(false);
-								}
-
-								break;
-							}
-						}// end switch enemytype
+		for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
+			GraphicObject Enemy = gIterator.next();
+			// if the enemy is on screen...
+			if (enemiesOnScreen(Enemy)){
+				// find out the enemies type and play the relevant type
+				switch (Enemy.getType()){
+				//diver
+				case 1 : {
+					if (Enemy.getIsPlaying() == false){
+						Constants.getSoundManager().playDiver();
+						Enemy.setIsPlaying(true);
+						DiverCounter = 0;
 					}
-				} //end for graphics objects
-				
-				
+					DiverCounter ++;
+					if (DiverCounter >= 500){
+						Enemy.setIsPlaying(false);
+					}
+					break;
+				}
+				//frog
+				case 2 :{
+					if (Enemy.getIsPlaying() == false){
+						Constants.getSoundManager().playFrog();
+						Enemy.setIsPlaying(true);
+						FrogCounter = 0;
+					}
 
-		
+					FrogCounter ++;
+
+					if (FrogCounter >= 500){
+						Enemy.setIsPlaying(false);
+					}
+					break;
+				}
+				//tugbout
+				case 3 :{
+					if (Enemy.getIsPlaying() == false){
+						Constants.getSoundManager().playTugBoat();
+						Enemy.setIsPlaying(true);
+						TugBoatCounter = 0;
+					}
+					TugBoatCounter ++;
+					if (TugBoatCounter >= 500){
+						Enemy.setIsPlaying(false);
+					}
+					break;
+				}
+
+				//shark
+				case 4 : {
+					if (Enemy.getIsPlaying() == false)
+					{
+						Constants.getSoundManager().playShark();
+						Enemy.setIsPlaying(true);
+						SharkCounter = 0;
+					}
+
+					SharkCounter ++;
+					if(SharkCounter >= 500)
+					{
+						Enemy.setIsPlaying(false);
+					}
+
+					break;
+				}
+				}// end switch enemytype
+			}
+		} //end for graphics objects
+
+
+
+
 		synchronized(mScreenLock){
 			duckOnScreen();
 		}
@@ -352,7 +352,7 @@ public class Level {
 	private void updateList(){		
 		for(Iterator<GraphicObject> mainIterator = mGraphics.listIterator(); mainIterator.hasNext();){
 			GraphicObject graphic = mainIterator.next();
-			
+
 			boolean isColliding = false;
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				if(whirl.checkCollision(graphic))
@@ -362,7 +362,7 @@ public class Level {
 				graphic.setPulledBy(null);
 				graphic.setPulledState(Constants.STATE_FREE);
 			}
-			
+
 			for(GraphicEnvironment enviro: mEnvironments){
 				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck){
 					if(((Finish) enviro).checkCollision(graphic)){
@@ -405,7 +405,7 @@ public class Level {
 	public void onDraw(Canvas canvas){
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
-		
+
 		for(int i = 0; i < (num); i++){
 			mRect.set((int) ((width*i)-mScrollBy), 0, (int)((width*(i+1)) - mScrollBy), Constants.getScreen().getHeight());
 			canvas.drawBitmap(mBackgroundImage, null, mRect,  null);
@@ -430,15 +430,15 @@ public class Level {
 		int bottom =Constants.getScreen().getHeight();
 		canvas.translate(-mScrollBy, 0.0f);
 		canvas.save();
-			mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),bottom);
-			canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
+		mRect.set(mLeftBorderImage.getWidth(),0,mLevelWidth-mRightBorderImage.getWidth(),bottom);
+		canvas.drawBitmap(mTopBorderImage, null, mRect,  null);
 
-			mRect.set(0, 0, mLeftBorderImage.getWidth(), bottom);
-			canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
-			canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
-	
-			mRect.set(0, 0, mRightBorderImage.getWidth(), bottom);
-			canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
+		mRect.set(0, 0, mLeftBorderImage.getWidth(), bottom);
+		canvas.drawBitmap(mLeftBorderImage, null, mRect,  null);
+		canvas.translate(mLevelWidth-mRightBorderImage.getWidth(), 0);
+
+		mRect.set(0, 0, mRightBorderImage.getWidth(), bottom);
+		canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 		canvas.restore();
 	}
 	public WPools getWPoolModel() {
@@ -465,7 +465,7 @@ public class Level {
 	public void shiftScrollBy(float delta) {
 	}
 	private void duckOnScreen(){
-		
+
 		mScrollBy = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
 		if(mScrollBy < 0){
 			mScrollBy = 0;
@@ -560,20 +560,26 @@ public class Level {
 		float RightEdge =Constants.getPlayer().getCentreX()+ Constants.getScreen().getWidth()/2;
 		float TopEdge =Constants.getPlayer().getCentreX()- Constants.getScreen().getHeight()/2;
 		float BottomEdge =Constants.getPlayer().getCentreX()+ Constants.getScreen().getHeight()/2;
-		
+
 		// get the edges of the enemy sprite
 		float EnemyLeftEdge = (TempEnemy.getCentreX() -(TempEnemy.getWidth()/2));
 		float EnemyRightEdge = (TempEnemy.getCentreX() + (TempEnemy.getWidth()/2));
 		float EnemyTopEdge = (TempEnemy.getCentreY() - (TempEnemy.getHeight()/2));
 		float EnemyBottomEdge = (TempEnemy.getCentreY() + (TempEnemy.getHeight()/2));
-		
+
 		//using the edges of the screen and the enemy sprite, do a  bounding box calculation to see if the enemy is inside the screen	
 		if (RightEdge < EnemyLeftEdge) { return false; }		
 		if (BottomEdge < EnemyTopEdge) { return false; }
 		if (LeftEdge > EnemyRightEdge) { return false; }
 		if (TopEdge > EnemyBottomEdge) { return false; }
-		
+
 		return true;
+	}
+	public void cleanUp(){
+		SpriteManager.unloadBoat();
+		SpriteManager.unloadDiver();
+		SpriteManager.unloadFrog();
+		SpriteManager.unloadShark();
 	}
 
 }

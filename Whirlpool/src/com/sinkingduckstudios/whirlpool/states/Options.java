@@ -83,9 +83,11 @@ public class Options extends Activity {
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		optionsView.CleanUp();
 		optionsView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 }

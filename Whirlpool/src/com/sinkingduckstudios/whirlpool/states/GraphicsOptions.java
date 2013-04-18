@@ -61,9 +61,11 @@ public class GraphicsOptions extends Activity{
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		graphicsOptionsView.CleanUp();
 		graphicsOptionsView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 	

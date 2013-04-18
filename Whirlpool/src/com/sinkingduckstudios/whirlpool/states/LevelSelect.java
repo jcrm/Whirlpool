@@ -4,20 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.views.LevelSelectView;
 
 public class LevelSelect extends Activity{
@@ -226,9 +222,11 @@ public class LevelSelect extends Activity{
 	};	
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		levelSelectView.CleanUp();
 		levelSelectView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 }

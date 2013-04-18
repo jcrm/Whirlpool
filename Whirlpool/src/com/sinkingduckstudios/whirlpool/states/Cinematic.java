@@ -51,6 +51,12 @@ public class Cinematic extends Activity {
 		mTime= new Timer();//init timer
 		mTime.schedule(new MainThread(),0, 1500);
     }
+	@Override
+	public void onDestroy(){
+		Runtime.getRuntime().gc();
+        System.gc();
+        super.onDestroy();
+	}
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 5){
