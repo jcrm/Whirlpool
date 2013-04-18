@@ -198,6 +198,8 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadDiver();
 		Constants.getSoundManager().loadFrog();
 		Constants.getSoundManager().loadTugBoat();
+		Constants.getSoundManager().loadShark();
+		Constants.getSoundManager().loadCinematic();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().playBackGround();
 	}

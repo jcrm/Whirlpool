@@ -322,6 +322,19 @@ public class Level {
 							
 							//shark
 							case 4 : {
+								if (Enemy.getIsPlaying() == false)
+								{
+									Constants.getSoundManager().playShark();
+									Enemy.setIsPlaying(true);
+									SharkCounter = 0;
+								}
+								
+								SharkCounter ++;
+								if(SharkCounter >= 500)
+								{
+									Enemy.setIsPlaying(false);
+								}
+
 								break;
 							}
 						}// end switch enemytype
