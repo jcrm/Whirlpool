@@ -11,7 +11,7 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 public class Boat extends GraphicObject{
-	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting};
+	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting, bBroken};
 	private BoatType mBoatState = BoatType.bDefault;
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
 	private int mTorpedoCount = -1;
@@ -134,18 +134,17 @@ public class Boat extends GraphicObject{
 	public void setBroken(boolean broken) {
 		mBroken = broken;
 		if(mBroken == true){
-			mBitmap = SpriteManager.getBoat();
-			mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
+			mBoatState = BoatType.bBroken;
+			mBitmap = SpriteManager.getDestroyBoat();
+			mAnimate.Reset(25, 4, 8, mBitmap.getWidth(), mBitmap.getHeight(),3);
 		}
 	}
 	public boolean checkBroken(){
-		if(mBroken == true){
-			mBoatState = BoatType.bReady;
-			if(++mTorpedoCount>=0){
-				if(mTorpedoCount == 200){
-					mTorpedoCount = -1;
-					mBroken = false;
-				}
+		if(mBroken == true && mBoatState == BoatType.bBroken){
+			if(mAnimate.getFinished()== true){
+				mBoatState = BoatType.bReady;
+				mTorpedoCount = -1;
+				mBroken = false;				
 			}
 			return true;
 		}else{
