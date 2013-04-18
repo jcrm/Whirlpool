@@ -83,7 +83,7 @@ public class Finish extends GraphicEnvironment{
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
 		
 		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		mHitAnimate = new Animate(28, 4, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
