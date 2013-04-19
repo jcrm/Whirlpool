@@ -620,7 +620,7 @@ public class SoundManager
 
 		if(mSndPool == null)
 		{
-			mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 0);	
+			mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);	
 		}
 		// load function takes in 3 paramiters-
 		//										the application centext
@@ -711,7 +711,7 @@ public class SoundManager
 
 
 	public void init() {
-		mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);
+		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
 		mMasterVolume = 1.0f;
 		mLeftVolume =mMasterVolume;			// the volume of the left speaker, set to on full

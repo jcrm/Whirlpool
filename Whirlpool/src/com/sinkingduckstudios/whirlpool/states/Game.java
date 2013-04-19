@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -87,6 +88,7 @@ public class Game extends Activity {
 					Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
 					scorescreen.putExtra("timepassed", timepassed);
 					scorescreen.putExtra("levelselected", levelselected);
+					scorescreen.putExtra("duckcount", mLevel.getDuckCount());
 					startActivity(scorescreen);
 					mLevel.cleanUp();
 					finish();
@@ -97,7 +99,12 @@ public class Game extends Activity {
 
 		timepassed=0;
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
+		ImageButton pauseButton = ((ImageButton)findViewById(R.id.pausebutton));
+		ImageButton unpauseButton = ((ImageButton)findViewById(R.id.unpausebutton));
 		menuButton.setOnClickListener(goToMenu);
+		pauseButton.setOnClickListener(pause);
+		unpauseButton.setOnClickListener(unpause);
+
 	}
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
@@ -113,7 +120,31 @@ public class Game extends Activity {
 			}
 		}
 	};
+	private OnClickListener pause = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			mPaused = true;
+			mCountDownTimer.cancel();
+			View unpauseButton = findViewById(R.id.unpausebutton);
+			unpauseButton.setVisibility(View.VISIBLE);
+			View pauseButton = findViewById(R.id.pausebutton);
+			pauseButton.setVisibility(View.INVISIBLE);
+		}
+	};
 	
+	private OnClickListener unpause = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			mPaused = false;
+			mCountDownTimer.start();
+			View pauseButton = findViewById(R.id.pausebutton);
+			pauseButton.setVisibility(View.VISIBLE);
+			View unpauseButton = findViewById(R.id.unpausebutton);
+			unpauseButton.setVisibility(View.INVISIBLE);
+		}
+	};
+	
+
 	public void onBackPressed(){
 		
 	}
@@ -160,6 +191,7 @@ public class Game extends Activity {
 	public void onPause(){
 		mPaused = true;
 		mCountDownTimer.cancel();
+		mTimerHasStarted = false;
 		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
@@ -185,7 +217,10 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().playBackGround();
-		mCountDownTimer.start();
+		if(!mTimerHasStarted){
+			mCountDownTimer.start();
+			mTimerHasStarted = true;				
+		}
 		super.onResume();
 	}
 	//
@@ -205,6 +240,7 @@ public class Game extends Activity {
 				Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
 				scorescreen.putExtra("timepassed", timepassed);
 				scorescreen.putExtra("levelselected", levelselected);
+				scorescreen.putExtra("duckcount", mLevel.getDuckCount());
 				startActivity(scorescreen);
 				finish();
 				//finish game
@@ -225,6 +261,8 @@ public class Game extends Activity {
 			mTimertext.setGravity(Gravity.CENTER_HORIZONTAL);
 			mTimertext.setTextColor(Color.BLACK);
 			mTimertext.setText("" + (timepassed)/60 + ":" + seconds);
+			Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
+			mTimertext.setTypeface(face);
 		}
 	}
 }

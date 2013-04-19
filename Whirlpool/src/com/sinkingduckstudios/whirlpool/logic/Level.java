@@ -10,6 +10,7 @@ package com.sinkingduckstudios.whirlpool.logic;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -31,7 +32,7 @@ import com.sinkingduckstudios.whirlpool.objects.Shark.SharkType;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
-public class Level {
+public class Level extends Activity{
 
 	private final WPools mWPoolModel = new WPools();
 	private ArrayList<GraphicObject> mGraphics = new ArrayList<GraphicObject>();
@@ -51,15 +52,14 @@ public class Level {
 	private int TugBoatCounter;
 	private int SharkCounter;
 
-	private boolean mPointsPlaying;
-
+	private int mCollectables;
 
 	private static Object mScreenLock;
 	private Rect mRect = new Rect();
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 
 
-	public Level(){
+	public Level() {
 	}
 	public void init(){
 		mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
@@ -67,7 +67,6 @@ public class Level {
 		initImages();
 
 		levelNumber(1);
-		mPointsPlaying = false;
 
 		DiverCounter = 0;
 		FrogCounter = 0;
@@ -85,7 +84,6 @@ public class Level {
 		if(replay){
 			replayLevel(lNumber);
 		}
-		mPointsPlaying = false;
 
 		DiverCounter = 0;
 		FrogCounter = 0;
@@ -386,11 +384,17 @@ public class Level {
 				if (collided!=((Collectable)graphic).getCollided()){
 					((Collectable)graphic).setFollowing(mFollowThis);
 					mFollowThis=graphic;
+					mCollectables ++;
+
 				}
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
 			}
 		}
+	}
+	public int getDuckCount(){
+		return mCollectables;
+		
 	}
 	private void checkBoatTorpedoCollision(GraphicObject graphic){
 		for(Torpedo torpedo : mTorpedoes){

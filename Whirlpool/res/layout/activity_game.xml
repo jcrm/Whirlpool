@@ -4,14 +4,16 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal"
     android:id="@+id/root" >
-
-    <com.sinkingduckstudios.whirlpool.views.GameView
+    
+   <com.sinkingduckstudios.whirlpool.views.GameView
 	    android:id="@+id/gameview"
 	    android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         >
 	</com.sinkingduckstudios.whirlpool.views.GameView>
-	<LinearLayout
+ 
+    
+	<RelativeLayout
 	    android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
 	    >
@@ -26,8 +28,27 @@
 	        android:id="@+id/time"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="loool" />
+	        android:layout_toRightOf="@+id/menubutton" />
+
+	    <ImageButton
+	        android:id="@+id/pausebutton"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        android:background="@drawable/back_button"
+	        android:scaleType="fitCenter" />
+
+	    <ImageButton
+	        android:id="@+id/unpausebutton"
+	        android:layout_width="100dp"
+	        android:layout_height="100dp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:background="@drawable/back_button"
+	        android:scaleType="fitCenter"
+	        android:visibility="invisible" />
 	    
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

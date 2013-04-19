@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,12 +29,13 @@ public class ScoreScreen extends Activity {
 	boolean mPaused = false;
 	
 	//TODO WHY U SO PUBLIC?
-	public int timepassed;
-	public int levelselected;
-	public int score;
-	public int highscore;
-	public int currentHS;
-	
+	private int timepassed;
+	private int levelselected;
+	private int score;
+	private int highscore;
+	private int miniDuckCount;
+
+
 	private int stars;
 	
 	public static final String HIGH_SCORES = "HighScores";
@@ -48,6 +50,7 @@ public class ScoreScreen extends Activity {
 		setContentView(R.layout.activity_scorescreen);
 		
 		Intent scorescreen = getIntent();
+		miniDuckCount = scorescreen.getIntExtra("duckcount", 0);
 		timepassed = scorescreen.getIntExtra("timepassed", 0);
 		levelselected = scorescreen.getIntExtra("levelselected", 0);
 		
@@ -56,7 +59,9 @@ public class ScoreScreen extends Activity {
 		
 		SharedPreferences prefs = getSharedPreferences(HIGH_SCORES, MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
+		Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
 		
+
 		switch(levelselected){
 		case 1:
 			if(score >= (prefs.getInt("HighScore_lvl1", score))){
@@ -190,12 +195,22 @@ public class ScoreScreen extends Activity {
 		Score.setText("Score: " + score);
 		Score.setTextColor(Color.BLACK);
 		Score.setY(Constants.getScreen().getHeight()*0.66f);
-		
+		Score.setTypeface(face);;
+
 		TextView HScore = (TextView) findViewById(R.id.highscore);
 		HScore.setText("HighScore: " + highscore);
 		HScore.setTextColor(Color.BLACK);
 		HScore.setY(Score.getY()+Score.getHeight());
+		HScore.setTypeface(face);
 		
+		TextView DuckCount = (TextView) findViewById(R.id.duckcount);
+		DuckCount.setText("DuckCount: " + miniDuckCount);
+		DuckCount.setTextColor(Color.BLACK);
+		DuckCount.setY(Score.getY()+Score.getHeight());
+		DuckCount.setTypeface(face);
+		
+		//duckcount
+
 		ImageButton menuButton = ((ImageButton)findViewById(R.id.op_return));
 		Constants.setContext(getApplicationContext());		
 		menuButton.setOnClickListener(goToMenu);
@@ -216,6 +231,12 @@ public class ScoreScreen extends Activity {
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+	}
+
 	@Override
 	public void onDestroy(){
 		scorescreenView.CleanUp();
