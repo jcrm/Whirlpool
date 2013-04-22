@@ -86,30 +86,30 @@ public final class R {
         public static final int options_button=0x7f020048;
         public static final int other_background=0x7f020049;
         public static final int play_button=0x7f02004a;
-        public static final int right_border=0x7f02004b;
-        public static final int selecter=0x7f02004c;
-        public static final int shark_bite_sprites=0x7f02004d;
-        public static final int shark_down_sprites=0x7f02004e;
-        public static final int shark_left_and_right_sprites=0x7f02004f;
-        public static final int shark_sleeping_sprites=0x7f020050;
-        public static final int shark_up_sprites=0x7f020051;
-        public static final int soundoptions_bar=0x7f020052;
-        public static final int star_empty=0x7f020053;
-        public static final int star_full=0x7f020054;
-        public static final int top_border_tiling=0x7f020055;
-        public static final int torpedo_explosion_sprites=0x7f020056;
-        public static final int torpedo_sprites=0x7f020057;
-        public static final int wateroffset_background=0x7f020058;
-        public static final int whirlpool_sprites=0x7f020059;
+        public static final int plug_sprite=0x7f02004b;
+        public static final int right_border=0x7f02004c;
+        public static final int selecter=0x7f02004d;
+        public static final int shark_bite_sprites=0x7f02004e;
+        public static final int shark_down_sprites=0x7f02004f;
+        public static final int shark_left_and_right_sprites=0x7f020050;
+        public static final int shark_sleeping_sprites=0x7f020051;
+        public static final int shark_up_sprites=0x7f020052;
+        public static final int soundoptions_bar=0x7f020053;
+        public static final int star_empty=0x7f020054;
+        public static final int star_full=0x7f020055;
+        public static final int top_border_tiling=0x7f020056;
+        public static final int torpedo_explosion_sprites=0x7f020057;
+        public static final int torpedo_sprites=0x7f020058;
+        public static final int wateroffset_background=0x7f020059;
+        public static final int whirlpool_sprites=0x7f02005a;
     }
     public static final class id {
         public static final int audio=0x7f08001c;
         public static final int audioOptionsView=0x7f080000;
         public static final int audio_off=0x7f080002;
         public static final int audio_on=0x7f080003;
-        public static final int bathzone=0x7f080022;
+        public static final int bathzone=0x7f080021;
         public static final int cinematicView=0x7f080007;
-        public static final int duckcount=0x7f080020;
         public static final int exit=0x7f08001a;
         public static final int game=0x7f080018;
         public static final int gameview=0x7f080009;
@@ -127,7 +127,7 @@ public final class R {
         public static final int mAudioOptions=0x7f080001;
         public static final int menuLayout=0x7f080016;
         public static final int menuView=0x7f080017;
-        public static final int menu_settings=0x7f080023;
+        public static final int menu_settings=0x7f080022;
         public static final int menubutton=0x7f08000a;
         public static final int op_return=0x7f080004;
         public static final int options=0x7f080019;
@@ -138,7 +138,7 @@ public final class R {
         public static final int scorescreenView=0x7f08001d;
         public static final int time=0x7f08000b;
         public static final int unpausebutton=0x7f08000d;
-        public static final int zoneScreenView=0x7f080021;
+        public static final int zoneScreenView=0x7f080020;
     }
     public static final class layout {
         public static final int activity_audiooptions=0x7f030000;

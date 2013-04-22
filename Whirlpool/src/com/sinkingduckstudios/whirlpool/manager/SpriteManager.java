@@ -29,6 +29,7 @@ public class SpriteManager {
 	private static Bitmap mArrow;
 	private static Bitmap mFinish;
 	private static Bitmap mFinishHit;
+	private static Bitmap mPlug;
 
 	private static Bitmap mTorpedo;
 	private static Bitmap mTorpedoExplosion;
@@ -101,6 +102,7 @@ public class SpriteManager {
 		clean(mFinish);
 		clean(mFinishHit);
 		clean(mArrow);
+		clean(mPlug);
 	}
 	public static void unloadDiver(){
 		clean(mDiver);
@@ -234,6 +236,12 @@ public class SpriteManager {
 			mFinishHit=  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.end_point_hit_sprites);
 		}
 		return mFinishHit;
+	}
+	public static Bitmap getPlug(){
+		if(empty(mPlug)){
+			mPlug =  BitmapFactory.decodeResource(Constants.getRes(), R.drawable.plug_sprite);
+		}
+		return mPlug;
 	}
 	public static Bitmap getShark() {
 		if(empty(mShark)){

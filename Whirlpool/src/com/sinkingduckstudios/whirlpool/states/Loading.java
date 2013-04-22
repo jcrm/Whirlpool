@@ -14,10 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.sinkingduckstudios.whirlpool.R;
-import com.sinkingduckstudios.whirlpool.views.MenuView;
 
 public class Loading extends Activity {
-	MenuView menuView;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

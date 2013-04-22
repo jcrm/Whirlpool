@@ -1,7 +1,7 @@
 /*
- * Author:
- * Last Updated:
- * Content:
+ * Author: Fraser Tomison &
+ * Last Updated: 22/04/2013
+ * Content: Displays score acheived, handles saving highscores
  * 
  * 
  */
@@ -28,7 +28,7 @@ public class ScoreScreen extends Activity {
 	public static final String PREFS_NAME = "Bath_Score";
 	boolean mPaused = false;
 	
-	//TODO WHY U SO PUBLIC?
+	
 	private int timepassed;
 	private int levelselected;
 	private int score;
@@ -203,13 +203,6 @@ public class ScoreScreen extends Activity {
 		HScore.setY(Score.getY()+Score.getHeight());
 		HScore.setTypeface(face);
 		
-		TextView DuckCount = (TextView) findViewById(R.id.duckcount);
-		DuckCount.setText("DuckCount: " + miniDuckCount);
-		DuckCount.setTextColor(Color.BLACK);
-		DuckCount.setY(Score.getY()+Score.getHeight());
-		DuckCount.setTypeface(face);
-		
-		//duckcount
 
 		ImageButton menuButton = ((ImageButton)findViewById(R.id.op_return));
 		Constants.setContext(getApplicationContext());		

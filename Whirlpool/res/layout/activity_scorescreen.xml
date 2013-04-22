@@ -36,14 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Score: " />
-        
-    <TextView
-        android:id="@+id/duckcount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-         android:layout_below="@+id/highscore"
-        android:layout_centerHorizontal="true"
-        android:text="Duck Count: " />
     
 
 </RelativeLayout>

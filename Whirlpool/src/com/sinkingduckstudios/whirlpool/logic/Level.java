@@ -112,7 +112,7 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(400, 250, 80));
 			mGraphics.add(new Frog(1200, 250, 70));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(1400, 250, -1, 1));
+			mEnvironments.add(new Finish(1400, 250));
 			break;
 		case 2:
 			mGraphics.add(new Diver(100, 0, 45, 100, 0, 400, 250));
@@ -121,7 +121,7 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(600, 250, 75));
 			mGraphics.add(new Frog(1250, 250, 140));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(1250, 250, -1, 1));
+			mEnvironments.add(new Finish(1250, 250));
 			break;
 		case 3:
 			mGraphics.add(new Diver(250, 0, 90, 0, 0, 0, 0));
@@ -133,7 +133,7 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(1000, 250, 45, 1000, 250, 1300, 500));
 			mGraphics.add(new Diver(1400, 50, 90, 0, 0, 0, 0));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(1200, 250, -1, 1));
+			mEnvironments.add(new Finish(1200, 250));
 			break;
 		case 4:
 			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
@@ -146,7 +146,7 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(1200, 250, 140));		
 			mGraphics.add(new Shark(600,300,300,150));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(2900, 250, -1, 1));
+			mEnvironments.add(new Finish(2900, 250));
 			break;
 		case 5: 
 			mGraphics.add(new Diver(100, 50, 0, 0, 0, 900, 0));
@@ -161,7 +161,7 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(1700, 200, 100));
 			mGraphics.add(new Frog(2350, 200, 100));	
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(2900, 250, -1, 1));
+			mEnvironments.add(new Finish(2900, 250));
 			break;
 		case 6:
 			mGraphics.add(new Diver(800, 50, 90, 0, 0, 0, 300));
@@ -173,11 +173,11 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(2500, 350, 100));
 			mGraphics.add(new Boat(600,250));//207=250-(96/2) --> 96 is height
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(2900, 235, -1, 1));
+			mEnvironments.add(new Finish(2900, 235));
 			break;
 		default: 
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
-			mEnvironments.add(new Finish(2900, 250, -1, 1));
+			mEnvironments.add(new Finish(2900, 250));
 			break;
 		}
 	}
@@ -259,6 +259,8 @@ public class Level extends Activity{
 		}
 		for(GraphicEnvironment enviro: mEnvironments){
 			if(enviro.getId() == envtype.tFinish){
+				if(getDuckCount()==3)
+					((Finish)enviro).activate();
 				int count =((Finish) enviro).getEnd(); 
 				if(count==1){
 					return 1;
@@ -362,7 +364,7 @@ public class Level extends Activity{
 			}
 
 			for(GraphicEnvironment enviro: mEnvironments){
-				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck){
+				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck && ((Finish)enviro).isActive()){
 					if(((Finish) enviro).checkCollision(graphic)){
 						((Duck) graphic).setFinished(true);
 					}
