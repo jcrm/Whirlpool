@@ -15,6 +15,7 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class SpriteManager {
 	private static Bitmap mCinematic[]=new Bitmap[6];
+	private static Bitmap mTutorial[]=new Bitmap[4];
 	private static Bitmap mDuck[]=new Bitmap[3];
 
 	private static Bitmap mDiver;
@@ -62,6 +63,7 @@ public class SpriteManager {
 		unloadTorpedo();
 		unloadStar();
 		unloadCinematic();
+		unloadTutorial();
 	}
 	public static void unloadFrog(){
 		clean(mFrog);
@@ -69,6 +71,11 @@ public class SpriteManager {
 	public static void unloadCinematic(){
 		for(int i = 0; i<6; i++){
 			clean(mCinematic[i]);
+		}
+	}
+	public static void unloadTutorial(){
+		for(int i = 0; i<4; i++){
+			clean(mTutorial[i]);
 		}
 	}
 	public static void unloadBackground(){
@@ -153,6 +160,21 @@ public class SpriteManager {
 			mCinematic[5] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.cinematic_6, opt);
 		}
 		return mCinematic[index];
+	}
+	public static Bitmap getTutorial(int index) {
+		if(index<0||index>3)return null;
+		if(empty(mTutorial[index])){
+			BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inJustDecodeBounds = true;
+			BitmapFactory.decodeResource(Constants.getRes(), R.drawable.tutorial_1, opt);
+			opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
+			opt.inJustDecodeBounds = false;
+			mTutorial[0] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.tutorial_1, opt);
+			mTutorial[1] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.tutorial_2, opt);
+			mTutorial[2] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.tutorial_3, opt);
+			mTutorial[3] = BitmapFactory.decodeResource(Constants.getRes(), R.drawable.tutorial_4, opt);
+		}
+		return mTutorial[index];
 	}
 	public static Bitmap getDiver() {
 		if(empty(mDiver)){

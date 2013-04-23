@@ -72,17 +72,4 @@ public class CinematicView extends View{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public int getScale(int oW, int oH, int nW, int nH){
-		int scale = 1;
-		if(oW>nW || oH>nH){
-			if(oW<oH){
-				scale=Math.round(oW/nW);
-			}else{
-				scale=Math.round(oH/nH);
-			}
-		}
-		return scale;
-	}
-
 }

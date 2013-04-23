@@ -33,6 +33,10 @@
             android:label="@string/title_activity_cinematic">
         </activity>
         <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Tutorial"
+            android:label="@string/title_activity_tutorial">
+        </activity>
+        <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Options"
             >
         </activity>

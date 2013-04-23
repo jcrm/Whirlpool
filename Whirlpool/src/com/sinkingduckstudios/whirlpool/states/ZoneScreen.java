@@ -53,7 +53,7 @@ public class ZoneScreen extends Activity{
 		public void onClick(View view) {
 			Constants.getSoundManager().playSplash();
 
-    		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
+    		startActivity(new Intent(getApplicationContext(), Tutorial.class));
     		finish();
         }
 	};

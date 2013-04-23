@@ -94,7 +94,7 @@ public final class R {
         public static final int audioOptionsView=0x7f080000;
         public static final int audio_off=0x7f080002;
         public static final int audio_on=0x7f080003;
-        public static final int bathzone=0x7f080026;
+        public static final int bathzone=0x7f080027;
         public static final int cinematicView=0x7f080007;
         public static final int exit=0x7f08001f;
         public static final int game=0x7f08001d;
@@ -118,7 +118,7 @@ public final class R {
         public static final int mAudioOptions=0x7f080001;
         public static final int menuLayout=0x7f08001b;
         public static final int menuView=0x7f08001c;
-        public static final int menu_settings=0x7f080027;
+        public static final int menu_settings=0x7f080028;
         public static final int menubutton=0x7f08000a;
         public static final int op_return=0x7f080004;
         public static final int options=0x7f08001e;
@@ -128,8 +128,9 @@ public final class R {
         public static final int score=0x7f080024;
         public static final int scorescreenView=0x7f080022;
         public static final int time=0x7f08000b;
+        public static final int tutorialView=0x7f080025;
         public static final int unpausebutton=0x7f08000d;
-        public static final int zoneScreenView=0x7f080025;
+        public static final int zoneScreenView=0x7f080026;
     }
     public static final class layout {
         public static final int activity_audiooptions=0x7f030000;
@@ -140,7 +141,8 @@ public final class R {
         public static final int activity_menu=0x7f030005;
         public static final int activity_options=0x7f030006;
         public static final int activity_scorescreen=0x7f030007;
-        public static final int activity_zonescreen=0x7f030008;
+        public static final int activity_tutorial=0x7f030008;
+        public static final int activity_zonescreen=0x7f030009;
     }
     public static final class menu {
         public static final int activity_main=0x7f070000;
@@ -184,14 +186,15 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int exit=0x7f050008;
+        public static final int exit=0x7f050009;
         public static final int menu_settings=0x7f050001;
-        public static final int options_screen=0x7f050007;
-        public static final int start_game=0x7f050006;
+        public static final int options_screen=0x7f050008;
+        public static final int start_game=0x7f050007;
         public static final int title_activity_cinematic=0x7f050005;
         public static final int title_activity_game=0x7f050002;
         public static final int title_activity_loading=0x7f050004;
         public static final int title_activity_menu=0x7f050003;
+        public static final int title_activity_tutorial=0x7f050006;
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;
