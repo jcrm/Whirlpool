@@ -17,8 +17,8 @@
         android:id="@+id/op_return"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@+id/highscore"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:background="@drawable/back_button"
         android:scaleType="fitCenter" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/highscore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/op_return"
+        android:layout_below="@+id/score"
         android:layout_centerHorizontal="true"
         android:text="HighScore: " />
 
@@ -34,8 +34,8 @@
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/op_return"
         android:layout_centerHorizontal="true"
         android:text="Score: " />
+    
 
 </RelativeLayout>

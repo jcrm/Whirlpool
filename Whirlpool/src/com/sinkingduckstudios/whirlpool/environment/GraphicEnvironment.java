@@ -211,5 +211,5 @@ public abstract class GraphicEnvironment {
 	}
 	public void resetwPoolCounter(){
 		wpoolCounter=0;
-	}
+	}	
 }

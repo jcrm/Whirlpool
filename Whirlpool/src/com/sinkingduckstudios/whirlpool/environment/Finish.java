@@ -13,85 +13,68 @@ import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
 public class Finish extends GraphicEnvironment{
-	private float power = 0.05f;
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
-	private float angle = 0.0f;
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
 	private boolean finished = false;
 	public boolean collisionDone = true;
-	private float tangentX, tangentY;
 	private boolean mHit = false;
 	private int mEnd = 0;
-	private Bitmap mHitBitmap;
+	private Bitmap mHitBitmap,mPlugBitmap;
 	private Animate mHitAnimate;
+	private boolean mActive;
 
 	public Finish(){
 		mId = envtype.tFinish;
 		init();
 	}
-	public Finish(int x, int y, int wa, int c){
+	public Finish(int x, int y){
 		mId = envtype.tFinish;
-		init(x,y,wa,c);
+		init(x,y);
 	}
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
-			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-			canvas.translate(getCentreX(), getCentreY());
-			canvas.scale(dirFactor, 1);
+		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+		canvas.translate(getCentreX(), getCentreY());
+		canvas.scale(dirFactor, 1);
+
+		if (mActive){
 			if(mHit == false){
 				canvas.drawBitmap(mBitmap, mAnimate.getPortion(), rect,  null);
 			}else{
 				canvas.drawBitmap(mHitBitmap, mHitAnimate.getPortion(), rect,  null);				
 			}
+		}else{
+			canvas.drawBitmap(mPlugBitmap, null, rect,  null);//draw plug
+		}
 		canvas.restore();
 	}
 
 	@Override
 	public void init() {
-		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
-
-		mBitmap = SpriteManager.getFinish();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-
-		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mHitBitmap.getWidth(), mHitBitmap.getHeight());
-		
-		mSpeed.setMove(false);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
-		
+		init(0,0);
 	}
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getFinish();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
-		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(40, 5, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
-		
-		mSpeed.setMove(false);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
-	}
-	public void init(int x, int y, int wa, int c){
-		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
-		mBitmap = SpriteManager.getFinish();
-		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
-		
 		mHitBitmap = SpriteManager.getFinishHit();
-		mHitAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+		mHitAnimate = new Animate(28, 4, 8, mHitBitmap.getWidth(), mHitBitmap.getHeight());
+
+		mPlugBitmap = SpriteManager.getPlug();
 		
 		mSpeed.setMove(false);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
+
 		setCentreX(x);
-    	setCentreY(y);
-    	setWAngle(angle);
-    	setClockwise(c);
+		setCentreY(y);
+		setClockwise(1);
+		
+		mActive = false;
 	}
 	@Override
 	public boolean move() {
@@ -146,79 +129,48 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
+	public boolean isActive() {
+		return mActive;
+	}
+	
 	public void frame(){
-		if(mHit == false){
-			mAnimate.animateFrame();
-		}else{
-			mHitAnimate.animateFrame();
-			if(mHitAnimate.getFinished() ==true){
-				mEnd = 2;
+		if (mActive){
+
+			if(mHit == false){
+				mAnimate.animateFrame();
+			}else{
+				mHitAnimate.animateFrame();
+				if(mHitAnimate.getFinished() ==true){
+					mEnd = 2;
+				}
 			}
 		}
 	}
 
-	
+	public void activate(){
+		mActive=true;
+	}
+
 	public boolean checkCollision(GraphicObject a){
 		if (a.getId()==objtype.tDuck ){
 			boolean collide = collision(a);
-			
+
 			if (collide&&a.getPulledBy()==null){
 				a.setPulledState(Constants.STATE_FINISHING);
 			}
-			
+
 			if (collide&&a.getPulledState()==Constants.STATE_FINISHING){//if the duck is touching finish
-				
+
 				collisionDone = false;
 				pull(a);//pull round whirlpool
 				mHit=true;
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
 
-	public boolean testAngle(GraphicObject graphic){
-		if (angle == -1)//wpool not directed yet
-			return false;
-		if(!graphic.wPoolCounter())
-			return false;
-		float _lastAngle;
-		//check if duckie has reached his exit angle
-		_lastAngle = graphic.getSpeed().getLastAngle();
-		//for a clockwise wpool, the last angle is always gonna be smaller
-		if (dirFactor == 1){
-			
-			if (_lastAngle > graphic.getSpeed().getAngle()){
-				//if lastangle is bigger, its passed 360
-				_lastAngle -= 360;
-				if (angle > graphic.getSpeed().getAngle()){
-					if (_lastAngle < angle-360 && graphic.getSpeed().getAngle() >= angle-360)
-						return true;
-				}else
-					if (_lastAngle < angle && graphic.getSpeed().getAngle() >= angle)
-						return true;
-			}
-			else if (_lastAngle < angle && graphic.getSpeed().getAngle() >= angle)
-				return true;
-		}else{
-			
-			if (_lastAngle < graphic.getSpeed().getAngle()){
-				//if lastangle is bigger, its passed 360
-				_lastAngle += 360;
-				if (angle < graphic.getSpeed().getAngle()){
-					if (_lastAngle > angle+360 && graphic.getSpeed().getAngle() <= angle+360)
-						return true;
-				}else
-					if (_lastAngle > angle && graphic.getSpeed().getAngle() <= angle)
-						return true;
-			}
-			else if (_lastAngle > angle && graphic.getSpeed().getAngle() <= angle)
-				return true;
-		}
-				
-		return false;
-	}
 	public boolean getFinished(){
 		return (finished && collisionDone);
 	}
@@ -261,7 +213,7 @@ public class Finish extends GraphicEnvironment{
 		dist = (distX*distX)+(distY*distY);
 
 		return(dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ));
-		
+
 
 	}
 
@@ -321,49 +273,6 @@ public class Finish extends GraphicEnvironment{
 		default:
 
 		}
-	}
-
-	//this function is called so the math is only done once per fetch
-	//(rather than individually in each getter)
-	public boolean calcTangentPoint(float x, float y){
-		float adj1,opp1,hyp1,angle1,angle2;
-
-		opp1 = objectRadius;
-		//distance from center to point
-		hyp1 = (float) Math.sqrt(((x-getCentreX())*(x-getCentreX())) + ((y-getCentreY())*(y-getCentreY())));
-
-		if(hyp1 < opp1)
-			return false;//no arrow can be drawn, point inside whirl
-		//distance from point to tangentPoint
-		adj1 = (float) Math.sqrt((hyp1*hyp1) - (opp1*opp1));
-		//angle from point to tangentPoint
-		angle1 = (float) Math.asin(opp1/hyp1);
-		angle2 = (float) (((CollisionManager.calcAngle(x,y,getCentreX(),getCentreY())))*(Math.PI/180));
-
-		angle1 *= getClockwise();
-		angle1 = angle2 + angle1;
-		//calc y component from circle center
-		tangentX = (float) (Math.cos(angle1) * adj1) + x;
-		tangentY = (float) (Math.sin(angle1) * adj1) + y;
-		return true;
-	}
-	public float getTangentX(){
-		return tangentX;
-	}
-	public float getTangentY(){
-		return tangentY;
-	}
-	public float getPower() {
-		return power;
-	}
-	public void setPower(float power) {
-		this.power = power;
-	}
-	public void setWAngle(float angle) {
-		this.angle = angle;
-	}
-	public float getWAngle() {
-		return angle;
 	}
 
 	public int getEnd() {

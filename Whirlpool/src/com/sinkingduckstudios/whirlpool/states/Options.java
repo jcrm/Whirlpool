@@ -36,7 +36,6 @@ public class Options extends Activity {
 		Constants.setState(this);
 		
 		ImageButton audioButton = ((ImageButton)findViewById(R.id.audio));
-		ImageButton graphicsButton = ((ImageButton)findViewById(R.id.graphics));
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		
 		Constants.setContext(getApplicationContext());
@@ -47,7 +46,6 @@ public class Options extends Activity {
 		Constants.setScreen(theScreen);
 		
 		audioButton.setOnClickListener(goToAudio);
-		graphicsButton.setOnClickListener(goToGraphics);
 		returnButton.setOnClickListener(goToMenu);
 		
 		optionsView=(OptionsView)findViewById(R.id.optionsView);
@@ -58,14 +56,6 @@ public class Options extends Activity {
 		@Override
 		public void onClick(View view) {
     		startActivity(new Intent(getApplicationContext(), AudioOptions.class));
-    		finish();
-        }
-	};
-	
-	private OnClickListener goToGraphics = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-    		startActivity(new Intent(getApplicationContext(), GraphicsOptions.class));
     		finish();
         }
 	};
@@ -83,9 +73,11 @@ public class Options extends Activity {
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		optionsView.CleanUp();
 		optionsView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 }

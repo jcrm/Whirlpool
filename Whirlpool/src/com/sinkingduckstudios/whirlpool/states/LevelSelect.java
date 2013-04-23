@@ -2,6 +2,7 @@ package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
@@ -59,7 +60,7 @@ public class LevelSelect extends Activity{
 		level1Button.setLayoutParams(buttonParams);
 		level1Button.setX(xstep-(scale/2));
 		level1Button.setY(ystep-(scale/2));
-		
+	
 		xstep += theWidth/4;
 		
 		level2Button.setLayoutParams(buttonParams);
@@ -99,6 +100,15 @@ public class LevelSelect extends Activity{
 		level6Button.setOnClickListener(goToLevel6);
 		returnButton.setOnClickListener(goToZone);
 		levelSelectView=(LevelSelectView)findViewById(R.id.levelSelectView);
+		
+		SharedPreferences prefs = getSharedPreferences("HighScores", MODE_PRIVATE);
+		int stars[] = new int[6];
+		
+		for(int i = 0; i < 6; i++){
+			stars[i] =  prefs.getInt("Stars_lvl"+Integer.toString(i+1), 0);
+		}
+		
+		levelSelectView.initStars(stars);
 	}
 	
 	private OnClickListener goToLevel1 = new OnClickListener() {
@@ -212,9 +222,11 @@ public class LevelSelect extends Activity{
 	};	
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		levelSelectView.CleanUp();
 		levelSelectView = null;
+		Runtime.getRuntime().gc();
+        System.gc();
+		super.onDestroy();
 	}
 
 }

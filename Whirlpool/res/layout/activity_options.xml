@@ -18,15 +18,6 @@
         android:scaleType="fitCenter" />
 
     <ImageButton
-        android:id="@+id/graphics"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_alignLeft="@+id/audio"
-        android:layout_below="@+id/audio"
-        android:background="@drawable/graphics_button"
-        android:scaleType="fitCenter" />
-
-    <ImageButton
         android:id="@+id/op_return"
         android:layout_width="100dp"
         android:layout_height="100dp"

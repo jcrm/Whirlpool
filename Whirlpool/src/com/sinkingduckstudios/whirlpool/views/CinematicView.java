@@ -19,6 +19,7 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.states.Cinematic;
 
 public class CinematicView extends View{
+	protected boolean Loaded = false;
 	private Bitmap mCinematic[] = new Bitmap[6];
 	public CinematicView(Context context) {
 		super(context);
@@ -26,6 +27,9 @@ public class CinematicView extends View{
 		setMinimumWidth(100);
 		setMinimumHeight(100);
     	Constants.setRes(getResources());
+    	Constants.createSoundManager(getContext());
+    	Constants.getSoundManager().loadCinematic();
+
 		for(int i = 0; i<6; i++){
 			mCinematic[i] = SpriteManager.getCinematic(i);
 		}
@@ -37,6 +41,9 @@ public class CinematicView extends View{
 		setMinimumWidth(100);
 		setMinimumHeight(100);
 		Constants.setRes(getResources());
+		Constants.createSoundManager(getContext());
+    	Constants.getSoundManager().loadCinematic();
+
 		for(int i = 0; i<6; i++){
 			mCinematic[i] = SpriteManager.getCinematic(i);
 		}
@@ -49,15 +56,19 @@ public class CinematicView extends View{
 	@Override
 	protected void onDraw(Canvas canvas){
 		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-		canvas.drawBitmap(mCinematic[Cinematic.mSlide], null, rect, null);
+		if(mCinematic[Cinematic.mSlide] != null && mCinematic[Cinematic.mSlide].isRecycled() ==false){
+			canvas.drawBitmap(mCinematic[Cinematic.mSlide], null, rect, null);	
+			Constants.getSoundManager().playCinematic(Cinematic.mSlide);
+
+		}
 		
 	}
-	
 	public void CleanUp() {
 		for(int i = 0; i < 6; i++){
 			mCinematic[i].recycle();
 			mCinematic[i] = null;
 		}
+		Constants.getSoundManager().CleanCinematic();
 		// TODO Auto-generated method stub
 		
 	}

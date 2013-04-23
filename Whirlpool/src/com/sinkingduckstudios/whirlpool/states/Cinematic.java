@@ -36,8 +36,6 @@ public class Cinematic extends Activity {
 			mTime.cancel();
 			mTime = null;
 		}
-		mTime= new Timer();//init timer
-		mTime.schedule(new MainThread(),0, 1500);
 		
 		// creates a handler to deal wit the return from the timer
 		mHandler = new Handler() {
@@ -49,7 +47,16 @@ public class Cinematic extends Activity {
 				}
 			}
 		};
+		
+		mTime= new Timer();//init timer
+		mTime.schedule(new MainThread(),0, 1500);
     }
+	@Override
+	public void onDestroy(){
+		Runtime.getRuntime().gc();
+        System.gc();
+        super.onDestroy();
+	}
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 5){
@@ -59,6 +66,7 @@ public class Cinematic extends Activity {
     			mTime.cancel();
     			startActivity(loading);
         		finish();
+        		cinematicView.CleanUp();
     		}else{
         		mSlide++;
     		}
