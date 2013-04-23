@@ -212,24 +212,32 @@ public class ScoreScreen extends Activity {
 		scorescreenView=(ScoreScreenView)findViewById(R.id.scorescreenView);
 		scorescreenView.setStars(stars);
 	}
-	
+	@Override 
+	public void onResume(){
+		Constants.createSoundManager(getApplicationContext());
+        Constants.getSoundManager().loadSplash();
+        super.onResume();
+	}
+	@Override 
+	public void onPause(){
+		Constants.getSoundManager().unloadAll();
+		super.onPause();
+	}
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+
     		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
     		finish();
         }
 	};
 	public void onBackPressed(){
+		Constants.getSoundManager().playSplash();
+
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-	}
-
 	@Override
 	public void onDestroy(){
 		scorescreenView.CleanUp();

@@ -18,6 +18,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.os.Handler;
 import android.util.Log;
 
 public class SoundManager 
@@ -59,6 +60,8 @@ public class SoundManager
 	protected int mEvilLaugh[] = new int [3];
 	protected int mPotion;
 	protected int mReal;
+	protected int mPoof;
+	protected int mGrab;
 
 	protected int mMissileStreamId;
 	protected boolean mMissilePlaying;
@@ -124,6 +127,14 @@ public class SoundManager
 
 		return true;	
 	}
+	// load the splash sound for the buttons
+	public boolean loadSplash(){
+		if(mSplash==0){
+			mSplash = load(R.raw.splash);
+		}
+		if (mSplash == 0){ return false;}
+		return true;
+	}
 
 	// a function to load the 
 	public boolean loadOtherSounds()
@@ -140,9 +151,6 @@ public class SoundManager
 		if(mPoints==0){
 			mPoints = load(R.raw.points);
 		}
-		if(mSplash==0){
-			mSplash = load(R.raw.splash);
-		}
 		if(mWhirlpool==0){
 			mWhirlpool = load(R.raw.whirlpool2);
 		}
@@ -156,7 +164,6 @@ public class SoundManager
 		if (mDownplug == 0){ return false;}
 		if (mPlug == 0){ return false;}
 		if (mPoints == 0){ return false;}
-		if (mSplash == 0){ return false;}
 		if (mWhirlpool == 0){ return false;}
 
 		if (mBackground == null){ return false;}
@@ -262,12 +269,22 @@ public class SoundManager
 		{
 			mReal = load(R.raw.real);
 		}
-
+		if (mGrab == 0)
+		{
+			mGrab = load(R.raw.grab);
+		}
+		
+		if (mPoof == 0)
+		{
+			mPoof = load(R.raw.poof);
+		}
 		if ( mEvilLaugh[0] == 0) { return false;}
 		if ( mEvilLaugh[1] == 0) { return false;}
 		if ( mEvilLaugh[2] == 0) { return false;}
 		if ( mPotion == 0) { return false;}
 		if ( mReal == 0) { return false;}
+		if (mPoof == 0){ return false;}
+		if (mGrab == 0){ return false;}
 
 
 		return true;
@@ -499,7 +516,6 @@ public class SoundManager
 			if(!mBackground.isPlaying()){
 				mBackground.setLooping(true);
 				mBackground.start();
-				Log.w("backgroud","played");
 			}
 		}
 	}
@@ -725,45 +741,69 @@ public class SoundManager
 	public void playCinematic(int slideNo)
 	{
 		// ply the sounds for ther cinematic in the correct orderr and at the correct time
-
+		
+		
 		switch (slideNo)
 		{
-		case 0:
-		{
-			playSound(mReal);			//play the sound for slide one
-			break;					// break out of the switch statement
-		}
-
-		case 1:
-		{
-			playSound(mEvilLaugh[0]);			//play the sound for slide two
-			break;					// break out of the switch statement
-		}
-
-		case 2:
-		{
-			playSound(mEvilLaugh[1]);			//play the sound for slide three
-			break;					// break out of the switch statement
-		}
-
-		case 3:
-		{
-			playSound(mPotion);			//play the sound for slide four
-			break;					// break out of the switch statement
-		}
-
-		case 4:
-		{
-			playSound(mEvilLaugh[2]);			//play the sound for slide five
-			break;					// break out of the switch statement
-		}
-
-		case 5:
-		{
-			//playSound();			//play the sound for slide six
-			break;					// break out of the switch statement
-		}
-
+			case 0:
+			{
+				new Handler().postDelayed(new Runnable()
+				{
+					@Override 
+					public void run()
+					{
+						playSound(mReal);			//play the sound for slide one
+					}
+				},500);
+				
+				break;					// break out of the switch statement
+			}
+			
+			case 1:
+				
+			{
+				playSound(mGrab);			//play the sound for slide two
+				break;					// break out of the switch statement
+			}
+			
+			case 2:
+			{
+				playSound(mEvilLaugh[0]);			//play the sound for slide three
+				playSound(mPotion);
+				break;					// break out of the switch statement
+			}
+			
+			case 3:
+			{
+				new Handler().postDelayed(new Runnable()
+				{
+					@Override 
+					public void run()
+					{
+							playSound(mPoof);	//play the sound for slide four
+					}
+				},1300);
+				break;					// break out of the switch statement
+			}
+			
+			case 4:
+			{
+				
+				break;					// break out of the switch statement
+			}
+			
+			case 5:
+			{
+				playSound(mEvilLaugh[2]);			//play the sound for slide six
+				break;					// break out of the switch statement
+			}
+			
+			default:
+			{
+				
+				break;
+			}
+		
 		}//end switch (slide no)
 	}//end load cinematic
 

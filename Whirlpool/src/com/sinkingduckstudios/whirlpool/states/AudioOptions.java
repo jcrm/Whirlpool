@@ -47,15 +47,27 @@ public class AudioOptions extends Activity{
 		
 		audioOptionsView=(AudioOptionsView)findViewById(R.id.audioOptionsView);
 	}
-	
+	@Override 
+	public void onResume(){
+		Constants.createSoundManager(getApplicationContext());
+        Constants.getSoundManager().loadSplash();
+        super.onResume();
+	}
+	@Override 
+	public void onPause(){
+		Constants.getSoundManager().unloadAll();
+		super.onPause();
+	}
 	private OnClickListener goToOp = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
     		startActivity(new Intent(getApplicationContext(), Options.class));
     		finish();
         }
 	};
 	public void onBackPressed(){
+		Constants.getSoundManager().playSplash();
 		startActivity(new Intent(getApplicationContext(), Options.class));
 		finish();
 	}

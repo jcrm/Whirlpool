@@ -39,6 +39,16 @@
         android:background="@drawable/level_two_button"
         android:layout_marginLeft="70dp"
         android:scaleType="fitCenter" />
+    
+    <ImageButton
+        android:id="@+id/level2locked"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/level_two_locked_button"
+        android:layout_marginLeft="70dp"
+        android:scaleType="fitCenter" />
+    
     <ImageButton
         android:id="@+id/level3"
         android:layout_width="50dp"
@@ -46,6 +56,15 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="140dp"
         android:background="@drawable/level_three_button"
+        android:scaleType="fitCenter" />
+    
+     <ImageButton
+        android:id="@+id/level3locked"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="140dp"
+        android:background="@drawable/level_three_locked_button"
         android:scaleType="fitCenter" />
     <ImageButton
         android:id="@+id/level4"
@@ -55,6 +74,14 @@
         android:layout_marginLeft="210dp"
         android:background="@drawable/level_four_button"
         android:scaleType="fitCenter" />
+     <ImageButton
+        android:id="@+id/level4locked"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="140dp"
+        android:background="@drawable/level_four_locked_button"
+        android:scaleType="fitCenter" />
     <ImageButton
         android:id="@+id/level5"
         android:layout_width="50dp"
@@ -63,6 +90,14 @@
         android:layout_marginLeft="280dp"
         android:background="@drawable/level_five_button"
         android:scaleType="fitCenter" />
+     <ImageButton
+        android:id="@+id/level5locked"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="140dp"
+        android:background="@drawable/level_five_locked_button"
+        android:scaleType="fitCenter" />
     <ImageButton
         android:id="@+id/level6"
         android:layout_width="50dp"
@@ -70,6 +105,14 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="350dp"
         android:background="@drawable/level_six_button"
+        android:scaleType="fitCenter" />
+     <ImageButton
+        android:id="@+id/level6locked"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="140dp"
+        android:background="@drawable/level_six_locked_button"
         android:scaleType="fitCenter" />
 
 </RelativeLayout>

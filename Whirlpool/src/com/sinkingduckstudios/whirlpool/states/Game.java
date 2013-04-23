@@ -65,6 +65,7 @@ public class Game extends Activity {
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
 		Constants.createSoundManager(getApplicationContext());
+		Constants.getSoundManager().loadSplash();
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
@@ -110,6 +111,7 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				Constants.getSoundManager().playSplash();
 				mTime.cancel();
 				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
@@ -123,6 +125,7 @@ public class Game extends Activity {
 	private OnClickListener pause = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
 			mPaused = true;
 			mCountDownTimer.cancel();
 			View unpauseButton = findViewById(R.id.unpausebutton);
@@ -135,6 +138,7 @@ public class Game extends Activity {
 	private OnClickListener unpause = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
 			mPaused = false;
 			mCountDownTimer.start();
 			View pauseButton = findViewById(R.id.pausebutton);
@@ -216,7 +220,9 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadTugBoat();
 		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
+		Constants.getSoundManager().loadSplash();
 		Constants.getSoundManager().playBackGround();
+
 		if(!mTimerHasStarted){
 			mCountDownTimer.start();
 			mTimerHasStarted = true;				

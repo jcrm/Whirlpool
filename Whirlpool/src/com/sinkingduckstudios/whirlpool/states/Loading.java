@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 public class Loading extends Activity {
 	@Override

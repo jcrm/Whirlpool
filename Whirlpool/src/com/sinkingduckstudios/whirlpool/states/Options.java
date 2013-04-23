@@ -51,10 +51,22 @@ public class Options extends Activity {
 		optionsView=(OptionsView)findViewById(R.id.optionsView);
 		
 	}
-	
+	@Override 
+	public void onResume(){
+		Constants.createSoundManager(getApplicationContext());
+        Constants.getSoundManager().loadSplash();
+        super.onResume();
+	}
+	@Override 
+	public void onPause(){
+		Constants.getSoundManager().unloadAll();
+		super.onPause();
+	}
 	private OnClickListener goToAudio = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+
     		startActivity(new Intent(getApplicationContext(), AudioOptions.class));
     		finish();
         }
@@ -63,11 +75,15 @@ public class Options extends Activity {
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+
     		startActivity(new Intent(getApplicationContext(), Menu.class));
     		finish();
         }
 	};
 	public void onBackPressed(){
+		Constants.getSoundManager().playSplash();
+
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
