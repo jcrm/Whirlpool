@@ -119,7 +119,9 @@ public class Options extends Activity {
 		@Override
 		public void onClick(View view) {
 			Constants.getSoundManager().playSplash();
-			startActivity(new Intent(getApplicationContext(), Tutorial.class));
+			Intent tutorialscreen = (new Intent(getApplicationContext(),Tutorial.class));
+			tutorialscreen.putExtra("tutorial", 2);
+			startActivity(tutorialscreen);
     		finish();
     		//Tutorial code
         }
@@ -132,9 +134,7 @@ public class Options extends Activity {
 			Constants.getSoundManager().playSplash();
 			Intent cinematicscreen = (new Intent(getApplicationContext(),Cinematic.class));
 			cinematicscreen.putExtra("cinematic", 2);
-			
 			startActivity(cinematicscreen);
-			
 			finish();
         }
 	};

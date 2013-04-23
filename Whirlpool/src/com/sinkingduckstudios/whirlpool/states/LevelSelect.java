@@ -228,9 +228,10 @@ public class LevelSelect extends Activity{
 			//mLevelSelect = 1;
 			Constants.getSoundManager().playSplash();
 
-			startActivity(new Intent(getApplicationContext(), Tutorial.class));
-
-			finish();
+			Intent loading = (new Intent(getApplicationContext(),Tutorial.class));
+			loading.putExtra("tutorial", 1);
+			startActivity(loading);
+    		finish();
 			//Code to select level1
 		}
 	};

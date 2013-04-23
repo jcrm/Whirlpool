@@ -25,12 +25,16 @@ public class Tutorial extends Activity {
 	TutorialView tutorialView;
 	private Timer mTime;
 	private Handler mHandler;
+	private int tutorial;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_tutorial);
         tutorialView=(TutorialView)findViewById(R.id.tutorialView);
+        
+        Intent tutorialscreen = getIntent();
+		tutorial = tutorialscreen.getIntExtra("tutorial",0);
         mSlide = -1;
         if(mTime!=null){
 			mTime.cancel();
@@ -58,13 +62,23 @@ public class Tutorial extends Activity {
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 3){
-        		Intent loading = (new Intent(getApplicationContext(),Loading.class));
-    			
-    			loading.putExtra("levelselected", 1);
-    			mTime.cancel();
-    			startActivity(loading);
-        		finish();
-        		tutorialView.CleanUp();
+				switch(tutorial){
+				case 1:
+	        		Intent loading = (new Intent(getApplicationContext(),Loading.class));
+	    			
+	    			loading.putExtra("levelselected", 1);
+	    			mTime.cancel();
+	    			startActivity(loading);
+	        		finish();
+	        		tutorialView.CleanUp();
+        		break;
+				case 2:
+					startActivity(new Intent(getApplicationContext(), Options.class));
+					mTime.cancel();
+					finish();
+	        		tutorialView.CleanUp();
+					break;
+				}
     		}else{
         		mSlide++;
     		}
