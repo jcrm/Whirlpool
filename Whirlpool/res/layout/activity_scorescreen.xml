@@ -11,6 +11,14 @@
 	    >
 	</com.sinkingduckstudios.whirlpool.views.ScoreScreenView>
     
+     <ImageButton
+        android:id="@+id/next_level"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/highscore"
+        android:layout_toRightOf="@+id/score"
+        android:background="@drawable/next_button"
+        android:scaleType="fitCenter" />
     
 
     <ImageButton

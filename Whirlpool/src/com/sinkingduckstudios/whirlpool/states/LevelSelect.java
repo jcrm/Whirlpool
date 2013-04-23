@@ -228,11 +228,7 @@ public class LevelSelect extends Activity{
 			//mLevelSelect = 1;
 			Constants.getSoundManager().playSplash();
 
-			Intent loading = (new Intent(getApplicationContext(),Cinematic.class));
-
-			loading.putExtra("levelselected", 1);
-
-			startActivity(loading);
+			startActivity(new Intent(getApplicationContext(), Tutorial.class));
 
 			finish();
 			//Code to select level1

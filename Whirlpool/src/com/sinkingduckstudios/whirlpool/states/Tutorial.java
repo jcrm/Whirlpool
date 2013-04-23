@@ -58,7 +58,7 @@ public class Tutorial extends Activity {
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 3){
-        		Intent loading = (new Intent(getApplicationContext(),LevelSelect.class));
+        		Intent loading = (new Intent(getApplicationContext(),Loading.class));
     			
     			loading.putExtra("levelselected", 1);
     			mTime.cancel();

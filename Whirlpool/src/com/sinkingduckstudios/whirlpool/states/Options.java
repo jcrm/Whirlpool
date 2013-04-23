@@ -10,6 +10,7 @@ package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Display;
@@ -25,7 +26,7 @@ import com.sinkingduckstudios.whirlpool.views.OptionsView;
 public class Options extends Activity {
 	boolean mPaused = false;
 	OptionsView optionsView;
-	
+	public static final String HIGH_SCORES = "HighScores";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +38,12 @@ public class Options extends Activity {
 		
 		ImageButton audioButton = ((ImageButton)findViewById(R.id.audio));
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
+		ImageButton resetButton = ((ImageButton)findViewById(R.id.resetdata));
+		ImageButton creditsButton = ((ImageButton)findViewById(R.id.credits));
+		ImageButton tutorialButton = ((ImageButton)findViewById(R.id.tutorial));
+		ImageButton cinematicButton = ((ImageButton)findViewById(R.id.cinematic));
 		
+
 		Constants.setContext(getApplicationContext());
 		
 		Display display = getWindowManager().getDefaultDisplay();
@@ -47,6 +53,11 @@ public class Options extends Activity {
 		
 		audioButton.setOnClickListener(goToAudio);
 		returnButton.setOnClickListener(goToMenu);
+		resetButton.setOnClickListener(resetData);
+		creditsButton.setOnClickListener(goToCredits);
+		tutorialButton.setOnClickListener(goToTutorial);
+		cinematicButton.setOnClickListener(goToCinematic);
+
 		
 		optionsView=(OptionsView)findViewById(R.id.optionsView);
 		
@@ -81,6 +92,53 @@ public class Options extends Activity {
     		finish();
         }
 	};
+	
+	private OnClickListener resetData = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+			//Editor editor = settings.edit();
+			SharedPreferences prefs = getSharedPreferences(HIGH_SCORES, MODE_PRIVATE);
+			SharedPreferences.Editor editor = prefs.edit();
+			
+			editor.clear();
+			editor.commit();
+    		
+        }
+	};
+	
+	private OnClickListener goToCredits = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+    		//Credits code
+			Constants.getSoundManager().playSplash();
+        }
+	};
+	
+	private OnClickListener goToTutorial = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+			startActivity(new Intent(getApplicationContext(), Tutorial.class));
+    		finish();
+    		//Tutorial code
+        }
+	};
+	
+	private OnClickListener goToCinematic = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+    		//Cinematic code
+			Constants.getSoundManager().playSplash();
+			Intent cinematicscreen = (new Intent(getApplicationContext(),Cinematic.class));
+			cinematicscreen.putExtra("cinematic", 2);
+			
+			startActivity(cinematicscreen);
+			
+			finish();
+        }
+	};
+
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
 

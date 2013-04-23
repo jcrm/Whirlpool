@@ -32,6 +32,7 @@ public class ScoreScreen extends Activity {
 	private int timepassed;
 	private int levelselected;
 	private int score;
+	private int next;
 	private int highscore;
 	private int miniDuckCount;
 
@@ -53,7 +54,8 @@ public class ScoreScreen extends Activity {
 		miniDuckCount = scorescreen.getIntExtra("duckcount", 0);
 		timepassed = scorescreen.getIntExtra("timepassed", 0);
 		levelselected = scorescreen.getIntExtra("levelselected", 0);
-		
+		next = levelselected +1;
+
 		//Way score can be calculated can be changed at a later date
 		score = (500 - timepassed);
 		
@@ -205,12 +207,20 @@ public class ScoreScreen extends Activity {
 		
 
 		ImageButton menuButton = ((ImageButton)findViewById(R.id.op_return));
+		ImageButton nextButton = ((ImageButton)findViewById(R.id.next_level));
 		Constants.setContext(getApplicationContext());		
 		menuButton.setOnClickListener(goToMenu);
+		nextButton.setOnClickListener(nextLevel);
 		menuButton.setY(HScore.getY()+HScore.getHeight());
+		nextButton.setY(HScore.getY()+HScore.getHeight());
+
 		
 		scorescreenView=(ScoreScreenView)findViewById(R.id.scorescreenView);
 		scorescreenView.setStars(stars);
+		if(levelselected == 6){
+			nextButton.setVisibility(View.INVISIBLE);
+		}
+
 	}
 	@Override 
 	public void onResume(){
@@ -223,13 +233,23 @@ public class ScoreScreen extends Activity {
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	private OnClickListener nextLevel = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			finish();
+    		Intent nextlevel = (new Intent(getApplicationContext(), Loading.class));
+    		nextlevel.putExtra("levelselected", next);
+    		startActivity(nextlevel);
+        }
+	};
+
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
 			Constants.getSoundManager().playSplash();
 
+			finish();
     		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
-    		finish();
         }
 	};
 	public void onBackPressed(){

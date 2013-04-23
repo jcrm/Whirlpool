@@ -39,6 +39,7 @@ public class Game extends Activity {
 	private Level mCurrentLevel;
 	private CountDownTimer mCountDownTimer;
 	private boolean mTimerHasStarted = false;
+	private boolean muted = true;
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
@@ -102,11 +103,92 @@ public class Game extends Activity {
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
 		ImageButton pauseButton = ((ImageButton)findViewById(R.id.pausebutton));
 		ImageButton unpauseButton = ((ImageButton)findViewById(R.id.unpausebutton));
+		ImageButton quitButton = ((ImageButton)findViewById(R.id.quit));
+		ImageButton restartButton = ((ImageButton)findViewById(R.id.restart));
+		ImageButton volumeOffButton = ((ImageButton)findViewById(R.id.volume_off));
+		ImageButton volumeOnButton = ((ImageButton)findViewById(R.id.volume_on));
 		menuButton.setOnClickListener(goToMenu);
 		pauseButton.setOnClickListener(pause);
 		unpauseButton.setOnClickListener(unpause);
+		quitButton.setOnClickListener(quit);
+		restartButton.setOnClickListener(restart);
+		volumeOffButton.setOnClickListener(volume_off);
+		volumeOnButton.setOnClickListener(volume_on);
+
 
 	}
+	private OnClickListener quit = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			synchronized(Constants.getLock()){
+				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				startActivity(new Intent(getApplicationContext(), Menu.class));
+				mLevel.cleanUp();
+				finish();
+			}
+		}
+	};
+	
+	private OnClickListener restart = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			synchronized(Constants.getLock()){
+				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				Intent restart = (new Intent(getApplicationContext(), Loading.class));
+				restart.putExtra("levelselected",levelselected);
+				startActivity(restart);
+				mLevel.cleanUp();
+				finish();
+			}
+		}
+	};
+	
+	private OnClickListener volume_off = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.VISIBLE);
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.INVISIBLE);
+			//Volume code here
+			muted = true;
+			
+			
+		}
+	};
+	
+	private OnClickListener volume_on = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.VISIBLE);
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.INVISIBLE);
+			//Volume code here
+			muted = false;
+			
+			
+		}
+	};
+	
+	/*
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.volume_off:
+			break;
+		case R.id.volume_on:
+			break;
+		}
+	}*/
+
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -132,6 +214,26 @@ public class Game extends Activity {
 			unpauseButton.setVisibility(View.VISIBLE);
 			View pauseButton = findViewById(R.id.pausebutton);
 			pauseButton.setVisibility(View.INVISIBLE);
+			View pausebg = findViewById(R.id.pausebg);
+			pausebg.setVisibility(View.VISIBLE);
+			View restart = findViewById(R.id.restart);
+			restart.setVisibility(View.VISIBLE);
+			View quit = findViewById(R.id.quit);
+			quit.setVisibility(View.VISIBLE);
+			
+			if(muted == true){
+				View volumeOnButton = findViewById(R.id.volume_on);
+				volumeOnButton.setVisibility(View.VISIBLE);
+				View volumeOffButton = findViewById(R.id.volume_off);
+				volumeOffButton.setVisibility(View.INVISIBLE);
+			} else  {
+				View volumeOnButton = findViewById(R.id.volume_on);
+				volumeOnButton.setVisibility(View.INVISIBLE);
+				View volumeOffButton = findViewById(R.id.volume_off);
+				volumeOffButton.setVisibility(View.VISIBLE);
+			}
+			Constants.getSoundManager().pause();
+
 		}
 	};
 	
@@ -145,6 +247,18 @@ public class Game extends Activity {
 			pauseButton.setVisibility(View.VISIBLE);
 			View unpauseButton = findViewById(R.id.unpausebutton);
 			unpauseButton.setVisibility(View.INVISIBLE);
+			View pausebg = findViewById(R.id.pausebg);
+			pausebg.setVisibility(View.INVISIBLE);
+			View restart = findViewById(R.id.restart);
+			restart.setVisibility(View.INVISIBLE);
+			View quit = findViewById(R.id.quit);
+			quit.setVisibility(View.INVISIBLE);
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.INVISIBLE);
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.INVISIBLE);
+			Constants.getSoundManager().unpause();
+
 		}
 	};
 	

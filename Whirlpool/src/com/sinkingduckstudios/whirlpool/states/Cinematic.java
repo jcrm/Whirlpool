@@ -25,51 +25,65 @@ public class Cinematic extends Activity {
 	CinematicView cinematicView;
 	private Timer mTime;
 	private Handler mHandler;
+	private int cinematic;
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.activity_cinematic);
-        cinematicView=(CinematicView)findViewById(R.id.cinematicView);
-        mSlide = -1;
-        if(mTime!=null){
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		setContentView(R.layout.activity_cinematic);
+		cinematicView=(CinematicView)findViewById(R.id.cinematicView);
+
+		Intent cinematicscreen = getIntent();
+		cinematic = cinematicscreen.getIntExtra("cinematic",0);
+		mSlide = -1;
+		if(mTime!=null){
 			mTime.cancel();
 			mTime = null;
 		}
-		
+
 		// creates a handler to deal wit the return from the timer
 		mHandler = new Handler() {
-		
+
 			public void handleMessage(Message aMsg) {
-		
+
 				if (aMsg.what == 0){//redraw
 					cinematicView.invalidate();
 				}
 			}
 		};
-		
+
 		mTime= new Timer();//init timer
 		mTime.schedule(new MainThread(),0, 1500);
-    }
+	}
 	@Override
 	public void onDestroy(){
 		Runtime.getRuntime().gc();
-        System.gc();
-        super.onDestroy();
+		System.gc();
+		super.onDestroy();
 	}
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 5){
-        		Intent loading = (new Intent(getApplicationContext(),Loading.class));
-    			
-    			loading.putExtra("levelselected", getIntent().getIntExtra("levelselected", 0));
-    			mTime.cancel();
-    			startActivity(loading);
-        		finish();
-        		cinematicView.CleanUp();
-    		}else{
-        		mSlide++;
-    		}
+
+				switch(cinematic){
+				case 1:
+					Intent loading = (new Intent(getApplicationContext(),LevelSelect.class));
+					mTime.cancel();
+					startActivity(loading);
+					finish();
+					cinematicView.CleanUp();
+					break;
+				case 2:
+					startActivity(new Intent(getApplicationContext(), Options.class));
+					mTime.cancel();
+					finish();
+					cinematicView.CleanUp();
+					break;
+				}
+
+			}else{
+				mSlide++;
+			}
 			mHandler.sendEmptyMessage(0);
 		}
 
