@@ -51,26 +51,45 @@ public class ZoneScreen extends Activity{
 	private OnClickListener goToBath = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-    		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
+			Constants.getSoundManager().playSplash();
+
+			Intent loading = (new Intent(getApplicationContext(),Cinematic.class));
+			loading.putExtra("cinematic", 1);
+			startActivity(loading);
     		finish();
         }
 	};
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
     		startActivity(new Intent(getApplicationContext(), Menu.class));
     		finish();
         }
 	};
 	public void onBackPressed(){
+		Constants.getSoundManager().playSplash();
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
 	@Override
 	public void onDestroy(){
-		super.onDestroy();
 		zoneScreenView.CleanUp();
 		zoneScreenView = null;
+        // TODO Auto-generated method stub
+        Runtime.getRuntime().gc();
+        System.gc();
+        super.onDestroy();
 	}
-	
+	@Override 
+	public void onResume(){
+		Constants.createSoundManager(getApplicationContext());
+        Constants.getSoundManager().loadSplash();
+        super.onResume();
+	}
+	@Override 
+	public void onPause(){
+		Constants.getSoundManager().unloadAll();
+		super.onPause();
+	}
 }

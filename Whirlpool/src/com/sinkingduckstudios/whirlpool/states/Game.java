@@ -13,10 +13,13 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -36,6 +39,7 @@ public class Game extends Activity {
 	private Level mCurrentLevel;
 	private CountDownTimer mCountDownTimer;
 	private boolean mTimerHasStarted = false;
+	private boolean muted = true;
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
@@ -62,17 +66,11 @@ public class Game extends Activity {
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
 		Constants.createSoundManager(getApplicationContext());
-
-//		Constants.getSoundManager().loadDucky();
-//		Constants.getSoundManager().loadDiver();
-//		Constants.getSoundManager().loadFrog();
-//		Constants.getSoundManager().loadTugBoat();
-//		Constants.getSoundManager().loadOtherSounds();
-//		Constants.getSoundManager().playBackGround();
+		Constants.getSoundManager().loadSplash();
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init(levelselected,true);
+		Constants.getLevel().init(levelselected);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
@@ -81,30 +79,45 @@ public class Game extends Activity {
 		}
 		mTime= new Timer();//init timer
 		// creates a handler to deal wit the return from the timer
-		mGameHandler = new Handler() {
-
-			public void handleMessage(Message aMsg) {
-
+		mGameHandler = new Handler(){
+			public void handleMessage(Message aMsg){
 				if (aMsg.what == 0){//redraw
 					mPanel.invalidate();
 				}else if(aMsg.what ==1){
 					mTime.cancel();
 					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 					Constants.getSoundManager().cleanup();
-					startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
+					Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
+					scorescreen.putExtra("timepassed", timepassed);
+					scorescreen.putExtra("levelselected", levelselected);
+					scorescreen.putExtra("duckcount", mLevel.getDuckCount());
+					startActivity(scorescreen);
+					mLevel.cleanUp();
 					finish();
 				}
 			}
 		};
-
-
 		mTime.schedule(new MainThread(),0, 25);
 
 		timepassed=0;
 		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
+		ImageButton pauseButton = ((ImageButton)findViewById(R.id.pausebutton));
+		ImageButton unpauseButton = ((ImageButton)findViewById(R.id.unpausebutton));
+		ImageButton quitButton = ((ImageButton)findViewById(R.id.quit));
+		ImageButton restartButton = ((ImageButton)findViewById(R.id.restart));
+		ImageButton volumeOffButton = ((ImageButton)findViewById(R.id.volume_off));
+		ImageButton volumeOnButton = ((ImageButton)findViewById(R.id.volume_on));
 		menuButton.setOnClickListener(goToMenu);
+		pauseButton.setOnClickListener(pause);
+		unpauseButton.setOnClickListener(unpause);
+		quitButton.setOnClickListener(quit);
+		restartButton.setOnClickListener(restart);
+		volumeOffButton.setOnClickListener(volume_off);
+		volumeOnButton.setOnClickListener(volume_on);
+
+
 	}
-	private OnClickListener goToMenu = new OnClickListener() {
+	private OnClickListener quit = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
@@ -112,21 +125,146 @@ public class Game extends Activity {
 				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
+				startActivity(new Intent(getApplicationContext(), Menu.class));
+				mLevel.cleanUp();
 				finish();
 			}
 		}
 	};
 	
-	public void onBackPressed(){
-		synchronized(Constants.getLock()){
-			mTime.cancel();
-			Constants.getSoundManager().unloadAll();
-			Constants.getSoundManager().cleanup();
-			mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-			startActivity(new Intent(getApplicationContext(), LevelSelect.class));
-			finish();
+	private OnClickListener restart = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			synchronized(Constants.getLock()){
+				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				Intent restart = (new Intent(getApplicationContext(), Loading.class));
+				restart.putExtra("levelselected",levelselected);
+				startActivity(restart);
+				mLevel.cleanUp();
+				finish();
+			}
 		}
+	};
+	
+	private OnClickListener volume_off = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.VISIBLE);
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.INVISIBLE);
+			//Volume code here
+			muted = true;
+			
+			
+		}
+	};
+	
+	private OnClickListener volume_on = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.VISIBLE);
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.INVISIBLE);
+			//Volume code here
+			muted = false;
+			
+			
+		}
+	};
+	
+	/*
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.volume_off:
+			break;
+		case R.id.volume_on:
+			break;
+		}
+	}*/
+
+	private OnClickListener goToMenu = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			synchronized(Constants.getLock()){
+				Constants.getSoundManager().playSplash();
+				mTime.cancel();
+				Constants.getSoundManager().unloadAll();
+				Constants.getSoundManager().cleanup();
+				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
+				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
+				mLevel.cleanUp();
+				finish();
+			}
+		}
+	};
+	private OnClickListener pause = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+			mPaused = true;
+			mCountDownTimer.cancel();
+			View unpauseButton = findViewById(R.id.unpausebutton);
+			unpauseButton.setVisibility(View.VISIBLE);
+			View pauseButton = findViewById(R.id.pausebutton);
+			pauseButton.setVisibility(View.INVISIBLE);
+			View pausebg = findViewById(R.id.pausebg);
+			pausebg.setVisibility(View.VISIBLE);
+			View restart = findViewById(R.id.restart);
+			restart.setVisibility(View.VISIBLE);
+			View quit = findViewById(R.id.quit);
+			quit.setVisibility(View.VISIBLE);
+			
+			if(muted == true){
+				View volumeOnButton = findViewById(R.id.volume_on);
+				volumeOnButton.setVisibility(View.VISIBLE);
+				View volumeOffButton = findViewById(R.id.volume_off);
+				volumeOffButton.setVisibility(View.INVISIBLE);
+			} else  {
+				View volumeOnButton = findViewById(R.id.volume_on);
+				volumeOnButton.setVisibility(View.INVISIBLE);
+				View volumeOffButton = findViewById(R.id.volume_off);
+				volumeOffButton.setVisibility(View.VISIBLE);
+			}
+			Constants.getSoundManager().pause();
+
+		}
+	};
+	
+	private OnClickListener unpause = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.getSoundManager().playSplash();
+			mPaused = false;
+			mCountDownTimer.start();
+			View pauseButton = findViewById(R.id.pausebutton);
+			pauseButton.setVisibility(View.VISIBLE);
+			View unpauseButton = findViewById(R.id.unpausebutton);
+			unpauseButton.setVisibility(View.INVISIBLE);
+			View pausebg = findViewById(R.id.pausebg);
+			pausebg.setVisibility(View.INVISIBLE);
+			View restart = findViewById(R.id.restart);
+			restart.setVisibility(View.INVISIBLE);
+			View quit = findViewById(R.id.quit);
+			quit.setVisibility(View.INVISIBLE);
+			View volumeOnButton = findViewById(R.id.volume_on);
+			volumeOnButton.setVisibility(View.INVISIBLE);
+			View volumeOffButton = findViewById(R.id.volume_off);
+			volumeOffButton.setVisibility(View.INVISIBLE);
+			Constants.getSoundManager().unpause();
+
+		}
+	};
+	
+
+	public void onBackPressed(){
+		
 	}
 	public Level getCurrentLevel() {
 		return mCurrentLevel;
@@ -136,7 +274,7 @@ public class Game extends Activity {
 		mCurrentLevel = level;
 		Constants.setLevel(level);
 	}
-
+	
 	public int update() {
 		int count = getCurrentLevel().update(); 
 		if(count==1){
@@ -169,32 +307,41 @@ public class Game extends Activity {
 	}
 	@Override
 	public void onPause(){
-		mCountDownTimer.cancel();
 		mPaused = true;
+		mCountDownTimer.cancel();
+		mTimerHasStarted = false;
 		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
-
 	@Override
 	public void onDestroy(){
-		mCountDownTimer.cancel();
 		mPaused = true;
+		mCountDownTimer.cancel();
 		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
+		Runtime.getRuntime().gc();
+        System.gc();
 		super.onDestroy();
 	}
 	@Override
 	public void onResume(){
 		mPaused = false;
-		super.onResume();
 		Constants.createSoundManager(getApplicationContext());
 		Constants.getSoundManager().loadDucky();
 		Constants.getSoundManager().loadDiver();
 		Constants.getSoundManager().loadFrog();
 		Constants.getSoundManager().loadTugBoat();
+		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
+		Constants.getSoundManager().loadSplash();
 		Constants.getSoundManager().playBackGround();
+
+		if(!mTimerHasStarted){
+			mCountDownTimer.start();
+			mTimerHasStarted = true;				
+		}
+		super.onResume();
 	}
 	//
 	//Timer Class
@@ -204,14 +351,17 @@ public class Game extends Activity {
 			super(startTime, interval);
 		}
 
-
 		@Override
 		public void onFinish(){
 			if(mPaused == false){
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				Constants.getSoundManager().cleanup();
-				startActivity(new Intent(getApplicationContext(), ScoreScreen.class));
 				mTime.cancel();
+				Constants.getSoundManager().cleanup();
+				Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
+				scorescreen.putExtra("timepassed", timepassed);
+				scorescreen.putExtra("levelselected", levelselected);
+				scorescreen.putExtra("duckcount", mLevel.getDuckCount());
+				startActivity(scorescreen);
 				finish();
 				//finish game
 			}
@@ -219,19 +369,20 @@ public class Game extends Activity {
 
 		@Override
 		public void onTick(long millisUntilFinished) {
-			
 			//The code below sets up the Minute and seconds
 			//The If statement allows the seconds to stay in double digits when going below 10 by adding a 0 in front of 9,8,7, etc
 			String seconds;	
-			
 			timepassed++;
 			if( (timepassed)%60<10){
 				seconds=new String("0" +(timepassed)%60);				
 			}else{
 				seconds=new String("" +(timepassed)%60);
 			}
-
+			mTimertext.setGravity(Gravity.CENTER_HORIZONTAL);
+			mTimertext.setTextColor(Color.BLACK);
 			mTimertext.setText("" + (timepassed)/60 + ":" + seconds);
+			Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
+			mTimertext.setTypeface(face);
 		}
 	}
 }

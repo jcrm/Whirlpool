@@ -2,8 +2,8 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ *
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -12,7 +12,6 @@ import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
@@ -23,7 +22,7 @@ public class Whirlpool extends GraphicObject{
 	private float angle = 0.0f;
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
-	private final int expireTimer = 250;
+	private final int expireTimer = 200;
 	private int expireCounter = 1;
 	private boolean finished = false;
 	public boolean collisionDone = true;
@@ -37,11 +36,20 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void draw(Canvas canvas) {
+		/*
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
+		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
 		canvas.scale(dirFactor, 1);
-		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect,  null);
+		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
 		if (mArrow != null){
 			mArrow.draw(canvas);//draw whirls directional arrow
@@ -50,7 +58,7 @@ public class Whirlpool extends GraphicObject{
 
 	@Override
 	public void init() {
-		mProperties.init(0, 0, 130, 130);	
+		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -61,7 +69,7 @@ public class Whirlpool extends GraphicObject{
 
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 130, 130);	
+		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
 		mBitmap = SpriteManager.getWhirlpool();
 		mAnimate = new Animate(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight());
@@ -75,54 +83,6 @@ public class Whirlpool extends GraphicObject{
 	public boolean move() {
 		return false;
 	}
-
-	@Override
-	public void borderCollision(ScreenSide side, int width, int height) {
-		switch(side){
-		case Top:
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case Bottom:
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case Left:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			break;
-		case Right:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			break;
-		case BottomLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case BottomRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case TopLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case TopRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		default:
-			break;
-		}
-	}
 	public Arrow getArrow(){
 		return mArrow;
 	}
@@ -131,6 +91,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public void frame(){
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(expireCounter < expireTimer){
 			expireCounter++;
 			if(expireCounter >= expireTimer){
@@ -142,7 +103,7 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	public boolean checkCollision(GraphicObject a){
-		if (a.getId()==objtype.tDuck || a.getId()==objtype.tTorpedo){// || a.getId()==objtype.tShark){
+		if (a.getId()==objtype.tDuck || a.getId()==objtype.tTorpedo || a.getId()==objtype.tShark){
 			boolean collide = collision(a);
 
 			if (a.getPulledState()==Constants.STATE_FREE&&collide){
@@ -150,16 +111,21 @@ public class Whirlpool extends GraphicObject{
 				a.setPulledBy(this);
 			}
 			if (a.getPulledState()==Constants.STATE_PULLED&&collide&&a.getPulledBy()==this){//if the object is able to be pulled, and is colliding
-				
+
 				if(a.getId()==objtype.tTorpedo)
 					((Torpedo)a).setTracking(false);//stop a torpedo tracking duck
-				collisionDone = false;
+				
+				if(a.getId()==objtype.tShark || a.getId()==objtype.tTorpedo)
+					collisionDone = true;
+				else	//Never dissipate if a duck is inside
+					collisionDone = false;
+				
 				pull(a);//pull round whirlpool
 				if (testAngle(a)){
 					a.setPulledState(Constants.STATE_LEAVING);//leaving a wpool
-					resetwPoolCounter();
+					a.resetwPoolCounter();
 					a.setAngle(getWAngle());
-					a.getSpeed().setSpeed(7+mArrow.getDist());
+					a.getSpeed().setSpeed(objtype.tDuck.tSpeed+mArrow.getDist());
 					collisionDone = true;
 					finished = true;
 				}

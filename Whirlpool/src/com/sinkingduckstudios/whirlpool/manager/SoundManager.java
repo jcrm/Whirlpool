@@ -18,6 +18,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.os.Handler;
 import android.util.Log;
 
 public class SoundManager 
@@ -45,6 +46,7 @@ public class SoundManager
 	protected int mDiver;	
 	protected int mFrog;
 	protected int mTugBoat;
+	protected int mShark;
 
 	// other sounds for the game
 	//protected int mBackground;				// the bacground music for the game
@@ -54,6 +56,12 @@ public class SoundManager
 	protected int mPoints;					// sounds of points being gained
 	protected int mSplash;					//  a splash of water
 	protected int mWhirlpool;				// the sound of the whirlpool
+	//sounds for the cinematic
+	protected int mEvilLaugh[] = new int [3];
+	protected int mPotion;
+	protected int mReal;
+	protected int mPoof;
+	protected int mGrab;
 
 	protected int mMissileStreamId;
 	protected boolean mMissilePlaying;
@@ -63,7 +71,7 @@ public class SoundManager
 	public SoundManager(Context appContext)
 	{
 		// the constuctor for the class.
-				// set up the sound pool with the auidomanager
+		// set up the sound pool with the auidomanager
 		pContext = appContext;		//get the games context 
 
 	}//  end consturctor
@@ -119,6 +127,14 @@ public class SoundManager
 
 		return true;	
 	}
+	// load the splash sound for the buttons
+	public boolean loadSplash(){
+		if(mSplash==0){
+			mSplash = load(R.raw.splash);
+		}
+		if (mSplash == 0){ return false;}
+		return true;
+	}
 
 	// a function to load the 
 	public boolean loadOtherSounds()
@@ -135,9 +151,6 @@ public class SoundManager
 		if(mPoints==0){
 			mPoints = load(R.raw.points);
 		}
-		if(mSplash==0){
-			mSplash = load(R.raw.splash);
-		}
 		if(mWhirlpool==0){
 			mWhirlpool = load(R.raw.whirlpool2);
 		}
@@ -151,11 +164,20 @@ public class SoundManager
 		if (mDownplug == 0){ return false;}
 		if (mPlug == 0){ return false;}
 		if (mPoints == 0){ return false;}
-		if (mSplash == 0){ return false;}
 		if (mWhirlpool == 0){ return false;}
 
 		if (mBackground == null){ return false;}
 
+
+		return true;
+	}
+	// lod the shark sound
+	public boolean loadShark()
+	{
+		if (mShark == 0)
+		{
+			mShark = load(R.raw.shark);
+		}if (mFrog == 0) {return false;}
 
 		return true;
 	}
@@ -217,6 +239,53 @@ public class SoundManager
 		if (mMissile[0] == 0){return false;}
 		if (mMissile[1] == 0){return false;}
 		if (mMissile[2] == 0){return false;}
+
+		return true;
+	}
+	// a function to load all of the sound sfor the cinematic
+	public boolean loadCinematic()
+	{
+		if (mEvilLaugh[0] == 0)
+		{
+			mEvilLaugh[0] = load(R.raw.evillaugh01);
+		}
+
+		if (mEvilLaugh[1] == 0)
+		{
+			mEvilLaugh[1] = load(R.raw.evillaugh02);
+		} 
+
+		if (mEvilLaugh[2] == 0)
+		{
+			mEvilLaugh[2] = load(R.raw.evillaugh03);
+		}
+
+		if (mPotion == 0)
+		{
+			mPotion = load(R.raw.potion);
+		}
+
+		if (mReal == 0)
+		{
+			mReal = load(R.raw.real);
+		}
+		if (mGrab == 0)
+		{
+			mGrab = load(R.raw.grab);
+		}
+		
+		if (mPoof == 0)
+		{
+			mPoof = load(R.raw.poof);
+		}
+		if ( mEvilLaugh[0] == 0) { return false;}
+		if ( mEvilLaugh[1] == 0) { return false;}
+		if ( mEvilLaugh[2] == 0) { return false;}
+		if ( mPotion == 0) { return false;}
+		if ( mReal == 0) { return false;}
+		if (mPoof == 0){ return false;}
+		if (mGrab == 0){ return false;}
+
 
 		return true;
 	}
@@ -447,9 +516,13 @@ public class SoundManager
 			if(!mBackground.isPlaying()){
 				mBackground.setLooping(true);
 				mBackground.start();
-				Log.w("backgroud","played");
 			}
 		}
+	}
+	// a function to play the shark noise
+	public void playShark()
+	{
+		playSound(mShark);			// play the shark sound	
 	}
 
 	// a function to play the ambient noise 
@@ -489,20 +562,24 @@ public class SoundManager
 	}
 
 	// a function to play the fast beep of the missile
+	// a function to play the fast beep of the missile
 	public void playBeepFast()
 	{
-		if(!mMissilePlaying){
+		if(!mMissilePlaying)			// if the missle is not playing
+		{
 			//mMissileStreamId = playSound(mMissile[0]);
-			mMissileStreamId = mSndPool.play(mMissile[0], mLeftVolume, mRightVolume, 1, -1, mRate);
-			mMissilePlaying=true;
-			if(mMissileStreamId!=0)
-				mSndPool.setVolume(mMissileStreamId, 0.1f, 0.1f);
+			mMissileStreamId = mSndPool.play(mMissile[0], mLeftVolume, mRightVolume, 1, -1, mRate);		// play the misslie sound at a reduced volume
+			mMissilePlaying=true;			// the misle is now playing
+			if(mMissileStreamId!=0)			// if the steam id is not 0 (all other streams)
+				mSndPool.setVolume(mMissileStreamId, 0.1f, 0.1f);		// set the steam volume to 0.1
 		}
 	}
 
+
 	public void alterBeepVolume(float v){
 		if (v==0){
-			mSndPool.stop(mMissileStreamId);
+			if(mSndPool!=null)
+				mSndPool.stop(mMissileStreamId);
 			mMissileStreamId=0;
 			mMissilePlaying=false;
 			return;
@@ -559,7 +636,7 @@ public class SoundManager
 
 		if(mSndPool == null)
 		{
-			mSndPool = new SoundPool(24, AudioManager.STREAM_MUSIC, 0);	
+			mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);	
 		}
 		// load function takes in 3 paramiters-
 		//										the application centext
@@ -623,7 +700,7 @@ public class SoundManager
 		}
 		// set the background to null.
 		mBackground = null;
-		
+
 		//TODO set all sound clips id to 0
 		for(int i = 0; i < 3; i++){
 			mDucky[i]  = 0;
@@ -650,7 +727,7 @@ public class SoundManager
 
 
 	public void init() {
-		mSndPool = new SoundPool(16, AudioManager.STREAM_MUSIC, 100);
+		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
 		mRate = 1.0f;				// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
 		mMasterVolume = 1.0f;
 		mLeftVolume =mMasterVolume;			// the volume of the left speaker, set to on full
@@ -661,6 +738,90 @@ public class SoundManager
 			mBackground = new MediaPlayer();
 		}
 	}
+	public void playCinematic(int slideNo)
+	{
+		// ply the sounds for ther cinematic in the correct orderr and at the correct time
+		
+		
+		switch (slideNo)
+		{
+			case 0:
+			{
+				new Handler().postDelayed(new Runnable()
+				{
+					@Override 
+					public void run()
+					{
+						playSound(mReal);			//play the sound for slide one
+					}
+				},500);
+				
+				break;					// break out of the switch statement
+			}
+			
+			case 1:
+				
+			{
+				playSound(mGrab);			//play the sound for slide two
+				break;					// break out of the switch statement
+			}
+			
+			case 2:
+			{
+				playSound(mEvilLaugh[0]);			//play the sound for slide three
+				playSound(mPotion);
+				break;					// break out of the switch statement
+			}
+			
+			case 3:
+			{
+				new Handler().postDelayed(new Runnable()
+				{
+					@Override 
+					public void run()
+					{
+							playSound(mPoof);	//play the sound for slide four
+					}
+				},1300);
+				break;					// break out of the switch statement
+			}
+			
+			case 4:
+			{
+				
+				break;					// break out of the switch statement
+			}
+			
+			case 5:
+			{
+				playSound(mEvilLaugh[2]);			//play the sound for slide six
+				break;					// break out of the switch statement
+			}
+			
+			default:
+			{
+				
+				break;
+			}
+		
+		}//end switch (slide no)
+	}//end load cinematic
+
+	// a function to clean up the cinematic sounds
+	public void CleanCinematic()
+	{
+		int i;
+
+		for( i = 0; i < 3 ; i++)
+		{
+			mEvilLaugh[i] = 0;
+		}
+		mPotion = 0;
+		mReal = 0;
+	}
+
+
+
 
 
 

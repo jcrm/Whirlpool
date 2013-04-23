@@ -4,7 +4,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
     <application
@@ -28,6 +28,14 @@
             android:name="com.sinkingduckstudios.whirlpool.states.Loading"
             android:label="@string/title_activity_loading">
         </activity>
+         <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Cinematic"
+            android:label="@string/title_activity_cinematic">
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Tutorial"
+            android:label="@string/title_activity_tutorial">
+        </activity>
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Options"
             >
@@ -38,10 +46,6 @@
         </activity>
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.AudioOptions"
-            >
-        </activity>
-        <activity
-            android:name="com.sinkingduckstudios.whirlpool.states.GraphicsOptions"
             >
         </activity>
         <activity
