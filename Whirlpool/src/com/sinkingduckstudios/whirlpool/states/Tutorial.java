@@ -16,11 +16,12 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.views.TutorialView;
 
-public class Tutorial extends Activity {
+public class Tutorial extends Activity{
 	static public int mSlide = -1;
 	TutorialView tutorialView;
 	private Timer mTime;
@@ -86,6 +87,28 @@ public class Tutorial extends Activity {
 		}
 
 	}
-
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		if(e.getAction() == MotionEvent.ACTION_DOWN){
+			switch(tutorial){
+			case 1:
+	    		Intent loading = (new Intent(getApplicationContext(),Loading.class));
+				
+				loading.putExtra("levelselected", 1);
+				mTime.cancel();
+				startActivity(loading);
+	    		finish();
+	    		tutorialView.CleanUp();
+			break;
+			case 2:
+				startActivity(new Intent(getApplicationContext(), Options.class));
+				mTime.cancel();
+				finish();
+	    		tutorialView.CleanUp();
+				break;
+			}
+		}
+		return true;
+	}
 }   
 

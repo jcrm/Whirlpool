@@ -16,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.views.CinematicView;
@@ -88,6 +89,26 @@ public class Cinematic extends Activity {
 		}
 
 	}
-
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		if(e.getAction() == MotionEvent.ACTION_DOWN){
+			switch(cinematic){
+			case 1:
+				Intent loading = (new Intent(getApplicationContext(),LevelSelect.class));
+				mTime.cancel();
+				startActivity(loading);
+				finish();
+				cinematicView.CleanUp();
+				break;
+			case 2:
+				startActivity(new Intent(getApplicationContext(), Options.class));
+				mTime.cancel();
+				finish();
+				cinematicView.CleanUp();
+				break;
+			}
+		}
+		return true;
+	}
 }   
 
