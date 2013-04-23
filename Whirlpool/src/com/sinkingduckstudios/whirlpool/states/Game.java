@@ -69,7 +69,7 @@ public class Game extends Activity {
 
 		mPanel.init();		
 		Constants.setPanel(mPanel);
-		Constants.getLevel().init(levelselected,true);
+		Constants.getLevel().init(levelselected);
 		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){

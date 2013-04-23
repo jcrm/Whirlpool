@@ -12,7 +12,6 @@ import java.util.Random;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
@@ -122,12 +121,35 @@ public class Shark extends GraphicObject{
 	}
 	
 	public void frame(){
+		if(updateDirection()){
+			if(getSharkState() == SharkType.tFollow){
+				setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
+			}
+		}
+		if(getSharkState() == SharkType.tAttack){
+			moveToDrop();
+		}
+		if(getSharkState() == SharkType.tAttack){
+			Constants.getPlayer().setCentre((int)(getCentreX()*Constants.getScreen().getRatio()), (int)(getCentreY()*Constants.getScreen().getRatio()));
+			if(getMovedToDrop()){
+				Constants.getPlayer().setSharkAttack(false);
+				setSharkState(SharkType.tRetreat);
+			}
+		}
+		if(getSharkState() == SharkType.tRetreat){
+			returnToStart();						
+			checkAtStart();
+		}
+		if(getSharkState() == SharkType.tWait){
+			if(Constants.getPlayer().getInvincibility() == false){
+				setSharkState(SharkType.tFollow);
+			}
+		}
 		// Move Objects
 		if(move()){
 			float tempSpeed = mSpeed.getSpeed()/Constants.getScreen().getRatio();
 			if(tempSpeed<mTopSpeed){
 				mSpeed.setSpeed(tempSpeed+0.05f);
-				Log.v("Shark Speed", Float.toString(mSpeed.getSpeed()));
 			}else{
 				mSpeed.setSpeed(mTopSpeed);
 			}

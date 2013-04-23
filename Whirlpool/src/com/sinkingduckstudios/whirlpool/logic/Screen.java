@@ -1,9 +1,9 @@
 /*
- * Author:
+ * Authors: Jordan O'Hare, Fraser , Jake Morey
  * Last Updated:
  * Content:
- * 
- * 
+ * Used to store size of the screen. Also stores the different sides.
+ * Corners are also included due to collision conflicts.
  */
 package com.sinkingduckstudios.whirlpool.logic;
 

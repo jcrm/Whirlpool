@@ -58,32 +58,16 @@ public class Level extends Activity{
 	private Rect mRect = new Rect();
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 
-
 	public Level() {
 	}
 	public void init(){
-		mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
-		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
-		initImages();
-
-		levelNumber(1);
-
-		DiverCounter = 0;
-		FrogCounter = 0;
-		TugBoatCounter = 0;
-		SharkCounter = 0;
-
-		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
-		mScreenLock=Constants.getLock();
+		init(1);
 	}
-	public void init(int lNumber, boolean replay){
+	public void init(int lNumber){
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
 
 		levelNumber(lNumber);
-		if(replay){
-			replayLevel(lNumber);
-		}
 
 		DiverCounter = 0;
 		FrogCounter = 0;
@@ -111,6 +95,9 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(900, 50, 90, 0, 0, 0, 235));
 			mGraphics.add(new Frog(400, 250, 80));
 			mGraphics.add(new Frog(1200, 250, 70));
+			mGraphics.add(new Collectable(600,250));
+			mGraphics.add(new Collectable(1200,250));
+			mGraphics.add(new Collectable(750,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1400, 250));
 			break;
@@ -120,6 +107,9 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(600, 500, 135, 0, 0, 0, 0));
 			mGraphics.add(new Frog(600, 250, 75));
 			mGraphics.add(new Frog(1250, 250, 140));
+			mGraphics.add(new Collectable(800,250));
+			mGraphics.add(new Collectable(250,50));
+			mGraphics.add(new Collectable(250,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1250, 250));
 			break;
@@ -132,6 +122,9 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(1000, 250, 135, 1000, 0, 1300, 250));
 			mGraphics.add(new Diver(1000, 250, 45, 1000, 250, 1300, 500));
 			mGraphics.add(new Diver(1400, 50, 90, 0, 0, 0, 0));
+			mGraphics.add(new Collectable(500,250));
+			mGraphics.add(new Collectable(1350,50));
+			mGraphics.add(new Collectable(1350,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1200, 250));
 			break;
@@ -145,6 +138,9 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(600, 250, 140));
 			mGraphics.add(new Frog(1200, 250, 140));		
 			mGraphics.add(new Shark(600,300,300,150));
+			mGraphics.add(new Collectable(500,50));
+			mGraphics.add(new Collectable(1000,400));
+			mGraphics.add(new Collectable(2100,350));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250));
 			break;
@@ -160,6 +156,9 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(1500, 350, 100));	
 			mGraphics.add(new Frog(1700, 200, 100));
 			mGraphics.add(new Frog(2350, 200, 100));	
+			mGraphics.add(new Collectable(500,50));
+			mGraphics.add(new Collectable(1500,400));
+			mGraphics.add(new Collectable(2000,190));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250));
 			break;
@@ -172,6 +171,9 @@ public class Level extends Activity{
 			mGraphics.add(new Frog(2500, 150, 100));
 			mGraphics.add(new Frog(2500, 350, 100));
 			mGraphics.add(new Boat(600,250));//207=250-(96/2) --> 96 is height
+			mGraphics.add(new Collectable(600,425));
+			mGraphics.add(new Collectable(1500,50));
+			mGraphics.add(new Collectable(2500,350));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 235));
 			break;
@@ -179,41 +181,6 @@ public class Level extends Activity{
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250));
 			break;
-		}
-	}
-	private void replayLevel(int lNumber){
-		switch(lNumber){
-		case 1:
-			mGraphics.add(new Collectable(600,250));
-			mGraphics.add(new Collectable(1200,250));
-			mGraphics.add(new Collectable(750,450));
-			break;
-		case 2:
-			mGraphics.add(new Collectable(800,250));
-			mGraphics.add(new Collectable(250,50));
-			mGraphics.add(new Collectable(250,450));
-			break;
-		case 3:
-			mGraphics.add(new Collectable(500,250));
-			mGraphics.add(new Collectable(1350,50));
-			mGraphics.add(new Collectable(1350,450));
-			break;
-		case 4:
-			mGraphics.add(new Collectable(500,50));
-			mGraphics.add(new Collectable(1000,400));
-			mGraphics.add(new Collectable(2100,350));
-			break;
-		case 5: 
-			mGraphics.add(new Collectable(500,50));
-			mGraphics.add(new Collectable(1500,400));
-			mGraphics.add(new Collectable(2000,190));
-			break;
-		case 6:
-			mGraphics.add(new Collectable(600,425));
-			mGraphics.add(new Collectable(1500,50));
-			mGraphics.add(new Collectable(2500,350));
-			break;
-		default: break;
 		}
 	}
 	public int update(){
@@ -275,75 +242,64 @@ public class Level extends Activity{
 		for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
 			GraphicObject Enemy = gIterator.next();
 			// if the enemy is on screen...
-			if (enemiesOnScreen(Enemy)){
+			if(enemiesOnScreen(Enemy)){
 				// find out the enemies type and play the relevant type
 				switch (Enemy.getType()){
 				//diver
-				case 1 : {
-					if (Enemy.getIsPlaying() == false){
+				case 1:{
+					if(Enemy.getIsPlaying() == false){
 						Constants.getSoundManager().playDiver();
 						Enemy.setIsPlaying(true);
 						DiverCounter = 0;
 					}
 					DiverCounter ++;
-					if (DiverCounter >= 500){
+					if(DiverCounter >= 500){
 						Enemy.setIsPlaying(false);
 					}
 					break;
 				}
 				//frog
-				case 2 :{
+				case 2:{
 					if (Enemy.getIsPlaying() == false){
 						Constants.getSoundManager().playFrog();
 						Enemy.setIsPlaying(true);
 						FrogCounter = 0;
 					}
-
 					FrogCounter ++;
-
-					if (FrogCounter >= 500){
+					if(FrogCounter >= 500){
 						Enemy.setIsPlaying(false);
 					}
 					break;
 				}
 				//tugbout
-				case 3 :{
-					if (Enemy.getIsPlaying() == false){
+				case 3:{
+					if(Enemy.getIsPlaying() == false){
 						Constants.getSoundManager().playTugBoat();
 						Enemy.setIsPlaying(true);
 						TugBoatCounter = 0;
 					}
 					TugBoatCounter ++;
-					if (TugBoatCounter >= 500){
+					if(TugBoatCounter >= 500){
 						Enemy.setIsPlaying(false);
 					}
 					break;
 				}
-
 				//shark
-				case 4 : {
-					if (Enemy.getIsPlaying() == false)
-					{
+				case 4:{
+					if(Enemy.getIsPlaying() == false){
 						Constants.getSoundManager().playShark();
 						Enemy.setIsPlaying(true);
 						SharkCounter = 0;
 					}
-
 					SharkCounter ++;
-					if(SharkCounter >= 500)
-					{
+					if(SharkCounter >= 500){
 						Enemy.setIsPlaying(false);
 					}
-
 					break;
 				}
 				}// end switch enemytype
 			}
 		} //end for graphics objects
-
-
-
-
 		synchronized(mScreenLock){
 			duckOnScreen();
 		}
@@ -362,7 +318,6 @@ public class Level extends Activity{
 				graphic.setPulledBy(null);
 				graphic.setPulledState(Constants.STATE_FREE);
 			}
-
 			for(GraphicEnvironment enviro: mEnvironments){
 				if(enviro.getId()==envtype.tFinish && graphic.getId() == objtype.tDuck && ((Finish)enviro).isActive()){
 					if(((Finish) enviro).checkCollision(graphic)){
@@ -378,8 +333,6 @@ public class Level extends Activity{
 					mTorpedoes.add(new Torpedo((int)(graphic.getCentreX()*Constants.getScreen().getRatio()),(int)(graphic.getBottomRightY()*Constants.getScreen().getRatio()),0));
 				}
 				graphic.frame();	//Do everything this object does every frame, like move
-			}else if(graphic.getId()==objtype.tShark){
-				sharkMovement(graphic);
 			}else if(graphic.getId()==objtype.tCollectable){
 				boolean collided = ((Collectable)graphic).getCollided();
 				graphic.frame();
@@ -387,7 +340,6 @@ public class Level extends Activity{
 					((Collectable)graphic).setFollowing(mFollowThis);
 					mFollowThis=graphic;
 					mCollectables ++;
-
 				}
 			}else{
 				graphic.frame();	//Do everything this object does every frame, like move
@@ -396,7 +348,7 @@ public class Level extends Activity{
 	}
 	public int getDuckCount(){
 		return mCollectables;
-		
+
 	}
 	private void checkBoatTorpedoCollision(GraphicObject graphic){
 		for(Torpedo torpedo : mTorpedoes){
@@ -416,10 +368,8 @@ public class Level extends Activity{
 			mRect.set((int) ((width*i)-mScrollBy), 0, (int)((width*(i+1)) - mScrollBy), Constants.getScreen().getHeight());
 			canvas.drawBitmap(mBackgroundImage, null, mRect,  null);
 		}
-
 		drawBathTub(canvas);
-
-		for (Whirlpool whirlpool : mWPoolModel.getWpools()) {
+		for (Whirlpool whirlpool : mWPoolModel.getWpools()){
 			whirlpool.draw(canvas);
 		}
 		for(GraphicEnvironment enviro : mEnvironments){
@@ -428,7 +378,7 @@ public class Level extends Activity{
 		for(Torpedo torpedo : mTorpedoes){
 			torpedo.draw(canvas);
 		}
-		for (GraphicObject graphic : mGraphics) {
+		for (GraphicObject graphic : mGraphics){
 			graphic.draw(canvas);
 		}
 	}
@@ -447,31 +397,28 @@ public class Level extends Activity{
 		canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 		canvas.restore();
 	}
-	public WPools getWPoolModel() {
+	public WPools getWPoolModel(){
 		return mWPoolModel;
 	}
-	public int getLevelWidth() {
+	public int getLevelWidth(){
 		return mLevelWidth;
 	}
 	public int getLevelHeight(){
 		return mLevelHeight;
 	}
-	public void setLevelWidth(int levelWidth) {
+	public void setLevelWidth(int levelWidth){
 		mLevelWidth = levelWidth;
 	}
 	public void setLevelHeight(int levelHeight){
 		mLevelHeight = levelHeight;
 	}
-	public float getScrollBy() {
+	public float getScrollBy(){
 		return mScrollBy;
 	}
-	public void setScrollBy(float scrollBy) {
+	public void setScrollBy(float scrollBy){
 		mScrollBy = scrollBy;
 	}
-	public void shiftScrollBy(float delta) {
-	}
 	private void duckOnScreen(){
-
 		mScrollBy = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
 		if(mScrollBy < 0){
 			mScrollBy = 0;
@@ -532,35 +479,8 @@ public class Level extends Activity{
 			}
 		}
 	}
-	private void sharkMovement(GraphicObject graphic){
-		if(((Shark) graphic).updateDirection()){
-			if(((Shark) graphic).getSharkState() == SharkType.tFollow){
-				((Shark) graphic).setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
-			}
-		}
-		if(((Shark) graphic).getSharkState() == SharkType.tAttack){
-			((Shark) graphic).moveToDrop();
-		}
-		if(((Shark) graphic).getSharkState() == SharkType.tAttack){
-			Constants.getPlayer().setCentre((int)(graphic.getCentreX()*Constants.getScreen().getRatio()), (int)(graphic.getCentreY()*Constants.getScreen().getRatio()));
-			if(((Shark) graphic).getMovedToDrop()){
-				Constants.getPlayer().setSharkAttack(false);
-				((Shark) graphic).setSharkState(SharkType.tRetreat);
-			}
-		}
-		if(((Shark) graphic).getSharkState() == SharkType.tRetreat){
-			((Shark) graphic).returnToStart();						
-			((Shark) graphic).checkAtStart();
-		}
-		if(((Shark) graphic).getSharkState() == SharkType.tWait){
-			if(Constants.getPlayer().getInvincibility() == false){
-				((Shark) graphic).setSharkState(SharkType.tFollow);
-			}
-		}
-		graphic.frame();
-	}
 	private boolean enemiesOnScreen(GraphicObject TempEnemy){
-		// work out the boundries opf the screen and then see what enemies are in that boundry
+		// work out the boundaries of the screen and then see what enemies are in that boundary
 		//work out the edges of the screen
 		float LeftEdge = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
 		float RightEdge =Constants.getPlayer().getCentreX()+ Constants.getScreen().getWidth()/2;

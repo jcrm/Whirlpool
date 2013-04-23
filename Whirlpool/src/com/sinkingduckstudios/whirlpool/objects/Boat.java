@@ -27,15 +27,6 @@ public class Boat extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
