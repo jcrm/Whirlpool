@@ -5,7 +5,6 @@
  * This is the touch listener hooked to the Panel
  * It handles the gesture of spinning a finger, 
  * and also of directing an already existing whirlpool
- * TODO: implement coordinate class to tidy things up
  */
 
 package com.sinkingduckstudios.whirlpool.logic;
