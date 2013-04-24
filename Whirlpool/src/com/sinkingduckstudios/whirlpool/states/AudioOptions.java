@@ -24,33 +24,26 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.views.AudioOptionsView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AudioOptions.
  */
 public class AudioOptions extends Activity implements OnClickListener{
-	
-	/** The m paused. */
-	boolean mPaused = false;
-	
 	/** The audio options view. */
 	AudioOptionsView audioOptionsView;
-	
-	/** The maudio group. */
-	RadioGroup maudioGroup;
-	
-	/** The audio3. */
+	/** The audio group. */
+	RadioGroup mAudioGroup;
+	/** The audio buttons. */
 	RadioButton audio1, audio2, audio3;
-
-	/** The audio_check. */
+	/** The audio check value. */
 	private int audio_check;
-	
 	/** The audiocheck. */
 	private int audiocheck;
-
-	/** The Constant AUDIO. */
+	/** The Constant AUDIO string. */
 	public static final String AUDIO = "audio_options";
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,7 +74,6 @@ public class AudioOptions extends Activity implements OnClickListener{
 		audio_check = prefs.getInt("audiocheck", audiocheck);
 
 		switch(audio_check){
-
 		case 1:
 			audio1.setChecked(true);
 			break;
@@ -91,10 +83,13 @@ public class AudioOptions extends Activity implements OnClickListener{
 		case 3:
 			audio3.setChecked(true);
 			break;
-
 		}
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	public void onClick(View v){
 
 		SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
@@ -131,19 +126,26 @@ public class AudioOptions extends Activity implements OnClickListener{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override 
 	public void onResume(){
 		Constants.createSoundManager(getApplicationContext());
 		Constants.getSoundManager().loadSplash();
 		super.onResume();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override 
 	public void onPause(){
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
 	
-	/** The go to op. */
+	/** The go to option button. */
 	private OnClickListener goToOp = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -152,11 +154,19 @@ public class AudioOptions extends Activity implements OnClickListener{
 			finish();
 		}
 	};
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onBackPressed()
+	 */
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
 		startActivity(new Intent(getApplicationContext(), Options.class));
 		finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	public void onDestroy(){
 		audioOptionsView.CleanUp();
@@ -165,5 +175,4 @@ public class AudioOptions extends Activity implements OnClickListener{
 		System.gc();
 		super.onDestroy();
 	}
-
 }

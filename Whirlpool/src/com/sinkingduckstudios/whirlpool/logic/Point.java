@@ -7,24 +7,18 @@
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Point.
  */
 public class Point{
-	//x and y components of a point.
-	/** The m x. */
+	/** The x component. */
 	private float mX = 0.0f;
-	
-	/** The m y. */
+	/** The y component. */
 	private float mY = 0.0f;
-	
 	/**
 	 * Instantiates a new point.
 	 */
-	public Point(){
-		
-	}
+	public Point(){}
 	
 	/**
 	 * Initialises the Point with the parameters.

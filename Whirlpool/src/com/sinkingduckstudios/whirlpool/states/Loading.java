@@ -14,12 +14,15 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.sinkingduckstudios.whirlpool.R;
-import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 /**
  * The Class Loading.
  */
 public class Loading extends Activity {
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +41,12 @@ public class Loading extends Activity {
         	}
         },500);
     }
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         Runtime.getRuntime().gc();
         System.gc();
         super.onDestroy();

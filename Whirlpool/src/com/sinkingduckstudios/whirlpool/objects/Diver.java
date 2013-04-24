@@ -20,36 +20,27 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Diver.
  */
 public class Diver extends GraphicObject{
 	
-	/** The m left border. */
+	/** The left border. */
 	private int mLeftBorder;
-	
-	/** The m right border. */
+	/** The right border. */
 	private int mRightBorder;
-	
-	/** The m top border. */
+	/** The top border. */
 	private int mTopBorder;
-	
-	/** The m bottom border. */
+	/** The bottom border. */
 	private int mBottomBorder;
-	
-	/** The m up bitmap. */
+	/** The up bitmap. */
 	private Bitmap mUpBitmap;
-	
-	/** The m down bitmap. */
+	/** The down bitmap. */
 	private Bitmap mDownBitmap;
-	
-	/** The m up animate. */
+	/** The up animation. */
 	private Animate mUpAnimate;
-	
-	/** The m down animate. */
+	/** The down animation. */
 	private Animate mDownAnimate;
-
 	/**
 	 * Instantiates a new diver.
 	 */
@@ -62,17 +53,16 @@ public class Diver extends GraphicObject{
 		mBottomBorder = Constants.getLevel().getLevelHeight();
 		checkBorderConditions();
 	}
-	
 	/**
 	 * Instantiates a new diver.
 	 *
-	 * @param x the x
-	 * @param y the y
-	 * @param angle the angle
-	 * @param left the left
-	 * @param top the top
-	 * @param right the right
-	 * @param bottom the bottom
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the diver
+	 * @param left the left border
+	 * @param top the top border
+	 * @param right the right border
+	 * @param bottom the bottom border
 	 */
 	public Diver(int x, int y, int angle, int left, int top, int right, int bottom){
 		mId = objtype.tDiver;
@@ -83,7 +73,6 @@ public class Diver extends GraphicObject{
 		mBottomBorder = (int) (bottom/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
-	
 	/* (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
 	 */
@@ -115,7 +104,6 @@ public class Diver extends GraphicObject{
 		}
 		canvas.restore();
 	}
-	
 	/* (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
 	 */
@@ -127,11 +115,11 @@ public class Diver extends GraphicObject{
 	}
 	
 	/**
-	 * Inits the.
+	 * Inits the diver.
 	 *
-	 * @param x the x
-	 * @param y the y
-	 * @param angle the angle
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the diver
 	 */
 	public void init(int x, int y, int angle) {
 		mGraphicType = 1;
@@ -172,7 +160,7 @@ public class Diver extends GraphicObject{
 	/**
 	 * Border collision.
 	 *
-	 * @param side the side
+	 * @param side the side of the screen
 	 */
 	public void borderCollision(ScreenSide side) {
 		switch(side){

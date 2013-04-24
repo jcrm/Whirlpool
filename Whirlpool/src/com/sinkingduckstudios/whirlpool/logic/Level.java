@@ -583,8 +583,8 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(750, 350, 90, 0, 100, 0, 500));
 			mGraphics.add(new Diver(500, 50, 90, 0, 0, 0, 235));
 			mGraphics.add(new Diver(900, 50, 90, 0, 0, 0, 235));
-			mGraphics.add(new Frog(400, 250, 80));
-			mGraphics.add(new Frog(1200, 250, 70));
+			mGraphics.add(new Frog(400, 250, 80, -1));
+			mGraphics.add(new Frog(1200, 250, 70, -1));
 			mGraphics.add(new Collectable(600,250));
 			mGraphics.add(new Collectable(1200,250));
 			mGraphics.add(new Collectable(750,450));
@@ -595,8 +595,8 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(100, 0, 45, 100, 0, 400, 250));
 			mGraphics.add(new Diver(100, 500, 135, 100, 250, 400, 500));
 			mGraphics.add(new Diver(600, 500, 135, 0, 0, 0, 0));
-			mGraphics.add(new Frog(600, 250, 75));
-			mGraphics.add(new Frog(1250, 250, 140));
+			mGraphics.add(new Frog(600, 250, 75, -1));
+			mGraphics.add(new Frog(1250, 250, 140, -1));
 			mGraphics.add(new Collectable(800,250));
 			mGraphics.add(new Collectable(250,50));
 			mGraphics.add(new Collectable(250,450));
@@ -625,8 +625,8 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(2100, 200, 90, 0, 0, 0, 0));
 			mGraphics.add(new Diver(2600, 100, 90, 0, 0, 0, 0));
 			mGraphics.add(new Boat(1200,207));
-			mGraphics.add(new Frog(600, 250, 140));
-			mGraphics.add(new Frog(1200, 250, 140));		
+			mGraphics.add(new Frog(600, 250, 140, -1));
+			mGraphics.add(new Frog(1200, 250, 140, -1));		
 			mGraphics.add(new Shark(600,300,300,150));
 			mGraphics.add(new Collectable(500,50));
 			mGraphics.add(new Collectable(1000,400));
@@ -637,15 +637,15 @@ public class Level extends Activity{
 		case 5: 
 			mGraphics.add(new Diver(100, 50, 0, 0, 0, 900, 0));
 			mGraphics.add(new Diver(100, 400, 0, 0, 0, 900, 0));
-			mGraphics.add(new Diver(1600, 50, 90, 1500, 0, 0, 2000));
+			mGraphics.add(new Diver(1600, 50, 90, 1500, 0, 0, 500));
 			mGraphics.add(new Diver(2100, 200, 45, 0, 0, 0, 0));
 			mGraphics.add(new Diver(2600, 100, 135, 0, 0, 0, 0));
-			mGraphics.add(new Frog(400, 250, 100));
-			mGraphics.add(new Frog(900, 250, 100));	
-			mGraphics.add(new Frog(1200, 200, 100));
-			mGraphics.add(new Frog(1500, 350, 100));	
-			mGraphics.add(new Frog(1700, 200, 100));
-			mGraphics.add(new Frog(2350, 200, 100));	
+			mGraphics.add(new Frog(400, 250, 100, -1));
+			mGraphics.add(new Frog(900, 250, 100, 1));	
+			mGraphics.add(new Frog(1200, 200, 100, -1));
+			mGraphics.add(new Frog(1500, 350, 100, 1));	
+			mGraphics.add(new Frog(1700, 200, 100, -1));
+			mGraphics.add(new Frog(2350, 200, 100, 1));	
 			mGraphics.add(new Collectable(500,50));
 			mGraphics.add(new Collectable(1500,400));
 			mGraphics.add(new Collectable(2000,190));
@@ -658,8 +658,8 @@ public class Level extends Activity{
 			mGraphics.add(new Diver(1500, 250, 45, 1000, 0, 1500, 400));
 			mGraphics.add(new Diver(1500, 250, 135, 1500, 0, 2000, 400));
 			mGraphics.add(new Diver(2100, 100, 90, 0, 50, 0, 500));
-			mGraphics.add(new Frog(2500, 150, 100));
-			mGraphics.add(new Frog(2500, 350, 100));
+			mGraphics.add(new Frog(2500, 150, 100, -1));
+			mGraphics.add(new Frog(2500, 350, 100, 1));
 			mGraphics.add(new Boat(600,250));
 			mGraphics.add(new Collectable(600,425));
 			mGraphics.add(new Collectable(1500,50));

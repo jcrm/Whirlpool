@@ -28,16 +28,34 @@ import com.sinkingduckstudios.whirlpool.views.ScoreScreenView;
  */
 public class ScoreScreen extends Activity {
 	
+	/** The Constant PREFS_NAME string. */
 	public static final String PREFS_NAME = "Bath_Score";
-	boolean mPaused = false;
+	
+	/** The time passed. */
 	private int timepassed;
+	
+	/** The level selected. */
 	private int levelselected;
+	
+	/** The score value. */
 	private int score;
+	
+	/** The next value. */
 	private int next;
+	
+	/** The highscore value. */
 	private int highscore;
+	
+	/** The mini duck counter. */
 	private int miniDuckCount;
+	
+	/** The number of stars. */
 	private int stars;
+	
+	/** The Constant HIGH_SCORES string. */
 	public static final String HIGH_SCORES = "HighScores";
+	
+	/** The scorescreen view. */
 	ScoreScreenView scorescreenView;
 	
 	/* (non-Javadoc)
@@ -61,7 +79,6 @@ public class ScoreScreen extends Activity {
 		SharedPreferences prefs = getSharedPreferences(HIGH_SCORES, MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
-		
 
 		switch(levelselected){
 		case 1:
@@ -79,7 +96,6 @@ public class ScoreScreen extends Activity {
 				editor.putInt("Stars_lvl1", stars);
 			}
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl1", score);
 			break;
 		case 2:
@@ -97,10 +113,7 @@ public class ScoreScreen extends Activity {
 				editor.putInt("Stars_lvl2", stars);
 			}
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl2", score);
-			
-			
 			break;
 		case 3:
 			if(score >= (prefs.getInt("HighScore_lvl3", score))){
@@ -118,10 +131,7 @@ public class ScoreScreen extends Activity {
 			}
 			
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl3", score);
-			
-			
 			break;
 		case 4:
 			if(score >= (prefs.getInt("HighScore_lvl4", score))){
@@ -137,11 +147,8 @@ public class ScoreScreen extends Activity {
 			if(stars > (prefs.getInt("Stars_lvl4", 0))){
 				editor.putInt("Stars_lvl4", stars);
 			}
-			
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl4", score);
-			
 			break;
 		case 5:
 			if(score >= (prefs.getInt("HighScore_lvl5", score))){
@@ -157,40 +164,27 @@ public class ScoreScreen extends Activity {
 			if(stars > (prefs.getInt("Stars_lvl5", 0))){
 				editor.putInt("Stars_lvl5", stars);
 			}
-			
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl5", score);
-			
-			
 			break;
 		case 6:
 			if(score >= (prefs.getInt("HighScore_lvl6", score))){
 				editor.putInt("HighScore_lvl6", score);
 			}
-			
 			stars=1;
 			if(timepassed <= LEVEL_SIX_AVERAGE)
 				stars=2;
 			if(timepassed <= LEVEL_SIX_GOOD)
 				stars=3;
-			
 			if(stars > (prefs.getInt("Stars_lvl6", 0))){
 				editor.putInt("Stars_lvl6", stars);
 			}
-			
 			editor.commit();
-			
 			highscore = prefs.getInt("HighScore_lvl6", score);
-			
-			
 			break;
-			
 		}
-		
 		Constants.clearLevel();
 		Constants.setState(this);
-		
 		
 		TextView Score = (TextView) findViewById(R.id.score);
 		Score.setText("Score: " + score);
@@ -203,7 +197,6 @@ public class ScoreScreen extends Activity {
 		HScore.setTextColor(Color.BLACK);
 		HScore.setY(Score.getY()+Score.getHeight());
 		HScore.setTypeface(face);
-		
 
 		ImageButton menuButton = ((ImageButton)findViewById(R.id.op_return));
 		ImageButton nextButton = ((ImageButton)findViewById(R.id.next_level));
@@ -213,15 +206,12 @@ public class ScoreScreen extends Activity {
 		menuButton.setY(HScore.getY()+HScore.getHeight());
 		nextButton.setY(HScore.getY()+HScore.getHeight());
 
-		
 		scorescreenView=(ScoreScreenView)findViewById(R.id.scorescreenView);
 		scorescreenView.setStars(stars);
 		if(levelselected == 6){
 			nextButton.setVisibility(View.INVISIBLE);
 		}
-
 	}
-	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onResume()
 	 */
@@ -231,7 +221,6 @@ public class ScoreScreen extends Activity {
         Constants.getSoundManager().loadSplash();
         super.onResume();
 	}
-	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPause()
 	 */
@@ -240,7 +229,6 @@ public class ScoreScreen extends Activity {
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
-	
 	/** The next level button.*/
 	private OnClickListener nextLevel = new OnClickListener() {
 		@Override
@@ -251,7 +239,6 @@ public class ScoreScreen extends Activity {
     		startActivity(nextlevel);
         }
 	};
-
 	/** The go to menu button.*/
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
@@ -262,13 +249,11 @@ public class ScoreScreen extends Activity {
     		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
         }
 	};
-	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onBackPressed()
 	 */
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
-
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
@@ -285,16 +270,28 @@ public class ScoreScreen extends Activity {
 		super.onDestroy();
 	}
 	
+	/** The level one average score. */
 	private int LEVEL_ONE_AVERAGE = 40;
+	/** The level one good score. */
 	private int LEVEL_ONE_GOOD = 20;
+	/** The level two average score. */
 	private int LEVEL_TWO_AVERAGE = 30;
+	/** The level two good score. */
 	private int LEVEL_TWO_GOOD = 15;
+	/** The level three average score. */
 	private int LEVEL_THREE_AVERAGE = 25;
+	/** The level three good score. */
 	private int LEVEL_THREE_GOOD = 15;
+	/** The level four average score. */
 	private int LEVEL_FOUR_AVERAGE = 35;
+	/** The level four good score. */
 	private int LEVEL_FOUR_GOOD = 25;
+	/** The level five average score. */
 	private int LEVEL_FIVE_AVERAGE = 40;
+	/** The level five good score. */
 	private int LEVEL_FIVE_GOOD = 25;
+	/** The level six average score. */
 	private int LEVEL_SIX_AVERAGE = 45;
+	/** The level six good score. */
 	private int LEVEL_SIX_GOOD = 27;
 }

@@ -22,50 +22,64 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
  * The Class Frog.
  */
 public class Frog extends GraphicObject{
-	//used for working out the location of the frog round the circle
-	/** The m frog radius. */
-	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
+	
+	/** Works out the position of the frog using these variables. */
+	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius, mFrogDirection;
 
+	/**
+	 * Instantiates a new frog.
+	 */
 	public Frog(){
 		mId = objtype.tFrog;
 		init();
 	}
-	public Frog(int x, int y, int r){
+	
+	/**
+	 * Instantiates a new frog.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param r the radius of the frog
+	 * @param dir the direction of the frog
+	 */
+	public Frog(int x, int y, int r, int dir){
 		mId = objtype.tFrog;
-		init(x, y, r);
+		init(x, y, r, dir);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(getCentreX(), getCentreY(), paint);
-		paint.setColor(Color.WHITE);
-		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
-		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
-		*/
-		
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
+		canvas.scale(mFrogDirection*-1, 1);
 		canvas.rotate((float) (-mFrogAngle*180/Math.PI));
 		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				(Constants.getLevel().getLevelHeight()/2)-70,
-				180);	
+				180, -1);	
 	}
-	public void init(int x, int y, int r) {
+	
+	/**
+	 * Inits the frog.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param r the radius of the frog
+	 * @param dir the direction of the frog
+	 */
+	public void init(int x, int y, int r, int dir) {
 		mGraphicType = 2;
 		mIsPlaying = false;
 		mProperties.init(x-r, y, 80, 80,0.7f,0.6f);	
@@ -80,20 +94,36 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(x);
 		setFrogCentreY(y);
 		setFrogRadius(r);
+		if(dir == 0 || dir == -1){
+			mFrogDirection = -1;
+		}else{
+			mFrogDirection = 1;
+		}
+		mFrogAngle = new Random().nextInt(360);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle));
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
-			mFrogAngle-=mSpeed.getSpeed()/100;
+			mFrogAngle+= mFrogDirection*mSpeed.getSpeed()/100;
+			if(mFrogAngle>360){
+				mFrogAngle-=360;
+			}
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		// Move Objects
 		if(move()){

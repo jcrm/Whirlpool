@@ -16,7 +16,6 @@ import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Arrow.
  */

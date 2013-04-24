@@ -30,53 +30,40 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Level;
 import com.sinkingduckstudios.whirlpool.views.GameView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Game.
  */
 public class Game extends Activity {
-	
-	/** The m panel. */
+	/** The game view. */
 	private GameView mPanel;
-	
-	/** The m level. */
+	/** The level holder. */
 	private Level mLevel;
-	
-	/** The levelselected. */
+	/** The level selected. */
 	private int levelselected;
-	
-	/** The m time. */
+	/** The timer. */
 	private Timer mTime;
-	
-	/** The m game handler. */
+	/** The game handler. */
 	private Handler mGameHandler;
-	
-	/** The m current level. */
+	/** The current level. */
 	private Level mCurrentLevel;
-	
-	/** The m count down timer. */
+	/** The count down timer. */
 	private CountDownTimer mCountDownTimer;
-	
-	/** The m timer has started. */
+	/** The timer has started. */
 	private boolean mTimerHasStarted = false;
-	
 	/** The muted. */
 	private boolean muted = true;
-	
-	/** The m timertext. */
+	/** The timer text. */
 	public TextView mTimertext;
 	//start time in milliseconds
 	//Will add a variable to change the time depending on the level
-	/** The m start time. */
+	/** The start time. */
 	private final long mStartTime = 180 * 1000;
 	//Tick time in milliseconds
-	/** The m interval. */
+	/** The interval time. */
 	private final long mInterval = 1 * 1000;	
-	
-	/** The m paused. */
+	/** The paused variable. */
 	private boolean mPaused = false;
-	
-	/** The timepassed. */
+	/** The time passed. */
 	public int timepassed;
 	
 	/* (non-Javadoc)
@@ -92,7 +79,6 @@ public class Game extends Activity {
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
-		//TODO remember to do this in all the other states
 		mLevel = new Level();
 		setCurrentLevel(mLevel);
 		mTimertext = (TextView) this.findViewById(R.id.time);
@@ -105,7 +91,6 @@ public class Game extends Activity {
 		mPanel.init();		
 		Constants.setPanel(mPanel);
 		Constants.getLevel().init(levelselected);
-		////
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
 			mTime.cancel();
@@ -148,11 +133,9 @@ public class Game extends Activity {
 		restartButton.setOnClickListener(restart);
 		volumeOffButton.setOnClickListener(volume_off);
 		volumeOnButton.setOnClickListener(volume_on);
-
-
 	}
 	
-	/** The quit. */
+	/** The quit button. */
 	private OnClickListener quit = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -168,7 +151,7 @@ public class Game extends Activity {
 		}
 	};
 	
-	/** The restart. */
+	/** The restart button. */
 	private OnClickListener restart = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -186,7 +169,7 @@ public class Game extends Activity {
 		}
 	};
 	
-	/** The volume_off. */
+	/** The volume_off button. */
 	private OnClickListener volume_off = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -202,7 +185,7 @@ public class Game extends Activity {
 		}
 	};
 	
-	/** The volume_on. */
+	/** The volume_on button. */
 	private OnClickListener volume_on = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -213,39 +196,26 @@ public class Game extends Activity {
 			volumeOnButton.setVisibility(View.INVISIBLE);
 			//Volume code here
 			muted = false;
-			
-			
 		}
 	};
-	
-	/*
-	public void onClick(View v) {
-		switch(v.getId()){
-		case R.id.volume_off:
-			break;
-		case R.id.volume_on:
-			break;
-		}
-	}*/
-
-	/** The go to menu. */
+	/** The go to menu button. */
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
 				Constants.getSoundManager().playSplash();
+				finish();
 				mTime.cancel();
 				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
 				mLevel.cleanUp();
-				finish();
 			}
 		}
 	};
 	
-	/** The pause. */
+	/** The pause button. */
 	private OnClickListener pause = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -268,18 +238,17 @@ public class Game extends Activity {
 				volumeOnButton.setVisibility(View.VISIBLE);
 				View volumeOffButton = findViewById(R.id.volume_off);
 				volumeOffButton.setVisibility(View.INVISIBLE);
-			} else  {
+			}else{
 				View volumeOnButton = findViewById(R.id.volume_on);
 				volumeOnButton.setVisibility(View.INVISIBLE);
 				View volumeOffButton = findViewById(R.id.volume_off);
 				volumeOffButton.setVisibility(View.VISIBLE);
 			}
 			Constants.getSoundManager().pause();
-
 		}
 	};
 	
-	/** The unpause. */
+	/** The unpause button. */
 	private OnClickListener unpause = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -304,8 +273,6 @@ public class Game extends Activity {
 
 		}
 	};
-	
-
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onBackPressed()
 	 */
@@ -335,7 +302,7 @@ public class Game extends Activity {
 	/**
 	 * Update.
 	 *
-	 * @return the int
+	 * @return the int for what stage the level is on.
 	 */
 	public int update() {
 		int count = getCurrentLevel().update(); 
@@ -424,9 +391,6 @@ public class Game extends Activity {
 		}
 		super.onResume();
 	}
-	//
-	//Timer Class
-	//
 	/**
 	 * The Class MyCountDownTimer.
 	 */

@@ -24,6 +24,10 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
  * The Class Credits.
  */
 public class Credits extends Activity {
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +89,20 @@ public class Credits extends Activity {
         	}
         },3000);
     }
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         Runtime.getRuntime().gc();
         System.gc();
         super.onDestroy();
     }
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		if(e.getAction() == MotionEvent.ACTION_DOWN){
