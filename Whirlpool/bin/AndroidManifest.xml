@@ -4,14 +4,14 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Menu"
             android:label="@string/app_name" >
@@ -23,6 +23,22 @@
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Game"
             android:label="@string/title_activity_game">
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Loading"
+            android:label="@string/title_activity_loading">
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Credits"
+            android:label="@string/title_activity_credits">
+        </activity>
+         <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Cinematic"
+            android:label="@string/title_activity_cinematic">
+        </activity>
+        <activity
+            android:name="com.sinkingduckstudios.whirlpool.states.Tutorial"
+            android:label="@string/title_activity_tutorial">
         </activity>
         <activity
             android:name="com.sinkingduckstudios.whirlpool.states.Options"
@@ -37,11 +53,11 @@
             >
         </activity>
         <activity
-            android:name="com.sinkingduckstudios.whirlpool.states.GraphicsOptions"
+            android:name="com.sinkingduckstudios.whirlpool.states.ZoneScreen"
             >
         </activity>
         <activity
-            android:name="com.sinkingduckstudios.whirlpool.states.ZoneScreen"
+            android:name="com.sinkingduckstudios.whirlpool.states.LevelSelect"
             >
         </activity>
     </application>

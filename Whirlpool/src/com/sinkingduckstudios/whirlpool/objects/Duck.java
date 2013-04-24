@@ -2,12 +2,10 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ *
+ *
  */
 package com.sinkingduckstudios.whirlpool.objects;
-
-import java.util.Random;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,7 +13,6 @@ import android.graphics.Rect;
 
 import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
@@ -25,7 +22,7 @@ public class Duck extends GraphicObject{
 	private enum CollisionType{
 		cDefault, cShark, cDiver, cFrog, cBoat, cTorpedo;
 	}
-	//collision variables 
+	//collision variables
 	public CollisionType cID = CollisionType.cDefault;
 	private int mCollisionCount = -1;
 	private Bitmap mBitmap[] = new Bitmap[3];
@@ -34,7 +31,7 @@ public class Duck extends GraphicObject{
 	private boolean mFinished = false;
 	private boolean mSharkAttack = false;
 	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
-	
+
 	public Duck(){
 		mId = objtype.tDuck;
 		init();
@@ -45,52 +42,40 @@ public class Duck extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
+		/*Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStrokeWidth(10);
+		for(int i = 0; i<4;i++){
+			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
+		}
+		paint.setColor(Color.GREEN);
+		canvas.drawPoint(getCentreX(), getCentreY(), paint);
+		paint.setColor(Color.WHITE);
+		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
+		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
+*/
 		if(mSharkAttack == false){
 			canvas.save();
-				/*ColorMatrix cm = new ColorMatrix();
-				cm.set(new float[]{
-									0.8f,0,0,0,100,
-									0,0.4f,0,0,80,
-									0,0,0.9f,0,20,
-									0,0,0,1,0
-									
-				});
-				Paint paint = new Paint();
-				paint.setColorFilter(new ColorMatrixColorFilter(cm));
-				 */
-				Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
-				canvas.translate(getCentreX(), getCentreY());
-				if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
-					canvas.scale(-1, 1);
-				}
-				int i = getSpriteSheetIndex();
-				canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), rect,  null);
+
+			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
+			canvas.translate(getCentreX(), getCentreY());
+			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
+				canvas.scale(-1, 1);
+			}
+			int i = getSpriteSheetIndex();
+			canvas.drawBitmap(mBitmap[i], mAnimate[i].getPortion(), rect, null);
 			canvas.restore();
 		}
 	}
 
 	@Override
 	public void init() {
-		mProperties.init(30, 60, 60, 60);		
-		
-		for(int i=0; i<3; i++){
-			int frames;
-			if(i==0){
-				frames = mId.tFrames;
-			}else{
-				frames = mId.tFrames+3;
-			}
-			mBitmap[i] = SpriteManager.getDuck(i);
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, frames, mBitmap[i].getWidth(), mBitmap[i].getHeight());
-		}
-
-		mSpeed.setMove(true);
-		mSpeed.setAngle(mId.tAngle);
-		mSpeed.setSpeed(mId.tSpeed);
+		init(30, 60);
 	}
 	public void init(int x, int y) {
-		mProperties.init(x, y, 60, 60);
-		
+		mProperties.init(x, y, 60, 60,0.6f,0.6f);
+
 		for(int i=0; i<3; i++){
 			int frames;
 			if(i==0){
@@ -100,72 +85,29 @@ public class Duck extends GraphicObject{
 			}
 			mBitmap[i] = SpriteManager.getDuck(i);
 			if (i==0)
-			mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
+				mAnimate[i] = new Animate(frames, mId.tNoOfRow, mId.tNoOfCol, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 			else
 				mAnimate[i] = new Animate(19, 3, 7, mBitmap[i].getWidth(), mBitmap[i].getHeight());
 		}
-		
+
 		mSpeed.setMove(true);
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 	@Override
 	public boolean move() {
+		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkAttack == false){
-			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
-			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
+			if((mSpeed.getSpeed()/Constants.getScreen().getRatio())<mId.tSpeed)
+				mSpeed.setSpeed((mSpeed.getSpeed()/Constants.getScreen().getRatio())+0.2f);
+			if((mSpeed.getSpeed()/Constants.getScreen().getRatio())>mId.tSpeed)
+				mSpeed.setSpeed((mSpeed.getSpeed()/Constants.getScreen().getRatio())-0.2f);
+			
+			moveDeltaX( (float)(mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
+			moveDeltaY( (float)(mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 			return true;
 		}
 		return false;
-	}
-
-
-	@Override
-	public void borderCollision(ScreenSide side, int width, int height) {
-		switch(side){
-		case Top:
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case Bottom:
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case Left:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			break;
-		case Right:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			break;
-		case BottomLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case BottomRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(height-getHeight());
-			break;
-		case TopLeft:
-			mSpeed.horizontalBounce();
-			setTopLeftX(-getTopLeftX());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		case TopRight:
-			mSpeed.horizontalBounce();
-			setTopLeftX(width - getWidth());
-			mSpeed.verticalBounce();
-			setTopLeftY(-getTopLeftY());
-			break;
-		default:
-			break;
-		}
 	}
 
 	public void frame(){
@@ -173,7 +115,7 @@ public class Duck extends GraphicObject{
 		collisonMovement();
 		if(move()){
 			//only detect border if not in wpool
-			if (!getPullState()){
+			if (getPulledState()==Constants.STATE_FREE){
 				if(border()){
 					Constants.getSoundManager().playDucky();
 				}
@@ -181,25 +123,33 @@ public class Duck extends GraphicObject{
 		}
 		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
+	
+	//fml plz rename 
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int radius){
 		boolean inRadius = false;
 		switch(id){
 		case tBoat:
-			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
+			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				inRadius = true;
 			}
 			if(inRadius ==true){
 				if(cID == CollisionType.cDefault && mInvincibility == false){
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cBoat;
-						collisionDiverFrogBoat();
+						if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+							cID = CollisionType.cBoat;
+							collisionDiverFrogBoat(
+									CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
+											mProperties.getRealCentre().getY(), 
+											otherProperties.getRealCentre().getX(), 
+											otherProperties.getRealCentre().getY()));
+						}
 					}
 				}
 				return true;
 			}
 			break;
 		case tShark:
-			if(CollisionManager.circleCollision(mProperties, otherProperties.getCentreX(), otherProperties.getCentreY(), radius)){
+			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				return true;
 			}
 			break;
@@ -209,66 +159,74 @@ public class Duck extends GraphicObject{
 	}
 	//collision checking
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties){
-			switch(id){
-			case tDiver:
-				if(cID == CollisionType.cDefault && mInvincibility == false){
-					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cDiver;
-						collisionDiverFrogBoat();
-					}
-				}
-				break;
-			case tFrog:
-				if(cID == CollisionType.cDefault && mInvincibility == false){
-					if(CollisionManager.circleCollision(mProperties, otherProperties)){
-						cID = CollisionType.cFrog;
-						collisionDiverFrogBoat();
-					}
-				}
-				break;
-			case tTorpedo:
+		switch(id){
+		case tDiver:
+			if(cID == CollisionType.cDefault && mInvincibility == false){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
-					if(cID != CollisionType.cShark && mInvincibility == false){
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cDiver;
+						collisionDiverFrogBoat(
+								CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
+										mProperties.getRealCentre().getY(), 
+										otherProperties.getRealCentre().getX(), 
+										otherProperties.getRealCentre().getY()));
+					}
+				}
+			}
+			break;
+		case tFrog:
+			if(cID == CollisionType.cDefault && mInvincibility == false){
+				if(CollisionManager.circleCollision(mProperties, otherProperties)){
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
+						cID = CollisionType.cFrog;
+						collisionDiverFrogBoat(
+								CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
+										mProperties.getRealCentre().getY(), 
+										otherProperties.getRealCentre().getX(), 
+										otherProperties.getRealCentre().getY()));
+					}
+				}
+			}
+			break;
+		case tTorpedo:
+			if(CollisionManager.circleCollision(mProperties, otherProperties)){
+				if(cID != CollisionType.cShark && mInvincibility == false){
+					//if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
 						cID = CollisionType.cTorpedo;
 						collisionTorpedo();
-					}
-					return true;
+					//}
 				}
-				break;
-			case tShark:
-				if(cID!=CollisionType.cShark && mInvincibility == false){
-					if(CollisionManager.circleCollision(mProperties, otherProperties)){
+				return true;
+			}
+			break;
+		case tShark:
+			if(cID!=CollisionType.cShark && mInvincibility == false){
+				if(CollisionManager.circleCollision(mProperties, otherProperties)){
+					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
 						cID = CollisionType.cShark;
 						mCollisionCount = 0;
 						mSharkAttack = true;
 						return true;
 					}
 				}
-				break;
-			default: break;
 			}
+			break;
+		default: break;
+		}
 		return false;
 	}
 	//collision movement
 	private void collisonMovement(){
-		//TODO: This is why duck stops moving if wpool over after collide. 
-		//It wont keep counting till wpool goes away
-		//Wpool wont go away coz duck is in it. Deadlock
+		
 		if(mCollisionCount >=0){
 			if(cID == CollisionType.cBoat || cID == CollisionType.cFrog || cID == CollisionType.cDiver){
-				if(mCollisionCount == 30){
-					getSpeed().setSpeed(0);
-				}else if(mCollisionCount == 45){
-					getSpeed().setSpeed(8);				
-					getSpeed().setAngle(0);
+				if(mCollisionCount == 1){
 					cID = CollisionType.cDefault;
 					mInvincibility = true;
 					mCollisionCount = 0;
 				}
 			}else if(cID == CollisionType.cTorpedo){
-				if(mCollisionCount == 10){
-					getSpeed().setSpeed(8);			
-					getSpeed().setAngle(0);
+				if(mCollisionCount == 1){
 					cID = CollisionType.cDefault;
 					mInvincibility = true;
 					mCollisionCount = 0;
@@ -281,8 +239,8 @@ public class Duck extends GraphicObject{
 						getSpeed().setSpeed(8);	
 						mCollisionCount = -1;
 					}else{
-						getSpeed().setSpeed(0);			
-						getSpeed().setAngle(0);					
+						getSpeed().setSpeed(0);	
+						getSpeed().setAngle(0);	
 					}
 				}else{
 					mCollisionCount = 0;
@@ -296,9 +254,9 @@ public class Duck extends GraphicObject{
 			mCollisionCount++;
 		}
 	}
-	private void collisionDiverFrogBoat(){
+	private void collisionDiverFrogBoat(float angle){
 		getSpeed().setSpeed(5);
-		getSpeed().setAngle(new Random().nextInt(90)+135);
+		getSpeed().setAngle(angle+180);
 		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
 	}

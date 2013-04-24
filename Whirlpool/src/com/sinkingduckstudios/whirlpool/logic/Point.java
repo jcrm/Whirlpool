@@ -8,29 +8,33 @@
 package com.sinkingduckstudios.whirlpool.logic;
 
 public class Point{
-	private int mX = 0;
-	private int mY = 0;
+	//x and y components of a point.
+	private float mX = 0.0f;
+	private float mY = 0.0f;
+	//constructors
 	public Point(){
 		
 	}
-	public Point(int x, int y){
+	public Point(float x, float y){
 		mX = x;
 		mY = y;
 	}
-	public void setPoints(int x, int y){
+	//setters
+	public void setPoints(float x, float y){
 		mX = x;
 		mY = y;
 	}
-	public int getX(){
+	public void setX(float x){
+		mX = x;
+	}
+	public void setY(float y){
+		mY = y;
+	}
+	//getters
+	public float getX(){
 		return mX;
 	}
-	public int getY(){
+	public float getY(){
 		return mY;
-	}
-	public void setX(int x){
-		mX = x;
-	}
-	public void setY(int y){
-		mY = y;
 	}
 }

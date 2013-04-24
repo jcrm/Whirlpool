@@ -93,10 +93,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 						mLast[1] = mScaledY;
 						mNoRef = 0;
 						mNewGesture = 1;
-						if(mWhirl!=null){
-							mWPools.getWpools().remove(mWhirl);
-							mWhirl=null;
-						}
+						
 						break;
 					}
 					addRefPoint();
@@ -109,6 +106,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 								mWSize,
 								-1,// pass in -1 for no angle, probs should clean this up
 								isClockwise());
+						mNewGesture = -1;
 					}
 					mXDir*=-1;
 					mYToChange = true;
@@ -122,10 +120,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 						mLast[1] = mScaledY;
 						mNoRef = 0;
 						mNewGesture = 1;
-						if(mWhirl!=null){
-							mWPools.getWpools().remove(mWhirl);
-							mWhirl=null;
-						}
+						
 						break;
 					}
 					addRefPoint();
@@ -138,6 +133,7 @@ final class TrackingTouchListener implements View.OnTouchListener{
 								mWSize,
 								-1,// pass in -1 for no angle, probs should clean this up
 								isClockwise());
+						mNewGesture = -1;
 					}
 					mYDir*=-1;
 					mYToChange = false;

@@ -14,9 +14,8 @@ public abstract class GraphicEnvironment {
 	//enum used to decide what type of sprite
 	public enum envtype {
 		tDefault(0, 0, 1, 1, 1), 
-		tFinish(0, 0, 30, 30, 1),
-		tLifeRinf(0,0,20,8,3);
-
+		tFinish(0, 0, 15, 4, 4);
+		
 		float tSpeed;
 		float tAngle;
 		int tFrames;
@@ -97,51 +96,51 @@ public abstract class GraphicEnvironment {
 		return hit;
 	}
 
-	public void setCentre(int x, int y){
+	public void setCentre(float x, float y){
 		mProperties.setCentre(x, y);
 	}
-	public void setCentreX(int x){
+	public void setCentreX(float x){
 		mProperties.setCentreX(x);
 	}
-	public void setCentreY(int y){
+	public void setCentreY(float y){
 		mProperties.setCentreY(y);
 	}
 	public Point getCentre(){
 		return mProperties.getCentre();
 	}
-	public int getCentreX(){
+	public float getCentreX(){
 		return mProperties.getCentreX();
 	}
-	public int getCentreY(){
+	public float getCentreY(){
 		return mProperties.getCentreY();
 	}
 
-	public void setTopLeft(int x, int y){
+	public void setTopLeft(float x, float y){
 		mProperties.setTopLeft(x, y);
 	}
-	public void setTopLeftX(int x){
+	public void setTopLeftX(float x){
 		mProperties.setTopLeftX(x);
 	}
-	public void setTopLeftY(int y){
-		mProperties.setTopLeftY(y);
+	public void setTopLeftY(float f){
+		mProperties.setTopLeftY(f);
 	}
 	public Point getTopLeft(){
 		return mProperties.getTopLeft();
 	}
-	public int getTopLeftX(){
+	public float getTopLeftX(){
 		return mProperties.getTopLeftX();
 	}
-	public int getTopLeftY(){
+	public float getTopLeftY(){
 		return mProperties.getTopLeftY();
 	}
 
 	public Point getBottomRight(){
 		return mProperties.getBottomRight();
 	}
-	public int getBottomRightX(){
+	public float getBottomRightX(){
 		return mProperties.getBottomRightX();
 	}
-	public int getBottomRightY(){
+	public float getBottomRightY(){
 		return mProperties.getBottomRightY();
 	}
 
@@ -210,5 +209,5 @@ public abstract class GraphicEnvironment {
 	}
 	public void resetwPoolCounter(){
 		wpoolCounter=0;
-	}
+	}	
 }

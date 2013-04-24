@@ -1,9 +1,9 @@
 /*
- * Author:
+ * Authors: Jordan O'Hare, Fraser , Jake Morey
  * Last Updated:
  * Content:
- * 
- * 
+ * Used to store size of the screen. Also stores the different sides.
+ * Corners are also included due to collision conflicts.
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
@@ -41,10 +41,10 @@ public class Screen {
 		mCentre.setPoints(width/2, height/2);
 	}
 	//getters for x and y components
-	public int getCentreX(){
+	public float getCentreX(){
 		return mCentre.getX();
 	}
-	public int getCentreY(){
+	public float getCentreY(){
 		return mCentre.getY();
 	}
 }
