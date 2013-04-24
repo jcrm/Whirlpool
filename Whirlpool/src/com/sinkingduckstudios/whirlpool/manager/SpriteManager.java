@@ -13,96 +13,70 @@ import android.graphics.BitmapFactory;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpriteManager.
  */
 public class SpriteManager {
-	
-	/** The m cinematic. */
+	/** The cinematic image. */
 	private static Bitmap mCinematic[]=new Bitmap[6];
-	
-	/** The m tutorial. */
+	/** The tutorial image. */
 	private static Bitmap mTutorial[]=new Bitmap[4];
-	
-	/** The m duck. */
+	/** The duck image. */
 	private static Bitmap mDuck[]=new Bitmap[3];
-
-	/** The m diver. */
+	/** The diver image. */
 	private static Bitmap mDiver;
-	
-	/** The m diver up. */
+	/** The diver up image. */
 	private static Bitmap mDiverUp;
-	
-	/** The m diver down. */
+	/** The diver down image. */
 	private static Bitmap mDiverDown;
-
-	/** The m boat. */
+	/** The boat image. */
 	private static Bitmap mBoat;
-	
-	/** The m boat attack. */
+	/** The boat attack image. */
 	private static Bitmap mBoatAttack;
-	
-	/** The m destroy boat. */
+	/** The destroy boat image. */
 	private static Bitmap mDestroyBoat;
-
-	/** The m whirlpool. */
+	/** The whirlpool image. */
 	private static Bitmap mWhirlpool;
-	
-	/** The m arrow. */
+	/** The arrow image. */
 	private static Bitmap mArrow;
-	
-	/** The m finish. */
+	/** The finish image. */
 	private static Bitmap mFinish;
-	
-	/** The m finish hit. */
+	/** The finish hit image. */
 	private static Bitmap mFinishHit;
-	
-	/** The m plug. */
+	/** The plug image. */
 	private static Bitmap mPlug;
-
-	/** The m torpedo. */
+	/** The torpedo image. */
 	private static Bitmap mTorpedo;
-	
-	/** The m torpedo explosion. */
+	/** The torpedo explosion image. */
 	private static Bitmap mTorpedoExplosion;
-
-	/** The m left border. */
+	/** The left border image. */
 	private static Bitmap mLeftBorder;
-	
-	/** The m right border. */
+	/** The right border image. */
 	private static Bitmap mRightBorder;
-	
-	/** The m top border. */
-	private static Bitmap mTopBorder;	
-
-	/** The m shark. */
+	/** The top border image. */
+	private static Bitmap mTopBorder;
+	/** The shark image. */
 	private static Bitmap mShark;
-	
-	/** The m shark up. */
+	/** The shark up image. */
 	private static Bitmap mSharkUp;
-	
-	/** The m shark down. */
+	/** The shark down image. */
 	private static Bitmap mSharkDown;
-	
-	/** The m shark sleep. */
+	/** The shark sleep image. */
 	private static Bitmap mSharkSleep;
-	
-	/** The m shark attack. */
+	/** The shark attack image. */
 	private static Bitmap mSharkAttack;
-
-	/** The m empty star. */
+	/** The empty star image. */
 	private static Bitmap mEmptyStar;
-	
-	/** The m full star. */
+	/** The full star image. */
 	private static Bitmap mFullStar;
-
-	/** The m frog. */
+	/** The frog image. */
 	private static Bitmap mFrog;
-	
-	/** The m background. */
+	/** The background image. */
 	private static Bitmap mBackground;
 
+	/**
+	 * Delete all images.
+	 */
 	public void deleteAllImages(){
 		unloadDuck();
 		unloadShark();
@@ -117,45 +91,85 @@ public class SpriteManager {
 		unloadCinematic();
 		unloadTutorial();
 	}
+	
+	/**
+	 * Unload frog.
+	 */
 	public static void unloadFrog(){
 		clean(mFrog);
 	}
+	
+	/**
+	 * Unload cinematic.
+	 */
 	public static void unloadCinematic(){
 		for(int i = 0; i<6; i++){
 			clean(mCinematic[i]);
 		}
 	}
+	
+	/**
+	 * Unload tutorial.
+	 */
 	public static void unloadTutorial(){
 		for(int i = 0; i<4; i++){
 			clean(mTutorial[i]);
 		}
 	}
+	
+	/**
+	 * Unload background.
+	 */
 	public static void unloadBackground(){
 		clean(mBackground);
 	}
+	
+	/**
+	 * Unload torpedo.
+	 */
 	public static void unloadTorpedo(){
 		clean(mTorpedo);
 		clean(mTorpedoExplosion);
 	}
+	
+	/**
+	 * Unload star.
+	 */
 	public static void unloadStar(){
 		clean(mEmptyStar);
 		clean(mFullStar);
 	}
+	
+	/**
+	 * Unload boat.
+	 */
 	public static void unloadBoat(){
 		clean(mBoat);
 		clean(mBoatAttack);
 		clean(mDestroyBoat);
 	}
+	
+	/**
+	 * Unload border.
+	 */
 	public static void unloadBorder(){
 		clean(mLeftBorder);
 		clean(mRightBorder);
 		clean(mTopBorder);
 	}
+	
+	/**
+	 * Unload duck.
+	 */
 	public static void unloadDuck(){
 		for(int i = 0; i<3; i++){
 			clean(mDuck[i]);
 		}
 	}
+	
+	/**
+	 * Unload whirlpool.
+	 */
 	public static void unloadWhirlpool(){
 		clean(mWhirlpool);
 		clean(mFinish);
@@ -163,11 +177,19 @@ public class SpriteManager {
 		clean(mArrow);
 		clean(mPlug);
 	}
+	
+	/**
+	 * Unload diver.
+	 */
 	public static void unloadDiver(){
 		clean(mDiver);
 		clean(mDiverUp);
 		clean(mDiverDown);
 	}
+	
+	/**
+	 * Unload shark.
+	 */
 	public static void unloadShark(){
 		clean(mShark);
 		clean(mSharkUp);
@@ -175,18 +197,38 @@ public class SpriteManager {
 		clean(mSharkSleep);
 		clean(mSharkAttack);
 	}
+	
+	/**
+	 * Clean.
+	 *
+	 * @param bitmap the bitmap
+	 */
 	private static void clean(Bitmap bitmap){
 		if(bitmap != null){
 			bitmap.recycle();
 			bitmap = null;
 		}
 	}
+	
+	/**
+	 * Empty.
+	 *
+	 * @param bitmap the bitmap
+	 * @return true, if successful
+	 */
 	private static boolean empty(Bitmap bitmap){
 		if(bitmap==null || bitmap.isRecycled()){
 			return true;
 		}
 		return false;
 	}
+	
+	/**
+	 * Gets the duck.
+	 *
+	 * @param index the index
+	 * @return the duck
+	 */
 	public static Bitmap getDuck(int index) {
 		if(index<0||index>2)return null;
 		if(empty(mDuck[index])){
@@ -196,6 +238,13 @@ public class SpriteManager {
 		}
 		return mDuck[index];
 	}
+	
+	/**
+	 * Gets the cinematic.
+	 *
+	 * @param index the index value
+	 * @return the cinematic
+	 */
 	public static Bitmap getCinematic(int index) {
 		if(index<0||index>5)return null;
 		if(empty(mCinematic[index])){
@@ -213,6 +262,13 @@ public class SpriteManager {
 		}
 		return mCinematic[index];
 	}
+	
+	/**
+	 * Gets the tutorial.
+	 *
+	 * @param index the index value
+	 * @return the tutorial
+	 */
 	public static Bitmap getTutorial(int index) {
 		if(index<0||index>3)return null;
 		if(empty(mTutorial[index])){
@@ -533,6 +589,16 @@ public class SpriteManager {
 		}
 		return mDestroyBoat;
 	}
+	
+	/**
+	 * Gets the scale.
+	 *
+	 * @param oW the original width
+	 * @param oH the original height
+	 * @param nW the new width
+	 * @param nH the new height
+	 * @return the scale
+	 */
 	public static int getScale(int oW, int oH, int nW, int nH){
 		int scale = 1;
 		if(oW>nW || oH>nH){

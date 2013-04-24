@@ -9,14 +9,19 @@ package com.sinkingduckstudios.whirlpool.movement;
 
 import java.lang.Math;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Angle.
  */
 class Angle{
 	
-	/** The m angle. */
+	/** The angle. */
 	private float mAngle = 0;
+	
+	/**
+	 * Instantiates a new angle.
+	 *
+	 * @param a the local angle
+	 */
 	Angle(float a){
 		mAngle = a;
 	}
@@ -31,9 +36,9 @@ class Angle{
 	}
 	
 	/**
-	 * Gets the angle rad.
+	 * Gets the angle in rads.
 	 *
-	 * @return the angle rad
+	 * @return the angle in rads
 	 */
 	public float getAngleRad(){
 		return (float) (mAngle*Math.PI/180);
@@ -41,17 +46,27 @@ class Angle{
 	
 	/**
 	 * Sets the angle.
-	 *
+	 * Checks with in range.
 	 * @param angle the new angle
 	 */
 	public void setAngle(float angle){
 		mAngle = angle;
 		checkAngle();
 	}
+	
+	/**
+	 * Shift angle.
+	 * Checks with in range.
+	 * @param angle the angle
+	 */
 	public void shiftAngle(float angle){
 		mAngle += angle;
 		checkAngle();
 	}
+	
+	/**
+	 * Check angle between 0 and 360.
+	 */
 	private void checkAngle(){		//Makes sure it's always within 0-360
 		if(mAngle >= 360.0f || mAngle < 0.0f){
 			mAngle = ((mAngle%360)+360)%360;

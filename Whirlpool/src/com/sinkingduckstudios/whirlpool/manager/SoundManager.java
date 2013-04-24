@@ -66,8 +66,7 @@ public class SoundManager
 	protected MediaPlayer mBackground;
 
 	// Constructor, setup the audio manager and store the app context
-	public SoundManager(Context appContext)
-	{
+	public SoundManager(Context appContext){
 		// the constuctor for the class.
 		// set up the sound pool with the auidomanager
 		pContext = appContext;		//get the games context 
@@ -79,8 +78,7 @@ public class SoundManager
 
 
 	// a function to load the sounds for ducky
-	public boolean loadDucky()
-	{
+	public boolean loadDucky(){
 		// load in the sounds for ducky
 		if(mDucky[0] == 0){
 			mDucky[0] = load(R.raw.ducky);
@@ -140,8 +138,7 @@ public class SoundManager
 
 
 	// a function to load the other sounds for the game
-	public boolean loadOtherSounds()
-	{
+	public boolean loadOtherSounds(){
 		if(mAmbientbath == 0){
 			mAmbientbath = load (R.raw.ambientbath);
 		}
@@ -189,8 +186,7 @@ public class SoundManager
 	}
 
 	// load the frog enemy
-	public boolean loadFrog()
-	{
+	public boolean loadFrog(){
 		// load in the sound for the frog
 		if (mFrog == 0){
 			mFrog = load(R.raw.frognoisemain);
@@ -201,10 +197,8 @@ public class SoundManager
 		return true;							// if the sound is loaded return true
 	}
 
-
 	// load the diver enemy sounds
-	public boolean loadDiver()
-	{		
+	public boolean loadDiver(){		
 		if ( mDiver == 0){
 			mDiver = load(R.raw.diver);
 		}
@@ -214,10 +208,8 @@ public class SoundManager
 		return true;							// if the sound is loaded the return true
 	}
 
-
 	// load the tugboat and torpedo sounds
-	public boolean loadTugBoat()
-	{
+	public boolean loadTugBoat(){
 		if (mTugBoat == 0){
 			mTugBoat = load(R.raw.tugboat);		// load in the sound for the boat itself
 		}
@@ -254,39 +246,26 @@ public class SoundManager
 	}
 
 	// a function to load all of the sound for the cinematic
-	public boolean loadCinematic()
-	{
-		if (mEvilLaugh[0] == 0)
-		{
+	public boolean loadCinematic(){
+		if (mEvilLaugh[0] == 0){
 			mEvilLaugh[0] = load(R.raw.evillaugh01);
 		}
-
-		if (mEvilLaugh[1] == 0)
-		{
+		if (mEvilLaugh[1] == 0){
 			mEvilLaugh[1] = load(R.raw.evillaugh02);
 		} 
-
-		if (mEvilLaugh[2] == 0)
-		{
+		if (mEvilLaugh[2] == 0){
 			mEvilLaugh[2] = load(R.raw.evillaugh03);
 		}
-
-		if (mPotion == 0)
-		{
+		if (mPotion == 0){
 			mPotion = load(R.raw.potion);
 		}
-
-		if (mReal == 0)
-		{
+		if (mReal == 0){
 			mReal = load(R.raw.real);
 		}
-		if (mGrab == 0)
-		{
+		if (mGrab == 0){
 			mGrab = load(R.raw.grab);
 		}
-
-		if (mPoof == 0)
-		{
+		if (mPoof == 0){
 			mPoof = load(R.raw.poof);
 		}
 		// check to see if the sounds have loaded
@@ -309,21 +288,18 @@ public class SoundManager
 	 *
 	 * @param nVol the new volume
 	 */
-	public void setVolume(float nVol)
-	{
+	public void setVolume(float nVol){
 		// this volume sets the master volume for all of the sounds. 
 		// the value sould be between the values 0.0f (off) and 1.0f ( on full)
 
 		mMasterVolume = nVol;
 		// check to see if the volume set is below 0.0f, if it is, set it to 0.0f
-		if (mMasterVolume < 0.0f)
-		{
+		if (mMasterVolume < 0.0f){
 			mMasterVolume = 0.0f;
 		}
 
 		// check to see if the volume set is above 1.0f, if it is, set to 1.0f
-		if (mMasterVolume > 1.0f)
-		{
+		if (mMasterVolume > 1.0f){
 			mMasterVolume = 1.0f;
 		}
 
@@ -333,14 +309,12 @@ public class SoundManager
 	}// end setVolume
 
 	// a function to increase the volume
-	public void increaseVolume()
-	{
+	public void increaseVolume(){
 		// add 0.1 to the master volume
 		mMasterVolume += 0.1f;
 
 		// make sure the volume doesn't go over the max value
-		if (mMasterVolume >= 1.0f)
-		{
+		if (mMasterVolume >= 1.0f){
 			mMasterVolume = 1.0f;
 		}
 		//re-set the left and right volumes to the master volume
@@ -348,14 +322,12 @@ public class SoundManager
 	}
 
 	// a function to decrease the volume
-	public void decreaseVolume()
-	{
+	public void decreaseVolume(){
 		// take away 0.1 from the master volume
 		mMasterVolume -= 0.1f;
 
 		// make sure the volume doesn't go below the min value
-		if (mMasterVolume <= 0.0f)
-		{
+		if (mMasterVolume <= 0.0f){
 			mMasterVolume = 0.0f;
 
 		}
@@ -366,8 +338,7 @@ public class SoundManager
 	}
 
 	// set the left and right values to the new value of the master volume
-	public void resetVolume()
-	{
+	public void resetVolume(){
 		// set the left,right and background volumes to the master volume level
 		mLeftVolume = mMasterVolume; 
 		mRightVolume = mMasterVolume;
@@ -377,97 +348,77 @@ public class SoundManager
 		mBeepVolume = mMasterVolume /2 ;
 
 		// if the master volume is 0 or less
-		if (mMasterVolume <= 0.0f)
-		{
+		if (mMasterVolume <= 0.0f){
 			// pause the sounds so that the sound is 'off'
 			mSndPool.autoPause();
 		}
 
 		// if the sound gets loauder than 0 again
-		if (mMasterVolume > 0.0f) 
-		{
+		if (mMasterVolume > 0.0f) {
 			// resume the sounds
 			mSndPool.autoResume();
 		}
 
 	}
 
-
 	// a function to play one of the ducky sounds. picked at random
-	public void playDucky()
-	{	// used to generate a random value between 0 and 5 using the varaible crated before.
-
+	public void playDucky(){
+	// used to generate a random value between 0 and 5 using the varaible crated before.
 		// play a sound depending on the random number generated
 		// switch by the random number 
-		switch (randomNumber(5))
-		{
-		case 0 : 						// if the randnum is 0...
-		{
+		switch (randomNumber(5)){
+		case 0:{ 						// if the randnum is 0...
 			playSound(mDucky[0]);		// play the first ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 0
 
-		case 1:						// if the randnum is 1...
-		{
+		case 1:{						// if the randnum is 1...
 			playSound( mDucky[1]);	// play the second ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 1
 
-		case 2 : 						// if the randnum is 2...
-		{
+		case 2 :{ 						// if the randnum is 2...
 			playSound(mDucky[2]);		// play the third ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 2
 
-		case 3:						// if the randnum is 3...
-		{
+		case 3:{						// if the randnum is 3...
 			playSound( mDucky[3]);	// play the fourth ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 3
 
-		case 4 : 						// if the randnum is 4...
-		{
+		case 4:{ 						// if the randnum is 4...
 			playSound(mDucky[4]);		// play the fifth ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 4
 
-		case 5:						// if the randnum is 5...
-		{
+		case 5:{						// if the randnum is 5...
 			playSound( mDucky[5]);	// play the sixth ducky sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 5
-
-		default :						// if default is reached ( a number ouside the range 0-5 is given)...
-		{
+		default :{						// if default is reached ( a number ouside the range 0-5 is given)...
 			Log.e("sound error", "default ducky reached. ERROR!");		// display an error message in logcat.
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		} // end default
 		}// end switch (RandomNumber(5))
 	}// end PlayDucky
 
-	public void playExplosion()
-	{
+	public void playExplosion(){
 		// play a sound depending on the random number generated
 		// switch by the random number 
-		switch (randomNumber(2))
-		{
-		case 0 :					// if the random number is 0...
-		{
+		switch (randomNumber(2)){
+		case 0:{					// if the random number is 0...
 			playSound(mExplosion[0]);	// play the first explosion sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 0
-
-		case 1 :					// if the random number is 1...
-		{
+		case 1:{					// if the random number is 1...
 			playSound(mExplosion[1]);	// play the  second explosion sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		} // end case 1
-
 		case 2:
 			playSound(mExplosion[2]);
 			break;
-		default:					// if default is reached ( a number outside the range 0-1 is given)...
-		{
+		default:{					// if default is reached ( a number outside the range 0-1 is given)...
 			Log.e("sound error", "default explosion reached. ERROR!");		// display an error message in logcat.
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		} // end default
@@ -475,26 +426,19 @@ public class SoundManager
 	}
 
 	// a function to play a ransdom bounce sound
-	public void playBounce()
-	{		  
+	public void playBounce(){		  
 		// play a sound depending on the random number generated
 		// switch by the random number 
-		switch (randomNumber(1))
-		{
-		case 0 :					// if the random number is 0...
-		{
+		switch (randomNumber(1)){
+		case 0 :{					// if the random number is 0...
 			playSound(mBounce[0]);	// play the first bounce sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		}// end case 0
-
-		case 1 :					// if the random number is 1...
-		{
+		case 1:{					// if the random number is 1...
 			playSound(mBounce[1]);	// play the  second bounce sound
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		} // end case 1
-
-		default:					// if default is reached ( a number outside the range 0-1 is given)...
-		{
+		default:{					// if default is reached ( a number outside the range 0-1 is given)...
 			Log.e("sound error", "default bounce reached. ERROR!");		// display an error message in logcat.
 			break;					// break out of the switch block so taht no other ducky sounds are played
 		} // end default
@@ -503,38 +447,32 @@ public class SoundManager
 	}// end of playBounce
 
 	// a function to play the angry ducky sound
-	public void playAngry()
-	{
+	public void playAngry(){
 		playSound(mAngryDucky);		// play the angry ducky sound.
 	}
 
 	// a function to play the scared ducky sound
-	public void playScare()
-	{
+	public void playScare(){
 		playSound(mScaredDucky);	// play the scared ducky sound.
 	}
 
 	// a function to play the diver's sound
-	public void playDiver()
-	{
+	public void playDiver(){
 		playSound(mDiver); 			// play the diver's sound
 	}
 
 	// a function to play the frod'g sound
-	public void playFrog()
-	{
+	public void playFrog(){
 		playSound(mFrog);			// play the Frog's sound
 	}
 
 	// a function to play the tugBoat's sound
-	public void playTugBoat()
-	{
+	public void playTugBoat(){
 		playSound(mTugBoat);		// play the tugboats's sound
 	}
 
 	// a function to play the background music looped
-	public void playBackGround ()
-	{
+	public void playBackGround (){
 		if(mBackground !=null){					// if the background is not null( it has a sound)
 			if(!mBackground.isPlaying()){		// if the backgrounds music is not already playing
 				mBackground.setLooping(true);	// make sure the track will loop continuously 
@@ -544,53 +482,44 @@ public class SoundManager
 
 	}
 	// a function to play the shark noise
-	public void playShark()
-	{
+	public void playShark(){
 		playSound(mShark);			// play the shark sound	
 	}
 
 	// a function to play the ambient noise 
-	public void playAmbient()
-	{
+	public void playAmbient(){
 		playSound(mAmbientbath);
 	}
 
 	// a function to play the down plug sound#
-	public void playDownPlug()
-	{
+	public void playDownPlug(){
 		playSound(mDownplug);
 	}
 
 	// a function to play the plug sound
-	public void playPlug()
-	{
+	public void playPlug(){
 		playSound(mPlug);
 	}
 
 	// a function to play the points sound
-	public void playPoints()
-	{
+	public void playPoints(){
 		playSound(mPoints);
 	}
 
 	// a function to play the splash sound
-	public void playSplash()
-	{
+	public void playSplash(){
 		playSound(mSplash);
 	}
 
 	// a function to play the whirlpool sound
-	public void playWhirlpool()
-	{
+	public void playWhirlpool(){
 		playSound(mWhirlpool);
 	}
 
 	// a function to play the fast beep of the missile
 	// a function to play the fast beep of the missile
-	public void playBeepFast()
-	{
-		if(!mMissilePlaying)			// if the missle is not playing
-		{
+	public void playBeepFast(){
+		if(!mMissilePlaying){			// if the missle is not playing
 			//mMissileStreamId = playSound(mMissile[0]);
 			mMissileStreamId = mSndPool.play(mMissile[0], mLeftVolume, mRightVolume, 1, -1, mRate);		// play the misslie sound at a reduced volume
 			mMissilePlaying=true;			// the misle is now playing
@@ -617,20 +546,17 @@ public class SoundManager
 	}
 
 	// a function to play the slow beep of the missile
-	public void playBeepSlow()
-	{
+	public void playBeepSlow(){
 		playSound(mMissile[1]);
 	}
 
 	// a function to play the sound of ducky being caught by the missile 
-	public void playCaught()
-	{
+	public void playCaught(){
 		playSound(mMissile[2]);
 	}
 
 	// Free ALL the sounds
-	public void unloadAll()
-	{
+	public void unloadAll(){
 		// release the sound pool.
 		if(mSndPool != null){		// if the sound pool is not already null
 			mSndPool.release();		// release all of the resources 
@@ -640,8 +566,7 @@ public class SoundManager
 	}
 
 	//a function to play a single sound based on a id passed in
-	protected int playSound( int SoundID)
-	{
+	protected int playSound( int SoundID){
 		// the sound pool play function takes in 6 parameters - soundID, the id of the sound the user wants to play 
 		//													  - leftvolume, the volume fo teh left speaker
 		//													  - rightvolume, the volume of the right speaker
@@ -650,8 +575,7 @@ public class SoundManager
 		//													  - rate, the rate at whitch the sounds is to be played 
 		// play the sound required.
 		// make sure that the sounds pool has been created and is not null and m,ake sure that the sound ID is not 0
-		if(SoundID != 0 && mSndPool != null)
-		{
+		if(SoundID != 0 && mSndPool != null){
 			return mSndPool.play(SoundID, mLeftVolume, mRightVolume, 1, 0, mRate);		// play trghe required sound
 		}
 
@@ -659,11 +583,9 @@ public class SoundManager
 	}// end PlaySound
 
 	// a load function that can be called to load in a file and return a value that the sounds pool will recognise
-	protected int load(int soundID)
-	{
+	protected int load(int soundID){
 		// if the sound pool has not been created already
-		if(mSndPool == null)
-		{
+		if(mSndPool == null){
 			mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);		// creat a new sound pool
 		}
 		// load function takes in 3 paramiters-
@@ -676,8 +598,7 @@ public class SoundManager
 	}// end load
 
 	//a function to generate a random number
-	protected int randomNumber(int nMaxVal)
-	{
+	protected int randomNumber(int nMaxVal){
 
 		nMaxVal = nMaxVal + 1;  		// add 1 to max val so that the random number generated can be the max value.
 		//generate a random number between 0 and a maximuim value and play the corrosponding sound
@@ -689,21 +610,18 @@ public class SoundManager
 	}
 
 	// a function to pause just the background music
-	public void pauseBackGround()
-	{
+	public void pauseBackGround(){
 		mBackground.pause();	// only pause the background music
 	}
 
 	// pause the music being played
-	public void pause()
-	{
+	public void pause(){
 		mSndPool.autoPause();	// pause the sound pool
 		mBackground.pause();	// pause the background music
 	}
 
 	// start the paused music to play again
-	public void unpause()
-	{
+	public void unpause(){
 		mSndPool.autoResume();	//resume the sound pools sounds
 		mBackground.start();	// resume the background music
 		Log.w("backgroud","resumed");
@@ -711,11 +629,9 @@ public class SoundManager
 	}
 
 	// a function to clean up/ release all of the resourses
-	public void cleanup()
-	{
+	public void cleanup(){
 		// if the sound pool is not allready nulll...
-		if(mSndPool != null)
-		{
+		if(mSndPool != null){
 			// release the sounds pool
 			mSndPool.release();
 		}
@@ -723,8 +639,7 @@ public class SoundManager
 		mSndPool = null;
 
 		// if the background music is not already null...
-		if(mBackground != null)
-		{
+		if(mBackground != null){
 			// release the background music from the media player
 			mBackground.release();
 		}
@@ -764,8 +679,7 @@ public class SoundManager
 
 
 	// a function to initialize the variables for the sound class
-	public void init() 
-	{
+	public void init(){
 		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);		// create the sound pool
 		mRate = 1.0f;							// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
 		mMasterVolume = 1.0f;					// set the master voume to full
@@ -781,17 +695,14 @@ public class SoundManager
 	}
 
 	// play the sounds for the cinematic
-	public void playCinematic(int slideNo)
-	{
+	public void playCinematic(int slideNo){
 		// play the sounds for the cinematic in the correct order and at the correct time
 		// play a sound dependig on the slide no
-		switch (slideNo)
-		{
-		case 0:		// first slide
-		{
+		switch (slideNo){
+		case 0:{		// first slide
+		
 			// create a new runnable to set a delay so that the sound is played roughly .5 of as second into the slide
-			new Handler().postDelayed(new Runnable()
-			{
+			new Handler().postDelayed(new Runnable(){
 				@Override 
 				public void run()
 				{
@@ -802,49 +713,37 @@ public class SoundManager
 			break;								// break out of the switch statement
 		}
 
-		case 1:		//second slide
-
-		{
+		case 1:{		//second slide
 			playSound(mGrab);					//play the sound for slide two
 			break;								// break out of the switch statement
 		}
 
-		case 2:		//third slide
-		{
+		case 2:{		//third slide
 			playSound(mEvilLaugh[0]);			//play the sound for slide three
 			playSound(mPotion);
 			break;								// break out of the switch statement
 		}
 
-		case 3:		// fourth slide
-		{
+		case 3:{		// fourth slide
 			// create a new runnable so that the 'poof' sound is played in between slide 4 and 5 
-			new Handler().postDelayed(new Runnable()
-			{
+			new Handler().postDelayed(new Runnable(){
 				@Override 
-				public void run()
-				{
+				public void run(){
 					playSound(mPoof);		//play the sound for slide four
 				}
 			},1300);
 			break;								// break out of the switch statement
 		}
-
-		case 4:		// fifth slide
-		{
+		case 4:{	// fifth slide
 			// play no sound on this slide
 			break;								// break out of the switch statement
 		}
 
-		case 5:		// sixth slide
-		{
+		case 5:	{	// sixth slide
 			playSound(mEvilLaugh[2]);			//play the sound for slide six
 			break;								// break out of the switch statement
 		}
-
-		default:	// if there is an error
-		{
-
+		default:{	// if there is an error
 			break;
 		}
 
@@ -853,11 +752,8 @@ public class SoundManager
 
 	// a function to clean up the cinematic sounds#
 	public void CleanCinematic(){
-		int i ;				// a counter for a for loop
-
 		// set all of the evillaugh ids to 0
-		for ( i = 0 ; i < 3; i++ )
-		{
+		for (int i = 0 ; i < 3; i++ ){
 			mEvilLaugh[i] = 0;
 		}
 

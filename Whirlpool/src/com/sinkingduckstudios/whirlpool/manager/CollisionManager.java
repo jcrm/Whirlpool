@@ -13,7 +13,6 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
-//collision class
 /**
  * The Class CollisionManager.
  */
@@ -80,12 +79,11 @@ public class CollisionManager{
     	}
     	return false;
 	}
-	//circle collision - graphic is the sprite being tested, event is the touch
 	/**
-	 * 
-	 * @param box1
-	 * @param box2
-	 * @return
+	 * Circle Collision 
+	 * @param box1 collision properties of the first object.
+	 * @param box2 collision properties of the second object.
+	 * @return true or false if collided or not
 	 */
 	static public boolean circleCollision(Properties box1, Properties box2){
 		float distanceX = box1.getCentreX() - box2.getCentreX();
@@ -98,14 +96,14 @@ public class CollisionManager{
 		}
 		return false;
 	}
-	//circle collision - graphic is the sprite being tested, event is the touch
 	/**
-	 * 
-	 * @param box1
-	 * @param x
-	 * @param y
-	 * @param r
-	 * @return
+	 * Circle Collision 
+	 * @param box1 collision properties of the first object.
+	 * @param box2 collision properties of the second object.
+	 * @param x centre x position for the second object
+	 * @param y centre y position for the second object
+	 * @param r radius for the second object
+	 * @return true or false if collided or not
 	 */
 	static public boolean circleCollision(Properties box1, int x, int y, int r){
 		float distanceX = box1.getCentreX() - x;
@@ -120,14 +118,14 @@ public class CollisionManager{
 	}
 	//circle collision - graphic is the sprite being tested, event is the touch
 	/**
-	 * 
-	 * @param x1
-	 * @param y1
-	 * @param r1
-	 * @param x2
-	 * @param y2
-	 * @param r2
-	 * @return
+	 * Circle Collision 
+	 * @param x1 centre x position for the first object
+	 * @param y1 centre y position for the first object
+	 * @param r1 radius for the first object
+	 * @param x2 centre x position for the second object
+	 * @param y2 centre y position for the second object
+	 * @param r2 radius for the second object
+	 * @return true or false if collided or not
 	 */
 	static public boolean circleCollision(float x1, float y1, float r1, float x2, float y2, float r2){
 		float distanceX = x1 - x2;
@@ -151,11 +149,11 @@ public class CollisionManager{
 		return ((float)((int)num%divide) + fresult);
 	}
 	/**
-	 * 
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
+	 * Calculate the angle between two points.
+	 * @param x1 x component of the first point
+	 * @param y1 y component of the first point
+	 * @param x2 x component of the second point
+	 * @param y2 y component of the second point
 	 * @return
 	 */
 	static public float calcAngle(float x1, float y1, float x2, float y2){
@@ -177,9 +175,9 @@ public class CollisionManager{
 		return fMod((fMod((angle1), 360)+360), 360);
 	}
 	/**
-	 * 
-	 * @param box1
-	 * @param angle
+	 * Update collision rectangle
+	 * @param box1 properties of the object
+	 * @param angle angle which to rotate rectangle by
 	 */
 	static public void updateCollisionRect(Properties box1, float angle){
 		box1.updateOriginal();
@@ -190,10 +188,10 @@ public class CollisionManager{
 		}
 	}
 	/**
-	 * 
-	 * @param centre
-	 * @param angle
-	 * @param point
+	 * Rotate a vertex about a point.
+	 * @param centre the point to rotate about
+	 * @param angle the angle in which to rotate
+	 * @param point the point that needs rotating
 	 */
 	private static void RotatePoint(Point centre, float angle, Point point){
 		float sine = (float) Math.sin(angle);

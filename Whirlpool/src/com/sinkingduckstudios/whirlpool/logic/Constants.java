@@ -15,51 +15,37 @@ import com.sinkingduckstudios.whirlpool.manager.SoundManager;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.views.GameView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Constants.
  */
 public class Constants {
 	
-	/** The s state. */
+	/** The state. */
 	private static Activity sState;
-	
-	/** The s res. */
+	/** The resource. */
 	private static Resources sRes;
-	
-	/** The s screen. */
+	/** The screen. */
 	private static Screen sScreen;
-	
-	/** The s level. */
+	/** The level. */
 	private static Level sLevel;
-	
-	/** The s player. */
+	/** The player. */
 	private static Duck sPlayer;
-	
-	/** The s context. */
+	/** The context. */
 	private static Context sContext;
-	
-	/** The s panel. */
+	/** The game view. */
 	private static GameView sPanel;
-	
-	/** The s screen lock. */
+	/** The screen lock. */
 	private static Object sScreenLock = 0;
-	
-	/** The s sound manager. */
+	/** The sound manager. */
 	private static SoundManager sSoundManager;
-	
-	/** The s duck distance. */
+	/** The duck distance. */
 	private static float sDuckDistance;
-
 	/** The state free. */
 	public static int STATE_FREE = 0;
-	
 	/** The state pulled. */
 	public static int STATE_PULLED = 1;
-	
 	/** The state leaving. */
 	public static int STATE_LEAVING = 2;
-	
 	/** The state finishing. */
 	public static int STATE_FINISHING = 3;
 
@@ -218,7 +204,7 @@ public class Constants {
 	/**
 	 * Sets the panel.
 	 *
-	 * @param panel the new panel
+	 * @param panel the new gameview
 	 */
 	public static void setPanel(GameView panel) {
 		sPanel = panel;
@@ -232,11 +218,10 @@ public class Constants {
 	public static SoundManager getSoundManager() {
 		return sSoundManager;
 	}
-	
 	/**
 	 * Creates the sound manager.
 	 *
-	 * @param appContext the app context
+	 * @param appContext
 	 */
 	public static void createSoundManager(Context appContext) {
 		if(sSoundManager==null)

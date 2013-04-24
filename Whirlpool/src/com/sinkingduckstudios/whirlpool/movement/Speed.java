@@ -9,24 +9,21 @@ package com.sinkingduckstudios.whirlpool.movement;
 
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Speed.
  */
 public class Speed {
-	//variables
-	/** The m move. */
+	/** The move. */
 	private boolean mMove = true;
-	
-	/** The m speed. */
+	/** The speed. */
 	private float mSpeed = 0;
-	
-	/** The m angle. */
+	/** The angle. */
 	private Angle mAngle = new Angle(0);
-	
-	/** The m last angle. */
+	/** The last angle. */
 	private Angle mLastAngle = new Angle(0);
-	//bounce functions
+	/**
+	 * Horizontal bounce.
+	 */
 	public void horizontalBounce(){
 		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
@@ -39,6 +36,9 @@ public class Speed {
 		}
 		mLastAngle.setAngle(mAngle.getAngle());
 	}
+	/**
+	 * Vertical bounce.
+	 */
 	public void verticalBounce(){
 		float angletemp = mAngle.getAngle();
 		switch((int)(angletemp/90)){
@@ -50,7 +50,6 @@ public class Speed {
 					break;
 		}
 	}
-	//getters and setters for speed
 	/**
 	 * Gets the speed.
 	 *
@@ -59,7 +58,6 @@ public class Speed {
 	public float getSpeed(){
 		return mSpeed;
 	}
-	
 	/**
 	 * Gets the x speed.
 	 *
@@ -68,7 +66,6 @@ public class Speed {
 	public float getXSpeed(){
 		return (float) (mSpeed*Math.cos(mAngle.getAngleRad()));
 	}
-	
 	/**
 	 * Gets the y speed.
 	 *
@@ -77,7 +74,6 @@ public class Speed {
 	public float getYSpeed(){
 		return (float) (mSpeed*Math.sin(mAngle.getAngleRad()));
 	}
-	
 	/**
 	 * Sets the speed.
 	 *
@@ -86,10 +82,14 @@ public class Speed {
 	public void setSpeed(float speed){
 		mSpeed = (speed*Constants.getScreen().getRatio());
 	}
-	public void shiftSpeed(float angle){
-		mSpeed += angle;
+	/**
+	 * Shift speed.
+	 *
+	 * @param speed adds the speed
+	 */
+	public void shiftSpeed(float speed){
+		mSpeed += speed;
 	}
-	//getters and setters for move
 	/**
 	 * Gets the move.
 	 *
@@ -98,7 +98,6 @@ public class Speed {
 	public boolean getMove(){
 		return mMove;
 	}
-	
 	/**
 	 * Sets the move.
 	 *
@@ -107,7 +106,6 @@ public class Speed {
 	public void setMove(boolean move){
 		mMove = move;
 	}
-	//getters and setters for angle
 	/**
 	 * Gets the angle.
 	 *
@@ -116,7 +114,6 @@ public class Speed {
 	public float getAngle(){
 		return mAngle.getAngle();
 	}
-	
 	/**
 	 * Gets the last angle.
 	 *
@@ -125,16 +122,14 @@ public class Speed {
 	public float getLastAngle(){
 		return mLastAngle.getAngle();
 	}
-	
 	/**
-	 * Gets the angle rad.
+	 * Gets the angle in rads.
 	 *
-	 * @return the angle rad
+	 * @return the angle in rads
 	 */
 	public float getAngleRad(){
 		return mAngle.getAngleRad();
 	}
-	
 	/**
 	 * Sets the angle.
 	 *
@@ -144,6 +139,11 @@ public class Speed {
 		mLastAngle.setAngle(mAngle.getAngle());
 		mAngle.setAngle(angle);
 	}
+	/**
+	 * Shift angle.
+	 *
+	 * @param angle the angle
+	 */
 	public void shiftAngle(float angle){
 		mAngle.shiftAngle(angle);
 	}
