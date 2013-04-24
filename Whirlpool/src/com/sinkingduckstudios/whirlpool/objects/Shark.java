@@ -19,35 +19,75 @@ import com.sinkingduckstudios.whirlpool.logic.Point;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+/**
+ * The Class Shark.
+ */
 public class Shark extends GraphicObject{
+	
+	/**
+	 * The Enum SharkType.
+	 */
 	public enum SharkType{
 		tDefault, tAsleep, tFollow, tAttack, tRetreat, tWait;
 	}
+	
+	/** The Constant TopSpeed. */
 	private static final float mTopSpeed = 8;
+	/** The shark state. */
 	private SharkType mSharkState = SharkType.tDefault;
+	/** The up bitmap image. */
 	private Bitmap mUpBitmap;
+	/** The down bitmap image. */
 	private Bitmap mDownBitmap;
+	/** The asleep bitmap image. */
 	private Bitmap mAsleepBitmap;
+	/** The attack bitmap image. */
 	private Bitmap mAttackBitmap;
+	/** The up animation. */
 	private Animate mUpAnimate;
+	/** The down animation. */
 	private Animate mDownAnimate;
+	/** The attack animation. */
 	private Animate mAttackAnimate;
+	/** The asleep animation. */
 	private Animate mAsleepAnimate;
+	/** The shark radius. */
 	private int mSharkRadius = Constants.getLevel().getLevelHeight()/2;
+	/** The duck counter. */
 	private int mDuckCounter = 10;
+	/** The wait counter. */
 	private int mWaitCounter = 40;
+	/** The wait time. */
 	private int mWaitTime = 40;
+	/** The start position. */
 	private Point mStart;
+	/** The drop location. */
 	private Point mDropLocation;
 
+	/**
+	 * Instantiates a new shark.
+	 */
 	public Shark(){
 		mId = objtype.tShark;
 		init();
 	}
+	
+	/**
+	 * Instantiates a new shark.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param dx the drop x position
+	 * @param dy the drop y position
+	 */
 	public Shark(int x, int y, int dx, int dy){
 		mId = objtype.tShark;
 		init(x, y, dx, dy);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -72,6 +112,9 @@ public class Shark extends GraphicObject{
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
@@ -79,6 +122,15 @@ public class Shark extends GraphicObject{
 				new Random().nextInt((int) (getCentreX()+(getCentreX()/4))),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/2));
 	}
+	
+	/**
+	 * Inits the shark.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param dx the drop x position
+	 * @param dy the drop y position
+	 */
 	public void init(int x, int y, int dx, int dy) {
 		mGraphicType = 4;
 		mIsPlaying = false;
@@ -109,6 +161,10 @@ public class Shark extends GraphicObject{
 
 		mSharkState = SharkType.tAsleep;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
@@ -120,6 +176,9 @@ public class Shark extends GraphicObject{
 		return false;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		if(updateDirection()){
 			if(getSharkState() == SharkType.tFollow){
@@ -164,12 +223,30 @@ public class Shark extends GraphicObject{
 		default: break;
 		}
 	}
+	
+	/**
+	 * Gets the shark state.
+	 *
+	 * @return the shark state
+	 */
 	public SharkType getSharkState() {
 		return mSharkState;
 	}
+	
+	/**
+	 * Sets the shark state.
+	 *
+	 * @param sharkState the new shark state
+	 */
 	public void setSharkState(SharkType sharkState) {
 		mSharkState = sharkState;
 	}
+	
+	/**
+	 * Gets the sprite sheet index.
+	 *
+	 * @return the sprite sheet index
+	 */
 	private int getSpriteSheetIndex(){
 		if(mSharkState == SharkType.tAsleep){
 			return 3;
@@ -185,15 +262,40 @@ public class Shark extends GraphicObject{
 		}
 		return 0;
 	}
+	
+	/**
+	 * Gets the shark radius.
+	 *
+	 * @return the shark radius
+	 */
 	public int getSharkRadius() {
 		return mSharkRadius;
 	}
+	
+	/**
+	 * Sets the shark radius.
+	 *
+	 * @param sharkRadius the new shark radius
+	 */
 	public void setSharkRadius(int sharkRadius) {
 		mSharkRadius = sharkRadius;
 	}
+	
+	/**
+	 * Calculates the angle between duck and shark.
+	 *
+	 * @param f the x position of the duck
+	 * @param g the g position of the duck
+	 */
 	public void setDuckPosition(float f, float g){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 	}
+	
+	/**
+	 * Update direction.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean updateDirection(){
 		if(this.getPulledState()!=Constants.STATE_PULLED){
 			mDuckCounter++;
@@ -204,6 +306,12 @@ public class Shark extends GraphicObject{
 		}
 		return false;
 	}
+	
+	/**
+	 * Check time.
+	 *
+	 * @return true, if waited long enough before attacking again.
+	 */
 	public boolean checkTime(){
 		mWaitCounter++;
 		if(mWaitCounter>= mWaitTime){
@@ -212,17 +320,35 @@ public class Shark extends GraphicObject{
 		}
 		return false;
 	}
+	
+	/**
+	 * Return to start.
+	 */
 	public void returnToStart(){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(mStart.getX(), mStart.getY(), getCentreX(), getCentreY()));
 	}
+	
+	/**
+	 * Check if at start position.
+	 */
 	public void checkAtStart(){	
 		if(CollisionManager.circleCollision(getCentreX(), getCentreY(), 10, mStart.getX(), mStart.getY(), 10)){
 			mSharkState = SharkType.tAsleep;
 		}
 	}
+	
+	/**
+	 * Move to drop location.
+	 */
 	public void moveToDrop(){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(mDropLocation.getX(), mDropLocation.getY(), getCentreX(), getCentreY()));	
 	}
+	
+	/**
+	 * Gets the moved to drop location.
+	 *
+	 * @return true if at drop location
+	 */
 	public boolean getMovedToDrop(){
 		if(CollisionManager.circleCollision(getCentreX(), getCentreY(), 20, mDropLocation.getX(), mDropLocation.getY(), 20)){
 			return true;

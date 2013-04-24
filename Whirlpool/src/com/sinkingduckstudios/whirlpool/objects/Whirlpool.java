@@ -15,25 +15,56 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Whirlpool.
+ */
 public class Whirlpool extends GraphicObject{
 	//private final float sharkFactor = 0.5f;
+	/** The power. */
 	private float power = 0.05f;
+	
+	/** The object radius. */
 	private float objectRadius = 40.0f; //distance of graphic to wpool center
+	
+	/** The angle. */
 	private float angle = 0.0f;
+	
+	/** The _rot. */
 	private float _rot = 0.0f;
+	
+	/** The dir factor. */
 	private int dirFactor = 1;
+	
+	/** The expire timer. */
 	private final int expireTimer = 200;
+	
+	/** The expire counter. */
 	private int expireCounter = 1;
+	
+	/** The finished. */
 	private boolean finished = false;
+	
+	/** The collision done. */
 	public boolean collisionDone = true;
+	
+	/** The m arrow. */
 	private Arrow mArrow = null;
+	
+	/** The tangent y. */
 	private float tangentX, tangentY;
 
+	/**
+	 * Instantiates a new whirlpool.
+	 */
 	public Whirlpool(){
 		mId = objtype.tWhirl;
 		init();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
 		/*
@@ -56,6 +87,9 @@ public class Whirlpool extends GraphicObject{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		mProperties.init(0, 0, 130, 130,1.0f,1.0f);	
@@ -68,6 +102,13 @@ public class Whirlpool extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 
 	}
+	
+	/**
+	 * Inits the.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
@@ -79,17 +120,35 @@ public class Whirlpool extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		return false;
 	}
+	
+	/**
+	 * Gets the arrow.
+	 *
+	 * @return the arrow
+	 */
 	public Arrow getArrow(){
 		return mArrow;
 	}
+	
+	/**
+	 * Sets the arrow.
+	 *
+	 * @param arrow the new arrow
+	 */
 	public void setArrow(Arrow arrow){
 		mArrow = arrow;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(expireCounter < expireTimer){
@@ -102,6 +161,12 @@ public class Whirlpool extends GraphicObject{
 		mAnimate.animateFrame();
 	}
 
+	/**
+	 * Check collision.
+	 *
+	 * @param a the a
+	 * @return true, if successful
+	 */
 	public boolean checkCollision(GraphicObject a){
 		if (a.getId()==objtype.tDuck || a.getId()==objtype.tTorpedo || a.getId()==objtype.tShark){
 			boolean collide = collision(a);
@@ -135,6 +200,12 @@ public class Whirlpool extends GraphicObject{
 		return false;
 	}
 
+	/**
+	 * Test angle.
+	 *
+	 * @param a the a
+	 * @return true, if successful
+	 */
 	public boolean testAngle(GraphicObject a){
 		if (angle == -1)//wpool not directed yet
 			return false;
@@ -176,20 +247,48 @@ public class Whirlpool extends GraphicObject{
 
 		return false;
 	}
+	
+	/**
+	 * Gets the finished.
+	 *
+	 * @return the finished
+	 */
 	public boolean getFinished(){
 		return (finished && collisionDone);
 	}
 
+	/**
+	 * Sets the expire counter.
+	 *
+	 * @param a the new expire counter
+	 */
 	public void setExpireCounter(int a){
 		expireCounter = a;
 	}
 
+	/**
+	 * Sets the clockwise.
+	 *
+	 * @param clockwise the new clockwise
+	 */
 	public void setClockwise(int clockwise){
 		dirFactor = clockwise;
 	}
+	
+	/**
+	 * Gets the clockwise.
+	 *
+	 * @return the clockwise
+	 */
 	public int getClockwise(){
 		return dirFactor;
 	}
+	
+	/**
+	 * Gets the rotation.
+	 *
+	 * @return the rotation
+	 */
 	public float getRotation(){
 		_rot+= (2*getClockwise());
 		if (_rot >= 360)_rot=0;
@@ -197,6 +296,13 @@ public class Whirlpool extends GraphicObject{
 		return _rot;
 	}
 
+	/**
+	 * Point collision.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return true, if successful
+	 */
 	public boolean pointCollision(float x, float y){
 
 		float distX, distY, dist;
@@ -211,6 +317,12 @@ public class Whirlpool extends GraphicObject{
 
 	}
 
+	/**
+	 * Collision.
+	 *
+	 * @param graphic the graphic
+	 * @return true, if successful
+	 */
 	public boolean collision(GraphicObject graphic){
 
 		float distX, distY, dist;
@@ -223,6 +335,11 @@ public class Whirlpool extends GraphicObject{
 
 	}
 
+	/**
+	 * Pull.
+	 *
+	 * @param graphic the graphic
+	 */
 	public void pull(GraphicObject graphic){
 		float objX = graphic.getCentreX();
 		float objY = graphic.getCentreY();
@@ -270,6 +387,13 @@ public class Whirlpool extends GraphicObject{
 
 	//this function is called so the math is only done once per fetch
 	//(rather than individually in each getter)
+	/**
+	 * Calc tangent point.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return true, if successful
+	 */
 	public boolean calcTangentPoint(float x, float y){
 		float adj1,opp1,hyp1,angle1,angle2;
 
@@ -292,21 +416,57 @@ public class Whirlpool extends GraphicObject{
 		tangentY = (float) (Math.sin(angle1) * adj1) + y;
 		return true;
 	}
+	
+	/**
+	 * Gets the tangent x.
+	 *
+	 * @return the tangent x
+	 */
 	public float getTangentX(){
 		return tangentX;
 	}
+	
+	/**
+	 * Gets the tangent y.
+	 *
+	 * @return the tangent y
+	 */
 	public float getTangentY(){
 		return tangentY;
 	}
+	
+	/**
+	 * Gets the power.
+	 *
+	 * @return the power
+	 */
 	public float getPower() {
 		return power;
 	}
+	
+	/**
+	 * Sets the power.
+	 *
+	 * @param power the new power
+	 */
 	public void setPower(float power) {
 		this.power = power;
 	}
+	
+	/**
+	 * Sets the w angle.
+	 *
+	 * @param angle the new w angle
+	 */
 	public void setWAngle(float angle) {
 		this.angle = angle;
 	}
+	
+	/**
+	 * Gets the w angle.
+	 *
+	 * @return the w angle
+	 */
 	public float getWAngle() {
 		return angle;
 	}

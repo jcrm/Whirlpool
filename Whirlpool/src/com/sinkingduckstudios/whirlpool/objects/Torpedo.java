@@ -10,34 +10,49 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-
+/**
+ * The Class Torpedo.
+ */
 public class Torpedo extends GraphicObject {
+	
+	/** Is torpedo ready to destroy. */
 	private boolean mIsReadyToDestroy = false;
+	/** The Constant mTopSpeed. */
 	private static final float mTopSpeed = 12*Constants.getScreen().getRatio();
+	/** The duck counter. */
 	private int mDuckCounter = 10;
+	/** The hit boat variable. */
 	private boolean mHitBoat = false;
+	/** The hit boat counter. */
 	private int mHitBoatCounter = 0;
+	/** The beep counter. */
 	private int mBeepCounter = 31;
+	/** The torpedo is tracking. */
 	private boolean mIsTracking; //tracking duck?
+	/** The explosion bitmap. */
 	private Bitmap mExplosionBitmap;
+	/** The explosion animation. */
 	private Animate mExplosionAnimate;
+	/** The explosion variable. */
 	private boolean mExplosion = false;
 
+	/**
+	 * Instantiates a new torpedo.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the torpedo
+	 */
 	public Torpedo(int x, int y, float angle){
 		mId= objtype.tTorpedo;
 		init(x, y, angle);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		*/
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -50,6 +65,13 @@ public class Torpedo extends GraphicObject {
 		canvas.restore();
 	}
 
+	/**
+	 * Inits the torpedo.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the torpedo
+	 */
 	public void init(int x, int y, float angle){
 		mProperties.init(x, y, 50, 50,0.5f,0.5f,0.35f,0.5f);	
 		mProperties.setRadius((int) Math.sqrt(((float)(getWidth()/2)*(getWidth()/2)) + ((float)(getHeight()/6)*(getHeight()/6)))-(mProperties.getWidth()/8));
@@ -66,11 +88,17 @@ public class Torpedo extends GraphicObject {
 		mIsTracking=true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init(){
 		init(30,60,mId.tAngle);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
@@ -86,6 +114,9 @@ public class Torpedo extends GraphicObject {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#borderCollision(com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide, int, int)
+	 */
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
 		boolean hit = false;
@@ -146,6 +177,9 @@ public class Torpedo extends GraphicObject {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	@Override
 	public void frame() {
 		if(mExplosion == false){
@@ -164,19 +198,48 @@ public class Torpedo extends GraphicObject {
 		}
 	}
 
+	/**
+	 * Gets the checks if is ready to destroy.
+	 *
+	 * @return the checks if is ready to destroy
+	 */
 	public boolean getIsReadyToDestroy() {
 		return mIsReadyToDestroy;
 	}
 
+	/**
+	 * Sets the checks if is ready to destroy.
+	 *
+	 * @param isReadyToDestroy the new checks if is ready to destroy
+	 */
 	public void setIsReadyToDestroy(boolean isReadyToDestroy) {
 		mIsReadyToDestroy = isReadyToDestroy;
 	}
+	
+	/**
+	 * Gets the tracking.
+	 *
+	 * @return the tracking
+	 */
 	public boolean getTracking(){
 		return mIsTracking;
 	}
+	
+	/**
+	 * Sets the tracking.
+	 *
+	 * @param b the new tracking
+	 */
 	public void setTracking(boolean b){
 		mIsTracking=b;
 	}
+	
+	/**
+	 * Uses duck position to calculate angle.
+	 *
+	 * @param f the x position of the duck
+	 * @param g the y position of the duck
+	 */
 	public void setDuckPosition(float f, float g){
 		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed();
@@ -186,13 +249,29 @@ public class Torpedo extends GraphicObject {
 			mSpeed.setSpeed(mTopSpeed);
 		}
 	}
-	//try get view by id , get id layout, get height and width of view; on button click of menu
+	/**
+	 * Gets the duck counter.
+	 *
+	 * @return the duck counter
+	 */
 	public int getDuckCounter() {
 		return mDuckCounter;
 	}
+	
+	/**
+	 * Sets the duck counter.
+	 *
+	 * @param duckCounter the new duck counter
+	 */
 	public void setDuckCounter(int duckCounter) {
 		mDuckCounter = duckCounter;
 	}
+	
+	/**
+	 * Update direction.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean updateDirection(){
 		if(mIsTracking){
 			mDuckCounter++;
@@ -203,6 +282,10 @@ public class Torpedo extends GraphicObject {
 		}
 		return false;
 	}
+	
+	/**
+	 * Check beep.
+	 */
 	public void checkBeep(){
 		if(mExplosion == false){
 			mBeepCounter++;
@@ -212,21 +295,57 @@ public class Torpedo extends GraphicObject {
 			}
 		}
 	}
+	
+	/**
+	 * Gets the hit boat.
+	 *
+	 * @return the hit boat
+	 */
 	public boolean getHitBoat() {
 		return mHitBoat;
 	}
+	
+	/**
+	 * Sets the hit boat.
+	 *
+	 * @param hitBoat the new hit boat
+	 */
 	public void setHitBoat(boolean hitBoat) {
 		mHitBoat = hitBoat;
 	}
+	
+	/**
+	 * Gets the top speed.
+	 *
+	 * @return the top speed
+	 */
 	public float getTopSpeed() {
 		return mTopSpeed;
 	}
+	
+	/**
+	 * Gets the explosion.
+	 *
+	 * @return the explosion
+	 */
 	public boolean getExplosion() {
 		return mExplosion;
 	}
+	
+	/**
+	 * Sets the explosion.
+	 *
+	 * @param explosion the new explosion
+	 */
 	public void setExplosion(boolean explosion) {
 		mExplosion = explosion;
 	}
+	
+	/**
+	 * Gets the distance between missile and duck.
+	 *
+	 * @return the distance
+	 */
 	public float getDist() {
 		float x1 = getCentreX();
 		float y1 = getCentreY();

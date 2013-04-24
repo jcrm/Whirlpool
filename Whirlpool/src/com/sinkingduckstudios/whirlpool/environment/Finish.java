@@ -1,3 +1,11 @@
+/*
+ * Author: Fraser Tomison implemented by Jake Morey
+ * Last Updated: 22/04/13
+ * Content:This is a stripped down copy of the whirlpool class,
+ * implemented as an endpoint goal for a level. It will only pull the duck
+ * when activate is called (level complete)
+ */
+
 package com.sinkingduckstudios.whirlpool.environment;
 
 import android.graphics.Bitmap;
@@ -12,8 +20,11 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject;
 import com.sinkingduckstudios.whirlpool.objects.GraphicObject.objtype;
 
+/**
+ * The Class Finish.
+ */
 public class Finish extends GraphicEnvironment{
-	private float objectRadius = 40.0f; //distance of graphic to wpool center
+	private float objectRadius = 40.0f; //distance of graphic to wpool center default 40
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
 	private boolean finished = false;
@@ -24,14 +35,28 @@ public class Finish extends GraphicEnvironment{
 	private Animate mHitAnimate;
 	private boolean mActive;
 
+	/**
+	 * Instantiates a new finish.
+	 */
 	public Finish(){
 		mId = envtype.tFinish;
 		init();
 	}
+	
+	/**
+	 * Instantiates a new finish.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public Finish(int x, int y){
 		mId = envtype.tFinish;
 		init(x,y);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -51,10 +76,20 @@ public class Finish extends GraphicEnvironment{
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment#init()
+	 */
 	@Override
 	public void init() {
 		init(0,0);
 	}
+	
+	/**
+	 * Initialises the finish environment object
+	 *
+	 * @param x scaled (0-500) x mid-point
+	 * @param y scaled (0-500) y mid-point
+	 */
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
 
@@ -76,11 +111,19 @@ public class Finish extends GraphicEnvironment{
 		
 		mActive = false;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment#move()
+	 */
 	@Override
 	public boolean move() {
-		return false;
+		return false;//does not move
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment#borderCollision(com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide, int, int)
+	 * Handles collision with edges of the screen
+	 */
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
 		switch(side){
@@ -129,13 +172,22 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
+	/**
+	 * Checks if is active.
+	 *
+	 * @return true, if is active
+	 */
 	public boolean isActive() {
 		return mActive;
 	}
 	
+	/* (non-Javadoc)
+	* @see com.sinkingduckstudios.whirlpool.environment.GraphicEnvironment#frame()
+	* Animate whirlpool, if active
+	*
+	*/
 	public void frame(){
 		if (mActive){
-
 			if(mHit == false){
 				mAnimate.animateFrame();
 			}else{
@@ -147,10 +199,20 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
+	/**
+	* Activate whirlpool, (when all three ducks have been collected)
+	*
+	*/
 	public void activate(){
 		mActive=true;
 	}
 
+	/**
+	* Check if duck is colliding with finish zone
+	*
+	*@param a GraphicObject : Duck object
+	* @return true, if successful
+	*/
 	public boolean checkCollision(GraphicObject a){
 		if (a.getId()==objtype.tDuck ){
 			boolean collide = collision(a);
@@ -160,7 +222,6 @@ public class Finish extends GraphicEnvironment{
 			}
 
 			if (collide&&a.getPulledState()==Constants.STATE_FINISHING){//if the duck is touching finish
-
 				collisionDone = false;
 				pull(a);//pull round whirlpool
 				mHit=true;
@@ -171,16 +232,38 @@ public class Finish extends GraphicEnvironment{
 		return false;
 	}
 
+	/**
+	 * Gets the finished.
+	 *
+	 * @return the finished
+	 */
 	public boolean getFinished(){
 		return (finished && collisionDone);
 	}
 
+	/**
+	 * Sets the clockwise.
+	 *
+	 * @param clockwise the new clockwise
+	 */
 	public void setClockwise(int clockwise){
 		dirFactor = clockwise;
 	}
+	
+	/**
+	 * Gets the clockwise.
+	 *
+	 * @return the clockwise
+	 */
 	public int getClockwise(){
 		return dirFactor;
 	}
+	
+	/**
+	 * Gets the rotation.
+	 *
+	 * @return the rotation
+	 */
 	public float getRotation(){
 		_rot+= (2*getClockwise());
 		if (_rot >= 360)_rot=0;
@@ -188,24 +271,32 @@ public class Finish extends GraphicEnvironment{
 		return _rot;
 	}
 
+	/**
+	* Hit test a point with the whirlpool circle
+	* @param x the x
+	* @param y the y
+	* @return true, if successful
+	*/
 	public boolean pointCollision(float x, float y){
-
 		float distX, distY, dist;
 		distX = this.getCentreX() - x;
 		distY = this.getCentreY() - y;
 		dist = (distX*distX)+(distY*distY);
 
-		if (dist <= ( (this.getRadius()) * (this.getRadius()) ))
+		if (dist <= ( (this.getRadius()) * (this.getRadius()) )){
 			return true;
-
+		}
 		return false;
-
 	}
 
+	/**
+	 * Hit test a graphic object with the whirlpool circle
+	 *
+	 *@param graphic object to test
+	 * @return true, if successful
+	 */
 	public boolean collision(GraphicObject graphic){
-
 		//Return 0 if there is no collision, return 1 if there is partial, 2 if there is centre collision
-
 		float distX, distY, dist;
 		distX = this.getCentreX() - graphic.getCentreX();
 		distY = this.getCentreY() - graphic.getCentreY();
@@ -213,11 +304,15 @@ public class Finish extends GraphicEnvironment{
 		dist = (distX*distX)+(distY*distY);
 
 		return(dist <= ( ((this.getRadius()) + graphic.getRadius()) * ((this.getRadius()) + graphic.getRadius()) ));
-
-
 	}
 
-	public void gravity(GraphicObject graphic, float factor){
+	/**
+	* Rotate graphic object (duck) around whirlpool
+	*
+	*@param graphic object to rotate
+	*@param factor depreciated, set to 1.0f for now
+	*/
+	private void gravity(GraphicObject graphic, float factor){
 		float objX = graphic.getCentreX();
 		float objY = graphic.getCentreY();
 		//float objSpeedX = graphic.getSpeed().getXSpeed();
@@ -260,11 +355,12 @@ public class Finish extends GraphicEnvironment{
 			else mAngle = cAngle;
 
 		graphic.setAngle(mAngle);
-	}
-	//pulls different objects to the centre depending on original speed
-	//sharks are pulled slower because they start faster
-	//where as boats get pulled faster because they start slower
-	//frogs are not effected 
+	}	
+	/**
+	* Rotate graphic object (duck) around whirlpool
+	*
+	*@param graphic object to rotate
+	*/
 	public void pull(GraphicObject graphic){
 		switch(graphic.getId()){
 		case tDuck:
@@ -275,10 +371,20 @@ public class Finish extends GraphicEnvironment{
 		}
 	}
 
+	/**
+	 * Gets the end.
+	 *
+	 * @return the end
+	 */
 	public int getEnd() {
 		return mEnd;
 	}
 
+	/**
+	 * Sets the end.
+	 *
+	 * @param end the new end
+	 */
 	public void setEnd(int end) {
 		mEnd = end;
 	}

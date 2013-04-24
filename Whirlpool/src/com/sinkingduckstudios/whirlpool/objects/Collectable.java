@@ -19,13 +19,23 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+/**
+ * The Class Collectable.
+ */
 public class Collectable extends GraphicObject{
+	/** The collectable images. */
 	private Bitmap mBitmap[] = new Bitmap[3];
+	/** The collectable animation. */
 	private Animate mAnimate[] = new Animate[3];
+	/** The paint variable. */
 	private Paint mPaint;
+	/** The collcetable rect. */
 	private Rect mRect;
+	/** The collided variable. */
 	private boolean mHasCollided;
+	/** Which object is it following. */
 	private GraphicObject mFollowing;
+
 	public Collectable(int x, int y){
 		mId = objtype.tCollectable;
 		init(x,y);
@@ -37,20 +47,6 @@ public class Collectable extends GraphicObject{
 	}
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(getCentreX(), getCentreY(), paint);
-		paint.setColor(Color.WHITE);
-		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
-		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
-		*/
 		canvas.save();
 
 		canvas.translate(getCentreX(), getCentreY());
@@ -63,12 +59,29 @@ public class Collectable extends GraphicObject{
 		canvas.restore();
 	}
 
+	/**
+	 * Gets the collided.
+	 *
+	 * @return the collided
+	 */
 	public boolean getCollided(){
 		return mHasCollided;
 	}
+
+	/**
+	 * Sets the following.
+	 *
+	 * @param f the new following
+	 */
 	public void setFollowing(GraphicObject f){
 		mFollowing = f;
 	}
+
+	/**
+	 * Gets the sprite sheet index.
+	 *
+	 * @return the sprite sheet index
+	 */
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
 			return 1;
@@ -76,7 +89,6 @@ public class Collectable extends GraphicObject{
 			return 2;
 		return 0;
 	}
-
 	@Override
 	public void init() {
 		init(0,0);
@@ -134,8 +146,6 @@ public class Collectable extends GraphicObject{
 		moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 		moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
 
-		//setCentreX(destX);
-		//setCentreY(destY);
 		return false;
 	}
 

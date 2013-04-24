@@ -17,35 +17,41 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Frog.
+ */
 public class Frog extends GraphicObject{
-	//used for working out the location of the frog round the circle
+	
+	/** Works out the position of the frog using these variables. */
 	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
 
+	/**
+	 * Instantiates a new frog.
+	 */
 	public Frog(){
 		mId = objtype.tFrog;
 		init();
 	}
+	
+	/**
+	 * Instantiates a new frog.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param r the radius of the frog
+	 * @param dir the direction of the frog
+	 */
 	public Frog(int x, int y, int r){
 		mId = objtype.tFrog;
 		init(x, y, r);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
-		/*
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(getCentreX(), getCentreY(), paint);
-		paint.setColor(Color.WHITE);
-		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
-		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
-		*/
-		
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -54,12 +60,23 @@ public class Frog extends GraphicObject{
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				(Constants.getLevel().getLevelHeight()/2)-70,
 				180);	
 	}
+	
+	/**
+	 * Inits the frog.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param r the radius of the frog
+	 */
 	public void init(int x, int y, int r) {
 		mGraphicType = 2;
 		mIsPlaying = false;
@@ -75,20 +92,31 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(x);
 		setFrogCentreY(y);
 		setFrogRadius(r);
+		mFrogAngle = new Random().nextInt(360);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle));
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
-			mFrogAngle-=mSpeed.getSpeed()/100;
+			mFrogAngle-= mSpeed.getSpeed()/100;
+			if(mFrogAngle>360){
+				mFrogAngle-=360;
+			}
 			return true;
 		}
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		// Move Objects
 		if(move()){
@@ -97,27 +125,74 @@ public class Frog extends GraphicObject{
 		mAnimate.animateFrame();
 	}
 
+	/**
+	 * Gets the frog angle.
+	 *
+	 * @return the frog angle
+	 */
 	public float getFrogAngle() {
 		return mFrogAngle;
 	}
+	
+	/**
+	 * Gets the frog radius.
+	 *
+	 * @return the frog radius
+	 */
 	public float getFrogRadius() {
 		return mFrogRadius;
 	}
+	
+	/**
+	 * Sets the frog centre x.
+	 *
+	 * @param frogCentreX the new frog centre x
+	 */
 	public void setFrogCentreX(float frogCentreX) {
 		mFrogCentreX = frogCentreX;
 	}
+	
+	/**
+	 * Sets the frog centre y.
+	 *
+	 * @param frogCentreY the new frog centre y
+	 */
 	public void setFrogCentreY(float frogCentreY) {
 		mFrogCentreY = frogCentreY;
 	}
+	
+	/**
+	 * Sets the frog angle.
+	 *
+	 * @param frogAngle the new frog angle
+	 */
 	public void setFrogAngle(float frogAngle) {
 		mFrogAngle = frogAngle;
 	}
+	
+	/**
+	 * Sets the frog radius.
+	 *
+	 * @param frogRadius the new frog radius
+	 */
 	public void setFrogRadius(float frogRadius) {
 		mFrogRadius = frogRadius;
 	}
+	
+	/**
+	 * Gets the frog centre x.
+	 *
+	 * @return the frog centre x
+	 */
 	public float getFrogCentreX() {
 		return mFrogCentreX;
 	}
+	
+	/**
+	 * Gets the frog centre y.
+	 *
+	 * @return the frog centre y
+	 */
 	public float getFrogCentreY() {
 		return mFrogCentreY;
 	}
