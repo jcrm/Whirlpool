@@ -21,10 +21,16 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.views.ZoneScreenView;
 
+/**
+ * The Class ZoneScreen.
+ */
 public class ZoneScreen extends Activity{
-	boolean mPaused = false;
+	/** The zone screen view. */
 	ZoneScreenView zoneScreenView;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,12 +49,13 @@ public class ZoneScreen extends Activity{
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
 		
-		bathZoneButton.setOnClickListener(goToBath);
+		bathZoneButton.setOnClickListener(goToCinematic);
 		returnButton.setOnClickListener(goToMenu);
 		zoneScreenView=(ZoneScreenView)findViewById(R.id.zoneScreenView);
 	}
-	
-	private OnClickListener goToBath = new OnClickListener() {
+
+	/** The go to cinematic button. */
+	private OnClickListener goToCinematic = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
 			Constants.getSoundManager().playSplash();
@@ -59,6 +66,8 @@ public class ZoneScreen extends Activity{
     		finish();
         }
 	};
+	
+	/** The go to menu button. */
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -67,26 +76,41 @@ public class ZoneScreen extends Activity{
     		finish();
         }
 	};
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onBackPressed()
+	 */
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	public void onDestroy(){
 		zoneScreenView.CleanUp();
 		zoneScreenView = null;
-        // TODO Auto-generated method stub
         Runtime.getRuntime().gc();
         System.gc();
         super.onDestroy();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override 
 	public void onResume(){
 		Constants.createSoundManager(getApplicationContext());
         Constants.getSoundManager().loadSplash();
         super.onResume();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override 
 	public void onPause(){
 		Constants.getSoundManager().unloadAll();

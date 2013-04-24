@@ -21,50 +21,109 @@ import android.media.SoundPool;
 import android.os.Handler;
 import android.util.Log;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SoundManager.
+ */
 public class SoundManager 
 {	
 	// set up variables needed for the class
+	/** The p context. */
 	protected Context pContext;				// holds thew applications contexts, needed to load in new sounds
+	
+	/** The m snd pool. */
 	protected SoundPool mSndPool;				// is the sound pool used to controll the sounds 
+	
+	/** The m rate. */
 	protected float mRate = 1.0f;				// is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
+	
+	/** The m master volume. */
 	protected float mMasterVolume = 1.0f;
+	
+	/** The m left volume. */
 	protected float mLeftVolume = mMasterVolume;		// the volume of the left speaker, set to on full
+	
+	/** The m right volume. */
 	protected float mRightVolume =mMasterVolume;		// the volume of the right speaker, set to on full
 
+	/** The m beep volume. */
 	protected float mBeepVolume = mMasterVolume / 2;
 
 	// integer values to store the ID's for the sounds needed to play them
 	// the sounds for ducky
+	/** The m ducky. */
 	protected int mDucky[]  = new int[6];					// an array of 6 to stor the 6 sounds of ducky
+	
+	/** The m bounce. */
 	protected int mBounce[] = new int [2];					// an array of 2 to hold the sounds of ducky bouncing
+	
+	/** The m missile. */
 	protected int mMissile[] = new int [3];
+	
+	/** The m explosion. */
 	protected int mExplosion[] = new int [3];
+	
+	/** The m angry ducky. */
 	protected int mAngryDucky;				// values for the angry and scared ducky sounds
+	
+	/** The m scared ducky. */
 	protected int mScaredDucky;
 
 	// sounds for the enemies. frog, diver and tugboat
+	/** The m diver. */
 	protected int mDiver;	
+	
+	/** The m frog. */
 	protected int mFrog;
+	
+	/** The m tug boat. */
 	protected int mTugBoat;
+	
+	/** The m shark. */
 	protected int mShark;
 
 	// other sounds for the game
 	//protected int mBackground;				// the bacground music for the game
+	/** The m ambientbath. */
 	protected int mAmbientbath;				// the ambient noises' heard in a bath
+	
+	/** The m downplug. */
 	protected int mDownplug;					// sounds to represent the noise of a plug
+	
+	/** The m plug. */
 	protected int mPlug;
+	
+	/** The m points. */
 	protected int mPoints;					// sounds of points being gained
+	
+	/** The m splash. */
 	protected int mSplash;					//  a splash of water
+	
+	/** The m whirlpool. */
 	protected int mWhirlpool;				// the sound of the whirlpool
 	//sounds for the cinematic
+	/** The m evil laugh. */
 	protected int mEvilLaugh[] = new int [3];
+	
+	/** The m potion. */
 	protected int mPotion;
+	
+	/** The m real. */
 	protected int mReal;
+	
+	/** The m poof. */
 	protected int mPoof;
+	
+	/** The m grab. */
 	protected int mGrab;
 
+	/** The m missile stream id. */
 	protected int mMissileStreamId;
+	
+	/** The m missile playing. */
 	protected boolean mMissilePlaying;
+	
+	/** The m background. */
 	protected MediaPlayer mBackground;
 
 	// Constructor, setup the audio manager and store the app context
@@ -291,6 +350,11 @@ public class SoundManager
 	}
 
 	// Set the volume of the sounds.
+	/**
+	 * Sets the volume.
+	 *
+	 * @param nVol the new volume
+	 */
 	public void setVolume(float nVol)
 	{
 		// this volume sets the master volume for all of the sounds. 

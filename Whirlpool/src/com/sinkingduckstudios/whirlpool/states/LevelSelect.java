@@ -16,18 +16,29 @@ import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.views.LevelSelectView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LevelSelect.
+ */
 public class LevelSelect extends Activity{
 
+	/** The m paused. */
 	boolean mPaused = false;
 
+	/** The m level select. */
 	public int mLevelSelect;
 
+	/** The score. */
 	protected int score;
+	
+	/** The prefs. */
 	protected SharedPreferences prefs;
 
+	/** The Constant HIGH_SCORES. */
 	public static final String HIGH_SCORES = "HighScores";
 
 
+	/** The level select view. */
 	LevelSelectView levelSelectView;
 
 	@Override
@@ -221,6 +232,8 @@ public class LevelSelect extends Activity{
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	
+	/** The go to level1. */
 	private OnClickListener goToLevel1 = new OnClickListener() {
 		@Override
 		public void onClick(View view){
@@ -235,6 +248,8 @@ public class LevelSelect extends Activity{
 			//Code to select level1
 		}
 	};
+	
+	/** The go to zone. */
 	private OnClickListener goToZone = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -252,6 +267,8 @@ public class LevelSelect extends Activity{
 			finish();
 		}
 	}
+	
+	/** The go to level2. */
 	private OnClickListener goToLevel2 = new OnClickListener() {
 		@Override
 		public void onClick(View view){
@@ -272,6 +289,8 @@ public class LevelSelect extends Activity{
 			//Code to select level2
 		}
 	};
+	
+	/** The go to level3. */
 	private OnClickListener goToLevel3 = new OnClickListener() {
 		@Override
 		public void onClick(View view){
@@ -292,6 +311,8 @@ public class LevelSelect extends Activity{
 			//Code to select level2
 		}
 	};
+	
+	/** The go to level4. */
 	private OnClickListener goToLevel4 = new OnClickListener() {
 		@Override
 		public void onClick(View view){
@@ -312,6 +333,8 @@ public class LevelSelect extends Activity{
 			//Code to select level2
 		}
 	};
+	
+	/** The go to level5. */
 	private OnClickListener goToLevel5 = new OnClickListener() {
 		@Override
 		public void onClick(View view){
@@ -332,6 +355,8 @@ public class LevelSelect extends Activity{
 			//Code to select level2
 		}
 	};
+	
+	/** The go to level6. */
 	private OnClickListener goToLevel6 = new OnClickListener() {
 		@Override
 		public void onClick(View view){

@@ -10,23 +10,58 @@ package com.sinkingduckstudios.whirlpool.movement;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Point;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Properties.
+ */
 public class Properties {
+	
+	/** The m centre. */
 	private Point mCentre = new Point();
+	
+	/** The m top left. */
 	private Point mTopLeft = new Point();
+	
+	/** The m bottom right. */
 	private Point mBottomRight = new Point();
 	//These relate to the real part of the bitmap the image takes up (for collision purposes)
+	/** The m real centre. */
 	private Point mRealCentre = new Point();
+	
+	/** The m real top left. */
 	private Point mRealTopLeft = new Point();
+	
+	/** The m real bottom right. */
 	private Point mRealBottomRight = new Point();
+	
+	/** The m radius. */
 	private int mRadius = 0;
+	
+	/** The m width. */
 	private int mWidth = 0;
+	
+	/** The m height. */
 	private int mHeight = 0;
+	
+	/** The m original width. */
 	private int mOriginalWidth = 0;
+	
+	/** The m original height. */
 	private int mOriginalHeight = 0;
+	
+	/** The m y ratio. */
 	private float mXRatio=0.0f, mYRatio=0.0f;
+	
+	/** The m y offset. */
 	private float mXOffset = 0.5f, mYOffset=0.5f;
+	
+	/** The m original rect. */
 	public Point mOriginalRect[] = new Point[4];
+	
+	/** The m collision rect. */
 	public Point mCollisionRect[] = new Point[4];
+	
+	/** The m angle. */
 	public float mAngle=0.0f;
 	
 	public Properties(){
@@ -91,6 +126,11 @@ public class Properties {
 		mRealCentre.setPoints(x1+((mWidth*mXRatio)/2),y1+((mHeight*mYRatio)/2));
 	}
 	//temp comment
+	/**
+	 * Sets the centre x.
+	 *
+	 * @param x the new centre x
+	 */
 	public void setCentreX(float x){
 		x/=Constants.getScreen().getRatio();
 		mCentre.setX(x);
@@ -105,6 +145,12 @@ public class Properties {
 		mRealBottomRight.setX(x2);
 		mRealCentre.setX(x1+((mWidth*mXRatio)/2));
 	}
+	
+	/**
+	 * Sets the centre y.
+	 *
+	 * @param y the new centre y
+	 */
 	public void setCentreY(float y){
 		y/=Constants.getScreen().getRatio();
 		mCentre.setY(y);
@@ -136,6 +182,12 @@ public class Properties {
 		mRealBottomRight.setPoints(x2, y2);
 		mRealCentre.setPoints(x1+((mWidth*mXRatio)/2),y1+((mHeight*mYRatio)/2));
 	}
+	
+	/**
+	 * Sets the top left x.
+	 *
+	 * @param x the new top left x
+	 */
 	public void setTopLeftX(float x){
 		//x/=Constants.getScreen().getRatio();
 		mTopLeft.setX(x);
@@ -148,6 +200,12 @@ public class Properties {
 		mRealBottomRight.setX(x2);
 		mRealCentre.setX(x1+((mWidth*mXRatio)/2));
 	}
+	
+	/**
+	 * Sets the top left y.
+	 *
+	 * @param y the new top left y
+	 */
 	public void setTopLeftY(float y){
 		//y/=Constants.getScreen().getRatio();
 		mTopLeft.setY(y);
@@ -161,59 +219,164 @@ public class Properties {
 		mRealCentre.setY(y1+((mHeight*mYRatio)/2));
 	}
 	
+	/**
+	 * Gets the centre.
+	 *
+	 * @return the centre
+	 */
 	public Point getCentre(){
 		return mCentre;
 	}
+	
+	/**
+	 * Gets the real centre.
+	 *
+	 * @return the real centre
+	 */
 	public Point getRealCentre(){
 		return mRealCentre;
 	}
+	
+	/**
+	 * Gets the top left.
+	 *
+	 * @return the top left
+	 */
 	public Point getTopLeft(){
 		return mTopLeft;
 	}
+	
+	/**
+	 * Gets the real top left.
+	 *
+	 * @return the real top left
+	 */
 	public Point getRealTopLeft(){
 		return mRealTopLeft;
 	}
+	
+	/**
+	 * Gets the bottom right.
+	 *
+	 * @return the bottom right
+	 */
 	public Point getBottomRight(){
 		return mBottomRight;
 	}
+	
+	/**
+	 * Gets the real bottom right.
+	 *
+	 * @return the real bottom right
+	 */
 	public Point getRealBottomRight(){
 		return mRealBottomRight;
 	}
+	
+	/**
+	 * Gets the centre x.
+	 *
+	 * @return the centre x
+	 */
 	public float getCentreX(){
 		return mCentre.getX();
 	}
+	
+	/**
+	 * Gets the centre y.
+	 *
+	 * @return the centre y
+	 */
 	public float getCentreY(){
 		return mCentre.getY();
 	}
+	
+	/**
+	 * Gets the top left x.
+	 *
+	 * @return the top left x
+	 */
 	public float getTopLeftX(){
 		return mTopLeft.getX();
 	}
+	
+	/**
+	 * Gets the top left y.
+	 *
+	 * @return the top left y
+	 */
 	public float getTopLeftY(){
 		return mTopLeft.getY();
 	}
+	
+	/**
+	 * Gets the bottom right x.
+	 *
+	 * @return the bottom right x
+	 */
 	public float getBottomRightX(){
 		return mBottomRight.getX();
 	}
+	
+	/**
+	 * Gets the bottom right y.
+	 *
+	 * @return the bottom right y
+	 */
 	public float getBottomRightY(){
 		return mBottomRight.getY();
 	}
 	
+	/**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
 	public int getWidth() {
 		return mWidth;
 	}
+	
+	/**
+	 * Sets the width.
+	 *
+	 * @param width the new width
+	 */
 	public void setWidth(int width) {
 		mWidth = width;
 	}
+	
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
 	public int getHeight() {
 		return mHeight;
 	}
+	
+	/**
+	 * Sets the height.
+	 *
+	 * @param height the new height
+	 */
 	public void setHeight(int height) {
 		mHeight = height;
 	}
 	
+	/**
+	 * Gets the radius.
+	 *
+	 * @return the radius
+	 */
 	public int getRadius() {
 		return mRadius;
 	}
+	
+	/**
+	 * Sets the radius.
+	 *
+	 * @param radius the new radius
+	 */
 	public void setRadius(int radius) {
 		mRadius = radius;
 	}
@@ -229,15 +392,38 @@ public class Properties {
 	}
 	
 	
+	/**
+	 * Gets the original width.
+	 *
+	 * @return the original width
+	 */
 	public int getOriginalWidth() {
 		return mOriginalWidth;
 	}
+	
+	/**
+	 * Sets the original width.
+	 *
+	 * @param originalWidth the new original width
+	 */
 	public void setOriginalWidth(int originalWidth) {
 		mOriginalWidth = originalWidth;
 	}
+	
+	/**
+	 * Gets the original height.
+	 *
+	 * @return the original height
+	 */
 	public int getOriginalHeight() {
 		return mOriginalHeight;
 	}
+	
+	/**
+	 * Sets the original height.
+	 *
+	 * @param originalHeight the new original height
+	 */
 	public void setOriginalHeight(int originalHeight) {
 		mOriginalHeight = originalHeight;
 	}
@@ -257,6 +443,12 @@ public class Properties {
 	public void updateAngle(float angle) {
 		mAngle = angle;
 	}
+	
+	/**
+	 * Gets the angle.
+	 *
+	 * @return the angle
+	 */
 	public float getAngle() {
 		return mAngle;
 	}

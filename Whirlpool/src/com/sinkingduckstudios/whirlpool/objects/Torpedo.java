@@ -11,16 +11,40 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Torpedo.
+ */
 public class Torpedo extends GraphicObject {
+	
+	/** The m is ready to destroy. */
 	private boolean mIsReadyToDestroy = false;
+	
+	/** The Constant mTopSpeed. */
 	private static final float mTopSpeed = 12*Constants.getScreen().getRatio();
+	
+	/** The m duck counter. */
 	private int mDuckCounter = 10;
+	
+	/** The m hit boat. */
 	private boolean mHitBoat = false;
+	
+	/** The m hit boat counter. */
 	private int mHitBoatCounter = 0;
+	
+	/** The m beep counter. */
 	private int mBeepCounter = 31;
+	
+	/** The m is tracking. */
 	private boolean mIsTracking; //tracking duck?
+	
+	/** The m explosion bitmap. */
 	private Bitmap mExplosionBitmap;
+	
+	/** The m explosion animate. */
 	private Animate mExplosionAnimate;
+	
+	/** The m explosion. */
 	private boolean mExplosion = false;
 
 	public Torpedo(int x, int y, float angle){
@@ -164,16 +188,38 @@ public class Torpedo extends GraphicObject {
 		}
 	}
 
+	/**
+	 * Gets the checks if is ready to destroy.
+	 *
+	 * @return the checks if is ready to destroy
+	 */
 	public boolean getIsReadyToDestroy() {
 		return mIsReadyToDestroy;
 	}
 
+	/**
+	 * Sets the checks if is ready to destroy.
+	 *
+	 * @param isReadyToDestroy the new checks if is ready to destroy
+	 */
 	public void setIsReadyToDestroy(boolean isReadyToDestroy) {
 		mIsReadyToDestroy = isReadyToDestroy;
 	}
+	
+	/**
+	 * Gets the tracking.
+	 *
+	 * @return the tracking
+	 */
 	public boolean getTracking(){
 		return mIsTracking;
 	}
+	
+	/**
+	 * Sets the tracking.
+	 *
+	 * @param b the new tracking
+	 */
 	public void setTracking(boolean b){
 		mIsTracking=b;
 	}
@@ -187,9 +233,20 @@ public class Torpedo extends GraphicObject {
 		}
 	}
 	//try get view by id , get id layout, get height and width of view; on button click of menu
+	/**
+	 * Gets the duck counter.
+	 *
+	 * @return the duck counter
+	 */
 	public int getDuckCounter() {
 		return mDuckCounter;
 	}
+	
+	/**
+	 * Sets the duck counter.
+	 *
+	 * @param duckCounter the new duck counter
+	 */
 	public void setDuckCounter(int duckCounter) {
 		mDuckCounter = duckCounter;
 	}
@@ -212,21 +269,57 @@ public class Torpedo extends GraphicObject {
 			}
 		}
 	}
+	
+	/**
+	 * Gets the hit boat.
+	 *
+	 * @return the hit boat
+	 */
 	public boolean getHitBoat() {
 		return mHitBoat;
 	}
+	
+	/**
+	 * Sets the hit boat.
+	 *
+	 * @param hitBoat the new hit boat
+	 */
 	public void setHitBoat(boolean hitBoat) {
 		mHitBoat = hitBoat;
 	}
+	
+	/**
+	 * Gets the top speed.
+	 *
+	 * @return the top speed
+	 */
 	public float getTopSpeed() {
 		return mTopSpeed;
 	}
+	
+	/**
+	 * Gets the explosion.
+	 *
+	 * @return the explosion
+	 */
 	public boolean getExplosion() {
 		return mExplosion;
 	}
+	
+	/**
+	 * Sets the explosion.
+	 *
+	 * @param explosion the new explosion
+	 */
 	public void setExplosion(boolean explosion) {
 		mExplosion = explosion;
 	}
+	
+	/**
+	 * Gets the dist.
+	 *
+	 * @return the dist
+	 */
 	public float getDist() {
 		float x1 = getCentreX();
 		float y1 = getCentreY();

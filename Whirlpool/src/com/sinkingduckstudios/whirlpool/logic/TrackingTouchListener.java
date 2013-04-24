@@ -17,31 +17,84 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.objects.Arrow;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The listener interface for receiving trackingTouch events.
+ * The class that is interested in processing a trackingTouch
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addTrackingTouchListener<code> method. When
+ * the trackingTouch event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @see TrackingTouchEvent
+ */
 final class TrackingTouchListener implements View.OnTouchListener{
 	//really bad way of doing this, change asap. no structs in java.
+	/** The m start. */
 	private float[] mStart = new float[2];
+	
+	/** The m last. */
 	private float[] mLast = new float[2];
+	
+	/** The m current. */
 	private float[] mCurrent = new float[2];
+	
+	/** The m ref x. */
 	private float[] mRefX = new float[4];
+	
+	/** The m ref y. */
 	private float[] mRefY = new float[4];
+	
+	/** The m last ref. */
 	private int mNoRef, mLastRef;
+	
+	/** The m y dir. */
 	private float mXDir, mYDir;
+	
+	/** The m new gesture. */
 	private int mNewGesture;//type of gesture 1 =  whirl, 2 = direction
+	
+	/** The m y to change. */
 	private boolean mXToChange, mYToChange; //nasty
 	//end result
+	/** The m w center. */
 	private float[] mWCenter = new float[2];
+	
+	/** The m w size. */
 	private int mWSize; //whirlpool direction, center point, and size.
+	
+	/** The m w pool index. */
 	private int mWPoolIndex;
+	
+	/** The m w angle. */
 	private float mWAngle;
+	
+	/** The m w pools. */
 	private final WPools mWPools;
+	
+	/** The m whirl. */
 	private Whirlpool mWhirl;
+	
+	/** The m arrow. */
 	private Arrow mArrow;
+	
+	/** The m scaled y. */
 	private float mScaledX, mScaledY;
+	
+	/**
+	 * Instantiates a new tracking touch listener.
+	 *
+	 * @param wpools the wpools
+	 */
 	TrackingTouchListener(WPools wpools) {
 		mWPools = wpools;
 		mNewGesture = 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
+	 */
 	public boolean onTouch(View view, MotionEvent event) {
 		mScaledX = (float) (event.getX()*Constants.getScreen().getRatio());
 		mScaledY = (float) (event.getY()*Constants.getScreen().getRatio());
@@ -157,6 +210,9 @@ final class TrackingTouchListener implements View.OnTouchListener{
 		return true;
 	}
 
+	/**
+	 * Adds the ref point.
+	 */
 	private void addRefPoint(){
 		int refindex = mNoRef % 4;
 		mRefX[refindex]=mLast[0];
@@ -165,6 +221,9 @@ final class TrackingTouchListener implements View.OnTouchListener{
 		mNoRef++;
 	}
 
+	/**
+	 * Find center.
+	 */
 	private void findCenter(){
 		int CountTo = mNoRef;
 		if (CountTo > 4){
@@ -182,6 +241,11 @@ final class TrackingTouchListener implements View.OnTouchListener{
 		mWSize = mNoRef;
 	}
 
+	/**
+	 * Checks if is clockwise.
+	 *
+	 * @return the int
+	 */
 	private int isClockwise(){
 		if (mNoRef < 3){
 			return 0;//not enough ref points to get a direction
@@ -208,23 +272,54 @@ final class TrackingTouchListener implements View.OnTouchListener{
 
 	}
 
+	/**
+	 * Adds the w pools.
+	 *
+	 * @param wpools the wpools
+	 * @param x the x
+	 * @param y the y
+	 * @param s the s
+	 * @param angle the angle
+	 * @param clockwise the clockwise
+	 * @return the whirlpool
+	 */
 	private Whirlpool addWPools(WPools wpools, int x, int y, int s, float angle, int clockwise) {
 		wpools.addWPool(x, y, s, angle, clockwise);
 		return wpools.getLastWpool();
 	}
 
+	/**
+	 * Gets the scaled x.
+	 *
+	 * @return the scaled x
+	 */
 	public float getScaledX() {
 		return mScaledX;
 	}
 
+	/**
+	 * Sets the scaled x.
+	 *
+	 * @param scaledX the new scaled x
+	 */
 	public void setScaledX(float scaledX) {
 		mScaledX = scaledX;
 	}
 
+	/**
+	 * Gets the scaled y.
+	 *
+	 * @return the scaled y
+	 */
 	public float getScaledY() {
 		return mScaledY;
 	}
 
+	/**
+	 * Sets the scaled y.
+	 *
+	 * @param scaledY the new scaled y
+	 */
 	public void setScaledY(float scaledY) {
 		mScaledY = scaledY;
 	}

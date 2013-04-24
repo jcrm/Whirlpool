@@ -10,8 +10,13 @@ import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
+/**
+ * The Class GraphicEnvironment.
+ */
 public abstract class GraphicEnvironment {
-	//enum used to decide what type of sprite
+	/**
+	 * The Enum envtype.
+	 */
 	public enum envtype {
 		tDefault(0, 0, 1, 1, 1), 
 		tFinish(0, 0, 15, 4, 4);
@@ -31,7 +36,6 @@ public abstract class GraphicEnvironment {
 			tNoOfRow = noOfRow;
 		}
 	}
-	//private variables
 	protected envtype mId = envtype.tDefault;
 	protected Properties mProperties = new Properties();
 	protected Bitmap mBitmap;
@@ -56,9 +60,20 @@ public abstract class GraphicEnvironment {
 	abstract public void frame();
 
 
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
 	public envtype getId(){
 		return mId;
 	}
+	
+	/**
+	 * Sets the id.
+	 *
+	 * @param id the new id
+	 */
 	public void setId(envtype id){
 		mId = id;
 	}
@@ -99,18 +114,48 @@ public abstract class GraphicEnvironment {
 	public void setCentre(float x, float y){
 		mProperties.setCentre(x, y);
 	}
+	
+	/**
+	 * Sets the centre x.
+	 *
+	 * @param x the new centre x
+	 */
 	public void setCentreX(float x){
 		mProperties.setCentreX(x);
 	}
+	
+	/**
+	 * Sets the centre y.
+	 *
+	 * @param y the new centre y
+	 */
 	public void setCentreY(float y){
 		mProperties.setCentreY(y);
 	}
+	
+	/**
+	 * Gets the centre.
+	 *
+	 * @return the centre
+	 */
 	public Point getCentre(){
 		return mProperties.getCentre();
 	}
+	
+	/**
+	 * Gets the centre x.
+	 *
+	 * @return the centre x
+	 */
 	public float getCentreX(){
 		return mProperties.getCentreX();
 	}
+	
+	/**
+	 * Gets the centre y.
+	 *
+	 * @return the centre y
+	 */
 	public float getCentreY(){
 		return mProperties.getCentreY();
 	}
@@ -118,41 +163,111 @@ public abstract class GraphicEnvironment {
 	public void setTopLeft(float x, float y){
 		mProperties.setTopLeft(x, y);
 	}
+	
+	/**
+	 * Sets the top left x.
+	 *
+	 * @param x the new top left x
+	 */
 	public void setTopLeftX(float x){
 		mProperties.setTopLeftX(x);
 	}
+	
+	/**
+	 * Sets the top left y.
+	 *
+	 * @param f the new top left y
+	 */
 	public void setTopLeftY(float f){
 		mProperties.setTopLeftY(f);
 	}
+	
+	/**
+	 * Gets the top left.
+	 *
+	 * @return the top left
+	 */
 	public Point getTopLeft(){
 		return mProperties.getTopLeft();
 	}
+	
+	/**
+	 * Gets the top left x.
+	 *
+	 * @return the top left x
+	 */
 	public float getTopLeftX(){
 		return mProperties.getTopLeftX();
 	}
+	
+	/**
+	 * Gets the top left y.
+	 *
+	 * @return the top left y
+	 */
 	public float getTopLeftY(){
 		return mProperties.getTopLeftY();
 	}
 
+	/**
+	 * Gets the bottom right.
+	 *
+	 * @return the bottom right
+	 */
 	public Point getBottomRight(){
 		return mProperties.getBottomRight();
 	}
+	
+	/**
+	 * Gets the bottom right x.
+	 *
+	 * @return the bottom right x
+	 */
 	public float getBottomRightX(){
 		return mProperties.getBottomRightX();
 	}
+	
+	/**
+	 * Gets the bottom right y.
+	 *
+	 * @return the bottom right y
+	 */
 	public float getBottomRightY(){
 		return mProperties.getBottomRightY();
 	}
 
+	/**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
 	public int getWidth(){
 		return mProperties.getWidth();
 	}
+	
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
 	public int getHeight(){
 		return mProperties.getHeight();
 	}
+	
+	/**
+	 * Sets the width.
+	 *
+	 * @param width the new width
+	 */
 	public void setWidth(int width){
 		mProperties.setWidth(width);
 	}
+	
+	/**
+	 * Sets the height.
+	 *
+	 * @param height the new height
+	 */
 	public void setHeight(int height){
 		mProperties.setHeight(height);
 	}
@@ -173,33 +288,83 @@ public abstract class GraphicEnvironment {
 		}
 	}
 	//getters and setters for angles and radius
+	/**
+	 * Gets the radius.
+	 *
+	 * @return the radius
+	 */
 	public float getRadius(){
 		return mProperties.getRadius();
 	}
+	
+	/**
+	 * Sets the radius.
+	 *
+	 * @param radius the new radius
+	 */
 	public void setRadius(int radius){
 		mProperties.setRadius(radius);
 	}
 
+	/**
+	 * Sets the angle.
+	 *
+	 * @param a the new angle
+	 */
 	public void setAngle(float a){
 		mSpeed.setAngle(a);
 	}
+	
+	/**
+	 * Gets the graphic.
+	 *
+	 * @return the graphic
+	 */
 	public Bitmap getGraphic() {
 		return mBitmap;
 	}
+	
+	/**
+	 * Gets the speed.
+	 *
+	 * @return the speed
+	 */
 	public Speed getSpeed() {
 		return mSpeed;
 	}
 
+	/**
+	 * Sets the pull.
+	 *
+	 * @param pull the new pull
+	 */
 	public void setPull(boolean pull){
 		mPull = pull;
 	}
+	
+	/**
+	 * Gets the pull state.
+	 *
+	 * @return the pull state
+	 */
 	public boolean getPullState() {
 		return mPull;
 	}
 
+	/**
+	 * Sets the collision.
+	 *
+	 * @param collision the new collision
+	 */
 	public void setCollision(Properties collision){
 		mProperties = collision;
 	}
+	
+	/**
+	 * Gets the collision.
+	 *
+	 * @return the collision
+	 */
 	public Properties getCollision(){
 		return mProperties;
 	}

@@ -16,12 +16,25 @@ import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Arrow.
+ */
 public class Arrow {
 
+	/** The m end y. */
 	private float mStartX, mStartY, mEndX, mEndY;
+	
+	/** The m visible. */
 	private boolean mVisible;
+	
+	/** The m dist. */
 	private float mAngle,mDist;
+	
+	/** The m bitmap. */
 	private Bitmap mBitmap;
+	
+	/** The m animate. */
 	private Animate mAnimate;
 	
 	public Arrow(float x1, float y1, float x2, float y2){
@@ -61,13 +74,30 @@ public class Arrow {
 			canvas.restore();
 		}
 	}
+	
+	/**
+	 * Gets the dist.
+	 *
+	 * @return the dist
+	 */
 	public float getDist(){
 	    return mDist/100f;
 	}
+	
+	/**
+	 * Sets the visible.
+	 *
+	 * @param visible the new visible
+	 */
 	public void setVisible(boolean visible){
 		mVisible = visible;
 	}
 	
+	/**
+	 * Gets the visible.
+	 *
+	 * @return the visible
+	 */
 	public boolean getVisible(){
 		return mVisible;
 	}

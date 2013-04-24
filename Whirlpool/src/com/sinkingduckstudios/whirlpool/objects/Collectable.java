@@ -19,12 +19,28 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Collectable.
+ */
 public class Collectable extends GraphicObject{
+	
+	/** The m bitmap. */
 	private Bitmap mBitmap[] = new Bitmap[3];
+	
+	/** The m animate. */
 	private Animate mAnimate[] = new Animate[3];
+	
+	/** The m paint. */
 	private Paint mPaint;
+	
+	/** The m rect. */
 	private Rect mRect;
+	
+	/** The m has collided. */
 	private boolean mHasCollided;
+	
+	/** The m following. */
 	private GraphicObject mFollowing;
 	public Collectable(int x, int y){
 		mId = objtype.tCollectable;
@@ -63,12 +79,29 @@ public class Collectable extends GraphicObject{
 		canvas.restore();
 	}
 
+	/**
+	 * Gets the collided.
+	 *
+	 * @return the collided
+	 */
 	public boolean getCollided(){
 		return mHasCollided;
 	}
+	
+	/**
+	 * Sets the following.
+	 *
+	 * @param f the new following
+	 */
 	public void setFollowing(GraphicObject f){
 		mFollowing = f;
 	}
+	
+	/**
+	 * Gets the sprite sheet index.
+	 *
+	 * @return the sprite sheet index
+	 */
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
 			return 1;

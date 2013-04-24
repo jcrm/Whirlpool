@@ -10,21 +10,65 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Boat.
+ */
 public class Boat extends GraphicObject{
-	private enum BoatType{ bDefault, bReady, bAttack, bTorpedo, bFinishing, bWaiting, bBroken};
+	
+	/**
+	 * The Enum BoatType.
+	 */
+	private enum BoatType{ 
+ /** The b default. */
+ bDefault, 
+ /** The b ready. */
+ bReady, 
+ /** The b attack. */
+ bAttack, 
+ /** The b torpedo. */
+ bTorpedo, 
+ /** The b finishing. */
+ bFinishing, 
+ /** The b waiting. */
+ bWaiting, 
+ /** The b broken. */
+ bBroken};
+	
+	/** The m boat state. */
 	private BoatType mBoatState = BoatType.bDefault;
+	
+	/** The m boat radius. */
 	private int mBoatRadius = Constants.getLevel().getLevelHeight()/2;
+	
+	/** The m torpedo count. */
 	private int mTorpedoCount = -1;
+	
+	/** The m broken. */
 	private boolean mBroken = false;
 
+	/**
+	 * Instantiates a new boat.
+	 */
 	public Boat(){
 		mId = objtype.tBoat;
 		init();
 	}
+	
+	/**
+	 * Instantiates a new boat.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public Boat(int x, int y){
 		mId = objtype.tBoat;
 		init(x, y);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -34,11 +78,21 @@ public class Boat extends GraphicObject{
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()/4));
 	}
+	
+	/**
+	 * Inits the.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void init(int x, int y) {
 		mGraphicType = 3;
 		mIsPlaying = false;
@@ -56,6 +110,10 @@ public class Boat extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		if(mSpeed.getMove()){
@@ -65,6 +123,10 @@ public class Boat extends GraphicObject{
 		}
 		return false;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		// Move Objects
 		if(move()){
@@ -83,19 +145,45 @@ public class Boat extends GraphicObject{
 		mAnimate.animateFrame();
 	}
 
+	/**
+	 * Gets the boat radius.
+	 *
+	 * @return the boat radius
+	 */
 	public int getBoatRadius() {
 		return mBoatRadius;
 	}
 
+	/**
+	 * Sets the boat radius.
+	 *
+	 * @param boatRadius the new boat radius
+	 */
 	public void setBoatRadius(int boatRadius) {
 		mBoatRadius = boatRadius;
 	}
+	
+	/**
+	 * Gets the torpedo count.
+	 *
+	 * @return the torpedo count
+	 */
 	public int getTorpedoCount() {
 		return mTorpedoCount;
 	}
+	
+	/**
+	 * Sets the torpedo count.
+	 *
+	 * @param torpedoCount the new torpedo count
+	 */
 	public void setTorpedoCount(int torpedoCount) {
 		mTorpedoCount = torpedoCount;
 	}
+	
+	/**
+	 * Increment counter.
+	 */
 	public void incrementCounter(){
 		if((mBoatState == BoatType.bWaiting) && (++mTorpedoCount>=0)){
 			if(mTorpedoCount == 120){
@@ -104,6 +192,12 @@ public class Boat extends GraphicObject{
 			}
 		}
 	}
+	
+	/**
+	 * Gets the new torpedo.
+	 *
+	 * @return the new torpedo
+	 */
 	public boolean getNewTorpedo() {
 		if(mBoatState == BoatType.bTorpedo){
 			mBoatState = BoatType.bFinishing;
@@ -112,6 +206,10 @@ public class Boat extends GraphicObject{
 			return false;
 		}
 	}
+	
+	/**
+	 * Change animation.
+	 */
 	public void changeAnimation(){
 		if(mBoatState == BoatType.bReady && mBroken == false){
 			mBitmap= SpriteManager.getBoatAttack();
@@ -119,9 +217,21 @@ public class Boat extends GraphicObject{
 			mBoatState = BoatType.bAttack;
 		}
 	}
+	
+	/**
+	 * Gets the broken.
+	 *
+	 * @return the broken
+	 */
 	public boolean getBroken() {
 		return mBroken;
 	}
+	
+	/**
+	 * Sets the broken.
+	 *
+	 * @param broken the new broken
+	 */
 	public void setBroken(boolean broken) {
 		mBroken = broken;
 		if(mBroken == true){
@@ -130,6 +240,12 @@ public class Boat extends GraphicObject{
 			mAnimate.Reset(25, 4, 8, mBitmap.getWidth(), mBitmap.getHeight(),3);
 		}
 	}
+	
+	/**
+	 * Check broken.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean checkBroken(){
 		if(mBroken == true && mBoatState == BoatType.bBroken){
 			if(mAnimate.getFinished()== true){

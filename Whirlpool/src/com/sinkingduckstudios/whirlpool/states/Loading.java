@@ -16,6 +16,9 @@ import android.os.Handler;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
+/**
+ * The Class Loading.
+ */
 public class Loading extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {

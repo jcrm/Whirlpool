@@ -11,26 +11,40 @@ import android.view.View;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
+/**
+ * The Class LevelSelectView.
+ */
 public class LevelSelectView extends View{
+	
+	/** The background image. */
 	private Bitmap background;
+	
+	/** The full star image. */
 	private Bitmap mFullStar;
+	
+	/** The empty star image. */
 	private Bitmap mEmptyStar;
+	
+	/** The scale values. */
 	private int theHeight,theWidth, theScale;
+	
+	/** The scale rect. */
 	private Rect scale;
+	
+	/** The stars. */
 	private int stars[] = new int[6];
 	
+	/**
+	 * Instantiates a new level select view.
+	 *
+	 * @param context
+	 */
 	public LevelSelectView(Context context) {
-		
 		super(context);
 		setFocusable(true);
 		setMinimumWidth(100);
 		setMinimumHeight(100);
-		BitmapFactory.Options opt = new BitmapFactory.Options();
-		opt.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
-		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
-		opt.inJustDecodeBounds = false;
-		background = BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
+		scaleBitmap();
 		theWidth=Constants.getScreen().getWidth();
 		theHeight=Constants.getScreen().getHeight();
 		theScale = theHeight/3;
@@ -41,26 +55,28 @@ public class LevelSelectView extends View{
 		
 		mEmptyStar =  BitmapFactory.decodeResource(getResources(), R.drawable.star_empty);
 		mFullStar = BitmapFactory.decodeResource(getResources(), R.drawable.star_full);
-
 	}
-	
+	/**
+	 * Inits the stars.
+	 *
+	 * @param strs set the stars 
+	 */
 	public void initStars(int strs[]){
 		for (int i = 0; i < 6; i++)
 			stars[i]=strs[i];
 	}
+	/**
+	 * Instantiates a new level select view.
+	 *
+	 * @param context
+	 * @param attrs
+	 */
 	public LevelSelectView(Context context, AttributeSet attrs) {
-		
 		super(context, attrs);
 		setFocusable(true);
 		setMinimumWidth(100);
 		setMinimumHeight(100);
-		BitmapFactory.Options opt = new BitmapFactory.Options();
-		opt.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
-		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, 500, 500);
-		opt.inJustDecodeBounds = false;
-		background = BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
-		
+		scaleBitmap();
 		theWidth=Constants.getScreen().getWidth();
 		theHeight=Constants.getScreen().getHeight();
 		theScale = theHeight/3;
@@ -71,13 +87,17 @@ public class LevelSelectView extends View{
 		
 		mEmptyStar =  BitmapFactory.decodeResource(getResources(), R.drawable.star_empty);
 		mFullStar = BitmapFactory.decodeResource(getResources(), R.drawable.star_full);
-		
 	}
-	
+	/* (non-Javadoc)
+	 * @see android.view.View#onMeasure(int, int)
+	 */
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 		setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
 	}
+	/* (non-Javadoc)
+	 * @see android.view.View#onDraw(android.graphics.Canvas)
+	 */
 	@Override
 	protected void onDraw(Canvas canvas){
 		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
@@ -165,7 +185,9 @@ public class LevelSelectView extends View{
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
 	}
-	
+	/**
+	 * Clean up.
+	 */
 	public void CleanUp() {
 		background.recycle();
 		background = null;
@@ -175,7 +197,26 @@ public class LevelSelectView extends View{
 		mFullStar = null;
 		
 	}
-	
+	/**
+	 * Scale bitmap.
+	 */
+	private void scaleBitmap(){
+		BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
+		opt.inSampleSize = getScale(opt.outWidth,opt.outWidth, 500, 500);
+		opt.inJustDecodeBounds = false;
+		background = BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
+	}
+	/**
+	 * Gets the scale.
+	 *
+	 * @param oW the original width
+	 * @param oH the original height
+	 * @param nW the new width
+	 * @param nH the new height
+	 * @return the scale
+	 */
 	public int getScale(int oW, int oH, int nW, int nH){
 		int scale = 1;
 		if(oW>nW || oH>nH){
@@ -187,5 +228,4 @@ public class LevelSelectView extends View{
 		}
 		return scale;
 	}
-
 }

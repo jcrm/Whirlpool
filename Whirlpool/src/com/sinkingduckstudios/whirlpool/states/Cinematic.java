@@ -21,11 +21,25 @@ import android.view.MotionEvent;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.views.CinematicView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Cinematic.
+ */
 public class Cinematic extends Activity {
+	
+	/** The m slide. */
 	static public int mSlide = -1;
+	
+	/** The cinematic view. */
 	CinematicView cinematicView;
+	
+	/** The m time. */
 	private Timer mTime;
+	
+	/** The m handler. */
 	private Handler mHandler;
+	
+	/** The cinematic. */
 	private int cinematic;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,10 @@ public class Cinematic extends Activity {
 		System.gc();
 		super.onDestroy();
 	}
+	
+	/**
+	 * The Class MainThread.
+	 */
 	class MainThread extends TimerTask {
 		public void run() {
 			if(mSlide >= 5){

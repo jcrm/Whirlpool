@@ -22,8 +22,16 @@ import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.views.MenuView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Menu.
+ */
 public class Menu extends Activity {
+	
+	/** The m paused. */
 	boolean mPaused = false;
+	
+	/** The menu view. */
 	MenuView menuView;
     //@SuppressLint("NewApi")
 	@Override
@@ -72,6 +80,8 @@ public class Menu extends Activity {
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	
+	/** The go to game. */
 	private OnClickListener goToGame = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -82,6 +92,8 @@ public class Menu extends Activity {
     		finish();
         }
 	};
+	
+	/** The go to options. */
 	private OnClickListener goToOptions = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -92,6 +104,7 @@ public class Menu extends Activity {
         }
 	};
 	
+	/** The go to exit. */
 	private OnClickListener goToExit = new OnClickListener() {
 		@Override
 		public void onClick(View view) {

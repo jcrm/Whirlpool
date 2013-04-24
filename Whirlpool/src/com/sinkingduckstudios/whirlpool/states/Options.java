@@ -23,10 +23,18 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.views.OptionsView;
 
+/**
+ * The Class Options.
+ */
 public class Options extends Activity {
+	
 	boolean mPaused = false;
 	OptionsView optionsView;
 	public static final String HIGH_SCORES = "HighScores";
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,17 +70,27 @@ public class Options extends Activity {
 		optionsView=(OptionsView)findViewById(R.id.optionsView);
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override 
 	public void onResume(){
 		Constants.createSoundManager(getApplicationContext());
         Constants.getSoundManager().loadSplash();
         super.onResume();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override 
 	public void onPause(){
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	
+	/** The go to audio button.*/
 	private OnClickListener goToAudio = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -83,6 +101,7 @@ public class Options extends Activity {
         }
 	};
 	
+	/** The go to menu button.*/
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -93,6 +112,7 @@ public class Options extends Activity {
         }
 	};
 	
+	/** The reset data button.*/
 	private OnClickListener resetData = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -107,6 +127,7 @@ public class Options extends Activity {
         }
 	};
 	
+	/** The go to credits button.*/
 	private OnClickListener goToCredits = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -117,6 +138,7 @@ public class Options extends Activity {
         }
 	};
 	
+	/** The go to tutorial button.*/
 	private OnClickListener goToTutorial = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -129,6 +151,7 @@ public class Options extends Activity {
         }
 	};
 	
+	/** The go to cinematic button.*/
 	private OnClickListener goToCinematic = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -141,12 +164,19 @@ public class Options extends Activity {
         }
 	};
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onBackPressed()
+	 */
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
 
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	public void onDestroy(){
 		optionsView.CleanUp();

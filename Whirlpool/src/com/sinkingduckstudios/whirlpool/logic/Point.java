@@ -7,33 +7,68 @@
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Point.
+ */
 public class Point{
 	//x and y components of a point.
+	/** The m x. */
 	private float mX = 0.0f;
+	
+	/** The m y. */
 	private float mY = 0.0f;
-	//constructors
+	
+	/**
+	 * Instantiates a new point.
+	 */
 	public Point(){
 		
 	}
+	
+	/**
+	 * Initialises the Point with the parameters.
+	 * @param x component.
+	 * @param y component.
+	 */
 	public Point(float x, float y){
 		mX = x;
 		mY = y;
 	}
-	//setters
+	/**
+	 * Initialises the Point with the parameters.
+	 * @param x component.
+	 * @param y component.
+	 */
 	public void setPoints(float x, float y){
 		mX = x;
 		mY = y;
 	}
+	/**
+	 * Initialises the X component with the parameter.
+	 * @param x component.
+	 */
 	public void setX(float x){
 		mX = x;
 	}
+	/**
+	 * Initialises the Y component with the parameter.
+	 * @param y component.
+	 */
 	public void setY(float y){
 		mY = y;
 	}
-	//getters
+	/**
+	 * Returns X component.
+	 * @return x component.
+	 */
 	public float getX(){
 		return mX;
 	}
+	/**
+	 * Returns Y component.
+	 * @return y component.
+	 */
 	public float getY(){
 		return mY;
 	}

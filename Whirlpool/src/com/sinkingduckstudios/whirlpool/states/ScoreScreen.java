@@ -23,27 +23,26 @@ import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.views.ScoreScreenView;
 
+/**
+ * The Class ScoreScreen.
+ */
 public class ScoreScreen extends Activity {
 	
 	public static final String PREFS_NAME = "Bath_Score";
 	boolean mPaused = false;
-	
-	
 	private int timepassed;
 	private int levelselected;
 	private int score;
 	private int next;
 	private int highscore;
 	private int miniDuckCount;
-
-
 	private int stars;
-	
 	public static final String HIGH_SCORES = "HighScores";
-	//private SharedPreferences prefs;
-	
 	ScoreScreenView scorescreenView;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -222,17 +221,27 @@ public class ScoreScreen extends Activity {
 		}
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override 
 	public void onResume(){
 		Constants.createSoundManager(getApplicationContext());
         Constants.getSoundManager().loadSplash();
         super.onResume();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override 
 	public void onPause(){
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	
+	/** The next level button.*/
 	private OnClickListener nextLevel = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -243,6 +252,7 @@ public class ScoreScreen extends Activity {
         }
 	};
 
+	/** The go to menu button.*/
 	private OnClickListener goToMenu = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -252,12 +262,20 @@ public class ScoreScreen extends Activity {
     		startActivity(new Intent(getApplicationContext(), LevelSelect.class));
         }
 	};
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onBackPressed()
+	 */
 	public void onBackPressed(){
 		Constants.getSoundManager().playSplash();
 
 		startActivity(new Intent(getApplicationContext(), Menu.class));
 		finish();
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	public void onDestroy(){
 		scorescreenView.CleanUp();
@@ -269,19 +287,14 @@ public class ScoreScreen extends Activity {
 	
 	private int LEVEL_ONE_AVERAGE = 40;
 	private int LEVEL_ONE_GOOD = 20;
-	
 	private int LEVEL_TWO_AVERAGE = 30;
 	private int LEVEL_TWO_GOOD = 15;
-	
 	private int LEVEL_THREE_AVERAGE = 25;
 	private int LEVEL_THREE_GOOD = 15;
-	
 	private int LEVEL_FOUR_AVERAGE = 35;
 	private int LEVEL_FOUR_GOOD = 25;
-	
 	private int LEVEL_FIVE_AVERAGE = 40;
 	private int LEVEL_FIVE_GOOD = 25;
-	
 	private int LEVEL_SIX_AVERAGE = 45;
 	private int LEVEL_SIX_GOOD = 27;
 }

@@ -17,8 +17,13 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Frog.
+ */
 public class Frog extends GraphicObject{
 	//used for working out the location of the frog round the circle
+	/** The m frog radius. */
 	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
 
 	public Frog(){
@@ -97,27 +102,74 @@ public class Frog extends GraphicObject{
 		mAnimate.animateFrame();
 	}
 
+	/**
+	 * Gets the frog angle.
+	 *
+	 * @return the frog angle
+	 */
 	public float getFrogAngle() {
 		return mFrogAngle;
 	}
+	
+	/**
+	 * Gets the frog radius.
+	 *
+	 * @return the frog radius
+	 */
 	public float getFrogRadius() {
 		return mFrogRadius;
 	}
+	
+	/**
+	 * Sets the frog centre x.
+	 *
+	 * @param frogCentreX the new frog centre x
+	 */
 	public void setFrogCentreX(float frogCentreX) {
 		mFrogCentreX = frogCentreX;
 	}
+	
+	/**
+	 * Sets the frog centre y.
+	 *
+	 * @param frogCentreY the new frog centre y
+	 */
 	public void setFrogCentreY(float frogCentreY) {
 		mFrogCentreY = frogCentreY;
 	}
+	
+	/**
+	 * Sets the frog angle.
+	 *
+	 * @param frogAngle the new frog angle
+	 */
 	public void setFrogAngle(float frogAngle) {
 		mFrogAngle = frogAngle;
 	}
+	
+	/**
+	 * Sets the frog radius.
+	 *
+	 * @param frogRadius the new frog radius
+	 */
 	public void setFrogRadius(float frogRadius) {
 		mFrogRadius = frogRadius;
 	}
+	
+	/**
+	 * Gets the frog centre x.
+	 *
+	 * @return the frog centre x
+	 */
 	public float getFrogCentreX() {
 		return mFrogCentreX;
 	}
+	
+	/**
+	 * Gets the frog centre y.
+	 *
+	 * @return the frog centre y
+	 */
 	public float getFrogCentreY() {
 		return mFrogCentreY;
 	}

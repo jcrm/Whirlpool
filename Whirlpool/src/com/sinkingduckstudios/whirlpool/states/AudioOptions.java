@@ -24,15 +24,31 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.views.AudioOptionsView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AudioOptions.
+ */
 public class AudioOptions extends Activity implements OnClickListener{
+	
+	/** The m paused. */
 	boolean mPaused = false;
+	
+	/** The audio options view. */
 	AudioOptionsView audioOptionsView;
+	
+	/** The maudio group. */
 	RadioGroup maudioGroup;
+	
+	/** The audio3. */
 	RadioButton audio1, audio2, audio3;
 
+	/** The audio_check. */
 	private int audio_check;
+	
+	/** The audiocheck. */
 	private int audiocheck;
 
+	/** The Constant AUDIO. */
 	public static final String AUDIO = "audio_options";
 
 	@Override
@@ -126,6 +142,8 @@ public class AudioOptions extends Activity implements OnClickListener{
 		Constants.getSoundManager().unloadAll();
 		super.onPause();
 	}
+	
+	/** The go to op. */
 	private OnClickListener goToOp = new OnClickListener() {
 		@Override
 		public void onClick(View view) {

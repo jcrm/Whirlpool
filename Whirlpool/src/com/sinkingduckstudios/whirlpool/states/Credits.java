@@ -20,6 +20,9 @@ import android.widget.TextView;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 
+/**
+ * The Class Credits.
+ */
 public class Credits extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
