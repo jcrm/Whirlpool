@@ -2,8 +2,11 @@
  * Author:
  * Last Updated:
  * Content:
- * 
- * 
+ * co-authors -
+ * Connor Nicol - added in the sounds for the enemies
+ * 				- made sure that the sounds are only played once per enemy on screen( so if there are 2 divers on screen, sound will only play once)
+ * 				- made sure the sounds did not play continuously 
+
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
@@ -40,58 +43,63 @@ public class Level extends Activity{
 
 	/** The m w pool model. */
 	private final WPools mWPoolModel = new WPools();
-	
+
 	/** The m graphics. */
 	private ArrayList<GraphicObject> mGraphics = new ArrayList<GraphicObject>();
-	
+
 	/** The m torpedoes. */
 	private ArrayList<Torpedo> mTorpedoes = new ArrayList<Torpedo>();
-	
+
 	/** The m environments. */
 	private ArrayList<GraphicEnvironment> mEnvironments = new ArrayList<GraphicEnvironment>();
-	
+
 	/** The m level width. */
 	private int mLevelWidth = 0;
-	
+
 	/** The m level height. */
 	private int mLevelHeight = 0;
-	
+
 	/** The m scroll by. */
 	private float mScrollBy = 0;
 
 	/** The m background image. */
 	private Bitmap mBackgroundImage;
-	
+
 	/** The m left border image. */
 	private Bitmap mLeftBorderImage;
-	
+
 	/** The m right border image. */
 	private Bitmap mRightBorderImage;
-	
+
 	/** The m top border image. */
 	private Bitmap mTopBorderImage;
 
 	/** The Diver counter. */
 	private int DiverCounter;
-	
+
 	/** The Frog counter. */
 	private int FrogCounter;
-	
+
 	/** The Tug boat counter. */
 	private int TugBoatCounter;
-	
+
 	/** The Shark counter. */
 	private int SharkCounter;
+
+	private boolean DiverPlaying;
+	private boolean FrogPlaying;
+	private boolean TugBoatPlaying;
+	private boolean SharkPlaying;
 
 	/** The m collectables. */
 	private int mCollectables;
 
 	/** The m screen lock. */
 	private static Object mScreenLock;
-	
+
 	/** The m rect. */
 	private Rect mRect = new Rect();
-	
+
 	/** The m follow this. */
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 
@@ -100,14 +108,14 @@ public class Level extends Activity{
 	 */
 	public Level() {
 	}
-	
+
 	/**
 	 * Inits the.
 	 */
 	public void init(){
 		init(1);
 	}
-	
+
 	/**
 	 * Inits the.
 	 *
@@ -123,11 +131,14 @@ public class Level extends Activity{
 		FrogCounter = 0;
 		TugBoatCounter = 0;
 		SharkCounter = 0;
-
+		DiverPlaying = false;
+		FrogPlaying= false;
+		TugBoatPlaying = false;
+		SharkPlaying= false;
 		Constants.getPanel().setOnTouchListener(new TrackingTouchListener(mWPoolModel));
 		mScreenLock=Constants.getLock();
 	}
-	
+
 	/**
 	 * Inits the images.
 	 */
@@ -205,59 +216,71 @@ public class Level extends Activity{
 			if(enemiesOnScreen(Enemy)){
 				// find out the enemies type and play the relevant type
 				switch (Enemy.getType()){
-				//diver
-				case 1:{
-					if(Enemy.getIsPlaying() == false){
-						Constants.getSoundManager().playDiver();
-						Enemy.setIsPlaying(true);
-						DiverCounter = 0;
+				case 1:{												// the diver
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if( DiverPlaying == false){						// if the diver sound is not already playing
+							Constants.getSoundManager().playDiver();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							DiverCounter = 0;							// re-set the counter to 0
+							DiverPlaying = true;						// show that the diver sound is playing
+						}
 					}
-					DiverCounter ++;
-					if(DiverCounter >= 500){
-						Enemy.setIsPlaying(false);
+					DiverCounter ++;									// increment the counter for the diver
+					if(DiverCounter >= 500){							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						DiverPlaying = false;							// show that the diver sound is no longer playing
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 2:{												// the frog
+					if (Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing... 
+						if( FrogPlaying == false){						// if the frog sound is not already playing
+							Constants.getSoundManager().playFrog();		// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							FrogCounter = 0;							// re-set the counter to 0
+							FrogPlaying = true;							// show that the frog sound is playing
+						}
+					}
+					FrogCounter ++;										// increment the counter for the frog
+					if(FrogCounter >= 500){								// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						FrogPlaying = false; 							// show that the sound is no longer playing 
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 3:{												// the tugboat
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if(TugBoatPlaying == false){					// if the tug boat is not already playing
+							Constants.getSoundManager().playTugBoat();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							TugBoatCounter = 0;							// re-set the counter to 0
+							TugBoatPlaying = true;						// show that the sound is already playing
+						}
+					}
+					TugBoatCounter ++;									// increment the counter for the tug boat
+					if(TugBoatCounter >= 500){							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						TugBoatPlaying = false;							// show that the sound is no longer playing
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 4:{												// the shark
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if( SharkPlaying == false){						// if the shark sound is not already playing
+							Constants.getSoundManager().playShark();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							SharkCounter = 0;							// re-set the counter to 0
+							SharkPlaying = true;						// show that the sound is playing
+						}
+					}
+					SharkCounter ++;									// increment the counter for the shark
+					if(SharkCounter >= 500)	{							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						SharkPlaying = false;							// show that the sound is no longer playing
 					}
 					break;
 				}
-				//frog
-				case 2:{
-					if (Enemy.getIsPlaying() == false){
-						Constants.getSoundManager().playFrog();
-						Enemy.setIsPlaying(true);
-						FrogCounter = 0;
-					}
-					FrogCounter ++;
-					if(FrogCounter >= 500){
-						Enemy.setIsPlaying(false);
-					}
-					break;
 				}
-				//tugbout
-				case 3:{
-					if(Enemy.getIsPlaying() == false){
-						Constants.getSoundManager().playTugBoat();
-						Enemy.setIsPlaying(true);
-						TugBoatCounter = 0;
-					}
-					TugBoatCounter ++;
-					if(TugBoatCounter >= 500){
-						Enemy.setIsPlaying(false);
-					}
-					break;
-				}
-				//shark
-				case 4:{
-					if(Enemy.getIsPlaying() == false){
-						Constants.getSoundManager().playShark();
-						Enemy.setIsPlaying(true);
-						SharkCounter = 0;
-					}
-					SharkCounter ++;
-					if(SharkCounter >= 500){
-						Enemy.setIsPlaying(false);
-					}
-					break;
-				}
-				}// end switch enemytype
 			}
 		} //end for graphics objects
 		synchronized(mScreenLock){
@@ -265,7 +288,7 @@ public class Level extends Activity{
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Update list.
 	 */
@@ -318,7 +341,7 @@ public class Level extends Activity{
 			}
 		}
 	}
-	
+
 	/**
 	 * Check boat torpedo collision.
 	 *
@@ -336,7 +359,7 @@ public class Level extends Activity{
 			}
 		}
 	}
-	
+
 	/**
 	 * On draw.
 	 *
@@ -365,7 +388,7 @@ public class Level extends Activity{
 			graphic.draw(canvas);
 		}
 	}
-	
+
 	/**
 	 * Draw bath tub.
 	 *
@@ -387,7 +410,7 @@ public class Level extends Activity{
 		canvas.drawBitmap(mRightBorderImage, null, mRect,  null);
 		canvas.restore();
 	}
-	
+
 	/**
 	 * Gets the w pool model.
 	 *
@@ -396,7 +419,7 @@ public class Level extends Activity{
 	public WPools getWPoolModel(){
 		return mWPoolModel;
 	}
-	
+
 	/**
 	 * Gets the level width.
 	 *
@@ -405,7 +428,7 @@ public class Level extends Activity{
 	public int getLevelWidth(){
 		return mLevelWidth;
 	}
-	
+
 	/**
 	 * Gets the level height.
 	 *
@@ -414,7 +437,7 @@ public class Level extends Activity{
 	public int getLevelHeight(){
 		return mLevelHeight;
 	}
-	
+
 	/**
 	 * Sets the level width.
 	 *
@@ -423,7 +446,7 @@ public class Level extends Activity{
 	public void setLevelWidth(int levelWidth){
 		mLevelWidth = levelWidth;
 	}
-	
+
 	/**
 	 * Sets the level height.
 	 *
@@ -432,7 +455,7 @@ public class Level extends Activity{
 	public void setLevelHeight(int levelHeight){
 		mLevelHeight = levelHeight;
 	}
-	
+
 	/**
 	 * Gets the scroll by.
 	 *
@@ -441,7 +464,7 @@ public class Level extends Activity{
 	public float getScrollBy(){
 		return mScrollBy;
 	}
-	
+
 	/**
 	 * Sets the scroll by.
 	 *
@@ -450,7 +473,7 @@ public class Level extends Activity{
 	public void setScrollBy(float scrollBy){
 		mScrollBy = scrollBy;
 	}
-	
+
 	/**
 	 * Gets the duck count.
 	 *
@@ -459,7 +482,7 @@ public class Level extends Activity{
 	public int getDuckCount(){
 		return mCollectables;
 	}
-	
+
 	/**
 	 * Duck on screen.
 	 */
@@ -473,7 +496,7 @@ public class Level extends Activity{
 			mScrollBy = mLevelWidth - Constants.getScreen().getWidth();
 		}
 	}
-	
+
 	/**
 	 * Duck movement collision.
 	 *
@@ -506,7 +529,7 @@ public class Level extends Activity{
 			}
 		}
 	}
-	
+
 	/**
 	 * Duck shark movement collision.
 	 *
@@ -538,7 +561,7 @@ public class Level extends Activity{
 			}
 		}
 	}
-	
+
 	/**
 	 * Enemies on screen.
 	 *
@@ -567,7 +590,7 @@ public class Level extends Activity{
 
 		return true;
 	}
-	
+
 	/**
 	 * Level number.
 	 *
@@ -673,7 +696,7 @@ public class Level extends Activity{
 			break;
 		}
 	}
-	
+
 	/**
 	 * Clean up.
 	 */
