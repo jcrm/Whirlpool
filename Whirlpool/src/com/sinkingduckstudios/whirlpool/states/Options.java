@@ -112,6 +112,8 @@ public class Options extends Activity {
 		public void onClick(View view) {
     		//Credits code
 			Constants.getSoundManager().playSplash();
+			startActivity(new Intent(getApplicationContext(), Credits.class));
+    		finish();
         }
 	};
 	
