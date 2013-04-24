@@ -20,16 +20,30 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
+/**
+ * The Class Diver.
+ */
 public class Diver extends GraphicObject{
+	
+	/** The left border. */
 	private int mLeftBorder;
+	/** The right border. */
 	private int mRightBorder;
+	/** The top border. */
 	private int mTopBorder;
+	/** The bottom border. */
 	private int mBottomBorder;
+	/** The up bitmap. */
 	private Bitmap mUpBitmap;
+	/** The down bitmap. */
 	private Bitmap mDownBitmap;
+	/** The up animation. */
 	private Animate mUpAnimate;
+	/** The down animation. */
 	private Animate mDownAnimate;
-
+	/**
+	 * Instantiates a new diver.
+	 */
 	public Diver(){
 		mId = objtype.tDiver;
 		init();
@@ -39,6 +53,17 @@ public class Diver extends GraphicObject{
 		mBottomBorder = Constants.getLevel().getLevelHeight();
 		checkBorderConditions();
 	}
+	/**
+	 * Instantiates a new diver.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the diver
+	 * @param left the left border
+	 * @param top the top border
+	 * @param right the right border
+	 * @param bottom the bottom border
+	 */
 	public Diver(int x, int y, int angle, int left, int top, int right, int bottom){
 		mId = objtype.tDiver;
 		init(x, y, angle);
@@ -48,6 +73,9 @@ public class Diver extends GraphicObject{
 		mBottomBorder = (int) (bottom/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -76,12 +104,23 @@ public class Diver extends GraphicObject{
 		}
 		canvas.restore();
 	}
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
 				0);	
 	}
+	
+	/**
+	 * Inits the diver.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 * @param angle the angle of the diver
+	 */
 	public void init(int x, int y, int angle) {
 		mGraphicType = 1;
 		mIsPlaying = false;
@@ -103,6 +142,10 @@ public class Diver extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
@@ -114,6 +157,11 @@ public class Diver extends GraphicObject{
 		return false;
 	}
 
+	/**
+	 * Border collision.
+	 *
+	 * @param side the side of the screen
+	 */
 	public void borderCollision(ScreenSide side) {
 		switch(side){
 		case Top:
@@ -156,6 +204,10 @@ public class Diver extends GraphicObject{
 			break;
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#border()
+	 */
 	@Override
 	public boolean border(){
 		boolean hit = false;
@@ -206,6 +258,9 @@ public class Diver extends GraphicObject{
 		return hit;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		// Move Objects
 		if(move()){
@@ -218,10 +273,18 @@ public class Diver extends GraphicObject{
 		default: break;
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#borderCollision(com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide, int, int)
+	 */
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
 		borderCollision(side);
 	}
+	
+	/**
+	 * Check border conditions.
+	 */
 	private void checkBorderConditions(){
 		if(mRightBorder < mLeftBorder){
 			int temp = mRightBorder;
@@ -240,6 +303,12 @@ public class Diver extends GraphicObject{
 			mBottomBorder = Constants.getLevel().getLevelHeight();
 		}
 	}
+	
+	/**
+	 * Gets the sprite sheet index.
+	 *
+	 * @return the sprite sheet index
+	 */
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
 			return 1;

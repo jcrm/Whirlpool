@@ -17,47 +17,65 @@ import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 
+/**
+ * The Class Duck.
+ */
 public class Duck extends GraphicObject{
-	//enum for collision checking
+	/**
+	 * The Enum CollisionType.
+	 */
 	private enum CollisionType{
 		cDefault, cShark, cDiver, cFrog, cBoat, cTorpedo;
 	}
-	//collision variables
+	/** The collision id. */
 	public CollisionType cID = CollisionType.cDefault;
+	/** The collision count. */
 	private int mCollisionCount = -1;
+	
+	/** The duck images. */
 	private Bitmap mBitmap[] = new Bitmap[3];
+	
+	/** The duck animations. */
 	private Animate mAnimate[] = new Animate[3];
+	
+	/** The invincibility variable. */
 	private boolean mInvincibility = false;
+	
+	/** The finished variable. */
 	private boolean mFinished = false;
+	
+	/** The shark attacked. */
 	private boolean mSharkAttack = false;
+	
+	/** The Constant mTopSpeed. */
 	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
 
+	/**
+	 * Instantiates a new duck.
+	 */
 	public Duck(){
 		mId = objtype.tDuck;
 		init();
 	}
+	
+	/**
+	 * Instantiates a new duck.
+	 *
+	 * @param x the x position
+	 * @param y the y position
+	 */
 	public Duck(int x, int y){
 		mId = objtype.tDuck;
 		init(x, y);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
+	 */
 	@Override
 	public void draw(Canvas canvas) {
-		/*Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setStrokeWidth(10);
-		for(int i = 0; i<4;i++){
-			canvas.drawPoint(mProperties.mCollisionRect[i].getX(), mProperties.mCollisionRect[i].getY(), paint);
-		}
-		paint.setColor(Color.GREEN);
-		canvas.drawPoint(getCentreX(), getCentreY(), paint);
-		paint.setColor(Color.WHITE);
-		canvas.drawPoint(getTopLeftX(), getTopLeftY(), paint);
-		canvas.drawPoint(getBottomRightX(), getBottomRightY(), paint);
-*/
 		if(mSharkAttack == false){
 			canvas.save();
-
 			Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 			canvas.translate(getCentreX(), getCentreY());
 			if(mSpeed.getAngle() > 90 && mSpeed.getAngle() < 270){
@@ -69,10 +87,20 @@ public class Duck extends GraphicObject{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
+	 */
 	@Override
 	public void init() {
 		init(30, 60);
 	}
+	
+	/**
+	 * Inits the duck.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void init(int x, int y) {
 		mProperties.init(x, y, 60, 60,0.6f,0.6f);
 
@@ -94,6 +122,10 @@ public class Duck extends GraphicObject{
 		mSpeed.setAngle(mId.tAngle);
 		mSpeed.setSpeed(mId.tSpeed);
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
@@ -110,9 +142,12 @@ public class Duck extends GraphicObject{
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
+	 */
 	public void frame(){
 		// Move Objects
-		collisonMovement();
+		collisionMovement();
 		if(move()){
 			//only detect border if not in wpool
 			if (getPulledState()==Constants.STATE_FREE){
@@ -123,8 +158,14 @@ public class Duck extends GraphicObject{
 		}
 		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
-	
-	//fml plz rename 
+	/**
+	 * Check object collision.
+	 *
+	 * @param id the id of the object
+	 * @param otherProperties the properties of the second object
+	 * @param radius the radius of the second object
+	 * @return true, if collision
+	 */
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties, int radius){
 		boolean inRadius = false;
 		switch(id){
@@ -157,7 +198,13 @@ public class Duck extends GraphicObject{
 		}
 		return false;
 	}
-	//collision checking
+	/**
+	 * Check object collision.
+	 *
+	 * @param id the id of the second object
+	 * @param otherProperties the properties of the second object
+	 * @return true, if collision
+	 */
 	public boolean checkObjectCollision(GraphicObject.objtype id, Properties otherProperties){
 		switch(id){
 		case tDiver:
@@ -191,10 +238,8 @@ public class Duck extends GraphicObject{
 		case tTorpedo:
 			if(CollisionManager.circleCollision(mProperties, otherProperties)){
 				if(cID != CollisionType.cShark && mInvincibility == false){
-					//if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
-						cID = CollisionType.cTorpedo;
-						collisionTorpedo();
-					//}
+					cID = CollisionType.cTorpedo;
+					collisionTorpedo();
 				}
 				return true;
 			}
@@ -215,23 +260,12 @@ public class Duck extends GraphicObject{
 		}
 		return false;
 	}
-	//collision movement
-	private void collisonMovement(){
-		
+	/**
+	 * Collision movement.
+	 */
+	private void collisionMovement(){
 		if(mCollisionCount >=0){
-			if(cID == CollisionType.cBoat || cID == CollisionType.cFrog || cID == CollisionType.cDiver){
-				if(mCollisionCount == 1){
-					cID = CollisionType.cDefault;
-					mInvincibility = true;
-					mCollisionCount = 0;
-				}
-			}else if(cID == CollisionType.cTorpedo){
-				if(mCollisionCount == 1){
-					cID = CollisionType.cDefault;
-					mInvincibility = true;
-					mCollisionCount = 0;
-				}
-			}else if(cID == CollisionType.cShark){
+			if(cID == CollisionType.cShark){
 				if(mSharkAttack == false){
 					if(mCollisionCount == 10){
 						cID = CollisionType.cDefault;
@@ -254,17 +288,37 @@ public class Duck extends GraphicObject{
 			mCollisionCount++;
 		}
 	}
+	
+	/**
+	 * Collision with diver or frog or boat.
+	 *
+	 * @param angle the angle
+	 */
 	private void collisionDiverFrogBoat(float angle){
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(angle+180);
-		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
+		cID = CollisionType.cDefault;
+		mInvincibility = true;
+		mCollisionCount = 0;
 	}
+	
+	/**
+	 * Collision with torpedo.
+	 */
 	private void collisionTorpedo(){
 		getSpeed().setSpeed(0);
-		mCollisionCount = 0;
 		Constants.getSoundManager().playDucky();
+		cID = CollisionType.cDefault;
+		mInvincibility = true;
+		mCollisionCount = 0;
 	}
+	
+	/**
+	 * Gets the sprite sheet index.
+	 *
+	 * @return the sprite sheet index
+	 */
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
 			return 1;
@@ -272,24 +326,66 @@ public class Duck extends GraphicObject{
 			return 2;
 		return 0;
 	}
+	
+	/**
+	 * Gets the invincibility.
+	 *
+	 * @return the invincibility
+	 */
 	public boolean getInvincibility() {
 		return mInvincibility;
 	}
+	
+	/**
+	 * Sets the invincibility.
+	 *
+	 * @param invincibility the new invincibility
+	 */
 	public void setInvincibility(boolean invincibility) {
 		mInvincibility = invincibility;
 	}
+	
+	/**
+	 * Gets the top speed.
+	 *
+	 * @return the top speed
+	 */
 	public static float getTopSpeed() {
 		return mTopSpeed;
 	}
+	
+	/**
+	 * Gets the finished.
+	 *
+	 * @return the finished
+	 */
 	public boolean getFinished() {
 		return mFinished;
 	}
+	
+	/**
+	 * Sets the finished.
+	 *
+	 * @param finished the new finished
+	 */
 	public void setFinished(boolean finished) {
 		mFinished = finished;
 	}
+	
+	/**
+	 * Gets the shark attack.
+	 *
+	 * @return the shark attack
+	 */
 	public boolean getSharkAttack() {
 		return mSharkAttack;
 	}
+	
+	/**
+	 * Sets the shark attack.
+	 *
+	 * @param sharkAttack the new shark attack
+	 */
 	public void setSharkAttack(boolean sharkAttack) {
 		mSharkAttack = sharkAttack;
 	}

@@ -21,12 +21,25 @@ import android.view.MotionEvent;
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.views.TutorialView;
 
+/**
+ * The Class Tutorial.
+ */
 public class Tutorial extends Activity{
+	
+	/** The slide counter. */
 	static public int mSlide = -1;
+	/** The tutorial view. */
 	TutorialView tutorialView;
+	/** The timer. */
 	private Timer mTime;
+	/** The handler. */
 	private Handler mHandler;
+	/** The tutorial type. */
 	private int tutorial;
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +54,6 @@ public class Tutorial extends Activity{
 			mTime.cancel();
 			mTime = null;
 		}
-		
 		// creates a handler to deal wit the return from the timer
 		mHandler = new Handler() {
 			public void handleMessage(Message aMsg) {
@@ -54,32 +66,28 @@ public class Tutorial extends Activity{
 		mTime= new Timer();//init timer
 		mTime.schedule(new MainThread(),0, 2000);
     }
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	public void onDestroy(){
 		Runtime.getRuntime().gc();
         System.gc();
         super.onDestroy();
 	}
+	
+	/**
+	 * The Class MainThread.
+	 */
 	class MainThread extends TimerTask {
+		
+		/* (non-Javadoc)
+		 * @see java.util.TimerTask#run()
+		 */
 		public void run() {
 			if(mSlide >= 3){
-				switch(tutorial){
-				case 1:
-	        		Intent loading = (new Intent(getApplicationContext(),Loading.class));
-	    			
-	    			loading.putExtra("levelselected", 1);
-	    			mTime.cancel();
-	    			startActivity(loading);
-	        		finish();
-	        		tutorialView.CleanUp();
-        		break;
-				case 2:
-					startActivity(new Intent(getApplicationContext(), Options.class));
-					mTime.cancel();
-					finish();
-	        		tutorialView.CleanUp();
-					break;
-				}
+				finsihTutorial();
     		}else{
         		mSlide++;
     		}
@@ -87,28 +95,38 @@ public class Tutorial extends Activity{
 		}
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		if(e.getAction() == MotionEvent.ACTION_DOWN){
-			switch(tutorial){
-			case 1:
-	    		Intent loading = (new Intent(getApplicationContext(),Loading.class));
-				
-				loading.putExtra("levelselected", 1);
-				mTime.cancel();
-				startActivity(loading);
-	    		finish();
-	    		tutorialView.CleanUp();
-			break;
-			case 2:
-				startActivity(new Intent(getApplicationContext(), Options.class));
-				mTime.cancel();
-				finish();
-	    		tutorialView.CleanUp();
-				break;
-			}
+			finsihTutorial();
 		}
 		return true;
+	}
+	
+	/**
+	 * Finsih tutorial depending on where coming from.
+	 */
+	private void finsihTutorial(){
+		switch(tutorial){
+		case 1:
+    		Intent loading = (new Intent(getApplicationContext(),Loading.class));
+			loading.putExtra("levelselected", 1);
+			mTime.cancel();
+			startActivity(loading);
+    		finish();
+    		tutorialView.CleanUp();
+		break;
+		case 2:
+			startActivity(new Intent(getApplicationContext(), Options.class));
+			mTime.cancel();
+			finish();
+    		tutorialView.CleanUp();
+			break;
+		}
 	}
 }   
 
