@@ -24,7 +24,7 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 public class Frog extends GraphicObject{
 	
 	/** Works out the position of the frog using these variables. */
-	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius, mFrogDirection;
+	private float mFrogCentreX, mFrogCentreY, mFrogAngle, mFrogRadius;
 
 	/**
 	 * Instantiates a new frog.
@@ -42,9 +42,9 @@ public class Frog extends GraphicObject{
 	 * @param r the radius of the frog
 	 * @param dir the direction of the frog
 	 */
-	public Frog(int x, int y, int r, int dir){
+	public Frog(int x, int y, int r){
 		mId = objtype.tFrog;
-		init(x, y, r, dir);
+		init(x, y, r);
 	}
 	
 	/* (non-Javadoc)
@@ -55,7 +55,6 @@ public class Frog extends GraphicObject{
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
-		canvas.scale(mFrogDirection*-1, 1);
 		canvas.rotate((float) (-mFrogAngle*180/Math.PI));
 		canvas.drawBitmap(getGraphic(), mAnimate.getPortion(), rect, null);
 		canvas.restore();
@@ -68,7 +67,7 @@ public class Frog extends GraphicObject{
 	public void init() {
 		init(new Random().nextInt(Constants.getLevel().getLevelWidth()),
 				(Constants.getLevel().getLevelHeight()/2)-70,
-				180, -1);	
+				180);	
 	}
 	
 	/**
@@ -77,9 +76,8 @@ public class Frog extends GraphicObject{
 	 * @param x the x position
 	 * @param y the y position
 	 * @param r the radius of the frog
-	 * @param dir the direction of the frog
 	 */
-	public void init(int x, int y, int r, int dir) {
+	public void init(int x, int y, int r) {
 		mGraphicType = 2;
 		mIsPlaying = false;
 		mProperties.init(x-r, y, 80, 80,0.7f,0.6f);	
@@ -94,11 +92,6 @@ public class Frog extends GraphicObject{
 		setFrogCentreX(x);
 		setFrogCentreY(y);
 		setFrogRadius(r);
-		if(dir == 0 || dir == -1){
-			mFrogDirection = -1;
-		}else{
-			mFrogDirection = 1;
-		}
 		mFrogAngle = new Random().nextInt(360);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
@@ -112,7 +105,7 @@ public class Frog extends GraphicObject{
 		if(mSpeed.getMove()){
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
-			mFrogAngle+= mFrogDirection*mSpeed.getSpeed()/100;
+			mFrogAngle-= mSpeed.getSpeed()/100;
 			if(mFrogAngle>360){
 				mFrogAngle-=360;
 			}
