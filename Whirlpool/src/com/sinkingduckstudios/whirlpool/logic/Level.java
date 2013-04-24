@@ -186,7 +186,7 @@ public class Level extends Activity{
 	public int update(){
 		updateList();
 		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
-		//could maybe optimise later TODO
+		//Pretty hacky, should change at a later date TODO
 		Constants.setDuckDist(9000000);//max dist
 		for(Iterator<Torpedo> tIterator = mTorpedoes.listIterator(); tIterator.hasNext();){
 			Torpedo torpedo = tIterator.next();
