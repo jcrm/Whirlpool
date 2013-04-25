@@ -1,9 +1,9 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Fraser, Jordan O'Hare
  * Content:
- *
- *
+ * Jordan O'Hare: created basic version based upon parent class.
+ * Jake Morey: added most of the collision code.
+ * Fraser: added shift angle from collision, and sprite index based upon angle. 
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -31,22 +31,16 @@ public class Duck extends GraphicObject{
 	public CollisionType cID = CollisionType.cDefault;
 	/** The collision count. */
 	private int mCollisionCount = -1;
-	
 	/** The duck images. */
 	private Bitmap mBitmap[] = new Bitmap[3];
-	
 	/** The duck animations. */
 	private Animate mAnimate[] = new Animate[3];
-	
 	/** The invincibility variable. */
 	private boolean mInvincibility = false;
-	
 	/** The finished variable. */
 	private boolean mFinished = false;
-	
 	/** The shark attacked. */
 	private boolean mSharkAttack = false;
-	
 	/** The Constant mTopSpeed. */
 	private static final float mTopSpeed = 8*Constants.getScreen().getRatio();
 
@@ -128,6 +122,7 @@ public class Duck extends GraphicObject{
 	 */
 	@Override
 	public boolean move() {
+		//update collision rect
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove() && mSharkAttack == false){
 			if((mSpeed.getSpeed()/Constants.getScreen().getRatio())<mId.tSpeed)
@@ -156,6 +151,7 @@ public class Duck extends GraphicObject{
 				}
 			}
 		}
+		//animate depending on the angle of the object
 		mAnimate[getSpriteSheetIndex()].animateFrame();
 	}
 	/**
@@ -170,14 +166,17 @@ public class Duck extends GraphicObject{
 		boolean inRadius = false;
 		switch(id){
 		case tBoat:
+			//check if the duck is in a radius from the boat
 			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				inRadius = true;
 			}
 			if(inRadius ==true){
 				if(cID == CollisionType.cDefault && mInvincibility == false){
+					//check for collision with boat
 					if(CollisionManager.circleCollision(mProperties, otherProperties)){
 						if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
 							cID = CollisionType.cBoat;
+							//do boat collision based upon angle between boat and duck
 							collisionDiverFrogBoat(
 									CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
 											mProperties.getRealCentre().getY(), 
@@ -190,6 +189,7 @@ public class Duck extends GraphicObject{
 			}
 			break;
 		case tShark:
+			//check that the duck is within a certain radius
 			if(CollisionManager.circleCollision(mProperties, (int)otherProperties.getCentreX(), (int)otherProperties.getCentreY(), radius)){
 				return true;
 			}
@@ -200,7 +200,7 @@ public class Duck extends GraphicObject{
 	}
 	/**
 	 * Check object collision.
-	 *
+	 * Check for direct object collision with duck.
 	 * @param id the id of the second object
 	 * @param otherProperties the properties of the second object
 	 * @return true, if collision
@@ -209,9 +209,11 @@ public class Duck extends GraphicObject{
 		switch(id){
 		case tDiver:
 			if(cID == CollisionType.cDefault && mInvincibility == false){
+				//check for collision with diver
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
 						cID = CollisionType.cDiver;
+						//do diver collision code with angle based upon duck position and divers position
 						collisionDiverFrogBoat(
 								CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
 										mProperties.getRealCentre().getY(), 
@@ -223,9 +225,11 @@ public class Duck extends GraphicObject{
 			break;
 		case tFrog:
 			if(cID == CollisionType.cDefault && mInvincibility == false){
+				//check for collision with frog
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
 						cID = CollisionType.cFrog;
+						//do frog collision code with angle based upon duck position and frogs position
 						collisionDiverFrogBoat(
 								CollisionManager.calcAngle(	mProperties.getRealCentre().getX(), 
 										mProperties.getRealCentre().getY(), 
@@ -236,6 +240,9 @@ public class Duck extends GraphicObject{
 			}
 			break;
 		case tTorpedo:
+			//if collision with torpedo then check being dragged by shark
+			//if not colliding with shark then call torpedo collision code and return true so torpedo can be destroyed
+			//if being dragged by shark the just return true
 			if(CollisionManager.circleCollision(mProperties, otherProperties)){
 				if(cID != CollisionType.cShark && mInvincibility == false){
 					cID = CollisionType.cTorpedo;
@@ -245,6 +252,8 @@ public class Duck extends GraphicObject{
 			}
 			break;
 		case tShark:
+			//if not collided with shark or invincible check for cillision
+			//if collision then change collision type
 			if(cID!=CollisionType.cShark && mInvincibility == false){
 				if(CollisionManager.circleCollision(mProperties, otherProperties)){
 					if(CollisionManager.boundingBoxCollision(mProperties, otherProperties)){
@@ -264,6 +273,8 @@ public class Duck extends GraphicObject{
 	 * Collision movement.
 	 */
 	private void collisionMovement(){
+		//if recently collided with shark or duck is invincible then
+		//change speed, or angle or disable invincibility
 		if(mCollisionCount >=0){
 			if(cID == CollisionType.cShark){
 				if(mSharkAttack == false){
@@ -295,6 +306,8 @@ public class Duck extends GraphicObject{
 	 * @param angle the angle
 	 */
 	private void collisionDiverFrogBoat(float angle){
+		//change the speed of the duck and play the duck sound
+		//set invincibility to be true and shift the angle
 		getSpeed().setSpeed(5);
 		getSpeed().setAngle(angle+180);
 		Constants.getSoundManager().playDucky();
@@ -307,6 +320,8 @@ public class Duck extends GraphicObject{
 	 * Collision with torpedo.
 	 */
 	private void collisionTorpedo(){
+		//stop the speed of the duck and play the duck sound
+		//set invincibility to be true
 		getSpeed().setSpeed(0);
 		Constants.getSoundManager().playDucky();
 		cID = CollisionType.cDefault;
@@ -315,7 +330,7 @@ public class Duck extends GraphicObject{
 	}
 	
 	/**
-	 * Gets the sprite sheet index.
+	 * Gets the sprite sheet index based upon angle.
 	 *
 	 * @return the sprite sheet index
 	 */

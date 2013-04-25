@@ -1,9 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Jordan O'Hare
  * Content:
- *
- *
+ * Jordan O'Hare: created basic class 
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -52,6 +50,7 @@ public class Frog extends GraphicObject{
 	 */
 	@Override
 	public void draw(Canvas canvas) {
+		//roate the sprite based upon the angle of the frog
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -101,8 +100,10 @@ public class Frog extends GraphicObject{
 	 */
 	@Override
 	public boolean move() {
+		//update collision rectangle
 		CollisionManager.updateCollisionRect(mProperties, (float) (-mFrogAngle));
 		if(mSpeed.getMove()){
+			//move around a circle based upon the ditance from the centre and the angle around a circle
 			setCentreX((int)(mFrogCentreX + Math.sin(mFrogAngle)*mFrogRadius));
 			setCentreY((int)(mFrogCentreY + Math.cos(mFrogAngle)*mFrogRadius));
 			mFrogAngle-= mSpeed.getSpeed()/100;
