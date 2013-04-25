@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    <com.sinkingduckstudios.whirlpool.views.OptionsView
-	    android:id="@+id/optionsView"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    >
-	</com.sinkingduckstudios.whirlpool.views.OptionsView>
-    
-    
+    android:layout_height="match_parent" 
+    android:background="@drawable/options_background">
 
     <ImageButton
         android:id="@+id/op_return"
@@ -25,8 +17,6 @@
        android:id="@+id/cinematic"
        android:layout_width="200dp"
        android:layout_height="100dp"
-       android:layout_alignLeft="@+id/resetdata"
-       android:layout_below="@+id/resetdata"
        android:background="@drawable/cinematic_button"
        android:scaleType="fitCenter" />
 
@@ -34,9 +24,6 @@
        android:id="@+id/resetdata"
        android:layout_width="200dp"
        android:layout_height="100dp"
-       android:layout_alignTop="@+id/audio"
-      
-       android:layout_toLeftOf="@+id/op_return"
        android:background="@drawable/reset_button"
        android:scaleType="fitCenter" />
 
@@ -44,9 +31,6 @@
        android:id="@+id/audio"
        android:layout_width="200dp"
        android:layout_height="100dp"
-       android:layout_alignParentTop="true"
-       
-       android:layout_toLeftOf="@+id/resetdata"
        android:background="@drawable/audio_button"
        android:scaleType="fitCenter" />
 
@@ -54,8 +38,6 @@
        android:id="@+id/tutorial"
        android:layout_width="200dp"
        android:layout_height="100dp"
-       android:layout_alignLeft="@+id/audio"
-       android:layout_below="@+id/audio"
        android:background="@drawable/tutorial_button"
        android:scaleType="fitCenter" />
 
@@ -63,8 +45,6 @@
        android:id="@+id/credits"
        android:layout_width="200dp"
        android:layout_height="100dp"
-       android:layout_below="@+id/tutorial"
-       android:layout_centerHorizontal="true"
        android:background="@drawable/credits_button"
        android:scaleType="fitCenter" />
 

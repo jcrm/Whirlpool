@@ -2,13 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <com.sinkingduckstudios.whirlpool.views.AudioOptionsView
-        android:id="@+id/audioOptionsView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </com.sinkingduckstudios.whirlpool.views.AudioOptionsView>
+    android:orientation="horizontal" 
+    android:background="@drawable/options_background">
 
     <ImageButton
         android:id="@+id/op_return"
@@ -32,9 +27,7 @@
         android:id="@+id/audio1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="40dp"
         android:background="@drawable/selecter"
         android:scaleType="fitCenter" />
 
@@ -42,7 +35,6 @@
         android:id="@+id/audio2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@drawable/selecter"
         android:scaleType="fitCenter" />
@@ -51,10 +43,7 @@
         android:id="@+id/audio3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignTop="@+id/audio2"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/op_return"
         android:background="@drawable/selecter"
         android:scaleType="fitCenter" />
 

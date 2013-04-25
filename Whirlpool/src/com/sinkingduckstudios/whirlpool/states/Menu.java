@@ -15,19 +15,17 @@ import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
-import com.sinkingduckstudios.whirlpool.views.MenuView;
 
 /**
  * The Class Menu.
  */
 public class Menu extends Activity {
-	/** The menu view. */
-	MenuView menuView;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -50,11 +48,35 @@ public class Menu extends Activity {
     	@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
     	Constants.setScreen(theScreen);
+    	
+    	int ScreenWidth = Constants.getScreen().getWidth();
+		int ScreenHeight = Constants.getScreen().getHeight();
+		int buttonScale = ScreenHeight/4;
+		int step = (ScreenHeight/4) - (buttonScale/2);
+		
+		RelativeLayout.LayoutParams gameParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		gameParams.leftMargin = (ScreenWidth/2) - (buttonScale);
+		gameParams.topMargin = step;
+		
+		step+= (ScreenHeight/4);
+		
+		RelativeLayout.LayoutParams optionsParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		optionsParams.leftMargin = (ScreenWidth/2) - (buttonScale);
+		optionsParams.topMargin = step;
+		
+		step+= (ScreenHeight/4);
+		
+		RelativeLayout.LayoutParams exitParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		exitParams.leftMargin = (ScreenWidth/2) - (buttonScale);
+		exitParams.topMargin = step;
+
         //set up button function
     	gameButton.setOnClickListener(goToGame);
+    	gameButton.setLayoutParams(gameParams);
         optionsButton.setOnClickListener(goToOptions);
+        optionsButton.setLayoutParams(optionsParams);
         exitButton.setOnClickListener(goToExit);
-        menuView=(MenuView)findViewById(R.id.menuView);
+        exitButton.setLayoutParams(exitParams);
         //unload all images if previously been playing levels
         SpriteManager.unloadBoat();
         SpriteManager.unloadDuck();
@@ -120,8 +142,6 @@ public class Menu extends Activity {
 	 */
 	@Override
 	public void onDestroy(){
-		menuView.CleanUp();
-		menuView = null;
 		Runtime.getRuntime().gc();
         System.gc();
 		super.onDestroy();

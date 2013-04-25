@@ -16,18 +16,17 @@ import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
-import com.sinkingduckstudios.whirlpool.views.AudioOptionsView;
 
 /**
  * The Class AudioOptions.
  */
 public class AudioOptions extends Activity{
 	/** The audio options view. */
-	AudioOptionsView audioOptionsView;
 	/** The Constant AUDIO string. */
 	public static final String AUDIO = "audio_options";
 	
@@ -42,6 +41,12 @@ public class AudioOptions extends Activity{
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
+	
+	private final int screenWidth = 100; //lets split the screen up into 100 segments for relative button positioning
+	private final int button1 = 18;
+	private final int button2 = 49;
+	private final int button3 = 80; //relative button positions to a screen width of 100
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,12 +61,25 @@ public class AudioOptions extends Activity{
 		audio2Button = ((ImageButton)findViewById(R.id.audio2));
 		audio3Button = ((ImageButton)findViewById(R.id.audio3));
 
+		int realScreenWidth = Constants.getScreen().getWidth();
+		int buttonScale = Constants.getScreen().getHeight() / 10;
+		
+		RelativeLayout.LayoutParams button1Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button1Params.leftMargin = (int)(((float)button1/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button1Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio1Button.setLayoutParams(button1Params);
+		
+		RelativeLayout.LayoutParams button2Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button2Params.leftMargin = (int)(((float)button2/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button2Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio2Button.setLayoutParams(button2Params);
+		
+		RelativeLayout.LayoutParams button3Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button3Params.leftMargin = (int)(((float)button3/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button3Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio3Button.setLayoutParams(button3Params);
+		
 		Constants.setContext(getApplicationContext());
-
-		Display display = getWindowManager().getDefaultDisplay();
-		@SuppressWarnings("deprecation")
-		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
-		Constants.setScreen(theScreen);
 
 		backButton.setOnClickListener(goToOp);
 		audio1Button.setOnClickListener(audio1);
@@ -136,10 +154,6 @@ public class AudioOptions extends Activity{
 	 */
 	@Override
 	public void onDestroy(){
-		if(audioOptionsView != null){
-			audioOptionsView.CleanUp();
-			audioOptionsView = null;
-		}
 		Runtime.getRuntime().gc();
 		System.gc();
 		super.onDestroy();
