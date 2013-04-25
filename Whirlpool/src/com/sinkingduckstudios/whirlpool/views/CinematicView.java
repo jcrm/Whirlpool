@@ -56,6 +56,7 @@ public class CinematicView extends View{
 		setMinimumHeight(100);
 		Constants.setRes(getResources());
 		Constants.createSoundManager(getContext());
+		Constants.updateVolume();
     	Constants.getSoundManager().loadCinematic();
 
 		for(int i = 0; i<6; i++){

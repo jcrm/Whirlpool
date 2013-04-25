@@ -133,6 +133,10 @@ public class Game extends Activity {
 		restartButton.setOnClickListener(restart);
 		volumeOffButton.setOnClickListener(volume_off);
 		volumeOnButton.setOnClickListener(volume_on);
+		if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
+			muted = true;
+		}
+		Constants.updateVolume();
 	}
 	
 	/** The quit button. */
@@ -179,9 +183,10 @@ public class Game extends Activity {
 			View volumeOffButton = findViewById(R.id.volume_off);
 			volumeOffButton.setVisibility(View.INVISIBLE);
 			//Volume code here
-			muted = true;
-			
-			
+			muted = false;
+			Constants.sBackgroundVolume = 1;
+			Constants.sEffectVolume = 1;
+			Constants.updateVolume();
 		}
 	};
 	
@@ -195,7 +200,10 @@ public class Game extends Activity {
 			View volumeOnButton = findViewById(R.id.volume_on);
 			volumeOnButton.setVisibility(View.INVISIBLE);
 			//Volume code here
-			muted = false;
+			muted = true;
+			Constants.sBackgroundVolume = 0;
+			Constants.sEffectVolume = 0;
+			Constants.updateVolume();
 		}
 	};
 	/** The go to menu button. */
@@ -233,7 +241,7 @@ public class Game extends Activity {
 			View quit = findViewById(R.id.quit);
 			quit.setVisibility(View.VISIBLE);
 			
-			if(muted == true){
+			if(muted == false){
 				View volumeOnButton = findViewById(R.id.volume_on);
 				volumeOnButton.setVisibility(View.VISIBLE);
 				View volumeOffButton = findViewById(R.id.volume_off);
@@ -383,6 +391,7 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().loadSplash();
+		Constants.updateVolume();
 		Constants.getSoundManager().playBackGround();
 
 		if(!mTimerHasStarted){

@@ -61,7 +61,7 @@ public class SoundManager
 	protected int mGrab;
 	protected int mMissileStreamId;
 	protected boolean mMissilePlaying;
-
+	private float mBackgroundVolume = 1;
 	// The media player used for the background music as it is too long for the soundpool.
 	protected MediaPlayer mBackground;
 
@@ -360,6 +360,13 @@ public class SoundManager
 		}
 
 	}
+	public void setBackgroundVolume(float volume){
+		mBackgroundVolume = volume;
+		mBackground.setVolume(mBackgroundVolume, mBackgroundVolume);
+	}
+	public void setEffectVolume(float volume){
+		mMasterVolume = volume;
+	}
 
 	// a function to play one of the ducky sounds. picked at random
 	public void playDucky(){
@@ -473,7 +480,7 @@ public class SoundManager
 
 	// a function to play the background music looped
 	public void playBackGround (){
-		if(mBackground !=null){					// if the background is not null( it has a sound)
+		if(mBackground !=null && mBackgroundVolume !=0){					// if the background is not null( it has a sound)
 			if(!mBackground.isPlaying()){		// if the backgrounds music is not already playing
 				mBackground.setLooping(true);	// make sure the track will loop continuously 
 				mBackground.start();			// start the music playing
@@ -519,7 +526,7 @@ public class SoundManager
 	// a function to play the fast beep of the missile
 	// a function to play the fast beep of the missile
 	public void playBeepFast(){
-		if(!mMissilePlaying){			// if the missle is not playing
+		if(!mMissilePlaying && mMasterVolume !=0){			// if the missle is not playing
 			//mMissileStreamId = playSound(mMissile[0]);
 			mMissileStreamId = mSndPool.play(mMissile[0], mLeftVolume, mRightVolume, 1, -1, mRate);		// play the misslie sound at a reduced volume
 			mMissilePlaying=true;			// the misle is now playing
@@ -575,7 +582,7 @@ public class SoundManager
 		//													  - rate, the rate at whitch the sounds is to be played 
 		// play the sound required.
 		// make sure that the sounds pool has been created and is not null and m,ake sure that the sound ID is not 0
-		if(SoundID != 0 && mSndPool != null){
+		if(SoundID != 0 && mSndPool != null && mMasterVolume !=0){
 			return mSndPool.play(SoundID, mLeftVolume, mRightVolume, 1, 0, mRate);		// play trghe required sound
 		}
 
@@ -617,13 +624,17 @@ public class SoundManager
 	// pause the music being played
 	public void pause(){
 		mSndPool.autoPause();	// pause the sound pool
-		mBackground.pause();	// pause the background music
+		if(mBackground.isPlaying()){
+			mBackground.pause();	// pause the background music
+		}
 	}
 
 	// start the paused music to play again
 	public void unpause(){
 		mSndPool.autoResume();	//resume the sound pools sounds
-		mBackground.start();	// resume the background music
+		if(mBackground.isPlaying()==false){
+			mBackground.start();	// resume the background music
+		}
 		Log.w("backgroud","resumed");
 
 	}

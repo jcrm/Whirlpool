@@ -15,6 +15,7 @@ import com.sinkingduckstudios.whirlpool.manager.SoundManager;
 import com.sinkingduckstudios.whirlpool.objects.Duck;
 import com.sinkingduckstudios.whirlpool.views.GameView;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Constants.
  */
@@ -48,7 +49,10 @@ public class Constants {
 	public static int STATE_LEAVING = 2;
 	/** The state finishing. */
 	public static int STATE_FINISHING = 3;
-
+	/** The background volume. */
+	public static float sBackgroundVolume = 1;
+	/** The effect volume. */
+	public static float sEffectVolume = 1;
 	
 	/**
 	 * Gets the duck dist.
@@ -218,14 +222,37 @@ public class Constants {
 	public static SoundManager getSoundManager() {
 		return sSoundManager;
 	}
+	
 	/**
 	 * Creates the sound manager.
 	 *
-	 * @param appContext
+	 * @param appContext the app context
 	 */
 	public static void createSoundManager(Context appContext) {
 		if(sSoundManager==null)
 			sSoundManager = new SoundManager(appContext);
 		sSoundManager.init();
+	}
+	
+	/**
+	 * Sets the background volume.
+	 *
+	 * @param volume the new background volume
+	 */
+	public static void setBackgroundVolume(float volume){
+		sBackgroundVolume = volume;
+	}
+	
+	/**
+	 * Sets the effect volume.
+	 *
+	 * @param volume the new effect volume
+	 */
+	public static void setEffectVolume(float volume){
+		sEffectVolume = volume;
+	}
+	public static void updateVolume(){
+		sSoundManager.setBackgroundVolume(sBackgroundVolume);
+		sSoundManager.setEffectVolume(sEffectVolume);
 	}
 }
