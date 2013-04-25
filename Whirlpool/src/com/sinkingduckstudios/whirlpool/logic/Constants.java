@@ -1,9 +1,9 @@
 /*
- * Author: Jordan O'Hare, Jake Morey, Fraser 
+ * Author: Jordan O'Hare, Jake Morey, Fraser Tomison
  * Content:
  * Used to store global variables.
  * Original functionality coded by Jordan O'Hare.
- * Added functions by Jake Morey, Fraser 
+ * Added functions by Jake Morey, Fraser Tomison 
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
