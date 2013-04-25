@@ -55,6 +55,9 @@ final class TrackingTouchListener implements View.OnTouchListener{
 	}
 
 
+	/*
+	 * Triggered on users touch of the game view
+	 */
 	public boolean onTouch(View view, MotionEvent event) {
 		mScaledX = event.getX();
 		mScaledY = event.getY();

@@ -110,6 +110,8 @@ public class Game extends Activity {
 					scorescreen.putExtra("timepassed", timepassed);
 					scorescreen.putExtra("levelselected", levelselected);
 					scorescreen.putExtra("duckcount", mLevel.getDuckCount());
+					scorescreen.putExtra("levelAverage", mLevel.getAverageTime());
+					scorescreen.putExtra("levelGood", mLevel.getGoodTime());
 					startActivity(scorescreen);
 					mLevel.cleanUp();
 					finish();
