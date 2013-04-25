@@ -23,15 +23,15 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
  * The Class Collectable.
  */
 public class Collectable extends GraphicObject{
-	/** The collectable images. */
+	/** The sprite sheets for the duck. */
 	private Bitmap mBitmap[] = new Bitmap[3];
-	/** The collectable animation. */
+	/** The animation classes for each sprite sheet */
 	private Animate mAnimate[] = new Animate[3];
-	/** The paint variable. */
+	/** The paint that holds the gold overlay for the duck */
 	private Paint mPaint;
-	/** The collcetable rect. */
+	/** The collision rect for the mini duck */
 	private Rect mRect;
-	/** The collided variable. */
+	/** State of the collectable, is it following or sitting still? */
 	private boolean mHasCollided;
 	/** Which object is it following. */
 	private GraphicObject mFollowing;
@@ -45,6 +45,7 @@ public class Collectable extends GraphicObject{
 		mId = objtype.tCollectable;
 		init();
 	}
+	
 	@Override
 	public void draw(Canvas canvas) {
 		canvas.save();
@@ -60,18 +61,18 @@ public class Collectable extends GraphicObject{
 	}
 
 	/**
-	 * Gets the collided.
+	 * Gets the state of the collectable
 	 *
-	 * @return the collided
+	 * @return bool true if following
 	 */
 	public boolean getCollided(){
 		return mHasCollided;
 	}
 
 	/**
-	 * Sets the following.
+	 * Sets the state of collectable
 	 *
-	 * @param f the new following
+	 * @param f has the duck collided with mini duck?
 	 */
 	public void setFollowing(GraphicObject f){
 		mFollowing = f;
@@ -117,6 +118,7 @@ public class Collectable extends GraphicObject{
 
 		mHasCollided=false;
 
+		//create the colour matrix to overlay a gold tint on the duck
 		ColorMatrix cm = new ColorMatrix();
 		cm.set(new float[]{
 				0.8f,0,0,0,100,
@@ -131,16 +133,25 @@ public class Collectable extends GraphicObject{
 		mRect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 	}
 
+	/**
+	 * move
+	 * Constantly move to just behind the object you are following
+	 */
 	@Override
 	public boolean move() {
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		int destX,destY;
 
+		/*Here we calculate the ideal position to be in, 
+		 *by taking the position of the object we are following
+		 *then picking a point behind it
+		 **/
 		destX=((int) (mFollowing.getCentreX()*Constants.getScreen().getRatio()));
 		destX+=((int) (mFollowing.getWidth()*Math.cos(mFollowing.getSpeed().getAngleRad()+Math.PI)));
 		destY=((int) (mFollowing.getCentreY()*Constants.getScreen().getRatio()));
 		destY+=((int) (mFollowing.getWidth()*Math.sin(mFollowing.getSpeed().getAngleRad()+Math.PI)));
 
+		//set current angle and speed to that of which we are following
 		setAngle(CollisionManager.calcAngle(getCentreX()*Constants.getScreen().getRatio(),getCentreY()*Constants.getScreen().getRatio(),destX, destY));
 		setSpeed(mFollowing.getSpeed().getSpeed()/Constants.getScreen().getRatio());
 		moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
@@ -149,6 +160,10 @@ public class Collectable extends GraphicObject{
 		return false;
 	}
 
+	/**
+	 * Update duck this frame.
+	 * If the duck is following something, move it
+	 */
 	public void frame(){
 		if(mHasCollided)
 			move();

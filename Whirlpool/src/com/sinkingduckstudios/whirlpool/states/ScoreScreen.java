@@ -187,29 +187,4 @@ public class ScoreScreen extends Activity {
 		System.gc();
 		super.onDestroy();
 	}
-
-	/** The level one average score. */
-	private int LEVEL_ONE_AVERAGE = 40;
-	/** The level one good score. */
-	private int LEVEL_ONE_GOOD = 20;
-	/** The level two average score. */
-	private int LEVEL_TWO_AVERAGE = 30;
-	/** The level two good score. */
-	private int LEVEL_TWO_GOOD = 15;
-	/** The level three average score. */
-	private int LEVEL_THREE_AVERAGE = 25;
-	/** The level three good score. */
-	private int LEVEL_THREE_GOOD = 15;
-	/** The level four average score. */
-	private int LEVEL_FOUR_AVERAGE = 35;
-	/** The level four good score. */
-	private int LEVEL_FOUR_GOOD = 25;
-	/** The level five average score. */
-	private int LEVEL_FIVE_AVERAGE = 40;
-	/** The level five good score. */
-	private int LEVEL_FIVE_GOOD = 25;
-	/** The level six average score. */
-	private int LEVEL_SIX_AVERAGE = 45;
-	/** The level six good score. */
-	private int LEVEL_SIX_GOOD = 27;
 }

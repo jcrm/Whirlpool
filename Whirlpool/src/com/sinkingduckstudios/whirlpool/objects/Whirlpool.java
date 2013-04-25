@@ -1,8 +1,9 @@
 /*
- * Author:
- * Last Updated:
- * Content:
- *
+ * Author: Fraser Tomison
+ * Last Updated: 5/04/13
+ * Content: This class holds the data pertaining to a whirlpool the user has created
+ * It also handles any interactions between game objects and the whirlpool, 
+ * namely manipulating their positions to spin around it. 
  *
  */
 package com.sinkingduckstudios.whirlpool.objects;
@@ -29,40 +30,38 @@ public class Whirlpool extends GraphicObject{
 	
 	/** The angle. */
 	private float angle = 0.0f;
-	
-	/** The _rot. */
-	private float _rot = 0.0f;
-	
-	/** The dir factor. */
+
+	/** The direction of the whirlpool (-1 counterclockwise, 1 clockwise) */
 	private int dirFactor = 1;
 	
-	/** The expire timer. */
+	/** The time till whirlpool expires, in frames */
 	private final int expireTimer = 200;
 	
-	/** The expire counter. */
+	/** The counter for the whirlpool timer */
 	private int expireCounter = 1;
 	
-	/** The finished. */
+	/** Whirlpool can expire */
 	private boolean finished = false;
 	
-	/** The collision done. */
+	/** All objects have left whirlpool */
 	public boolean collisionDone = true;
 	
-	/** The m arrow. */
+	/** The directional arrow of the whirlpool. */
 	private Arrow mArrow = null;
 	
-	/** The tangent y. */
+	/** The tangent point where the object will exit */
 	private float tangentX, tangentY;
 
 	/**
-	 * Instantiates a new whirlpool.
+	 * Default constructor for a new whirlpool.
 	 */
 	public Whirlpool(){
 		mId = objtype.tWhirl;
 		init();
 	}
 
-	/* (non-Javadoc)
+	/** Draws the whirlpool on screen
+	 * (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#draw(android.graphics.Canvas)
 	 */
 	@Override
@@ -87,7 +86,7 @@ public class Whirlpool extends GraphicObject{
 		}
 	}
 
-	/* (non-Javadoc)
+	/** Initialises the whirlpool (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#init()
 	 */
 	@Override
@@ -104,10 +103,10 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	/**
-	 * Inits the.
+	 * Initialises the whirlpool with position.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x the x coord
+	 * @param y the y coord
 	 */
 	public void init(int x, int y) {
 		mProperties.init(x, y, 130, 130,1.0f,1.0f);	
@@ -201,10 +200,11 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	/**
-	 * Test angle.
-	 *
-	 * @param a the a
-	 * @return true, if successful
+	 * Test current angle against the exit angle, 
+	 * to see if we can exit yet
+	 * 
+	 * @param a the object inside the whirlpool
+	 * @return true, if we can exit
 	 */
 	public boolean testAngle(GraphicObject a){
 		if (angle == -1)//wpool not directed yet
@@ -249,9 +249,9 @@ public class Whirlpool extends GraphicObject{
 	}
 	
 	/**
-	 * Gets the finished.
+	 * Gets the state
 	 *
-	 * @return the finished
+	 * @return true, if finished
 	 */
 	public boolean getFinished(){
 		return (finished && collisionDone);
@@ -260,51 +260,40 @@ public class Whirlpool extends GraphicObject{
 	/**
 	 * Sets the expire counter.
 	 *
-	 * @param a the new expire counter
+	 * @param a the counter limit
 	 */
 	public void setExpireCounter(int a){
 		expireCounter = a;
 	}
 
 	/**
-	 * Sets the clockwise.
+	 * Sets the direction
 	 *
-	 * @param clockwise the new clockwise
+	 * @param clockwise the new direction
 	 */
 	public void setClockwise(int clockwise){
 		dirFactor = clockwise;
 	}
 	
 	/**
-	 * Gets the clockwise.
+	 * Gets the direction
 	 *
-	 * @return the clockwise
+	 * @return the direction (-1 counter clockwise, 1 clockwise)
 	 */
 	public int getClockwise(){
 		return dirFactor;
-	}
-	
-	/**
-	 * Gets the rotation.
-	 *
-	 * @return the rotation
-	 */
-	public float getRotation(){
-		_rot+= (2*getClockwise());
-		if (_rot >= 360)_rot=0;
-		if (_rot < 0)_rot=360;
-		return _rot;
 	}
 
 	/**
 	 * Point collision.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x the x coord
+	 * @param y the y coord
 	 * @return true, if successful
 	 */
 	public boolean pointCollision(float x, float y){
 
+		//Simple bounding circle collision
 		float distX, distY, dist;
 		distX = this.getCentreX() - x;
 		distY = this.getCentreY() - y;
@@ -318,13 +307,14 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	/**
-	 * Collision.
+	 * Collision with another graphic object
 	 *
-	 * @param graphic the graphic
+	 * @param graphic the object to check
 	 * @return true, if successful
 	 */
 	public boolean collision(GraphicObject graphic){
 
+		
 		float distX, distY, dist;
 		distX = this.getCentreX() - graphic.getCentreX();
 		distY = this.getCentreY() - graphic.getCentreY();
@@ -336,23 +326,26 @@ public class Whirlpool extends GraphicObject{
 	}
 
 	/**
-	 * Pull.
+	 * Pull the object around the whirlpool
 	 *
-	 * @param graphic the graphic
+	 * @param graphic the object to pull
 	 */
 	public void pull(GraphicObject graphic){
 		float objX = graphic.getCentreX();
 		float objY = graphic.getCentreY();
-		//float objSpeedX = graphic.getSpeed().getXSpeed();
-		//float objSpeedY = graphic.getSpeed().getYSpeed();
 		float wPoolCentreX = getCentreX();
 		float wPoolCentreY = getCentreY();
 		//this is the current distance from centre to graphic
 		objectRadius = (float)Math.sqrt(Math.pow(wPoolCentreX-objX, 2)+(Math.pow(wPoolCentreY-objY, 2)));
-		//angle of radius
+		
+		//the current angle of whirlpool to object
 		float cAngle = CollisionManager.calcAngle(wPoolCentreX, wPoolCentreY,objX, objY)+90;
 		cAngle+= (2 * getClockwise());//rotate obj around wpool
 
+		// By creating a circle with centre at the whirlpool centre
+		// and radius the distance to the object, we can find the ideal position
+		// by stepping around the circle from the current position by a short distance
+		// The direction we step depends upon the whirlpool direction
 		float destX = wPoolCentreX + (float)Math.sin(cAngle*Math.PI/180)*objectRadius;
 		float destY = wPoolCentreY - (float)Math.cos(cAngle*Math.PI/180)*objectRadius;
 
@@ -360,11 +353,14 @@ public class Whirlpool extends GraphicObject{
 
 		//reset angle and speed
 		//graphic.getSpeed().setSpeed((float) (Math.sqrt(Math.pow(speedx, 2) + Math.pow(speedy, 2))));
-		cAngle = cAngle+ (5.0f * getClockwise()); //ideal angle
+		cAngle = cAngle+ (5.0f * getClockwise()); //ideal angle (this then +- the angle by a unit of 5 to ensure it spins inwards to the centre.)
 
+		//once we know the ideal position of the object,
+		//we can compare the current with it, and step towards it.
 		float mAngle = graphic.getSpeed().getAngle();
 		float clockwiseDiff;
 		float anticlockwiseDiff;
+		//Find out it its quicker to move clockwise or anti-clockwise towards the ideal
 		if (mAngle > cAngle){
 			anticlockwiseDiff = (cAngle + 360) - mAngle;
 			clockwiseDiff = (mAngle - cAngle);
@@ -373,6 +369,7 @@ public class Whirlpool extends GraphicObject{
 			clockwiseDiff = (mAngle + 360) - cAngle;
 			anticlockwiseDiff = (cAngle - mAngle);
 		}
+		//Knowing this, do the step
 		if (anticlockwiseDiff < clockwiseDiff)
 			if (anticlockwiseDiff >= 10)
 				mAngle+=10;
@@ -388,10 +385,10 @@ public class Whirlpool extends GraphicObject{
 	//this function is called so the math is only done once per fetch
 	//(rather than individually in each getter)
 	/**
-	 * Calc tangent point.
-	 *
-	 * @param x the x
-	 * @param y the y
+	 * Calculate tangent point from circle to point x,y.
+	 * Get this point by calling getTangentX/Y()
+	 * @param x 
+	 * @param y 
 	 * @return true, if successful
 	 */
 	public boolean calcTangentPoint(float x, float y){
@@ -419,7 +416,7 @@ public class Whirlpool extends GraphicObject{
 	
 	/**
 	 * Gets the tangent x.
-	 *
+	 * 
 	 * @return the tangent x
 	 */
 	public float getTangentX(){
