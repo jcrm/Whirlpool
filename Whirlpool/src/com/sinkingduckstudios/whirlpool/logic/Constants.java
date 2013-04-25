@@ -1,7 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jordan O'Hare, Jake Morey, Fraser 
  * Content:
+ * Used to store global variables.
  * Original functionality coded by Jordan O'Hare.
  * Added functions by Jake Morey, Fraser 
  */

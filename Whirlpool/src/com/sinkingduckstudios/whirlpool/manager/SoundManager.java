@@ -1,17 +1,20 @@
 /*
- * Author: Connor Nicol
+ * Author: Connor Nicol, Jake Morey
  * Last Updated: 18/02/2013
  * Content:
  * class used to control and play all of the sound in the game. this class will play the background music
  * continuously throughout the game and also play the sound effects for the game based on what's happening 
  * in the game ( i.e. ducky hits the side of the bath play one of the bounce sound effects). when needed
  * a sound effect will play at random form a list of appropriate sounds 
+ * Jake Morey:
+ * Added background and effect volume for muting audio.
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
 import java.util.Random;
 
 import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 
 import android.content.Context;
@@ -366,6 +369,8 @@ public class SoundManager
 	}
 	public void setEffectVolume(float volume){
 		mMasterVolume = volume;
+		mLeftVolume = mMasterVolume;
+		mRightVolume = mMasterVolume;
 	}
 
 	// a function to play one of the ducky sounds. picked at random
@@ -691,13 +696,13 @@ public class SoundManager
 
 	// a function to initialize the variables for the sound class
 	public void init(){
-		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);		// create the sound pool
-		mRate = 1.0f;							// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
-		mMasterVolume = 1.0f;					// set the master voume to full
-		mLeftVolume =mMasterVolume;				// the volume of the left speaker, set to on full
-		mRightVolume = mMasterVolume;			// the volume of the right speaker, set to on full
+		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);	// create the sound pool
+		mRate = 1.0f;													// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
+		mMasterVolume = Constants.sEffectVolume;						// set the master voume to full
+		mLeftVolume =mMasterVolume;										// the volume of the left speaker, set to on full
+		mRightVolume = mMasterVolume;									// the volume of the right speaker, set to on full
 
-		mMissilePlaying=false;					// the missile is not yet playing
+		mMissilePlaying=false;											// the missile is not yet playing
 
 		// if the backgound is null
 		if(mBackground ==null){

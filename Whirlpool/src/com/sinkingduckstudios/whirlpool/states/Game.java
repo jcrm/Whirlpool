@@ -135,6 +135,8 @@ public class Game extends Activity {
 		volumeOnButton.setOnClickListener(volume_on);
 		if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
 			muted = true;
+		}else {
+			muted = false;
 		}
 		Constants.updateVolume();
 	}
@@ -391,6 +393,11 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().loadSplash();
+		if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
+			muted = true;
+		}else {
+			muted = false;
+		}
 		Constants.updateVolume();
 		Constants.getSoundManager().playBackGround();
 
