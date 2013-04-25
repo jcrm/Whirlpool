@@ -1,17 +1,14 @@
 /*
- * Author:Lewis Shaw
- * Last Updated: 25/04/2013
+ * Author:Lewis Shaw, Jake Morey
  * Content:
  * Lewis Shaw - Created the AudioOptions screen with working buttons
- * 
- * 
+ * Jake Morey: added function for checking what buttons to show
  */
 
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,14 +28,16 @@ import com.sinkingduckstudios.whirlpool.views.AudioOptionsView;
 public class AudioOptions extends Activity{
 	/** The audio options view. */
 	AudioOptionsView audioOptionsView;
-	/** The audio check value. */
-	private int audio_check;
-	/** The audiocheck. */
-	private int audiocheck;
 	/** The Constant AUDIO string. */
 	public static final String AUDIO = "audio_options";
+	
+	/** The audio1 button. */
 	ImageButton audio1Button;
+	
+	/** The audio2 button. */
 	ImageButton audio2Button;
+	
+	/** The audio3 button. */
 	ImageButton audio3Button;
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -68,30 +67,6 @@ public class AudioOptions extends Activity{
 		audio1Button.setOnClickListener(audio1);
 		audio2Button.setOnClickListener(audio2);
 		audio3Button.setOnClickListener(audio3);
-		/*
-		audioOptionsView=(AudioOptionsView)findViewById(R.id.audioOptionsView);
-		SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-		audio_check = prefs.getInt("audiocheck", audiocheck);
-
-		switch(audio_check){
-
-		case 1:
-			audio1Button.setBackgroundResource(R.drawable.selecter);
-			audio2Button.setBackgroundColor(Color.TRANSPARENT);
-			audio3Button.setBackgroundColor(Color.TRANSPARENT);
-			break;
-		case 2:
-			audio1Button.setBackgroundColor(Color.TRANSPARENT);
-			audio2Button.setBackgroundResource(R.drawable.selecter);
-			audio3Button.setBackgroundColor(Color.TRANSPARENT);
-			break;
-		case 3:
-			audio1Button.setBackgroundColor(Color.TRANSPARENT);
-			audio2Button.setBackgroundColor(Color.TRANSPARENT);
-			audio3Button.setBackgroundResource(R.drawable.selecter);
-			break;
-
-		}*/
 		checkButton();
 	}
 
@@ -124,72 +99,31 @@ public class AudioOptions extends Activity{
 		}
 	};
 
+	/** The audio1 button. */
 	private OnClickListener audio1 = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			/*
-			SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			audiocheck = 1;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-
-			View audio1Button = findViewById(R.id.audio1);
-			audio1Button.setBackgroundResource(R.drawable.selecter);
-			View audio2Button = findViewById(R.id.audio2);
-			audio2Button.setBackgroundColor(Color.TRANSPARENT);
-			View audio3Button = findViewById(R.id.audio3);
-			audio3Button.setBackgroundColor(Color.TRANSPARENT);
-			 */
 			Constants.sBackgroundVolume = 1;
 			Constants.sEffectVolume = 1;
 			checkButton();
 		}
 	};
 
+	/** The audio2 button. */
 	private OnClickListener audio2 = new OnClickListener() {
 
 		@Override
 		public void onClick(View view) {
-			/*
-			SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			audiocheck = 2;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-
-			View audio1Button = findViewById(R.id.audio1);
-			audio1Button.setBackgroundColor(Color.TRANSPARENT);
-			View audio2Button = findViewById(R.id.audio2);
-			audio2Button.setBackgroundResource(R.drawable.selecter);
-			View audio3Button = findViewById(R.id.audio3);
-			audio3Button.setBackgroundColor(Color.TRANSPARENT);
-			 */
 			Constants.sBackgroundVolume = 0;
 			Constants.sEffectVolume = 1;
 			checkButton();
 		}
 	};
+	
+	/** The audio3 button. */
 	private OnClickListener audio3 = new OnClickListener() {
-
-		//SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-		//SharedPreferences.Editor editor = prefs.edit();
-
 		@Override
 		public void onClick(View view) {
-			/*
-			SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			audiocheck = 3;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-
-			View audio1Button = findViewById(R.id.audio1);
-			audio1Button.setBackgroundColor(Color.TRANSPARENT);
-			View audio2Button = findViewById(R.id.audio2);
-			audio2Button.setBackgroundColor(Color.TRANSPARENT);
-			View audio3Button = findViewById(R.id.audio3);
-			audio3Button.setBackgroundResource(R.drawable.selecter);*/
 			Constants.sBackgroundVolume = 0;
 			Constants.sEffectVolume = 0;
 			checkButton();
@@ -210,7 +144,12 @@ public class AudioOptions extends Activity{
 		System.gc();
 		super.onDestroy();
 	}
+	
+	/**
+	 * Check button.
+	 */
 	private void checkButton(){
+		//depending on the values of the two variables set transparency of the other two buttons 
 		if(Constants.sBackgroundVolume == 1 && Constants.sEffectVolume == 1){
 			audio1Button.setBackgroundResource(R.drawable.selecter);
 			audio2Button.setBackgroundColor(Color.TRANSPARENT);
