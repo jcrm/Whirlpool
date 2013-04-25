@@ -1,8 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Fraser, Jordan O'Hare, Connor Nicol
  * Content:
- * co-authors -
+ * Jake Morey: add code about updating enemies, drawing the bath tub, and adding objects based upon level number.
  * Connor Nicol - added in the sounds for the enemies
  * 				- made sure that the sounds are only played once per enemy on screen( so if there are 2 divers on screen, sound will only play once)
  * 				- made sure the sounds did not play continuously 
@@ -35,72 +34,55 @@ import com.sinkingduckstudios.whirlpool.objects.Shark.SharkType;
 import com.sinkingduckstudios.whirlpool.objects.Torpedo;
 import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Level.
  */
 public class Level extends Activity{
-
-	/** The m w pool model. */
+	/** The wpool model. */
 	private final WPools mWPoolModel = new WPools();
-
-	/** The m graphics. */
+	/** The graphics list. */
 	private ArrayList<GraphicObject> mGraphics = new ArrayList<GraphicObject>();
-
-	/** The m torpedoes. */
+	/** The torpedoes list. */
 	private ArrayList<Torpedo> mTorpedoes = new ArrayList<Torpedo>();
-
-	/** The m environments. */
+	/** The environments list. */
 	private ArrayList<GraphicEnvironment> mEnvironments = new ArrayList<GraphicEnvironment>();
-
-	/** The m level width. */
+	/** The level width. */
 	private int mLevelWidth = 0;
-
-	/** The m level height. */
+	/** The level height. */
 	private int mLevelHeight = 0;
-
-	/** The m scroll by. */
+	/** The scroll by value. */
 	private float mScrollBy = 0;
-
-	/** The m background image. */
+	/** The background image. */
 	private Bitmap mBackgroundImage;
-
-	/** The m left border image. */
+	/** The left border image. */
 	private Bitmap mLeftBorderImage;
-
-	/** The m right border image. */
+	/** The right border image. */
 	private Bitmap mRightBorderImage;
-
-	/** The m top border image. */
+	/** The top border image. */
 	private Bitmap mTopBorderImage;
-
 	/** The Diver counter. */
 	private int DiverCounter;
-
 	/** The Frog counter. */
 	private int FrogCounter;
-
 	/** The Tug boat counter. */
 	private int TugBoatCounter;
-
 	/** The Shark counter. */
 	private int SharkCounter;
-
+	/** The Diver playing. */
 	private boolean DiverPlaying;
+	/** The Frog playing. */
 	private boolean FrogPlaying;
+	/** The Tug boat playing. */
 	private boolean TugBoatPlaying;
+	/** The Shark playing. */
 	private boolean SharkPlaying;
-
-	/** The m collectables. */
+	/** The collectables value. */
 	private int mCollectables;
-
-	/** The m screen lock. */
+	/** The screen lock. */
 	private static Object mScreenLock;
-
-	/** The m rect. */
+	/** The rect. */
 	private Rect mRect = new Rect();
-
-	/** The m follow this. */
+	/** The follow this. */
 	private GraphicObject mFollowThis;//holds which object the next collectable should follow
 
 	/**
@@ -108,23 +90,20 @@ public class Level extends Activity{
 	 */
 	public Level() {
 	}
-
 	/**
-	 * Inits the.
+	 * Inits the level.
 	 */
 	public void init(){
 		init(1);
 	}
-
 	/**
-	 * Inits the.
+	 * Inits the level with the correct level number.
 	 *
-	 * @param lNumber the l number
+	 * @param lNumber the level number
 	 */
 	public void init(int lNumber){
 		mLevelHeight = (int) (500/Constants.getScreen().getRatio());
 		initImages();
-
 		levelNumber(lNumber);
 
 		DiverCounter = 0;
@@ -150,18 +129,19 @@ public class Level extends Activity{
 	}
 
 	/**
-	 * Update.
+	 * Update all objects on screen.
 	 *
-	 * @return the int
+	 * @return the value of the stage of the end point.
 	 */
 	public int update(){
+		//update graphic objects
 		updateList();
-		//synchronized(screenLock){//synchronize whole thing, risk of null pointer large. 
-		//Pretty hacky, should change at a later date TODO
-		Constants.setDuckDist(9000000);//max dist
+		Constants.setDuckDist(9000000);//max distance
+		//iterate through torpedo list
 		for(Iterator<Torpedo> tIterator = mTorpedoes.listIterator(); tIterator.hasNext();){
 			Torpedo torpedo = tIterator.next();
 			boolean isColliding = false;
+			//check for collision with whirlpools
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				if(whirl.checkCollision(torpedo))
 					isColliding=true;
@@ -170,119 +150,58 @@ public class Level extends Activity{
 				torpedo.setPulledBy(null);
 				torpedo.setPulledState(Constants.STATE_FREE);
 			}
-
-			if(torpedo.getIsReadyToDestroy()){
+			if(torpedo.getIsReadyToDestroy()){		//check to see if the torpedo needs to be destroyed
 				Constants.getSoundManager().playExplosion();
 				tIterator.remove();
-			}else if(torpedo.updateDirection() && torpedo.getExplosion() == false){
+			}else if(torpedo.updateDirection() && torpedo.getExplosion() == false){	//checks if the direction needs to get updated 
 				torpedo.setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 				torpedo.frame();
-			}else{
+			}else{	//checks to see if need to play missile sound
 				torpedo.checkBeep();
 				torpedo.frame();	//Do everything this object does every frame, like move
 			}
+			//set the distance between the torpedo and duck
 			float theDist = torpedo.getDist();
 			if (theDist<Constants.getDuckDist())
 				Constants.setDuckDist(theDist);	
 		}
+		//play the missile sound depending on the closest missile
 		float vol = 1 - (Constants.getDuckDist()/9000000);
 		Constants.getSoundManager().alterBeepVolume(vol);
+		//iterate through the whirlpool list
 		for(int i = 0; i < mWPoolModel.getWpools().size(); i++){
+			//do things the whilrpool needs to do each frame
 			mWPoolModel.getWpools().get(i).frame();
+			//if finished remove whilrpool
 			if(mWPoolModel.getWpools().get(i).getFinished()){
 				mWPoolModel.getWpools().remove(i);
 				i--;
 			}else
 				mWPoolModel.getWpools().get(i).collisionDone=true;
 		}
+		//iterate through the environment list
 		for(GraphicEnvironment enviro: mEnvironments){
 			if(enviro.getId() == envtype.tFinish){
+				//if all three baby ducks collected then activate the finish
 				if(getDuckCount()==3)
 					((Finish)enviro).activate();
+				//depending on the stage of the finish point return a different value
+				//return one if hit the end so that the timer can be stopped
+				//return two when the hit animation has finished so the level can end
 				int count =((Finish) enviro).getEnd(); 
 				if(count==1){
+					enviro.frame();
 					return 1;
 				}else if(count == 2){
 					return 2;
 				}
+				enviro.frame();
+			}else{
+				enviro.frame();
 			}
-			enviro.frame();
 		}
-
-		//go through the list of graphics objects
-		for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
-			GraphicObject Enemy = gIterator.next();
-			// if the enemy is on screen...
-			if(enemiesOnScreen(Enemy)){
-				// find out the enemies type and play the relevant type
-				switch (Enemy.getType()){
-				case 1:{												// the diver
-					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
-						if( DiverPlaying == false){						// if the diver sound is not already playing
-							Constants.getSoundManager().playDiver();	// play the enemies sound
-							Enemy.setIsPlaying(true);					// show that the sound is playing
-							DiverCounter = 0;							// re-set the counter to 0
-							DiverPlaying = true;						// show that the diver sound is playing
-						}
-					}
-					DiverCounter ++;									// increment the counter for the diver
-					if(DiverCounter >= 500){							// if the counter has reached 500...
-						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
-						DiverPlaying = false;							// show that the diver sound is no longer playing
-					}
-					break;												// break to stop the next sound playing
-				}
-				case 2:{												// the frog
-					if (Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing... 
-						if( FrogPlaying == false){						// if the frog sound is not already playing
-							Constants.getSoundManager().playFrog();		// play the enemies sound
-							Enemy.setIsPlaying(true);					// show that the sound is playing
-							FrogCounter = 0;							// re-set the counter to 0
-							FrogPlaying = true;							// show that the frog sound is playing
-						}
-					}
-					FrogCounter ++;										// increment the counter for the frog
-					if(FrogCounter >= 500){								// if the counter has reached 500...
-						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
-						FrogPlaying = false; 							// show that the sound is no longer playing 
-					}
-					break;												// break to stop the next sound playing
-				}
-				case 3:{												// the tugboat
-					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
-						if(TugBoatPlaying == false){					// if the tug boat is not already playing
-							Constants.getSoundManager().playTugBoat();	// play the enemies sound
-							Enemy.setIsPlaying(true);					// show that the sound is playing
-							TugBoatCounter = 0;							// re-set the counter to 0
-							TugBoatPlaying = true;						// show that the sound is already playing
-						}
-					}
-					TugBoatCounter ++;									// increment the counter for the tug boat
-					if(TugBoatCounter >= 500){							// if the counter has reached 500...
-						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
-						TugBoatPlaying = false;							// show that the sound is no longer playing
-					}
-					break;												// break to stop the next sound playing
-				}
-				case 4:{												// the shark
-					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
-						if( SharkPlaying == false){						// if the shark sound is not already playing
-							Constants.getSoundManager().playShark();	// play the enemies sound
-							Enemy.setIsPlaying(true);					// show that the sound is playing
-							SharkCounter = 0;							// re-set the counter to 0
-							SharkPlaying = true;						// show that the sound is playing
-						}
-					}
-					SharkCounter ++;									// increment the counter for the shark
-					if(SharkCounter >= 500)	{							// if the counter has reached 500...
-						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
-						SharkPlaying = false;							// show that the sound is no longer playing
-					}
-					break;
-				}
-				}
-			}
-		} //end for graphics objects
+		//play the enemy sounds
+		enemySounds();
 		synchronized(mScreenLock){
 			duckOnScreen();
 		}
@@ -290,7 +209,7 @@ public class Level extends Activity{
 	}
 
 	/**
-	 * Update list.
+	 * Update list of graphic objects.
 	 */
 	private void updateList(){
 		//check list of graphic objects for movement
@@ -298,6 +217,7 @@ public class Level extends Activity{
 			GraphicObject graphic = mainIterator.next();
 			//check through list of whirlpools for interactions
 			boolean isColliding = false;
+			//check for collision with whirlpools
 			for(Whirlpool whirl : mWPoolModel.getWpools()){
 				if(whirl.checkCollision(graphic))
 					isColliding=true;
@@ -369,21 +289,25 @@ public class Level extends Activity{
 		//draw background, bath tub, and all other objects.
 		int width = Constants.getScreen().getWidth();
 		int num = (int) Math.ceil((double)mLevelWidth/Constants.getScreen().getWidth());
-
+		//draw background
 		for(int i = 0; i < (num); i++){
 			mRect.set((int) ((width*i)-mScrollBy), 0, (int)((width*(i+1)) - mScrollBy), Constants.getScreen().getHeight());
 			canvas.drawBitmap(mBackgroundImage, null, mRect,  null);
 		}
+		//draw bath tub
 		drawBathTub(canvas);
 		for (Whirlpool whirlpool : mWPoolModel.getWpools()){
 			whirlpool.draw(canvas);
 		}
+		//draw environments
 		for(GraphicEnvironment enviro : mEnvironments){
 			enviro.draw(canvas);
 		}
+		//draw torpedoes
 		for(Torpedo torpedo : mTorpedoes){
 			torpedo.draw(canvas);
 		}
+		//draw enemies and duck
 		for (GraphicObject graphic : mGraphics){
 			graphic.draw(canvas);
 		}
@@ -489,6 +413,7 @@ public class Level extends Activity{
 	private void duckOnScreen(){
 		//calculate how much to translate the background by
 		mScrollBy = Constants.getPlayer().getCentreX()- Constants.getScreen().getWidth()/2;
+		//make sure it is inside the size of the level
 		if(mScrollBy < 0){
 			mScrollBy = 0;
 		}
@@ -500,28 +425,36 @@ public class Level extends Activity{
 	/**
 	 * Duck movement collision.
 	 *
-	 * @param graphic the graphic
+	 * @param graphic the enemy object
 	 */
 	private void duckMovementCollision(GraphicObject graphic){
 		graphic.frame();	//Do everything this object does every frame, like move
+		//if not swimming around the end point do other collision
 		if(((Duck) graphic).getFinished() == false){
+			//iterate through other objects
 			for(Iterator<GraphicObject> collisionIterator = mGraphics.listIterator(); collisionIterator.hasNext();){
 				GraphicObject graphic2 = collisionIterator.next();
+				//if collision with boat change boat animation
 				if(graphic2.getId()==objtype.tBoat){
 					boolean collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Boat) graphic2).getBoatRadius());
 					if(collision){
 						((Boat) graphic2).changeAnimation();	
 					}
 				}else if(graphic2.getId()==objtype.tShark){
+					//do shark and duck collision
 					duckSharkMovementCollision(graphic, graphic2);
 				}else{
+					//check for collision agiant other objects
 					((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
 				}
 			}
+			//iterate through the torpedo list
 			for(Torpedo torpedo : mTorpedoes){
 				boolean collision = false;
+				//if torpedo is not being destroyed then check for collision
 				if(torpedo.getIsReadyToDestroy()==false && torpedo.getExplosion() == false){
 					collision = ((Duck) graphic).checkObjectCollision(torpedo.getId(), torpedo.getCollision());
+					//if collision play explosion animation
 					if(collision){
 						torpedo.setExplosion(true);
 					}
@@ -533,18 +466,21 @@ public class Level extends Activity{
 	/**
 	 * Duck shark movement collision.
 	 *
-	 * @param graphic the graphic
-	 * @param graphic2 the graphic2
+	 * @param graphic the duck object
+	 * @param graphic2 the shark object
 	 */
 	private void duckSharkMovementCollision(GraphicObject graphic, GraphicObject graphic2){
 		boolean collision = false;
+		//if the shark is asleep then check that the duck is in a certain radius
 		if(((Shark) graphic2).getSharkState() == SharkType.tAsleep){
 			collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Shark) graphic2).getSharkRadius());
+			//check if the shark can attack again
 			if(collision && ((Shark) graphic2).checkTime()){
 				((Shark) graphic2).setSharkState(SharkType.tFollow);
 			}
-		}else if(((Shark) graphic2).getSharkState() == SharkType.tFollow){
+		}else if(((Shark) graphic2).getSharkState() == SharkType.tFollow){ //check if the shark is following the duck
 			collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision());
+			//if collision disable the duck graphic, and set it to shark position, speed, and angle
 			if(collision){							
 				((Shark) graphic2).setSharkState(SharkType.tAttack);
 				((Shark) graphic2).moveToDrop();
@@ -554,6 +490,7 @@ public class Level extends Activity{
 				graphic.setCentreX((int)(graphic2.getCentreX()*Constants.getScreen().getRatio()));
 				graphic.setCentreY((int)(graphic2.getCentreY()*Constants.getScreen().getRatio()));
 			}else if(((Duck) graphic).getInvincibility() == true){
+				//if the duck is invincibable and with in a certain radius then wait until the duck has left the radius
 				collision = ((Duck) graphic).checkObjectCollision(graphic2.getId(), graphic2.getCollision(),((Shark) graphic2).getSharkRadius());
 				if(collision){
 					((Shark) graphic2).setSharkState(SharkType.tWait);
@@ -561,11 +498,90 @@ public class Level extends Activity{
 			}
 		}
 	}
-
+	
+	/**
+	 * Enemy sounds.
+	 */
+	private void enemySounds(){
+		//go through the list of graphics objects
+		for(Iterator<GraphicObject> gIterator = mGraphics.listIterator(); gIterator.hasNext();){
+			GraphicObject Enemy = gIterator.next();
+			// if the enemy is on screen...
+			if(enemiesOnScreen(Enemy)){
+				// find out the enemies type and play the relevant type
+				switch (Enemy.getType()){
+				case 1:{												// the diver
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if( DiverPlaying == false){						// if the diver sound is not already playing
+							Constants.getSoundManager().playDiver();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							DiverCounter = 0;							// re-set the counter to 0
+							DiverPlaying = true;						// show that the diver sound is playing
+						}
+					}
+					DiverCounter ++;									// increment the counter for the diver
+					if(DiverCounter >= 500){							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						DiverPlaying = false;							// show that the diver sound is no longer playing
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 2:{												// the frog
+					if (Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing... 
+						if( FrogPlaying == false){						// if the frog sound is not already playing
+							Constants.getSoundManager().playFrog();		// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							FrogCounter = 0;							// re-set the counter to 0
+							FrogPlaying = true;							// show that the frog sound is playing
+						}
+					}
+					FrogCounter ++;										// increment the counter for the frog
+					if(FrogCounter >= 500){								// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						FrogPlaying = false; 							// show that the sound is no longer playing 
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 3:{												// the tugboat
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if(TugBoatPlaying == false){					// if the tug boat is not already playing
+							Constants.getSoundManager().playTugBoat();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							TugBoatCounter = 0;							// re-set the counter to 0
+							TugBoatPlaying = true;						// show that the sound is already playing
+						}
+					}
+					TugBoatCounter ++;									// increment the counter for the tug boat
+					if(TugBoatCounter >= 500){							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						TugBoatPlaying = false;							// show that the sound is no longer playing
+					}
+					break;												// break to stop the next sound playing
+				}
+				case 4:{												// the shark
+					if(Enemy.getIsPlaying() == false){					//if that enemies sound is not already playing...
+						if( SharkPlaying == false){						// if the shark sound is not already playing
+							Constants.getSoundManager().playShark();	// play the enemies sound
+							Enemy.setIsPlaying(true);					// show that the sound is playing
+							SharkCounter = 0;							// re-set the counter to 0
+							SharkPlaying = true;						// show that the sound is playing
+						}
+					}
+					SharkCounter ++;									// increment the counter for the shark
+					if(SharkCounter >= 500)	{							// if the counter has reached 500...
+						Enemy.setIsPlaying(false);						// set the sound playing to false to show that it can be played again
+						SharkPlaying = false;							// show that the sound is no longer playing
+					}
+					break;
+				}
+				}
+			}
+		}
+	}
 	/**
 	 * Enemies on screen.
 	 *
-	 * @param TempEnemy the temp enemy
+	 * @param TempEnemy the enemies
 	 * @return true, if successful
 	 */
 	private boolean enemiesOnScreen(GraphicObject TempEnemy){
@@ -593,8 +609,8 @@ public class Level extends Activity{
 
 	/**
 	 * Level number.
-	 *
-	 * @param lNumber the l number
+	 * Add different objects depending on level number.
+	 * @param lNumber the level number
 	 */
 	private void levelNumber(int lNumber){
 		mWPoolModel.addWPool(125, 255, 10, -1, 1);

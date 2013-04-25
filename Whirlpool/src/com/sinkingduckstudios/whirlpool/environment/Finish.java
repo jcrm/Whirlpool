@@ -191,6 +191,9 @@ public class Finish extends GraphicEnvironment{
 			if(mHit == false){
 				mAnimate.animateFrame();
 			}else{
+				if(mEnd ==0){					
+					mEnd = 1;
+				}
 				mHitAnimate.animateFrame();
 				if(mHitAnimate.getFinished() ==true){
 					mEnd = 2;

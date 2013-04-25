@@ -1,9 +1,11 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Jordan O'Hare, Fraser
  * Content:
- * 
- * 
+ * Collision Manager
+ * Jake Morey: Wrote Box and Circle collision methods, 
+ * as well as rotation about point, and update collision rectangle.
+ * Jordan O'Hare: wrote FMod, and calculate angle
+ * Fraser: Added rotational bounding box collision. 
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
