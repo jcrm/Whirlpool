@@ -142,12 +142,9 @@ public class Arrow {
 			mAnimate.setFinished(false);
 		
 		mDist = newDist;
-		
-		
 		//mPointer1X = mEndX + (float)Math.sin((angle+20)*Math.PI/180)*(dist/5);
 		//mPointer1Y = mEndY - (float)Math.cos((angle+20)*Math.PI/180)*(dist/5);
 		//mPointer2X = mEndX + (float)Math.sin((angle-20)*Math.PI/180)*(dist/5);
 		//mPointer2Y = mEndY - (float)Math.cos((angle-20)*Math.PI/180)*(dist/5);
-
 	}
 }
