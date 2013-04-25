@@ -1,9 +1,8 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey
  * Content:
- * 
- * 
+ * Jake Morey: Based upon game activity and loading class.
+ * the slide counter represents each image in the cinemtaic view class.
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -45,7 +44,7 @@ public class Cinematic extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_cinematic);
 		cinematicView=(CinematicView)findViewById(R.id.cinematicView);
-
+		//retrieve what screen the cinematic was started
 		Intent cinematicscreen = getIntent();
 		cinematic = cinematicscreen.getIntExtra("cinematic",0);
 		mSlide = -1;
@@ -85,6 +84,7 @@ public class Cinematic extends Activity {
 		 * @see java.util.TimerTask#run()
 		 */
 		public void run() {
+			//if the slides have finished go to the next screen else increment the slide count
 			if(mSlide >= 5){
 				finishCinematic();
 			}else{
@@ -110,6 +110,7 @@ public class Cinematic extends Activity {
 	 * Finish cinematic.
 	 */
 	private void finishCinematic(){
+		//depending on what menu the cinematic was started depends where it returns to
 		switch(cinematic){
 		case 1:
 			Intent loading = (new Intent(getApplicationContext(),LevelSelect.class));

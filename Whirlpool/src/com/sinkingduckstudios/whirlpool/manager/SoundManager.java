@@ -1,17 +1,21 @@
 /*
- * Author: Connor Nicol
+ * Author: Connor Nicol, Jake Morey, Fraser Tomison
  * Last Updated: 18/02/2013
  * Content:
  * class used to control and play all of the sound in the game. this class will play the background music
  * continuously throughout the game and also play the sound effects for the game based on what's happening 
  * in the game ( i.e. ducky hits the side of the bath play one of the bounce sound effects). when needed
  * a sound effect will play at random form a list of appropriate sounds 
+ * Jake Morey:
+ * Added background and effect volume for muting audio.
+ * Fraser Tomison: added missile volume code.
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
 import java.util.Random;
 
 import com.sinkingduckstudios.whirlpool.R;
+import com.sinkingduckstudios.whirlpool.logic.Constants;
 
 
 import android.content.Context;
@@ -61,7 +65,7 @@ public class SoundManager
 	protected int mGrab;
 	protected int mMissileStreamId;
 	protected boolean mMissilePlaying;
-
+	private float mBackgroundVolume = 1;
 	// The media player used for the background music as it is too long for the soundpool.
 	protected MediaPlayer mBackground;
 
@@ -360,6 +364,15 @@ public class SoundManager
 		}
 
 	}
+	public void setBackgroundVolume(float volume){
+		mBackgroundVolume = volume;
+		mBackground.setVolume(mBackgroundVolume, mBackgroundVolume);
+	}
+	public void setEffectVolume(float volume){
+		mMasterVolume = volume;
+		mLeftVolume = mMasterVolume;
+		mRightVolume = mMasterVolume;
+	}
 
 	// a function to play one of the ducky sounds. picked at random
 	public void playDucky(){
@@ -473,8 +486,14 @@ public class SoundManager
 
 	// a function to play the background music looped
 	public void playBackGround (){
-		if(mBackground !=null){					// if the background is not null( it has a sound)
-			if(!mBackground.isPlaying()){		// if the backgrounds music is not already playing
+		if(mBackground ==null){
+			mBackground = new MediaPlayer();	// create a new media player for the background music 
+			if(mBackgroundVolume !=0 && !mBackground.isPlaying()){		// if the backgrounds music is not already playing
+					mBackground.setLooping(true);	// make sure the track will loop continuously 
+					mBackground.start();			// start the music playing
+			}
+		}else if(mBackground !=null){					// if the background is not null( it has a sound)
+			if(!mBackground.isPlaying() && mBackgroundVolume !=0){		// if the backgrounds music is not already playing
 				mBackground.setLooping(true);	// make sure the track will loop continuously 
 				mBackground.start();			// start the music playing
 			}
@@ -519,7 +538,7 @@ public class SoundManager
 	// a function to play the fast beep of the missile
 	// a function to play the fast beep of the missile
 	public void playBeepFast(){
-		if(!mMissilePlaying){			// if the missle is not playing
+		if(!mMissilePlaying && mMasterVolume !=0){			// if the missle is not playing
 			//mMissileStreamId = playSound(mMissile[0]);
 			mMissileStreamId = mSndPool.play(mMissile[0], mLeftVolume, mRightVolume, 1, -1, mRate);		// play the misslie sound at a reduced volume
 			mMissilePlaying=true;			// the misle is now playing
@@ -555,15 +574,6 @@ public class SoundManager
 		playSound(mMissile[2]);
 	}
 
-	// Free ALL the sounds
-	public void unloadAll(){
-		// release the sound pool.
-		if(mSndPool != null){		// if the sound pool is not already null
-			mSndPool.release();		// release all of the resources 
-			mSndPool = null;		// make sure the sound pool is null
-		}
-
-	}
 
 	//a function to play a single sound based on a id passed in
 	protected int playSound( int SoundID){
@@ -575,7 +585,7 @@ public class SoundManager
 		//													  - rate, the rate at whitch the sounds is to be played 
 		// play the sound required.
 		// make sure that the sounds pool has been created and is not null and m,ake sure that the sound ID is not 0
-		if(SoundID != 0 && mSndPool != null){
+		if(SoundID != 0 && mSndPool != null && mMasterVolume !=0){
 			return mSndPool.play(SoundID, mLeftVolume, mRightVolume, 1, 0, mRate);		// play trghe required sound
 		}
 
@@ -617,13 +627,17 @@ public class SoundManager
 	// pause the music being played
 	public void pause(){
 		mSndPool.autoPause();	// pause the sound pool
-		mBackground.pause();	// pause the background music
+		if(mBackground != null && mBackground.isPlaying()){
+			mBackground.pause();	// pause the background music
+		}
 	}
 
 	// start the paused music to play again
 	public void unpause(){
 		mSndPool.autoResume();	//resume the sound pools sounds
-		mBackground.start();	// resume the background music
+		if(mBackground.isPlaying()==false){
+			mBackground.start();	// resume the background music
+		}
 		Log.w("backgroud","resumed");
 
 	}
@@ -680,13 +694,14 @@ public class SoundManager
 
 	// a function to initialize the variables for the sound class
 	public void init(){
-		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);		// create the sound pool
-		mRate = 1.0f;							// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
-		mMasterVolume = 1.0f;					// set the master voume to full
-		mLeftVolume =mMasterVolume;				// the volume of the left speaker, set to on full
-		mRightVolume = mMasterVolume;			// the volume of the right speaker, set to on full
+		if(mSndPool==null)
+			mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);	// create the sound pool
+		mRate = 1.0f;													// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
+		mMasterVolume = Constants.sEffectVolume;						// set the master voume to full
+		mLeftVolume =mMasterVolume;										// the volume of the left speaker, set to on full
+		mRightVolume = mMasterVolume;									// the volume of the right speaker, set to on full
 
-		mMissilePlaying=false;					// the missile is not yet playing
+		mMissilePlaying=false;											// the missile is not yet playing
 
 		// if the backgound is null
 		if(mBackground ==null){

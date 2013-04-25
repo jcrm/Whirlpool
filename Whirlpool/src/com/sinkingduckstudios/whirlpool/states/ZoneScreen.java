@@ -1,8 +1,8 @@
 /*
- * Author:
- * Last Updated:
+ * Author:Lewis Shaw
+ * Last Updated:25/04/2013
  * Content:
- * 
+ * Lewis Shaw Created the ZoneSelect screen
  * 
  */
 package com.sinkingduckstudios.whirlpool.states;
@@ -39,16 +39,16 @@ public class ZoneScreen extends Activity{
 		
 		Constants.clearLevel();
 		Constants.setState(this);
-		
+		//set up the image buttons
 		ImageButton bathZoneButton = ((ImageButton)findViewById(R.id.bathzone));
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		Constants.setContext(getApplicationContext());
-		
+		//get screen size
 		Display display = getWindowManager().getDefaultDisplay();
 		@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
-		
+		//set up functions for the button
 		bathZoneButton.setOnClickListener(goToCinematic);
 		returnButton.setOnClickListener(goToMenu);
 		zoneScreenView=(ZoneScreenView)findViewById(R.id.zoneScreenView);
@@ -113,7 +113,7 @@ public class ZoneScreen extends Activity{
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 }

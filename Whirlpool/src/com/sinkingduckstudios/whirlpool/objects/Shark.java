@@ -1,8 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey
  * Content:
- *
+ * Jake Morey: based upon the parent class with added functionality for the different shark states.
  *
  */
 package com.sinkingduckstudios.whirlpool.objects;
@@ -90,6 +89,7 @@ public class Shark extends GraphicObject{
 	 */
 	@Override
 	public void draw(Canvas canvas) {
+		//draw different shark images based upon the state and angle
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
@@ -167,7 +167,9 @@ public class Shark extends GraphicObject{
 	 */
 	@Override
 	public boolean move() {
+		//update the collision rectangle
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
+		//move the shark if not asleep or waiting
 		if(mSpeed.getMove() && mSharkState != SharkType.tAsleep && mSharkState != SharkType.tWait){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
 			moveDeltaY((int) (mSpeed.getSpeed()*Math.sin(mSpeed.getAngleRad())));
@@ -180,25 +182,31 @@ public class Shark extends GraphicObject{
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#frame()
 	 */
 	public void frame(){
+		//if time to update direction as long as following set angle based upon angle between duck and shark
 		if(updateDirection()){
 			if(getSharkState() == SharkType.tFollow){
 				setDuckPosition(Constants.getPlayer().getCentreX(),Constants.getPlayer().getCentreY());
 			}
 		}
+		//if got duck move to drop location
 		if(getSharkState() == SharkType.tAttack){
 			moveToDrop();
 		}
+		//set position of duck based upon shark
 		if(getSharkState() == SharkType.tAttack){
 			Constants.getPlayer().setCentre((int)(getCentreX()*Constants.getScreen().getRatio()), (int)(getCentreY()*Constants.getScreen().getRatio()));
+			//if at drop location change state for duck and shark
 			if(getMovedToDrop()){
 				Constants.getPlayer().setSharkAttack(false);
 				setSharkState(SharkType.tRetreat);
 			}
 		}
+		//if returning back to start change angle based upon location, then check if at start
 		if(getSharkState() == SharkType.tRetreat){
 			returnToStart();						
 			checkAtStart();
 		}
+		//if waiting check to see if still need to wait
 		if(getSharkState() == SharkType.tWait){
 			if(Constants.getPlayer().getInvincibility() == false){
 				setSharkState(SharkType.tFollow);
@@ -206,6 +214,7 @@ public class Shark extends GraphicObject{
 		}
 		// Move Objects
 		if(move()){
+			//increase or decrease speed around a set speed
 			float tempSpeed = mSpeed.getSpeed()/Constants.getScreen().getRatio();
 			if(tempSpeed<mTopSpeed){
 				mSpeed.setSpeed(tempSpeed+0.05f);
@@ -214,6 +223,7 @@ public class Shark extends GraphicObject{
 			}
 			border();
 		}
+		//animate based upon shark state and angle
 		switch(getSpriteSheetIndex()){
 		case 0: mAnimate.animateFrame(); break;
 		case 1: mUpAnimate.animateFrame(); break;
@@ -245,7 +255,7 @@ public class Shark extends GraphicObject{
 	/**
 	 * Gets the sprite sheet index.
 	 *
-	 * @return the sprite sheet index
+	 * @return the sprite sheet index based upon angle and state
 	 */
 	private int getSpriteSheetIndex(){
 		if(mSharkState == SharkType.tAsleep){
@@ -294,7 +304,7 @@ public class Shark extends GraphicObject{
 	/**
 	 * Update direction.
 	 *
-	 * @return true, if successful
+	 * @return true, if not in whirlpool and timer is ready
 	 */
 	public boolean updateDirection(){
 		if(this.getPulledState()!=Constants.STATE_PULLED){
@@ -325,6 +335,7 @@ public class Shark extends GraphicObject{
 	 * Return to start.
 	 */
 	public void returnToStart(){
+		//move towards the start location
 		mSpeed.setAngle(180+CollisionManager.calcAngle(mStart.getX(), mStart.getY(), getCentreX(), getCentreY()));
 	}
 	
@@ -332,6 +343,7 @@ public class Shark extends GraphicObject{
 	 * Check if at start position.
 	 */
 	public void checkAtStart(){	
+		//check to see if returned to asleep position
 		if(CollisionManager.circleCollision(getCentreX(), getCentreY(), 10, mStart.getX(), mStart.getY(), 10)){
 			mSharkState = SharkType.tAsleep;
 		}
@@ -341,6 +353,7 @@ public class Shark extends GraphicObject{
 	 * Move to drop location.
 	 */
 	public void moveToDrop(){
+		//move towards the drop location
 		mSpeed.setAngle(180+CollisionManager.calcAngle(mDropLocation.getX(), mDropLocation.getY(), getCentreX(), getCentreY()));	
 	}
 	
@@ -350,6 +363,7 @@ public class Shark extends GraphicObject{
 	 * @return true if at drop location
 	 */
 	public boolean getMovedToDrop(){
+		//check if the shark is with in a certain distance from the drop location
 		if(CollisionManager.circleCollision(getCentreX(), getCentreY(), 20, mDropLocation.getX(), mDropLocation.getY(), 20)){
 			return true;
 		}

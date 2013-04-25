@@ -1,9 +1,9 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Connor Nicol
  * Content:
- * 
- * 
+ * Connor Nicol: added sounds
+ * Jake Morey: created based upon game view to display
+ * image based upon slide number in cinematic class
  */
 package com.sinkingduckstudios.whirlpool.views;
 
@@ -18,7 +18,6 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 import com.sinkingduckstudios.whirlpool.states.Cinematic;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CinematicView.
  */
@@ -56,8 +55,9 @@ public class CinematicView extends View{
 		setMinimumHeight(100);
 		Constants.setRes(getResources());
 		Constants.createSoundManager(getContext());
+		Constants.updateVolume();
     	Constants.getSoundManager().loadCinematic();
-
+    	//set up cinematic images
 		for(int i = 0; i<6; i++){
 			mCinematic[i] = SpriteManager.getCinematic(i);
 		}
@@ -75,6 +75,7 @@ public class CinematicView extends View{
 	 */
 	@Override
 	protected void onDraw(Canvas canvas){
+		//draw image base upon cinematic class slide number
 		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
 		if(mCinematic[Cinematic.mSlide] != null && mCinematic[Cinematic.mSlide].isRecycled() ==false){
 			canvas.drawBitmap(mCinematic[Cinematic.mSlide], null, rect, null);	

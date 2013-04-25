@@ -1,9 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey
  * Content:
- * 
- * 
+ * Jake Morey: shows of the name of every person in the group and their roles.
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -34,7 +32,9 @@ public class Credits extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_credits);
         
+        //set the distance between the text related to the size of the screen 
         int height = Constants.getScreen().getHeight()/10;
+        //set the typeface of the text to be the same
         Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
         TextView Jake = (TextView) findViewById(R.id.credits1);
         Jake.setY(height);
@@ -80,7 +80,7 @@ public class Credits extends Activity {
         Andrew.setY(9*height);
         Andrew.setTextColor(Color.BLACK);
         Andrew.setTypeface(face);
-        
+        //quit after a certain time
         new Handler().postDelayed (new Runnable(){
         	@Override
         	public void run(){    			
@@ -105,6 +105,7 @@ public class Credits extends Activity {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
+		//if the screen was touched exit the activity
 		if(e.getAction() == MotionEvent.ACTION_DOWN){
 			startActivity(new Intent(getApplicationContext(),Options.class));
     		finish();

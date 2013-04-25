@@ -1,9 +1,8 @@
 /*
- * Author: Jake Morey
- * Last Updated: 25/02/2013
+ * Author: Jake Morey, Fraser Tomison
  * Content:
- * A Class for corners of an object, the centre, width & height, and the radius.
- * 
+ * Jake Morey: A Class for corners of an object, the centre, width & height, and the radius.
+ * Fraser Tomison: added the scaling code.
  */
 package com.sinkingduckstudios.whirlpool.movement;
 

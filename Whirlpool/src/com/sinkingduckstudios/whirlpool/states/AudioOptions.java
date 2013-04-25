@@ -1,49 +1,52 @@
 /*
- * Author:
- * Last Updated:
+ * Author:Lewis Shaw, Jake Morey
  * Content:
- * 
- * 
+ * Lewis Shaw - Created the AudioOptions screen with working buttons
+ * Jake Morey: added function for checking what buttons to show
  */
+
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.logic.Screen;
-import com.sinkingduckstudios.whirlpool.views.AudioOptionsView;
 
 /**
  * The Class AudioOptions.
  */
-public class AudioOptions extends Activity implements OnClickListener{
+public class AudioOptions extends Activity{
 	/** The audio options view. */
-	AudioOptionsView audioOptionsView;
-	/** The audio group. */
-	RadioGroup mAudioGroup;
-	/** The audio buttons. */
-	RadioButton audio1, audio2, audio3;
-	/** The audio check value. */
-	private int audio_check;
-	/** The audiocheck. */
-	private int audiocheck;
 	/** The Constant AUDIO string. */
 	public static final String AUDIO = "audio_options";
-
+	
+	/** The audio1 button. */
+	ImageButton audio1Button;
+	
+	/** The audio2 button. */
+	ImageButton audio2Button;
+	
+	/** The audio3 button. */
+	ImageButton audio3Button;
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
+	
+	private final int screenWidth = 100; //lets split the screen up into 100 segments for relative button positioning
+	private final int button1 = 18;
+	private final int button2 = 49;
+	private final int button3 = 80; //relative button positions to a screen width of 100
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,76 +57,35 @@ public class AudioOptions extends Activity implements OnClickListener{
 		Constants.setState(this);
 
 		ImageButton backButton = ((ImageButton)findViewById(R.id.op_return));
-		audio1 = (RadioButton)findViewById(R.id.audio1); //Music on, SFX on
-		audio2 = (RadioButton)findViewById(R.id.audio2); //Music off, SFX on
-		audio3 = (RadioButton)findViewById(R.id.audio3); //Music off, SFX off
+		audio1Button = ((ImageButton)findViewById(R.id.audio1));
+		audio2Button = ((ImageButton)findViewById(R.id.audio2));
+		audio3Button = ((ImageButton)findViewById(R.id.audio3));
+
+		int realScreenWidth = Constants.getScreen().getWidth();
+		int buttonScale = Constants.getScreen().getHeight() / 10;
+		
+		RelativeLayout.LayoutParams button1Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button1Params.leftMargin = (int)(((float)button1/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button1Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio1Button.setLayoutParams(button1Params);
+		
+		RelativeLayout.LayoutParams button2Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button2Params.leftMargin = (int)(((float)button2/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button2Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio2Button.setLayoutParams(button2Params);
+		
+		RelativeLayout.LayoutParams button3Params = new RelativeLayout.LayoutParams(buttonScale,buttonScale);
+		button3Params.leftMargin = (int)(((float)button3/(float)screenWidth)*realScreenWidth) - (buttonScale/2);
+		button3Params.addRule(RelativeLayout.CENTER_VERTICAL);
+		audio3Button.setLayoutParams(button3Params);
+		
 		Constants.setContext(getApplicationContext());
 
-		Display display = getWindowManager().getDefaultDisplay();
-		@SuppressWarnings("deprecation")
-		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
-		Constants.setScreen(theScreen);
-
 		backButton.setOnClickListener(goToOp);
-		audio1.setOnClickListener((OnClickListener) this);
-		audio2.setOnClickListener((OnClickListener) this);
-		audio3.setOnClickListener((OnClickListener) this);
-
-		audioOptionsView=(AudioOptionsView)findViewById(R.id.audioOptionsView);
-		SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-		audio_check = prefs.getInt("audiocheck", audiocheck);
-
-		switch(audio_check){
-		case 1:
-			audio1.setChecked(true);
-			break;
-		case 2:
-			audio2.setChecked(true);
-			break;
-		case 3:
-			audio3.setChecked(true);
-			break;
-		}
-
-	}
-	
-	/* (non-Javadoc)
-	 * @see android.view.View.OnClickListener#onClick(android.view.View)
-	 */
-	public void onClick(View v){
-
-		SharedPreferences prefs = getSharedPreferences(AUDIO, MODE_PRIVATE);
-		SharedPreferences.Editor editor = prefs.edit();
-
-		switch(v.getId()){
-
-		case R.id.audio1:
-			//Constants.getSoundManager().setVolume(1);
-			audiocheck = 1; 
-			editor.putInt("audiocheck", audiocheck);
-			editor.commit();
-			audio1.setChecked(true);
-			break;
-		case R.id.audio2:
-			audiocheck = 2;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-			audio2.setChecked(true);
-			break;
-		case R.id.audio3:
-			//Constants.getSoundManager().setVolume(0);
-			audiocheck = 3;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-			audio3.setChecked(true);
-			break;
-		default:
-			audiocheck = 1;
-			editor.putInt("audiocheck",audiocheck);
-			editor.commit();
-			audio1.setChecked(true);
-			break;
-		}
+		audio1Button.setOnClickListener(audio1);
+		audio2Button.setOnClickListener(audio2);
+		audio3Button.setOnClickListener(audio3);
+		checkButton();
 	}
 
 	/* (non-Javadoc)
@@ -135,16 +97,16 @@ public class AudioOptions extends Activity implements OnClickListener{
 		Constants.getSoundManager().loadSplash();
 		super.onResume();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPause()
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
-	
+
 	/** The go to option button. */
 	private OnClickListener goToOp = new OnClickListener() {
 		@Override
@@ -154,25 +116,66 @@ public class AudioOptions extends Activity implements OnClickListener{
 			finish();
 		}
 	};
+
+	/** The audio1 button. */
+	private OnClickListener audio1 = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.sBackgroundVolume = 1;
+			Constants.sEffectVolume = 1;
+			checkButton();
+		}
+	};
+
+	/** The audio2 button. */
+	private OnClickListener audio2 = new OnClickListener() {
+
+		@Override
+		public void onClick(View view) {
+			Constants.sBackgroundVolume = 0;
+			Constants.sEffectVolume = 1;
+			checkButton();
+		}
+	};
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onBackPressed()
-	 */
-	public void onBackPressed(){
-		Constants.getSoundManager().playSplash();
-		startActivity(new Intent(getApplicationContext(), Options.class));
-		finish();
-	}
-	
+	/** The audio3 button. */
+	private OnClickListener audio3 = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Constants.sBackgroundVolume = 0;
+			Constants.sEffectVolume = 0;
+			checkButton();
+		}
+	};
+
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onDestroy()
 	 */
 	@Override
 	public void onDestroy(){
-		audioOptionsView.CleanUp();
-		audioOptionsView = null;
 		Runtime.getRuntime().gc();
 		System.gc();
 		super.onDestroy();
+	}
+	
+	/**
+	 * Check button.
+	 */
+	private void checkButton(){
+		//depending on the values of the two variables set transparency of the other two buttons 
+		if(Constants.sBackgroundVolume == 1 && Constants.sEffectVolume == 1){
+			audio1Button.setBackgroundResource(R.drawable.selecter);
+			audio2Button.setBackgroundColor(Color.TRANSPARENT);
+			audio3Button.setBackgroundColor(Color.TRANSPARENT);
+		}else if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 1){
+			audio1Button.setBackgroundColor(Color.TRANSPARENT);
+			audio2Button.setBackgroundResource(R.drawable.selecter);
+			audio3Button.setBackgroundColor(Color.TRANSPARENT);
+		}else if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
+			audio1Button.setBackgroundColor(Color.TRANSPARENT);
+			audio2Button.setBackgroundColor(Color.TRANSPARENT);
+			audio3Button.setBackgroundResource(R.drawable.selecter);
+		}
 	}
 }

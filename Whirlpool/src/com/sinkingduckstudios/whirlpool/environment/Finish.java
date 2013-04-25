@@ -27,7 +27,6 @@ public class Finish extends GraphicEnvironment{
 	private float objectRadius = 40.0f; //distance of graphic to wpool center default 40
 	private float _rot = 0.0f;
 	private int dirFactor = 1;
-	private boolean finished = false;
 	public boolean collisionDone = true;
 	private boolean mHit = false;
 	private int mEnd = 0;
@@ -191,6 +190,9 @@ public class Finish extends GraphicEnvironment{
 			if(mHit == false){
 				mAnimate.animateFrame();
 			}else{
+				if(mEnd ==0){					
+					mEnd = 1;
+				}
 				mHitAnimate.animateFrame();
 				if(mHitAnimate.getFinished() ==true){
 					mEnd = 2;
@@ -232,14 +234,7 @@ public class Finish extends GraphicEnvironment{
 		return false;
 	}
 
-	/**
-	 * Gets the finished.
-	 *
-	 * @return the finished
-	 */
-	public boolean getFinished(){
-		return (finished && collisionDone);
-	}
+	
 
 	/**
 	 * Sets the clockwise.

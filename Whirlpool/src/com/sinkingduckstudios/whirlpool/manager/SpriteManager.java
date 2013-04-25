@@ -1,8 +1,8 @@
 /*
- * Author:
+ * Author: Jake Morey losely based upon Imports created by Jordan O'Hare
  * Last Updated:
  * Content:
- * 
+ * Managers the bitmaps for every object, buttons, and backgrounds.
  * 
  */
 package com.sinkingduckstudios.whirlpool.manager;
@@ -199,7 +199,7 @@ public class SpriteManager {
 	}
 	
 	/**
-	 * Clean.
+	 * Cleans the bitmap.
 	 *
 	 * @param bitmap the bitmap
 	 */

@@ -1,3 +1,9 @@
+/*
+ * Author: Jake Morey, Fraser Tomison
+ * Content:
+ * Jake Morey: based upon the parent class with added functionality for following the duck
+ * Fraser Tomison: added checking distance between missile and duck, and whilrpool code
+ */
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Bitmap;
@@ -57,6 +63,7 @@ public class Torpedo extends GraphicObject {
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
 		canvas.rotate(mSpeed.getAngle()+180);
+		//if torpedo is exploding show exploding image 
 		if(mExplosion){
 			canvas.drawBitmap(mExplosionBitmap, mExplosionAnimate.getPortion(), rect, null);
 		}else{
@@ -101,7 +108,9 @@ public class Torpedo extends GraphicObject {
 	 */
 	@Override
 	public boolean move() {
+		//update colision rectangle
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
+		//make sure it cant exploding instantly by hitting the boat
 		if(mHitBoat == false && ++mHitBoatCounter > 40){
 			mHitBoatCounter = 0;
 			mHitBoat = true;
@@ -119,6 +128,7 @@ public class Torpedo extends GraphicObject {
 	 */
 	@Override
 	public void borderCollision(ScreenSide side, int width, int height) {
+		//if hit border set hit to true
 		boolean hit = false;
 		switch(side){
 		case Top:
@@ -172,6 +182,7 @@ public class Torpedo extends GraphicObject {
 		default:
 			break;
 		}
+		//if already been in a whirlpool and hit a border then start explosion image
 		if(hit == true && mIsTracking == false){
 			mExplosion = true;
 		}
@@ -182,11 +193,13 @@ public class Torpedo extends GraphicObject {
 	 */
 	@Override
 	public void frame() {
+		//if not exploding then move
 		if(mExplosion == false){
 			if(move()){
 				border();
 			}
 		}
+		//play explosion animation until the animation has finished
 		if(mExplosion){
 			if(mExplosionAnimate.getFinished() == false){
 				mExplosionAnimate.animateFrame();
@@ -241,6 +254,7 @@ public class Torpedo extends GraphicObject {
 	 * @param g the y position of the duck
 	 */
 	public void setDuckPosition(float f, float g){
+		//update angle based upon duck position, also increase speed
 		mSpeed.setAngle(180+CollisionManager.calcAngle(f, g, getCentreX(), getCentreY()));
 		float tempSpeed = mSpeed.getSpeed();
 		if(tempSpeed<mTopSpeed){
@@ -270,7 +284,7 @@ public class Torpedo extends GraphicObject {
 	/**
 	 * Update direction.
 	 *
-	 * @return true, if successful
+	 * @return true, successful if counter is ready
 	 */
 	public boolean updateDirection(){
 		if(mIsTracking){
@@ -287,6 +301,7 @@ public class Torpedo extends GraphicObject {
 	 * Check beep.
 	 */
 	public void checkBeep(){
+		//check if missile can play sound
 		if(mExplosion == false){
 			mBeepCounter++;
 			if(mBeepCounter>30){
