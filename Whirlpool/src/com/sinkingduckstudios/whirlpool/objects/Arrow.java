@@ -6,7 +6,6 @@
  * Arrow indicates direction of whirlpool, may have different size/colour for speeds
  */
 
-
 package com.sinkingduckstudios.whirlpool.objects;
 
 import android.graphics.Bitmap;
@@ -21,21 +20,28 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
  */
 public class Arrow {
 
-	/** The m end y. */
+	/** The start and end points of the arrow. */
 	private float mStartX, mStartY, mEndX, mEndY;
 	
-	/** The m visible. */
+	/** The visibility of the arrow. */
 	private boolean mVisible;
 	
-	/** The m dist. */
+	/** The vector of the arrow */
 	private float mAngle,mDist;
 	
-	/** The m bitmap. */
+	/** The arrow bitmap. */
 	private Bitmap mBitmap;
 	
-	/** The m animate. */
+	/** The animate class for this sprite sheet. */
 	private Animate mAnimate;
 	
+	/**Constructor for Arrow class, takes the starting position
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 */
 	public Arrow(float x1, float y1, float x2, float y2){
 		mBitmap = SpriteManager.getArrow();
 		mAnimate = new Animate(13, 1, 13, mBitmap.getWidth(), mBitmap.getHeight());
@@ -44,10 +50,23 @@ public class Arrow {
 		init(x1,y1,x2,y2);
 	}
 	
+	/**
+	 * Call to reposition the arrow
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 */
 	public void reposition(float x1, float y1, float x2, float y2){
 		init(x1,y1,x2,y2);
 	}
 	
+	/**
+	 * Draws the arrow to specified canvas
+	 * 
+	 * @param canvas
+	 */
 	public void draw(Canvas canvas) {
 		if (mVisible){
 			//Paint paint = new Paint();
@@ -75,32 +94,40 @@ public class Arrow {
 	}
 	
 	/**
-	 * Gets the dist.
+	 * Gets the length of the arrow, in a form we can assign to the ducks speed
 	 *
-	 * @return the dist
+	 * @return the speed we should set the duck
 	 */
 	public float getDist(){
 	    return mDist/100f;
 	}
 	
 	/**
-	 * Sets the visible.
+	 * Sets the visibility of the arrow
 	 *
-	 * @param visible the new visible
+	 * @param visible true or false
 	 */
 	public void setVisible(boolean visible){
 		mVisible = visible;
 	}
 	
 	/**
-	 * Gets the visible.
+	 * Gets the visibility
 	 *
-	 * @return the visible
+	 * @return the visibility
 	 */
 	public boolean getVisible(){
 		return mVisible;
 	}
 	
+	/**
+	 * Initialise the arrow with starting coordinates
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 */
 	private void init(float x1, float y1, float x2, float y2){
 		float newDist;
 		mStartX = x1;

@@ -46,7 +46,11 @@ public class Level extends Activity{
 	private ArrayList<Torpedo> mTorpedoes = new ArrayList<Torpedo>();
 	/** The environments list. */
 	private ArrayList<GraphicEnvironment> mEnvironments = new ArrayList<GraphicEnvironment>();
-	/** The level width. */
+	/** The 2-star time required (in secs). */
+	private int mLevelAverageTime;
+	/** The 3-star time required (in secs). */
+	private int mLevelGoodTime;
+	/** The m level width. */
 	private int mLevelWidth = 0;
 	/** The level height. */
 	private int mLevelHeight = 0;
@@ -629,6 +633,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(750,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1400, 250));
+			
+			mLevelAverageTime = 40;	//seconds to get 2 stars
+			mLevelGoodTime = 20;	//seconds to get 3 stars
 			break;
 		case 2:
 			mGraphics.add(new Diver(100, 0, 45, 100, 0, 400, 250));
@@ -641,6 +648,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(250,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1250, 250));
+			
+			mLevelAverageTime = 30;	//seconds to get 2 stars
+			mLevelGoodTime = 15;	//seconds to get 3 stars
 			break;
 		case 3:
 			mGraphics.add(new Diver(250, 0, 90, 0, 0, 0, 0));
@@ -656,6 +666,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(1350,450));
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(1200, 250));
+			
+			mLevelAverageTime = 25;	//seconds to get 2 stars
+			mLevelGoodTime = 15;	//seconds to get 3 stars
 			break;
 		case 4:
 			mGraphics.add(new Diver(100, 350, 0, 0, 400, 1000, 400));
@@ -672,6 +685,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(2100,350));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250));
+			
+			mLevelAverageTime = 35;	//seconds to get 2 stars
+			mLevelGoodTime = 25;	//seconds to get 3 stars
 			break;
 		case 5: 
 			mGraphics.add(new Diver(100, 50, 0, 0, 0, 900, 0));
@@ -690,6 +706,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(2000,190));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 250));
+			
+			mLevelAverageTime = 40;	//seconds to get 2 stars
+			mLevelGoodTime = 25;	//seconds to get 3 stars
 			break;
 		case 6:
 			mGraphics.add(new Diver(800, 50, 90, 0, 0, 0, 300));
@@ -705,6 +724,9 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(2500,350));
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
 			mEnvironments.add(new Finish(2900, 235));
+			
+			mLevelAverageTime = 45;	//seconds to get 2 stars
+			mLevelGoodTime = 27;	//seconds to get 3 stars
 			break;
 		default: 
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
@@ -721,6 +743,20 @@ public class Level extends Activity{
 		SpriteManager.unloadDiver();
 		SpriteManager.unloadFrog();
 		SpriteManager.unloadShark();
+	}
+	/**
+	 * Get Average Time
+	 * @return the level average time
+	 */
+	public int getAverageTime() {
+		return mLevelAverageTime;
+	}
+	/**
+	 * Get Good Time
+	 * @return the level good time
+	 */
+	public int getGoodTime() {
+		return mLevelGoodTime;
 	}
 
 }
