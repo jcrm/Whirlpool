@@ -48,8 +48,8 @@ public class Diver extends GraphicObject{
 		init();
 		mLeftBorder = 0;
 		mTopBorder = 0;
-		mRightBorder = Constants.getLevel().getLevelWidth();
-		mBottomBorder = Constants.getLevel().getLevelHeight();
+		mRightBorder = (int) (Constants.getLevel().getLevelWidth()/Constants.getScreen().getRatio());
+		mBottomBorder = (int) (Constants.getLevel().getLevelHeight()/Constants.getScreen().getRatio());
 		checkBorderConditions();
 	}
 	/**
@@ -309,8 +309,8 @@ public class Diver extends GraphicObject{
 		if(mRightBorder ==0 && mLeftBorder ==0 && mTopBorder == 0 && mBottomBorder ==0){
 			mLeftBorder = 0;
 			mTopBorder = 0;
-			mRightBorder = Constants.getLevel().getLevelWidth();
-			mBottomBorder = Constants.getLevel().getLevelHeight();
+			mRightBorder = (int) (Constants.getLevel().getLevelWidth()/Constants.getScreen().getRatio());
+			mBottomBorder = (int) (Constants.getLevel().getLevelHeight()/Constants.getScreen().getRatio());
 		}
 	}
 
