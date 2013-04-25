@@ -162,7 +162,6 @@ public class Game extends Activity {
 			synchronized(Constants.getLock()){
 				//quit the activity
 				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
@@ -179,7 +178,6 @@ public class Game extends Activity {
 			synchronized(Constants.getLock()){
 				//reload the level
 				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				Intent restart = (new Intent(getApplicationContext(), Loading.class));
@@ -361,7 +359,6 @@ public class Game extends Activity {
 		mPaused = true;
 		mCountDownTimer.cancel();
 		mTimerHasStarted = false;
-		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
@@ -374,7 +371,6 @@ public class Game extends Activity {
 		//clean up data
 		mPaused = true;
 		mCountDownTimer.cancel();
-		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		Runtime.getRuntime().gc();
         System.gc();

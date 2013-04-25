@@ -229,9 +229,11 @@ public class Constants {
 	 * @param appContext the app context
 	 */
 	public static void createSoundManager(Context appContext) {
-		if(sSoundManager==null)
+		if(sSoundManager==null){
 			sSoundManager = new SoundManager(appContext);
+		}
 		sSoundManager.init();
+		
 	}
 	
 	/**

@@ -113,7 +113,7 @@ public class ZoneScreen extends Activity{
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 }

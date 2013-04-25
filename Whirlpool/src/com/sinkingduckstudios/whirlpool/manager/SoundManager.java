@@ -574,15 +574,6 @@ public class SoundManager
 		playSound(mMissile[2]);
 	}
 
-	// Free ALL the sounds
-	public void unloadAll(){
-		// release the sound pool.
-		if(mSndPool != null){		// if the sound pool is not already null
-			mSndPool.release();		// release all of the resources 
-			mSndPool = null;		// make sure the sound pool is null
-		}
-
-	}
 
 	//a function to play a single sound based on a id passed in
 	protected int playSound( int SoundID){
@@ -703,7 +694,8 @@ public class SoundManager
 
 	// a function to initialize the variables for the sound class
 	public void init(){
-		mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);	// create the sound pool
+		if(mSndPool==null)
+			mSndPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);	// create the sound pool
 		mRate = 1.0f;													// this is the sample rate that the sounds will be played at. set to 1 to play them at the noraml rate
 		mMasterVolume = Constants.sEffectVolume;						// set the master voume to full
 		mLeftVolume =mMasterVolume;										// the volume of the left speaker, set to on full

@@ -103,7 +103,7 @@ public class Menu extends Activity {
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 	/** The go to game button. */
