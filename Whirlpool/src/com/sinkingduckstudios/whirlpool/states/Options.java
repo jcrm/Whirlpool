@@ -1,11 +1,11 @@
 /*
- * Author:
- * Last Updated:
+ * Author:Lewis Shaw
+ * Last Updated:25/04/2013
  * Content:
+ * Lewis Shaw - Created the Options screen with working buttons
  * 
  * 
  */
-
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;

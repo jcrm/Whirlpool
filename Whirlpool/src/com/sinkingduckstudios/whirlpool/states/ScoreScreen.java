@@ -1,10 +1,11 @@
 /*
- * Author: Fraser Tomison &
+ * Author: Fraser Tomison & Lewis Shaw
  * Last Updated: 22/04/2013
- * Content: Displays score acheived, handles saving highscores
- * 
+ * Content: 
+ * Lewis Shaw - Displaying Score achieved, saves score plus the level number together
  * 
  */
+
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;

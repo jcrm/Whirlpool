@@ -1,3 +1,10 @@
+/*
+ * Author:Lewis Shaw
+ * Last Updated:25/04/2013
+ * Content:
+ * 
+ * 
+ */
 package com.sinkingduckstudios.whirlpool.views;
 
 import android.content.Context;

@@ -485,8 +485,14 @@ public class SoundManager
 
 	// a function to play the background music looped
 	public void playBackGround (){
-		if(mBackground !=null && mBackgroundVolume !=0){					// if the background is not null( it has a sound)
-			if(!mBackground.isPlaying()){		// if the backgrounds music is not already playing
+		if(mBackground ==null){
+			mBackground = new MediaPlayer();	// create a new media player for the background music 
+			if(mBackgroundVolume !=0 && !mBackground.isPlaying()){		// if the backgrounds music is not already playing
+					mBackground.setLooping(true);	// make sure the track will loop continuously 
+					mBackground.start();			// start the music playing
+			}
+		}else if(mBackground !=null){					// if the background is not null( it has a sound)
+			if(!mBackground.isPlaying() && mBackgroundVolume !=0){		// if the backgrounds music is not already playing
 				mBackground.setLooping(true);	// make sure the track will loop continuously 
 				mBackground.start();			// start the music playing
 			}
@@ -629,7 +635,7 @@ public class SoundManager
 	// pause the music being played
 	public void pause(){
 		mSndPool.autoPause();	// pause the sound pool
-		if(mBackground.isPlaying()){
+		if(mBackground != null && mBackground.isPlaying()){
 			mBackground.pause();	// pause the background music
 		}
 	}

@@ -1,7 +1,8 @@
 /*
  * Author: Jake Morey, Jordan O'Hare
  * Content:
- * Jordan O'Hare: created basic class 
+ * Jordan O'Hare: created basic class based upon parent class
+ * Jake Morey: added function to move frog around a circle
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -14,8 +15,6 @@ import com.sinkingduckstudios.whirlpool.logic.Animate;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.CollisionManager;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Frog.
  */

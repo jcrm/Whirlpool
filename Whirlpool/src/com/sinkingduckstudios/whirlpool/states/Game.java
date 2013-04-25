@@ -1,10 +1,11 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Lewis Shaw &
+ * Last Updated: 25/04/2013
  * Content:
- * 
+ * Lewis Shaw - added a timer on screen, worked on the pause screen with multiple buttons to perform various actions
  * 
  */
+
 package com.sinkingduckstudios.whirlpool.states;
 
 import java.util.Timer;
@@ -121,14 +122,12 @@ public class Game extends Activity {
 		mTime.schedule(new MainThread(),0, 25);
 
 		timepassed=0;
-		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
 		ImageButton pauseButton = ((ImageButton)findViewById(R.id.pausebutton));
 		ImageButton unpauseButton = ((ImageButton)findViewById(R.id.unpausebutton));
 		ImageButton quitButton = ((ImageButton)findViewById(R.id.quit));
 		ImageButton restartButton = ((ImageButton)findViewById(R.id.restart));
 		ImageButton volumeOffButton = ((ImageButton)findViewById(R.id.volume_off));
 		ImageButton volumeOnButton = ((ImageButton)findViewById(R.id.volume_on));
-		menuButton.setOnClickListener(goToMenu);
 		pauseButton.setOnClickListener(pause);
 		unpauseButton.setOnClickListener(unpause);
 		quitButton.setOnClickListener(quit);
@@ -210,23 +209,6 @@ public class Game extends Activity {
 			Constants.updateVolume();
 		}
 	};
-	/** The go to menu button. */
-	private OnClickListener goToMenu = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			synchronized(Constants.getLock()){
-				Constants.getSoundManager().playSplash();
-				finish();
-				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
-				Constants.getSoundManager().cleanup();
-				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
-				mLevel.cleanUp();
-			}
-		}
-	};
-	
 	/** The pause button. */
 	private OnClickListener pause = new OnClickListener() {
 		@Override

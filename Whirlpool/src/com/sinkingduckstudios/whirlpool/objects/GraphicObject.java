@@ -1,9 +1,11 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jordan O'Hare, Jake Morey, Connor Nicol, Fraser
  * Content:
- * 
- * 
+ * Jordan O'Hare created original class which has been built upon and edited.
+ * Jake Morey: added enum types and altered the variables it holds.
+ * 			   also changed to use properties class instead of individual variables.
+ * Fraser: added whirlpool code
+ * Connor Nicol: set type functions.
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -20,7 +22,6 @@ import com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide;
 import com.sinkingduckstudios.whirlpool.movement.Properties;
 import com.sinkingduckstudios.whirlpool.movement.Speed;
 
-// TODO: Auto-generated Javadoc
 interface ObjectFunctions{
 	public void draw(Canvas canvas);
 	public void init();
@@ -30,13 +31,12 @@ interface ObjectFunctions{
 /**
  * The Class GraphicObject.
  */
-public abstract class GraphicObject {//implements ObjectFunctions{
-	//enum used to decide what type of sprite
+public abstract class GraphicObject {
 	/**
- * The Enum objtype.
- */
-public enum objtype {
-		
+	 * The Enum objtype.
+	 */
+	public enum objtype {
+
 		/** The default values. */
 		tDefault(0, 0, 1, 1, 1), 
 		/** The t whirl. */
@@ -55,7 +55,7 @@ public enum objtype {
 		tTorpedo(6, new Random().nextInt(360), 10, 4, 3),
 		/** The collectable values. */
 		tCollectable(8,0,16,4,4);
-		
+
 		/** The speed of the object. */
 		float tSpeed;
 		/** The angle of the object. */
@@ -66,7 +66,7 @@ public enum objtype {
 		int tNoOfCol;
 		/** The number of rows of the object. */
 		int tNoOfRow;
-		
+
 		/**
 		 * Instantiates a new objtype.
 		 *
@@ -106,32 +106,32 @@ public enum objtype {
 	protected boolean mIsPlaying;
 	/** The graphic type. */
 	protected int mGraphicType;				// for ease sake, 1 = diver, 2 = frog, 3 = boat, 4 = shark
-    /**
-     * Instantiates a new graphic object.
-     */
-    public GraphicObject(){
-    	mScreenLock=Constants.getLock();
-    }
-    /**
-     * Draw.
-     *
-     * @param canvas to draw to
-     */
-    abstract public void draw(Canvas canvas);
-    /**
-     * Inits the object.
-     */
-    abstract public void init();
-    /**
-     * Move.
-     *
-     * @return true, if can move
-     */
-    abstract public boolean move();
-    /**
-     * Frame.
-     */
-    abstract public void frame();
+	/**
+	 * Instantiates a new graphic object.
+	 */
+	public GraphicObject(){
+		mScreenLock=Constants.getLock();
+	}
+	/**
+	 * Draw.
+	 *
+	 * @param canvas to draw to
+	 */
+	abstract public void draw(Canvas canvas);
+	/**
+	 * Inits the object.
+	 */
+	abstract public void init();
+	/**
+	 * Move.
+	 *
+	 * @return true, if can move
+	 */
+	abstract public boolean move();
+	/**
+	 * Frame.
+	 */
+	abstract public void frame();
 	/**
 	 * Gets the id.
 	 *
@@ -167,25 +167,25 @@ public enum objtype {
 			}
 			hit = true;
 		}else if(getBottomRightX() > WIDTH){
-        	if(getTopLeftY() < 0){
-            	borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
-            }else if(getBottomRightY() > HEIGHT) {
-            	borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
-            }else{
-            	borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
-            }
-        	hit = true;
-        }
+			if(getTopLeftY() < 0){
+				borderCollision(Screen.ScreenSide.TopRight, WIDTH, HEIGHT);
+			}else if(getBottomRightY() > HEIGHT) {
+				borderCollision(Screen.ScreenSide.BottomRight, WIDTH, HEIGHT);
+			}else{
+				borderCollision(Screen.ScreenSide.Right, WIDTH, HEIGHT);
+			}
+			hit = true;
+		}
 		if (getTopLeftY() < 0) {
-        	borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
-        	hit = true;
-        } else if (getBottomRightY() > HEIGHT) {
-        	borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
-        	hit = true;
-        }
-        return hit;
+			borderCollision(Screen.ScreenSide.Top, WIDTH, HEIGHT);
+			hit = true;
+		} else if (getBottomRightY() > HEIGHT) {
+			borderCollision(Screen.ScreenSide.Bottom, WIDTH, HEIGHT);
+			hit = true;
+		}
+		return hit;
 	}
-	
+
 	/**
 	 * Border collision.
 	 *
@@ -239,7 +239,7 @@ public enum objtype {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Sets the centre.
 	 *
@@ -249,7 +249,7 @@ public enum objtype {
 	public void setCentre(float x, float y){
 		mProperties.setCentre(x, y);
 	}
-	
+
 	/**
 	 * Sets the centre x.
 	 *
@@ -258,7 +258,7 @@ public enum objtype {
 	public void setCentreX(float x){
 		mProperties.setCentreX(x);
 	}
-	
+
 	/**
 	 * Sets the centre y.
 	 *
@@ -267,7 +267,7 @@ public enum objtype {
 	public void setCentreY(float y){
 		mProperties.setCentreY(y);
 	}
-	
+
 	/**
 	 * Gets the centre.
 	 *
@@ -276,7 +276,7 @@ public enum objtype {
 	public Point getCentre(){
 		return mProperties.getCentre();
 	}
-	
+
 	/**
 	 * Gets the centre x.
 	 *
@@ -285,7 +285,7 @@ public enum objtype {
 	public float getCentreX(){
 		return mProperties.getCentreX();
 	}
-	
+
 	/**
 	 * Gets the centre y.
 	 *
@@ -294,7 +294,7 @@ public enum objtype {
 	public float getCentreY(){
 		return mProperties.getCentreY();
 	}
-	
+
 	/**
 	 * Sets the top left.
 	 *
@@ -304,7 +304,7 @@ public enum objtype {
 	public void setTopLeft(float x, float y){
 		mProperties.setTopLeft(x, y);
 	}
-	
+
 	/**
 	 * Sets the top left x.
 	 *
@@ -313,7 +313,7 @@ public enum objtype {
 	public void setTopLeftX(float x){
 		mProperties.setTopLeftX(x);
 	}
-	
+
 	/**
 	 * Sets the top left y.
 	 *
@@ -322,7 +322,7 @@ public enum objtype {
 	public void setTopLeftY(float y){
 		mProperties.setTopLeftY(y);
 	}
-	
+
 	/**
 	 * Gets the top left.
 	 *
@@ -331,7 +331,7 @@ public enum objtype {
 	public Point getTopLeft(){
 		return mProperties.getTopLeft();
 	}
-	
+
 	/**
 	 * Gets the top left x.
 	 *
@@ -340,7 +340,7 @@ public enum objtype {
 	public float getTopLeftX(){
 		return mProperties.getTopLeftX();
 	}
-	
+
 	/**
 	 * Gets the top left y.
 	 *
@@ -349,7 +349,7 @@ public enum objtype {
 	public float getTopLeftY(){
 		return mProperties.getTopLeftY();
 	}
-	
+
 	/**
 	 * Gets the bottom right.
 	 *
@@ -358,7 +358,7 @@ public enum objtype {
 	public Point getBottomRight(){
 		return mProperties.getBottomRight();
 	}
-	
+
 	/**
 	 * Gets the bottom right x.
 	 *
@@ -367,7 +367,7 @@ public enum objtype {
 	public float getBottomRightX(){
 		return mProperties.getBottomRightX();
 	}
-	
+
 	/**
 	 * Gets the bottom right y.
 	 *
@@ -376,25 +376,25 @@ public enum objtype {
 	public float getBottomRightY(){
 		return mProperties.getBottomRightY();
 	}
-	
+
 	/**
 	 * Gets the width.
 	 *
 	 * @return the width of the object.
 	 */
 	public int getWidth(){
-    	return mProperties.getWidth();
-    }
-    
-    /**
-     * Gets the height.
-     *
-     * @return the height of the object.
-     */
-    public int getHeight(){
-    	return mProperties.getHeight();
-    }
-	
+		return mProperties.getWidth();
+	}
+
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height of the object.
+	 */
+	public int getHeight(){
+		return mProperties.getHeight();
+	}
+
 	/**
 	 * Sets the width.
 	 *
@@ -403,7 +403,7 @@ public enum objtype {
 	public void setWidth(int width){
 		mProperties.setWidth(width);
 	}
-	
+
 	/**
 	 * Sets the height.
 	 *
@@ -412,7 +412,7 @@ public enum objtype {
 	public void setHeight(int height){
 		mProperties.setHeight(height);
 	}
-	
+
 	/**
 	 * Move delta x.
 	 *
@@ -421,9 +421,9 @@ public enum objtype {
 	public void moveDeltaX(float deltaX){
 		synchronized(mScreenLock){
 			mProperties.moveDeltaX(deltaX);
-    	}
+		}
 	}
-	
+
 	/**
 	 * Move delta y.
 	 *
@@ -432,7 +432,7 @@ public enum objtype {
 	public void moveDeltaY(float deltaY){
 		synchronized(mScreenLock){
 			mProperties.moveDeltaY(deltaY);
-    	}
+		}
 	}
 	/**
 	 * Move delta.
@@ -443,17 +443,17 @@ public enum objtype {
 	public void moveDelta(float deltaX, float deltaY){
 		synchronized(mScreenLock){
 			mProperties.moveDelta(deltaX, deltaY);
-    	}
+		}
 	}
-    /**
+	/**
 	 * Gets the radius.
 	 *
 	 * @return the radius
 	 */
 	public float getRadius(){
-    	return mProperties.getRadius();
-    }
-	
+		return mProperties.getRadius();
+	}
+
 	/**
 	 * Sets the radius.
 	 *
@@ -470,7 +470,7 @@ public enum objtype {
 	public void setAngle(float a){
 		mSpeed.setAngle(a);
 	}
-	
+
 	/**
 	 * Sets the speed.
 	 *
@@ -479,34 +479,34 @@ public enum objtype {
 	public void setSpeed(float speed){
 		mSpeed.setSpeed(speed);
 	}
-    
-    /**
-     * Gets the graphic.
-     *
-     * @return the graphic
-     */
-    public Bitmap getGraphic() {
-        return mBitmap;
-    }
-    
-    /**
-     * Gets the speed.
-     *
-     * @return the speed
-     */
-    public Speed getSpeed() {
-        return mSpeed;
-    }
-    
-    /**
-     * Sets the pulled state.
-     *
-     * @param state the new pulled state
-     */
-    public void setPulledState(int state){
-    	mPullState = state;
-    }
-	
+
+	/**
+	 * Gets the graphic.
+	 *
+	 * @return the graphic
+	 */
+	public Bitmap getGraphic() {
+		return mBitmap;
+	}
+
+	/**
+	 * Gets the speed.
+	 *
+	 * @return the speed
+	 */
+	public Speed getSpeed() {
+		return mSpeed;
+	}
+
+	/**
+	 * Sets the pulled state.
+	 *
+	 * @param state the new pulled state
+	 */
+	public void setPulledState(int state){
+		mPullState = state;
+	}
+
 	/**
 	 * Gets the pulled state.
 	 *
@@ -515,7 +515,7 @@ public enum objtype {
 	public int getPulledState() {
 		return mPullState;
 	}
-	
+
 	/**
 	 * Sets the collision.
 	 *
@@ -524,7 +524,7 @@ public enum objtype {
 	public void setCollision(Properties collision){
 		mProperties = collision;
 	}
-	
+
 	/**
 	 * Gets the collision.
 	 *
@@ -533,7 +533,7 @@ public enum objtype {
 	public Properties getCollision(){
 		return mProperties;
 	}
-	
+
 	/**
 	 * Wpool counter.
 	 *
@@ -543,14 +543,14 @@ public enum objtype {
 		wpoolCounter++;
 		return (wpoolCounter>=15);
 	}
-	
+
 	/**
 	 * Resetw pool counter.
 	 */
 	public void resetwPoolCounter(){
 		wpoolCounter=0;
 	}
-	
+
 	/**
 	 * Sets the pulled by.
 	 *
@@ -559,7 +559,7 @@ public enum objtype {
 	public void setPulledBy(Whirlpool whirlpool) {
 		mPulledBy=whirlpool;
 	}
-	
+
 	/**
 	 * Gets the pulled by.
 	 *
@@ -568,7 +568,7 @@ public enum objtype {
 	public Whirlpool getPulledBy() {
 		return mPulledBy;
 	}
-	
+
 	/**
 	 * Sets the checks if is playing.
 	 *
@@ -577,7 +577,7 @@ public enum objtype {
 	public void setIsPlaying(boolean IsOnPlaying){
 		mIsPlaying = IsOnPlaying;
 	}
-	
+
 	/**
 	 * Gets the checks if is playing.
 	 *
@@ -586,7 +586,7 @@ public enum objtype {
 	public boolean getIsPlaying(){
 		return mIsPlaying;
 	}
-	
+
 	/**
 	 * Sets the type.
 	 *
@@ -595,7 +595,7 @@ public enum objtype {
 	public void setType(int enemyType){
 		mGraphicType = enemyType;
 	}
-	
+
 	/**
 	 * Gets the type.
 	 *

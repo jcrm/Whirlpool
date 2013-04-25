@@ -1,11 +1,13 @@
 /*
- * Author: Jake Morey, Fraser, Jordan O'Hare, Connor Nicol
+ * Author: Jake Morey, Fraser, Jordan O'Hare, Connor Nicol, Lewis
  * Content:
+ * Jordan O'Hare: created original file which has been added to
  * Jake Morey: add code about updating enemies, drawing the bath tub, and adding objects based upon level number.
  * Connor Nicol - added in the sounds for the enemies
  * 				- made sure that the sounds are only played once per enemy on screen( so if there are 2 divers on screen, sound will only play once)
  * 				- made sure the sounds did not play continuously 
-
+ * Lewis: added scrolling code.
+ * Fraser: added level times
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
