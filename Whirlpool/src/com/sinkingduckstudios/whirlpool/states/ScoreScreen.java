@@ -3,7 +3,7 @@
  * Last Updated: 22/04/2013
  * Content: 
  * Lewis Shaw - Displaying Score achieved, saves score plus the level number together
- * 
+ * Fraser Tomison: added scaling code and some score functionality
  */
 
 package com.sinkingduckstudios.whirlpool.states;
@@ -31,34 +31,24 @@ public class ScoreScreen extends Activity {
 
 	/** The Constant PREFS_NAME string. */
 	public static final String PREFS_NAME = "Bath_Score";
-
 	/** The time passed. */
 	private int timepassed;
-
 	/** The level selected. */
 	private int levelselected;
-
 	/** The 2-star time required (in secs). */
 	private int levelAverageTime;
-	
 	/** The 3-star time required (in secs). */
 	private int levelGoodTime;
-	
 	/** The score value. */
 	private int score;
-
 	/** The next value. */
 	private int next;
-
 	/** The highscore value. */
 	private int highscore;
-
 	/** The number of stars. */
 	private int stars;
-
 	/** The Constant HIGH_SCORES string. */
 	public static final String HIGH_SCORES = "HighScores";
-
 	/** The scorescreen view. */
 	ScoreScreenView scorescreenView;
 
@@ -70,7 +60,7 @@ public class ScoreScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_scorescreen);
-
+		//retrieve values from previous activities
 		Intent scorescreen = getIntent();
 		timepassed = scorescreen.getIntExtra("timepassed", 0);
 		levelselected = scorescreen.getIntExtra("levelselected", 0);
@@ -80,22 +70,21 @@ public class ScoreScreen extends Activity {
 
 		//Way score can be calculated can be changed at a later date
 		score = (500 - timepassed);
-
+		
 		SharedPreferences prefs = getSharedPreferences(HIGH_SCORES, MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
 		Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
-
-		
+		//change high score if better than previous
 		if(score >= (prefs.getInt("HighScore_lvl"+levelselected, score))){
 			editor.putInt("HighScore_lvl"+levelselected, score);
 		}
-
+		//display stars based upon the level average and good times
 		stars=1;
 		if(timepassed <= levelAverageTime)
 			stars=2;
 		if(timepassed <= levelGoodTime)
 			stars=3;
-
+		//change the number of stars in preferences if its lower then whats already there
 		if(stars > (prefs.getInt("Stars_lvl"+levelselected, 0))){
 			editor.putInt("Stars_lvl"+levelselected, stars);
 		}
@@ -104,19 +93,19 @@ public class ScoreScreen extends Activity {
 
 		Constants.clearLevel();
 		Constants.setState(this);
-
+		//show score text
 		TextView Score = (TextView) findViewById(R.id.score);
 		Score.setText("Score: " + score);
 		Score.setTextColor(Color.BLACK);
 		Score.setY(Constants.getScreen().getHeight()*0.66f);
 		Score.setTypeface(face);;
-
+		//show high score text
 		TextView HScore = (TextView) findViewById(R.id.highscore);
 		HScore.setText("HighScore: " + highscore);
 		HScore.setTextColor(Color.BLACK);
 		HScore.setY(Score.getY()+Score.getHeight());
 		HScore.setTypeface(face);
-
+		//create buttons and put them in the right location
 		ImageButton menuButton = ((ImageButton)findViewById(R.id.op_return));
 		ImageButton nextButton = ((ImageButton)findViewById(R.id.next_level));
 		Constants.setContext(getApplicationContext());		
@@ -188,29 +177,4 @@ public class ScoreScreen extends Activity {
 		System.gc();
 		super.onDestroy();
 	}
-
-	/** The level one average score. */
-	private int LEVEL_ONE_AVERAGE = 40;
-	/** The level one good score. */
-	private int LEVEL_ONE_GOOD = 20;
-	/** The level two average score. */
-	private int LEVEL_TWO_AVERAGE = 30;
-	/** The level two good score. */
-	private int LEVEL_TWO_GOOD = 15;
-	/** The level three average score. */
-	private int LEVEL_THREE_AVERAGE = 25;
-	/** The level three good score. */
-	private int LEVEL_THREE_GOOD = 15;
-	/** The level four average score. */
-	private int LEVEL_FOUR_AVERAGE = 35;
-	/** The level four good score. */
-	private int LEVEL_FOUR_GOOD = 25;
-	/** The level five average score. */
-	private int LEVEL_FIVE_AVERAGE = 40;
-	/** The level five good score. */
-	private int LEVEL_FIVE_GOOD = 25;
-	/** The level six average score. */
-	private int LEVEL_SIX_AVERAGE = 45;
-	/** The level six good score. */
-	private int LEVEL_SIX_GOOD = 27;
 }

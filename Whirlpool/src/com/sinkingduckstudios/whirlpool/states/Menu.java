@@ -1,10 +1,9 @@
 /*
- * Author: Lewis Shaw
+ * Author: Lewis Shaw, Jake Morey
  * Last Updated:25/04/2013
  * Content:
- * Lewis Shaw - Created the level select screen
- * 
- * 
+ * Lewis Shaw - Created the menu screen
+ * Jake Morey: added cleaning code
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -41,21 +40,22 @@ public class Menu extends Activity {
         
         Constants.clearLevel();
         Constants.setState(this);
-        
+        //set up image buttons
         ImageButton gameButton = ((ImageButton) findViewById(R.id.game));
         ImageButton optionsButton = ((ImageButton) findViewById(R.id.options));
         ImageButton exitButton = ((ImageButton) findViewById(R.id.exit));
         Constants.setContext(getApplicationContext());
-
+        //set up display size
         Display display = getWindowManager().getDefaultDisplay(); 
     	@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
     	Constants.setScreen(theScreen);
-        
+        //set up button function
     	gameButton.setOnClickListener(goToGame);
         optionsButton.setOnClickListener(goToOptions);
         exitButton.setOnClickListener(goToExit);
         menuView=(MenuView)findViewById(R.id.menuView);
+        //unload all images if previously been playing levels
         SpriteManager.unloadBoat();
         SpriteManager.unloadDuck();
         SpriteManager.unloadDiver();

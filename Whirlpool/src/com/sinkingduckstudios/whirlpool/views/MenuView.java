@@ -1,9 +1,8 @@
 /*
- * Author:Lewis Shaw
- * Last Updated:25/04/2013
+ * Author:Lewis Shaw, Jake Morey
  * Content:
- * 
- * 
+ * Lewis Shaw: wrote code to display an image on the screen
+ * Jake Morey: wrote the code to scale the image
  */
 package com.sinkingduckstudios.whirlpool.views;
 
@@ -77,6 +76,8 @@ public class MenuView extends View{
 	 * Scale bitmap.
 	 */
 	private void scaleBitmap(){
+		//scales the image to a set size by first taking a peek
+		//at the size of the image then scaling it to a set size
 		BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(getResources(), R.drawable.mainmenu_background, opt);
@@ -94,6 +95,7 @@ public class MenuView extends View{
 	 * @return the scale
 	 */
 	public int getScale(int oW, int oH, int nW, int nH){
+		//work out new width and height
 		int scale = 1;
 		if(oW>nW || oH>nH){
 			if(oW<oH){

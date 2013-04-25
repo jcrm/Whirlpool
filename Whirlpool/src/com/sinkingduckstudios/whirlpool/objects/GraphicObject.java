@@ -1,10 +1,10 @@
 /*
- * Author: Jordan O'Hare, Jake Morey, Connor Nicol, Fraser
+ * Author: Jordan O'Hare, Jake Morey, Connor Nicol, Fraser Tomison
  * Content:
  * Jordan O'Hare created original class which has been built upon and edited.
  * Jake Morey: added enum types and altered the variables it holds.
  * 			   also changed to use properties class instead of individual variables.
- * Fraser: added whirlpool code
+ * Fraser Tomison: added whirlpool code
  * Connor Nicol: set type functions.
  */
 package com.sinkingduckstudios.whirlpool.objects;

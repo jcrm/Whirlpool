@@ -1,9 +1,10 @@
 /*
- * Authors: Jordan O'Hare, Fraser , Jake Morey
+ * Authors: Jordan O'Hare, Fraser Tomison , Jake Morey
  * Content:
  * Jake Morey: added code for corners.
  * Used to store size of the screen. Also stores the different sides.
  * Corners are also included due to collision conflicts.
+ * Fraser Tomison: added ratio code.
  */
 package com.sinkingduckstudios.whirlpool.logic;
 

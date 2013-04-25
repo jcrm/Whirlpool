@@ -1,8 +1,8 @@
 /*
- * Author: Jake Morey, Fraser
+ * Author: Jake Morey, Fraser Tomison
  * Content:
  * Jake Morey: based upon the parent class with added functionality for following the duck
- * Fraser: added checking distance between missile and duck, and whilrpool code
+ * Fraser Tomison: added checking distance between missile and duck, and whilrpool code
  */
 package com.sinkingduckstudios.whirlpool.objects;
 

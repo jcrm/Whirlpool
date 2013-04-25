@@ -1,9 +1,9 @@
 /*
- * Author: Jake Morey, Fraser, Jordan O'Hare
+ * Author: Jake Morey, Fraser Tomison, Jordan O'Hare
  * Content:
  * Jordan O'Hare: created basic version based upon parent class.
  * Jake Morey: added most of the collision code.
- * Fraser: added shift angle from collision, and sprite index based upon angle. 
+ * Fraser Tomison: added shift angle from collision, and sprite index based upon angle. 
  */
 package com.sinkingduckstudios.whirlpool.objects;
 

@@ -1,9 +1,9 @@
 /*
- * Author: Lewis Shaw , Fraser, Jake Morey, Jordan O'Hare 
+ * Author: Lewis Shaw , Fraser Tomison, Jake Morey, Jordan O'Hare 
  * Last Updated: 25/04/2013
  * Content:
  * Lewis Shaw - added a timer on screen, worked on the pause screen with multiple buttons to perform various actions
- * Fraser: added timer thread and handler
+ * Fraser Tomison: added timer thread and handler
  * Jake Morey: added resume, destroy, and on pause functions and muted functionality, and some minor bug fixes
  * Jordan O'Hare created very basic and limited version of this class
  */

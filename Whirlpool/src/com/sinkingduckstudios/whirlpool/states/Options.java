@@ -1,10 +1,9 @@
 /*
- * Author:Lewis Shaw
+ * Author:Lewis Shaw, Jake Morey
  * Last Updated:25/04/2013
  * Content:
  * Lewis Shaw - Created the Options screen with working buttons
- * 
- * 
+ * Jake Morey: added go to credits and tutorial functions
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -40,7 +39,7 @@ public class Options extends Activity {
 		
 		Constants.clearLevel();
 		Constants.setState(this);
-		
+		//set up image buttons
 		ImageButton audioButton = ((ImageButton)findViewById(R.id.audio));
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		ImageButton resetButton = ((ImageButton)findViewById(R.id.resetdata));
@@ -54,7 +53,7 @@ public class Options extends Activity {
 		@SuppressWarnings("deprecation")
 		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
 		Constants.setScreen(theScreen);
-		
+		//set the button functions
 		audioButton.setOnClickListener(goToAudio);
 		returnButton.setOnClickListener(goToMenu);
 		resetButton.setOnClickListener(resetData);

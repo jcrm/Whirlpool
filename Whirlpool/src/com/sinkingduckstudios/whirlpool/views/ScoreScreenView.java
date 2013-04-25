@@ -1,9 +1,9 @@
 /*
- * Author:Lewis Shaw
- * Last Updated:25/04/2013
+ * Author:Lewis Shaw, Jake Morey, Fraser Tomison
  * Content:
- * 
- * 
+ * Lewis Shaw: wrote code to display an image on the screen
+ * Jake Morey: wrote the code to scale the image
+ * Fraser Tomison: wrote code to scale screen
  */
 package com.sinkingduckstudios.whirlpool.views;
 
@@ -19,7 +19,6 @@ import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
 import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ScoreScreenView.
  */
@@ -129,6 +128,8 @@ public class ScoreScreenView extends View {
 	 * Scale bitmap.
 	 */
 	private void scaleBitmap(){
+		//scales the image to a set size by first taking a peek
+		//at the size of the image then scaling it to a set size
 		BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
@@ -146,6 +147,7 @@ public class ScoreScreenView extends View {
 	 * @return the scale
 	 */
 	public int getScale(int oW, int oH, int nW, int nH){
+		//work out new width and height
 		int scale = 1;
 		if(oW>nW || oH>nH){
 			if(oW<oH){

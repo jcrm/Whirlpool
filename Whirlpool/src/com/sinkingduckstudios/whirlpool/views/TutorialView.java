@@ -1,9 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey
  * Content:
- * 
- * 
+ * Based upon cinematic view class changes image based upon slide value from tutorial class
  */
 package com.sinkingduckstudios.whirlpool.views;
 

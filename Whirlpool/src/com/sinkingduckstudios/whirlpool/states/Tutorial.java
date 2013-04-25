@@ -1,9 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey
  * Content:
- * 
- * 
+ * Jake Morey: Used the same code as cinematic just change the value of the number of slides
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -86,6 +84,7 @@ public class Tutorial extends Activity{
 		 * @see java.util.TimerTask#run()
 		 */
 		public void run() {
+			//if the number of slides is too high end the activity else increment the counter
 			if(mSlide >= 3){
 				finsihTutorial();
     		}else{
@@ -111,6 +110,7 @@ public class Tutorial extends Activity{
 	 * Finsih tutorial depending on where coming from.
 	 */
 	private void finsihTutorial(){
+		//choose an activity to go to next depending on where the activity was started from
 		switch(tutorial){
 		case 1:
     		Intent loading = (new Intent(getApplicationContext(),Loading.class));
@@ -119,7 +119,7 @@ public class Tutorial extends Activity{
 			startActivity(loading);
     		finish();
     		tutorialView.CleanUp();
-		break;
+    		break;
 		case 2:
 			startActivity(new Intent(getApplicationContext(), Options.class));
 			mTime.cancel();

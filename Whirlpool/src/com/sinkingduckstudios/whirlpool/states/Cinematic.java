@@ -1,7 +1,7 @@
 /*
  * Author: Jake Morey
  * Content:
- * Jake Morey: Based upon game activity class.
+ * Jake Morey: Based upon game activity and loading class.
  * the slide counter represents each image in the cinemtaic view class.
  */
 package com.sinkingduckstudios.whirlpool.states;

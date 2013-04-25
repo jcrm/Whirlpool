@@ -1,5 +1,5 @@
 /*
- * Author: Connor Nicol, Jake Morey
+ * Author: Connor Nicol, Jake Morey, Fraser Tomison
  * Last Updated: 18/02/2013
  * Content:
  * class used to control and play all of the sound in the game. this class will play the background music
@@ -8,6 +8,7 @@
  * a sound effect will play at random form a list of appropriate sounds 
  * Jake Morey:
  * Added background and effect volume for muting audio.
+ * Fraser Tomison: added missile volume code.
  */
 package com.sinkingduckstudios.whirlpool.manager;
 
