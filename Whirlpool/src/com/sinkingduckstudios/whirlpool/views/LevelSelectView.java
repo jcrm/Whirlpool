@@ -1,3 +1,10 @@
+/*
+ * Author:Lewis Shaw, Jake Morey, Fraser Tomison
+ * Content:
+ * Lewis Shaw: wrote code to display an image on the screen
+ * Jake Morey: wrote the code to scale the image
+ * Fraser Tomison: added scaling code and stars for each level
+ */
 package com.sinkingduckstudios.whirlpool.views;
 
 import android.content.Context;
@@ -15,25 +22,20 @@ import com.sinkingduckstudios.whirlpool.logic.Constants;
  * The Class LevelSelectView.
  */
 public class LevelSelectView extends View{
-	
+
 	/** The background image. */
 	private Bitmap background;
-	
 	/** The full star image. */
 	private Bitmap mFullStar;
-	
 	/** The empty star image. */
 	private Bitmap mEmptyStar;
-	
 	/** The scale values. */
 	private int theHeight,theWidth, theScale;
-	
 	/** The scale rect. */
 	private Rect scale;
-	
 	/** The stars. */
 	private int stars[] = new int[6];
-	
+
 	/**
 	 * Instantiates a new level select view.
 	 *
@@ -50,9 +52,9 @@ public class LevelSelectView extends View{
 		theScale = theHeight/3;
 		if ((theWidth/4)< theScale)
 			theScale = theWidth/4;
-		
+
 		scale = new Rect(-(theScale/4),-(theScale/4),theScale/4,theScale/4);
-		
+
 		mEmptyStar =  BitmapFactory.decodeResource(getResources(), R.drawable.star_empty);
 		mFullStar = BitmapFactory.decodeResource(getResources(), R.drawable.star_full);
 	}
@@ -82,9 +84,9 @@ public class LevelSelectView extends View{
 		theScale = theHeight/3;
 		if ((theWidth/4)< theScale)
 			theScale = theWidth/4;
-		
+
 		scale = new Rect(-(theScale/4),-(theScale/4),theScale/4,theScale/4);
-		
+
 		mEmptyStar =  BitmapFactory.decodeResource(getResources(), R.drawable.star_empty);
 		mFullStar = BitmapFactory.decodeResource(getResources(), R.drawable.star_full);
 	}
@@ -102,9 +104,9 @@ public class LevelSelectView extends View{
 	protected void onDraw(Canvas canvas){
 		Rect rect = new Rect(0,0,Constants.getScreen().getWidth(), Constants.getScreen().getHeight());
 		canvas.drawBitmap(background, null, rect, null);
-		
+
 		int xstep=theWidth/4; int ystep=theHeight/3;
-		
+		//draw all the stars
 		canvas.translate(xstep+(theWidth*0.01f), ystep);//translate to button
 		canvas.save();
 		canvas.translate(-(theScale/3),-(theScale/3));
@@ -117,7 +119,7 @@ public class LevelSelectView extends View{
 		if(stars[0]>2)canvas.drawBitmap(mFullStar,null,scale,null);
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
-		
+
 		canvas.save();
 		canvas.translate(0, ystep);//translate to button
 		canvas.translate(-(theScale/3),-(theScale/3));
@@ -130,9 +132,9 @@ public class LevelSelectView extends View{
 		if(stars[3]>2)canvas.drawBitmap(mFullStar,null,scale,null);
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
-		
+
 		canvas.translate(xstep, 0);
-		
+
 		canvas.save();
 		canvas.translate(-(theScale/3),-(theScale/3));
 		if(stars[1]>0)canvas.drawBitmap(mFullStar,null,scale,null);
@@ -144,7 +146,7 @@ public class LevelSelectView extends View{
 		if(stars[1]>2)canvas.drawBitmap(mFullStar,null,scale,null);
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
-		
+
 		canvas.save();
 		canvas.translate(0, ystep);//translate to button
 		canvas.translate(-(theScale/3),-(theScale/3));
@@ -157,9 +159,9 @@ public class LevelSelectView extends View{
 		if(stars[4]>2)canvas.drawBitmap(mFullStar,null,scale,null);
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
-		
+
 		canvas.translate(xstep, 0);
-		
+
 		canvas.save();
 		canvas.translate(-(theScale/3),-(theScale/3));
 		if(stars[2]>0)canvas.drawBitmap(mFullStar,null,scale,null);
@@ -171,7 +173,7 @@ public class LevelSelectView extends View{
 		if(stars[2]>2)canvas.drawBitmap(mFullStar,null,scale,null);
 		else canvas.drawBitmap(mEmptyStar,null,scale,null);
 		canvas.restore();
-		
+
 		canvas.save();
 		canvas.translate(0, ystep);//translate to button
 		canvas.translate(-(theScale/3),-(theScale/3));
@@ -195,12 +197,14 @@ public class LevelSelectView extends View{
 		mEmptyStar=null;
 		mFullStar.recycle();
 		mFullStar = null;
-		
+
 	}
 	/**
 	 * Scale bitmap.
 	 */
 	private void scaleBitmap(){
+		//scales the image to a set size by first taking a peek
+		//at the size of the image then scaling it to a set size
 		BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(getResources(), R.drawable.options_background, opt);
@@ -218,6 +222,7 @@ public class LevelSelectView extends View{
 	 * @return the scale
 	 */
 	public int getScale(int oW, int oH, int nW, int nH){
+		//work out new width and height
 		int scale = 1;
 		if(oW>nW || oH>nH){
 			if(oW<oH){

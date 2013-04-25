@@ -1,8 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jordan O'Hare
  * Content:
- * 
+ * stores the angle and object.
  * 
  */
 package com.sinkingduckstudios.whirlpool.movement;

@@ -1,9 +1,8 @@
 /*
- * Author:
- * Last Updated:
+ * Author:Lewis Shaw
+ * Last Updated:25/04/2013
  * Content:
- * 
- * 
+ * Used to show the game activity
  */
 package com.sinkingduckstudios.whirlpool.views;
 

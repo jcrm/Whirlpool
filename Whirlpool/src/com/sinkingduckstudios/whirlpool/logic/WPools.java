@@ -14,6 +14,8 @@ import com.sinkingduckstudios.whirlpool.objects.Whirlpool;
 
 public class WPools {
 
+	//List of active whirlpools in-game
+	
 	private final ArrayList<Whirlpool> wpools = new ArrayList<Whirlpool>();
 
 	/** @return the most recently added whirlpool. */

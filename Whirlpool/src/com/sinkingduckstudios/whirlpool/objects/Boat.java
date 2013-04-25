@@ -1,3 +1,9 @@
+/*
+ * Author: Jake Morey, Jordan 'Hare
+ * Content:
+ * Jordan O'Hare: Added basic functions that are inherited from parent class.
+ * Jake Morey: Added all functionality for boat building upon the parent class.
+ */
 package com.sinkingduckstudios.whirlpool.objects;
 
 import java.util.Random;
@@ -79,6 +85,7 @@ public class Boat extends GraphicObject{
 		mIsPlaying = false;
 
 		mBoatState = BoatType.bReady;
+		//set the position so that it is the centre of the image
 		x-=((96/Constants.getScreen().getRatio())/2);
 		y-=((96/Constants.getScreen().getRatio())/2);
 		mProperties.init(x, y, 96, 96,0.9f,0.4f,0.5f,0.65f);	
@@ -113,11 +120,14 @@ public class Boat extends GraphicObject{
 		if(move()){
 			border();
 		}
+		//if not broken then depending on boat type do different things
 		if(checkBroken() == false){
 			incrementCounter();
+			//if in attack mode and the frame number is right set the mode so a torpedo can be created later
 			if(mBoatState == BoatType.bAttack && mAnimate.getNoOfFrames()>=44){
 				mBoatState = BoatType.bTorpedo;
 			}else if(mBoatState == BoatType.bFinishing && mAnimate.getFinished()){	
+				//if animation has finished after firing the torpedo set back to original animation.
 				mBitmap = SpriteManager.getBoat();
 				mAnimate.Reset(mId.tFrames, mId.tNoOfRow, mId.tNoOfCol, mBitmap.getWidth(), mBitmap.getHeight(),3);
 				mBoatState = BoatType.bWaiting;	
@@ -166,6 +176,7 @@ public class Boat extends GraphicObject{
 	 * Increment counter for waiting to fire new torpedo.
 	 */
 	public void incrementCounter(){
+		//if just sent a torpedo then wait before being able to send another one
 		if((mBoatState == BoatType.bWaiting) && (++mTorpedoCount>=0)){
 			if(mTorpedoCount == 120){
 				mBoatState = BoatType.bReady;
@@ -180,6 +191,7 @@ public class Boat extends GraphicObject{
 	 * @return true, if can fire a new torpedo
 	 */
 	public boolean getNewTorpedo() {
+		//if called then a torpedo will be created and set the type to be finished
 		if(mBoatState == BoatType.bTorpedo){
 			mBoatState = BoatType.bFinishing;
 			return true;
@@ -192,6 +204,7 @@ public class Boat extends GraphicObject{
 	 * Change animation.
 	 */
 	public void changeAnimation(){
+		//change animation and bitmap to attack images 
 		if(mBoatState == BoatType.bReady && mBroken == false){
 			mBitmap= SpriteManager.getBoatAttack();
 			mAnimate.Reset(56, 7, 8, mBitmap.getWidth(), mBitmap.getHeight(),1);
@@ -210,7 +223,7 @@ public class Boat extends GraphicObject{
 
 	/**
 	 * Sets the broken variable.
-	 * If true change animation.
+	 * If true change animation to destroyed boat image.
 	 * @param broken the new broken value
 	 */
 	public void setBroken(boolean broken) {
@@ -229,6 +242,7 @@ public class Boat extends GraphicObject{
 	 */
 	public boolean checkBroken(){
 		if(mBroken == true && mBoatState == BoatType.bBroken){
+			//if broken check that animation has finished if so then set boat back to default
 			if(mAnimate.getFinished()== true){
 				mBoatState = BoatType.bReady;
 				mTorpedoCount = -1;

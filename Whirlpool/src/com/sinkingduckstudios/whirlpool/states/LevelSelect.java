@@ -1,3 +1,12 @@
+/*
+ * Author:Lewis Shaw, Fraser Tomison, Connor Nicol
+ * Last Updated: 25/04/2013
+ * Content:
+ * Lewis Shaw - Created the LevelSelect screen
+ * Fraser Tomison: added scailing code
+ * Connor Nicol: added locked images
+ */
+
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
@@ -110,7 +119,7 @@ public class LevelSelect extends Activity{
 			scale = theWidth/4;
 
 		int xstep=theWidth/4; int ystep=theHeight/3;
-
+		
 		RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(scale, scale);
 
 		level1Button.setLayoutParams(buttonParams);
@@ -202,7 +211,7 @@ public class LevelSelect extends Activity{
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 

@@ -1,9 +1,8 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jordan O'Hare
  * Content:
- * 
- * 
+ * Stores the speed and angle for an object.
+ * has functions for shifting angles for when bouncing of borders.
  */
 package com.sinkingduckstudios.whirlpool.movement;
 

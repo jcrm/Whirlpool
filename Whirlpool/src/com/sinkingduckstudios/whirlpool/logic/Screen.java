@@ -1,13 +1,13 @@
 /*
- * Authors: Jordan O'Hare, Fraser , Jake Morey
- * Last Updated:
+ * Authors: Jordan O'Hare, Fraser Tomison , Jake Morey
  * Content:
+ * Jake Morey: added code for corners.
  * Used to store size of the screen. Also stores the different sides.
  * Corners are also included due to collision conflicts.
+ * Fraser Tomison: added ratio code.
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Screen.
  */
@@ -17,36 +17,16 @@ public class Screen {
 	 * The Enum ScreenSide.
 	 */
 	public enum ScreenSide{
-		
-		/** The Top. */
-		Top, 
- /** The Bottom. */
- Bottom, 
- /** The Left. */
- Left, 
- /** The Right. */
- Right, 
- /** The Top left. */
- TopLeft, 
- /** The Top right. */
- TopRight, 
- /** The Bottom left. */
- BottomLeft, 
- /** The Bottom right. */
- BottomRight;
+		Top, Bottom, Left, Right, TopLeft, TopRight, BottomLeft, BottomRight;
 	}
-	
-	//variables
-	/** The m width. */
+
+	/** The width of the screen. */
 	private int mWidth;
-	
-	/** The m height. */
+	/** The height of the screen. */
 	private int mHeight;
-	
-	/** The m ratio. */
+	/** The ratio. */
 	private float mRatio;
-	
-	/** The m centre. */
+	/** The centre of the screen. */
 	private Point mCentre = new Point();
 	
 	public Screen(){

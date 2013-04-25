@@ -1,62 +1,53 @@
 /*
- * Author:
+ * Author: Connor Nicol edited by Jake Morey
  * Last Updated:
  * Content:
- * Added functionality for knowing when an animation is finished as well as sprites with multiple rows.
- * 
+ * A class for moving a rectangle around an image
+ * that describes the corners of a frame. 
+ * Jake Morey:
+ * Added functionality for knowing when an animation is 
+ * finished as well as sprites with multiple rows.
  */
 package com.sinkingduckstudios.whirlpool.logic;
 
 import android.graphics.Rect;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Animate.
  */
 public class Animate{
 	
-	/** The m frame num. */
+	/** The frame number. */
 	private int mFrameNum = 0;
-	
-	/** The m frame width. */
+	/** The frame width. */
 	private int mFrameWidth = 0;
-	
-	/** The m frame height. */
+	/** The frame height. */
 	private int mFrameHeight = 0;
-	
-	/** The m bitmap width. */
+	/** The bitmap width. */
 	private int mBitmapWidth = 0;
-	
-	/** The m bitmap height. */
+	/** The bitmap height. */
 	private int mBitmapHeight = 0;
-	
-	/** The m no of col. */
+	/** The number of columns. */
 	private int mNoOfCol = 0;
-	
-	/** The m no of rows. */
+	/** The number of rows. */
 	private int mNoOfRows = 0;
-	
-	/** The m no of frames. */
+	/** The number of frames. */
 	private int mNoOfFrames = 1;
-	
-	/** The m delay. */
+	/** The delay. */
 	private int mDelay = 3;
-	
-	/** The m counter. */
+	/** The counter. */
 	private int mCounter = 0;
-	
-	/** The m portion. */
+	/** The portion. */
 	private Rect mPortion;
-	
-	/** The m finished. */
+	/** The finished variable. */
 	private boolean mFinished = false;
 
 	/**
 	 * Instantiates a new animate.
 	 *
 	 * @param totalFrames the total frames
-	 * @param noOfRows the no of rows
-	 * @param noOfCol the no of col
+	 * @param noOfRows the number of rows.
+	 * @param noOfCol the number of columns.
 	 * @param width the width
 	 * @param height the height
 	 */
@@ -75,7 +66,7 @@ public class Animate{
 	/**
 	 * Gets the no of frames.
 	 *
-	 * @return the no of frames
+	 * @return the number of frames
 	 */
 	public int getNoOfFrames(){
 		return mFrameNum;
@@ -105,6 +96,11 @@ public class Animate{
 	 * Update portion.
 	 */
 	public void updatePortion(){
+		/*
+		 * use the number of columns to work out where the top and left
+		 * of the rectangle for the frame. add width and height to work
+		 * out right and bottom.
+		 */
 		mPortion.left =  (mFrameNum%mNoOfCol) * mFrameWidth;
 		mPortion.top = (mFrameNum/mNoOfCol) * mFrameHeight;
 		mPortion.right = mPortion.left + mFrameWidth;
@@ -128,11 +124,10 @@ public class Animate{
 	 * Reset.
 	 *
 	 * @param totalFrames the total frames
-	 * @param noOfRows the no of rows
-	 * @param noOfCol the no of col
+	 * @param noOfRows the number of rows.
+	 * @param noOfCol the number of columns.
 	 * @param width the width
 	 * @param height the height
-	 * @param delay the delay
 	 */
 	public void Reset(int totalFrames, int noOfRows, int noOfCol, int width, int height, int delay){
 		mNoOfFrames = totalFrames;

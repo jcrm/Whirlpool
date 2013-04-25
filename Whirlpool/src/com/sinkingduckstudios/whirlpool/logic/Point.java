@@ -1,6 +1,5 @@
 /*
  * Author: Jake Morey
- * Last Updated: 25/02/2013
  * Content:
  * A small class for the defining points on the screen.
  * 

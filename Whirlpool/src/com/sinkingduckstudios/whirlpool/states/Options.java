@@ -1,11 +1,10 @@
 /*
- * Author:
- * Last Updated:
+ * Author:Lewis Shaw, Jake Morey
+ * Last Updated:25/04/2013
  * Content:
- * 
- * 
+ * Lewis Shaw - Created the Options screen with working buttons
+ * Jake Morey: added go to credits and tutorial functions
  */
-
 package com.sinkingduckstudios.whirlpool.states;
 
 import android.app.Activity;
@@ -13,21 +12,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.sinkingduckstudios.whirlpool.R;
 import com.sinkingduckstudios.whirlpool.logic.Constants;
-import com.sinkingduckstudios.whirlpool.logic.Screen;
-import com.sinkingduckstudios.whirlpool.views.OptionsView;
 
 /**
  * The Class Options.
  */
 public class Options extends Activity {
-	OptionsView optionsView;
 	public static final String HIGH_SCORES = "HighScores";
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -40,7 +36,7 @@ public class Options extends Activity {
 		
 		Constants.clearLevel();
 		Constants.setState(this);
-		
+		//set up image buttons
 		ImageButton audioButton = ((ImageButton)findViewById(R.id.audio));
 		ImageButton returnButton = ((ImageButton)findViewById(R.id.op_return));
 		ImageButton resetButton = ((ImageButton)findViewById(R.id.resetdata));
@@ -48,21 +44,50 @@ public class Options extends Activity {
 		ImageButton tutorialButton = ((ImageButton)findViewById(R.id.tutorial));
 		ImageButton cinematicButton = ((ImageButton)findViewById(R.id.cinematic));
 
+		int ScreenWidth = Constants.getScreen().getWidth();
+		int ScreenHeight = Constants.getScreen().getHeight();
+		int buttonScale = ScreenHeight/4;
+		int step = (ScreenHeight/4) - (buttonScale/2);
+		
+		RelativeLayout.LayoutParams audioParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		audioParams.leftMargin = (ScreenWidth/2) - (buttonScale*2);
+		audioParams.topMargin = step;
+		
+		RelativeLayout.LayoutParams resetParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		resetParams.leftMargin = (ScreenWidth/2);
+		resetParams.topMargin = step;
+		
+		step += (ScreenHeight/4);
+		
+		RelativeLayout.LayoutParams tutorialParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		tutorialParams.leftMargin = (ScreenWidth/2) - (buttonScale*2);
+		tutorialParams.topMargin = step;
+		
+		RelativeLayout.LayoutParams cinematicParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		cinematicParams.leftMargin = (ScreenWidth/2);
+		cinematicParams.topMargin = step;
+		
+		step += (ScreenHeight/4);
+		
+		RelativeLayout.LayoutParams creditsParams = new RelativeLayout.LayoutParams(buttonScale*2,buttonScale);
+		creditsParams.leftMargin = (ScreenWidth/2) - (buttonScale);
+		creditsParams.topMargin = step;
+		
+		
 		Constants.setContext(getApplicationContext());
 		
-		Display display = getWindowManager().getDefaultDisplay();
-		@SuppressWarnings("deprecation")
-		Screen theScreen = new Screen(display.getWidth(), display.getHeight());
-		Constants.setScreen(theScreen);
-		
+		//set the button functions
 		audioButton.setOnClickListener(goToAudio);
+		audioButton.setLayoutParams(audioParams);
 		returnButton.setOnClickListener(goToMenu);
 		resetButton.setOnClickListener(resetData);
+		resetButton.setLayoutParams(resetParams);
 		creditsButton.setOnClickListener(goToCredits);
+		creditsButton.setLayoutParams(creditsParams);
 		tutorialButton.setOnClickListener(goToTutorial);
+		tutorialButton.setLayoutParams(tutorialParams);
 		cinematicButton.setOnClickListener(goToCinematic);
-		
-		optionsView=(OptionsView)findViewById(R.id.optionsView);
+		cinematicButton.setLayoutParams(cinematicParams);
 		
 	}
 	/* (non-Javadoc)
@@ -79,7 +104,7 @@ public class Options extends Activity {
 	 */
 	@Override 
 	public void onPause(){
-		Constants.getSoundManager().unloadAll();
+		//Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
 	/** The go to audio button.*/
@@ -165,8 +190,6 @@ public class Options extends Activity {
 	 */
 	@Override
 	public void onDestroy(){
-		optionsView.CleanUp();
-		optionsView = null;
 		Runtime.getRuntime().gc();
         System.gc();
 		super.onDestroy();

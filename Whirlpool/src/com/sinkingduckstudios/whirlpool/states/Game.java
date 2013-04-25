@@ -1,10 +1,13 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Lewis Shaw , Fraser Tomison, Jake Morey, Jordan O'Hare 
+ * Last Updated: 25/04/2013
  * Content:
- * 
- * 
+ * Lewis Shaw - added a timer on screen, worked on the pause screen with multiple buttons to perform various actions
+ * Fraser Tomison: added timer thread and handler
+ * Jake Morey: added resume, destroy, and on pause functions and muted functionality, and some minor bug fixes
+ * Jordan O'Hare created very basic and limited version of this class
  */
+
 package com.sinkingduckstudios.whirlpool.states;
 
 import java.util.Timer;
@@ -72,24 +75,30 @@ public class Game extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		//used to determine what level has been selected
 		Intent game = getIntent();
 		levelselected = game.getIntExtra("levelselected", 0);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.activity_game);
+		//set the view to be that of the game view
 		mPanel = (GameView) findViewById(R.id.gameview);
 		Constants.setContext(getApplicationContext());
 		Constants.setState(this);
+		//set a new level
 		mLevel = new Level();
 		setCurrentLevel(mLevel);
+		//set the timer text
 		mTimertext = (TextView) this.findViewById(R.id.time);
-
+		//initialise the count down timer
 		mCountDownTimer = new MyCountDownTimer(mStartTime, mInterval);
 		mTimertext.setText(mTimertext.getText() + String.valueOf(mStartTime/100));
+		//init the sound manager
 		Constants.createSoundManager(getApplicationContext());
 		Constants.getSoundManager().loadSplash();
-
+		//init the view
 		mPanel.init();		
 		Constants.setPanel(mPanel);
+		//init the level selected
 		Constants.getLevel().init(levelselected);
 		//create a runable thread to pass message to handler
 		if(mTime!=null){
@@ -103,13 +112,18 @@ public class Game extends Activity {
 				if (aMsg.what == 0){//redraw
 					mPanel.invalidate();
 				}else if(aMsg.what ==1){
+					//quit the applicatiob
 					mTime.cancel();
 					mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 					Constants.getSoundManager().cleanup();
+					//store values for time passed, level selected,
+					//level average, and level good for reading across activities
 					Intent scorescreen = (new Intent(getApplicationContext(), ScoreScreen.class));
 					scorescreen.putExtra("timepassed", timepassed);
 					scorescreen.putExtra("levelselected", levelselected);
 					scorescreen.putExtra("duckcount", mLevel.getDuckCount());
+					scorescreen.putExtra("levelAverage", mLevel.getAverageTime());
+					scorescreen.putExtra("levelGood", mLevel.getGoodTime());
 					startActivity(scorescreen);
 					mLevel.cleanUp();
 					finish();
@@ -119,20 +133,26 @@ public class Game extends Activity {
 		mTime.schedule(new MainThread(),0, 25);
 
 		timepassed=0;
-		ImageButton menuButton = ((ImageButton) findViewById(R.id.menubutton));
+		//initialise all the buttons for the ui and pause menu
 		ImageButton pauseButton = ((ImageButton)findViewById(R.id.pausebutton));
 		ImageButton unpauseButton = ((ImageButton)findViewById(R.id.unpausebutton));
 		ImageButton quitButton = ((ImageButton)findViewById(R.id.quit));
 		ImageButton restartButton = ((ImageButton)findViewById(R.id.restart));
 		ImageButton volumeOffButton = ((ImageButton)findViewById(R.id.volume_off));
 		ImageButton volumeOnButton = ((ImageButton)findViewById(R.id.volume_on));
-		menuButton.setOnClickListener(goToMenu);
 		pauseButton.setOnClickListener(pause);
 		unpauseButton.setOnClickListener(unpause);
 		quitButton.setOnClickListener(quit);
 		restartButton.setOnClickListener(restart);
 		volumeOffButton.setOnClickListener(volume_off);
 		volumeOnButton.setOnClickListener(volume_on);
+		//depending on the volume variable set muted to be true or false
+		if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
+			muted = true;
+		}else {
+			muted = false;
+		}
+		Constants.updateVolume();
 	}
 	
 	/** The quit button. */
@@ -140,8 +160,8 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				//quit the activity
 				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				startActivity(new Intent(getApplicationContext(), Menu.class));
@@ -156,8 +176,8 @@ public class Game extends Activity {
 		@Override
 		public void onClick(View view) {
 			synchronized(Constants.getLock()){
+				//reload the level
 				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
 				Constants.getSoundManager().cleanup();
 				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
 				Intent restart = (new Intent(getApplicationContext(), Loading.class));
@@ -173,15 +193,16 @@ public class Game extends Activity {
 	private OnClickListener volume_off = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			
+			//switch images and change background and effect values
 			View volumeOnButton = findViewById(R.id.volume_on);
 			volumeOnButton.setVisibility(View.VISIBLE);
 			View volumeOffButton = findViewById(R.id.volume_off);
 			volumeOffButton.setVisibility(View.INVISIBLE);
 			//Volume code here
-			muted = true;
-			
-			
+			muted = false;
+			Constants.sBackgroundVolume = 1;
+			Constants.sEffectVolume = 1;
+			Constants.updateVolume();
 		}
 	};
 	
@@ -189,32 +210,18 @@ public class Game extends Activity {
 	private OnClickListener volume_on = new OnClickListener() {
 		@Override
 		public void onClick(View view) {
-			
+			//switch images and change background and effect values
 			View volumeOffButton = findViewById(R.id.volume_off);
 			volumeOffButton.setVisibility(View.VISIBLE);
 			View volumeOnButton = findViewById(R.id.volume_on);
 			volumeOnButton.setVisibility(View.INVISIBLE);
 			//Volume code here
-			muted = false;
+			muted = true;
+			Constants.sBackgroundVolume = 0;
+			Constants.sEffectVolume = 0;
+			Constants.updateVolume();
 		}
 	};
-	/** The go to menu button. */
-	private OnClickListener goToMenu = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			synchronized(Constants.getLock()){
-				Constants.getSoundManager().playSplash();
-				finish();
-				mTime.cancel();
-				Constants.getSoundManager().unloadAll();
-				Constants.getSoundManager().cleanup();
-				mPanel.setVisibility(8);//8 = GONE - ensures no redraw -> nullpointer
-				startActivity(new Intent(getApplicationContext(), LevelSelect.class));
-				mLevel.cleanUp();
-			}
-		}
-	};
-	
 	/** The pause button. */
 	private OnClickListener pause = new OnClickListener() {
 		@Override
@@ -222,6 +229,7 @@ public class Game extends Activity {
 			Constants.getSoundManager().playSplash();
 			mPaused = true;
 			mCountDownTimer.cancel();
+			//show buttons for the pause menu
 			View unpauseButton = findViewById(R.id.unpausebutton);
 			unpauseButton.setVisibility(View.VISIBLE);
 			View pauseButton = findViewById(R.id.pausebutton);
@@ -232,8 +240,8 @@ public class Game extends Activity {
 			restart.setVisibility(View.VISIBLE);
 			View quit = findViewById(R.id.quit);
 			quit.setVisibility(View.VISIBLE);
-			
-			if(muted == true){
+			//if not muted display volume on button else show vulme off button
+			if(muted == false){
 				View volumeOnButton = findViewById(R.id.volume_on);
 				volumeOnButton.setVisibility(View.VISIBLE);
 				View volumeOffButton = findViewById(R.id.volume_off);
@@ -277,7 +285,7 @@ public class Game extends Activity {
 	 * @see android.app.Activity#onBackPressed()
 	 */
 	public void onBackPressed(){
-		
+		//to stop accidently going back to a previous activity
 	}
 	
 	/**
@@ -305,6 +313,7 @@ public class Game extends Activity {
 	 * @return the int for what stage the level is on.
 	 */
 	public int update() {
+		//depending on value being returned stop counter or stop activity
 		int count = getCurrentLevel().update(); 
 		if(count==1){
 			return 1;
@@ -319,7 +328,6 @@ public class Game extends Activity {
 	 * The Class MainThread.
 	 */
 	class MainThread extends TimerTask {
-		
 		/* (non-Javadoc)
 		 * @see java.util.TimerTask#run()
 		 */
@@ -347,10 +355,10 @@ public class Game extends Activity {
 	 */
 	@Override
 	public void onPause(){
+		//pause the activity
 		mPaused = true;
 		mCountDownTimer.cancel();
 		mTimerHasStarted = false;
-		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		super.onPause();
 	}
@@ -360,9 +368,9 @@ public class Game extends Activity {
 	 */
 	@Override
 	public void onDestroy(){
+		//clean up data
 		mPaused = true;
 		mCountDownTimer.cancel();
-		Constants.getSoundManager().unloadAll();
 		Constants.getSoundManager().cleanup();
 		Runtime.getRuntime().gc();
         System.gc();
@@ -383,6 +391,12 @@ public class Game extends Activity {
 		Constants.getSoundManager().loadShark();
 		Constants.getSoundManager().loadOtherSounds();
 		Constants.getSoundManager().loadSplash();
+		if(Constants.sBackgroundVolume == 0 && Constants.sEffectVolume == 0){
+			muted = true;
+		}else {
+			muted = false;
+		}
+		Constants.updateVolume();
 		Constants.getSoundManager().playBackGround();
 
 		if(!mTimerHasStarted){

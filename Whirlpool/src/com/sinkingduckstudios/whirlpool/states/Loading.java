@@ -1,9 +1,7 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Fraser Tomison
  * Content:
- * 
- * 
+ * Written at the same time to show one image for a certain amount of time.
  */
 package com.sinkingduckstudios.whirlpool.states;
 
@@ -28,7 +26,7 @@ public class Loading extends Activity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_loading);
-        
+        //display image until timer runs out
         new Handler().postDelayed (new Runnable(){
         	@Override
         	public void run(){

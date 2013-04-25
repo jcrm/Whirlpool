@@ -1,9 +1,8 @@
 /*
- * Author:
- * Last Updated:
+ * Author: Jake Morey, Jordan O'Hare
  * Content:
- *
- *
+ * Jordan O'Hare: Created basic class based upon parent class.
+ * Jake Morey: Added functionality for the movement of the diver.
  */
 package com.sinkingduckstudios.whirlpool.objects;
 
@@ -24,7 +23,7 @@ import com.sinkingduckstudios.whirlpool.manager.SpriteManager;
  * The Class Diver.
  */
 public class Diver extends GraphicObject{
-	
+
 	/** The left border. */
 	private int mLeftBorder;
 	/** The right border. */
@@ -81,6 +80,7 @@ public class Diver extends GraphicObject{
 		canvas.save();
 		Rect rect = new Rect(-(getWidth()/2), -(getHeight()/2), getWidth()/2, getHeight()/2);
 		canvas.translate(getCentreX(), getCentreY());
+		//draw the sprite based upon the angle of the diver
 		switch(getSpriteSheetIndex()){
 		case 0: if(mSpeed.getAngle()<=270 && mSpeed.getAngle()>90){
 			canvas.rotate(mSpeed.getAngle()+180);	
@@ -113,7 +113,7 @@ public class Diver extends GraphicObject{
 				new Random().nextInt(Constants.getLevel().getLevelHeight()),
 				0);	
 	}
-	
+
 	/**
 	 * Inits the diver.
 	 *
@@ -142,12 +142,13 @@ public class Diver extends GraphicObject{
 		mSpeed.setSpeed(mId.tSpeed);
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#move()
 	 */
 	@Override
 	public boolean move() {
+		//update the collision rectangle when moving
 		CollisionManager.updateCollisionRect(mProperties, mSpeed.getAngleRad());
 		if(mSpeed.getMove()){
 			moveDeltaX((int) (mSpeed.getSpeed()*Math.cos(mSpeed.getAngleRad())));
@@ -163,6 +164,7 @@ public class Diver extends GraphicObject{
 	 * @param side the side of the screen
 	 */
 	public void borderCollision(ScreenSide side) {
+		//flip angle when colliding with the borders
 		switch(side){
 		case Top:
 			mSpeed.shiftAngle(180);
@@ -204,14 +206,17 @@ public class Diver extends GraphicObject{
 			break;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#border()
 	 */
 	@Override
 	public boolean border(){
 		boolean hit = false;
+		//if two borders are the same then it must either be going vertically or horizontally
+		//if not then it must be going diagonally so check all borders.
 		if(mLeftBorder == mRightBorder){
+			//if going vertically check collision against top and bottom
 			if(getTopLeftY() < mTopBorder){
 				borderCollision(Screen.ScreenSide.Top);
 				hit = true;
@@ -220,6 +225,7 @@ public class Diver extends GraphicObject{
 				hit = true;
 			}
 		}else if(mTopBorder == mBottomBorder){
+			//if going horizontally check collision against left and right borders
 			if(getTopLeftX() <mLeftBorder){
 				borderCollision(Screen.ScreenSide.Left);
 				hit = true;
@@ -228,6 +234,7 @@ public class Diver extends GraphicObject{
 				hit = true;
 			}
 		}else{
+			//check collision against all borders including corners
 			if(getTopLeftX()<mLeftBorder){
 				if(getTopLeftY()<mTopBorder){
 					borderCollision(Screen.ScreenSide.TopLeft);
@@ -266,6 +273,7 @@ public class Diver extends GraphicObject{
 		if(move()){
 			border();
 		}
+		//update animation based upon angle
 		switch(getSpriteSheetIndex()){
 		case 0: mAnimate.animateFrame(); break;
 		case 1: mUpAnimate.animateFrame(); break;
@@ -273,7 +281,7 @@ public class Diver extends GraphicObject{
 		default: break;
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.sinkingduckstudios.whirlpool.objects.GraphicObject#borderCollision(com.sinkingduckstudios.whirlpool.logic.Screen.ScreenSide, int, int)
 	 */
@@ -281,11 +289,12 @@ public class Diver extends GraphicObject{
 	public void borderCollision(ScreenSide side, int width, int height) {
 		borderCollision(side);
 	}
-	
+
 	/**
 	 * Check border conditions.
 	 */
 	private void checkBorderConditions(){
+		//check that the border values are round the right way
 		if(mRightBorder < mLeftBorder){
 			int temp = mRightBorder;
 			mRightBorder = mLeftBorder;
@@ -296,6 +305,7 @@ public class Diver extends GraphicObject{
 			mBottomBorder = mTopBorder;
 			mTopBorder = temp;
 		}
+		//if the values are zero then set the value to that of the level
 		if(mRightBorder ==0 && mLeftBorder ==0 && mTopBorder == 0 && mBottomBorder ==0){
 			mLeftBorder = 0;
 			mTopBorder = 0;
@@ -303,11 +313,10 @@ public class Diver extends GraphicObject{
 			mBottomBorder = Constants.getLevel().getLevelHeight();
 		}
 	}
-	
 	/**
 	 * Gets the sprite sheet index.
 	 *
-	 * @return the sprite sheet index
+	 * @return the sprite sheet index based upon angle
 	 */
 	private int getSpriteSheetIndex(){
 		if (getSpeed().getAngle()>240&&getSpeed().getAngle()<300)
