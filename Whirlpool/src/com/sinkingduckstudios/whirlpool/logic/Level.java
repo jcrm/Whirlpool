@@ -652,7 +652,7 @@ public class Level extends Activity{
 			mEnvironments.add(new Finish(1250, 250));
 			
 			mLevelAverageTime = 30;	//seconds to get 2 stars
-			mLevelGoodTime = 15;	//seconds to get 3 stars
+			mLevelGoodTime = 20;	//seconds to get 3 stars
 			break;
 		case 3:
 			mLevelWidth = (int) (1500/Constants.getScreen().getRatio());
@@ -669,8 +669,8 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(1350,450));
 			mEnvironments.add(new Finish(1200, 250));
 			
-			mLevelAverageTime = 25;	//seconds to get 2 stars
-			mLevelGoodTime = 15;	//seconds to get 3 stars
+			mLevelAverageTime = 40;	//seconds to get 2 stars
+			mLevelGoodTime = 30;	//seconds to get 3 stars
 			break;
 		case 4:
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
@@ -689,7 +689,7 @@ public class Level extends Activity{
 			mEnvironments.add(new Finish(2900, 250));
 			
 			mLevelAverageTime = 35;	//seconds to get 2 stars
-			mLevelGoodTime = 25;	//seconds to get 3 stars
+			mLevelGoodTime = 30;	//seconds to get 3 stars
 			break;
 		case 5: 
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
@@ -710,7 +710,7 @@ public class Level extends Activity{
 			mEnvironments.add(new Finish(2900, 250));
 			
 			mLevelAverageTime = 40;	//seconds to get 2 stars
-			mLevelGoodTime = 25;	//seconds to get 3 stars
+			mLevelGoodTime = 30;	//seconds to get 3 stars
 			break;
 		case 6:
 			mLevelWidth = (int) (3000/Constants.getScreen().getRatio());
@@ -727,7 +727,7 @@ public class Level extends Activity{
 			mGraphics.add(new Collectable(2500,350));
 			mEnvironments.add(new Finish(2900, 235));
 			
-			mLevelAverageTime = 45;	//seconds to get 2 stars
+			mLevelAverageTime = 35;	//seconds to get 2 stars
 			mLevelGoodTime = 27;	//seconds to get 3 stars
 			break;
 		default: 
