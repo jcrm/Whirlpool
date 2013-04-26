@@ -17,7 +17,8 @@
     <string name="jordan">Programmer: Jordan O’Hare</string>
     <string name="noah">Artist: Noah Ramanan</string>
     <string name="aiste">Artist: Aiste Surutkoviciute</string>
-    <string name="allan">Audio Tech: Allan Reid</string>
+    <string name="allan">Audio Director: Allan Reid</string>
+    <string name="irvine">Music Composer: Irvine Cruickshank</string>
     <string name="andrew">Producer/Designer: Andrew Duthie</string>
     <string name="exit">Exit</string>
 </resources>

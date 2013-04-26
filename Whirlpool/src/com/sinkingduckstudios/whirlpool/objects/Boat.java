@@ -1,5 +1,5 @@
 /*
- * Author: Jake Morey, Jordan 'Hare
+ * Author: Jake Morey, Jordan O'Hare
  * Content:
  * Jordan O'Hare: Added basic functions that are inherited from parent class.
  * Jake Morey: Added all functionality for boat building upon the parent class.

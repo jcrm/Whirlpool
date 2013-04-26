@@ -33,7 +33,7 @@ public class Credits extends Activity {
         setContentView(R.layout.activity_credits);
         
         //set the distance between the text related to the size of the screen 
-        int height = Constants.getScreen().getHeight()/10;
+        int height = Constants.getScreen().getHeight()/11;
         //set the typeface of the text to be the same
         Typeface face = Typeface.createFromAsset(getAssets(), "whirlpool.ttf");
         TextView Jake = (TextView) findViewById(R.id.credits1);
@@ -76,8 +76,13 @@ public class Credits extends Activity {
         Allan.setTextColor(Color.BLACK);
         Allan.setTypeface(face);
         
+        TextView Irvine = (TextView) findViewById(R.id.credits10);
+        Irvine.setY(9*height);
+        Irvine.setTextColor(Color.BLACK);
+        Irvine.setTypeface(face);
+        
         TextView Andrew = (TextView) findViewById(R.id.credits9);
-        Andrew.setY(9*height);
+        Andrew.setY(10*height);
         Andrew.setTextColor(Color.BLACK);
         Andrew.setTypeface(face);
         //quit after a certain time
@@ -87,7 +92,7 @@ public class Credits extends Activity {
     			startActivity(new Intent(getApplicationContext(),Options.class));
         		finish();
         	}
-        },3000);
+        },5000);
     }
 	
 	/* (non-Javadoc)

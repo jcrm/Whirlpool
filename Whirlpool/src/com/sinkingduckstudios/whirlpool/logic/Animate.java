@@ -1,5 +1,5 @@
 /*
- * Author: Connor Nicol edited by Jake Morey
+ * Author: Connor Nicol implemented by Jordan O'Hare edited by Jake Morey
  * Last Updated:
  * Content:
  * A class for moving a rectangle around an image

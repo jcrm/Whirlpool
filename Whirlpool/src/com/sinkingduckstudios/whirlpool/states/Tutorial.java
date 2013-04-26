@@ -62,7 +62,7 @@ public class Tutorial extends Activity{
 		};
 		
 		mTime= new Timer();//init timer
-		mTime.schedule(new MainThread(),0, 2000);
+		mTime.schedule(new MainThread(),0, 5000);
     }
 	
 	/* (non-Javadoc)
